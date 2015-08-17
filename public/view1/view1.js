@@ -30,7 +30,7 @@ app.controller('View1Ctrl', function($scope) {
 app.controller('ExampleController', ['$scope', '$http', function($scope, $http) {
 
     $scope.submit = function() {
-				var dataObj = {name: $scope.formData.name, email: $scope.formData.email, messeage: $scope.formData.message};
+				var dataObj = {name: $scope.formData.name, email: $scope.formData.email, message: $scope.formData.message};
         //if ($scope.text) {
 				var res = $http.post('/postTrip', dataObj);
 				res.success(function(data, status, headers, config) {

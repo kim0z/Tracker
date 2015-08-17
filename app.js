@@ -30,21 +30,20 @@ require('./app/routes.js')(app);
 
 app.post('/postTrip', function(request, response){
   console.log(request.body);      // your JSON
-  response.send(200).end();    // echo the result back
+  
+  myFirebaseRef.set({
+  name: request.body.name,
+  email: request.body.email,
+  message: request.body.message
+});
+
+  response.status(200).end();    // echo the result back
 }); 
 
 app.listen(port);
 console.log("App listening on port " + port);
 
 
-myFirebaseRef.set({
-  title: "Hello World!",
-  author: "Firebase",
-  location: {
-    city: "San Francisco",
-    state: "California",
-    zip: 94103
-  }
-});
+
 
 
