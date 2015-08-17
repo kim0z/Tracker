@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="view1\assets\css\main.css">
+<title>Contact Form</title>
+</head>
+
+<body>
+
+<aside id="sidebar">
+
+    <section id="widget_1"></section>
+    <section id="widget_2"></section>
+    <section id="widget_3"></section>
+</aside>
+
+    <header class="body">
+    </header>
+
+    <section class="body">
+			<form ng-submit="submit()" ng-controller="ExampleController">
+        
+			<label>Trip Name</label>
+			<input name="name" placeholder="Type Here" ng-model="formData.name">
+            
+			<label>Email</label>
+			<input name="email" type="email" placeholder="Type Here" ng-model="formData.email">
+            
+			<label>Message</label>
+			<textarea name="message" placeholder="Type Here" ng-model="formData.message"></textarea>
+            
+			<input id="submit" name="submit" type="submit" value="Submit">
+        
+		</form>
+    </section>
+
+    <footer class="body">
+    </footer>
+
+</body>
+
+</html>
