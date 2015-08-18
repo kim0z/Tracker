@@ -19,8 +19,8 @@ body {
 }
 
 .body {
-	width:576px;
-	margin:0 auto;
+	width:450px;
+	margin:10px;  
 	display:block;
 }
 
@@ -36,6 +36,7 @@ h1 {
 	margin:0 auto;
 }
 
+
 form {
 	width:459px;
 	margin:0 auto;
@@ -48,7 +49,7 @@ label {
 }
 
 input, textarea {
-	width:439px;
+	width:350px;
 	height:27px;
 	background:#efefef;
 	border-radius:5px;

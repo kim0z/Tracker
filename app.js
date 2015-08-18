@@ -24,8 +24,6 @@ app.use(methodOverride());
 // routes 
 require('./app/routes.js')(app);
 
-
-
 //post - receive trip details
 
 app.post('/postTrip', function(request, response){
