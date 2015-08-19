@@ -43,5 +43,19 @@ console.log("App listening on port " + port);
 
 
 
+////// Google maps /////////
+var geocoderProvider = 'google';
+var httpAdapter = 'https';
+// optionnal
+var extra = {
+    apiKey: 'AIzaSyBgSxdli3zXpI3dPtFR9H0fbVZIcSZOvyo', // for Mapquest, OpenCage, Google Premier
+    formatter: null         // 'gpx', 'string', ...
+};
 
+var geocoder = require('/Users/fanadka/AppData/Roaming/npm/node_modules/node-geocoder')(geocoderProvider, httpAdapter, extra);
+
+// Using callback
+geocoder.geocode('paris', function(err, res) {
+    console.log(err,res);
+});
 
