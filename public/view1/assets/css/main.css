@@ -13,9 +13,10 @@
 }
 
 body {
-	font-size:100%;
+	font-size:120%;
 	font-family:Georgia, "Times New Roman", Times, serif;
 	color:#3a3a3a;
+
 }
 
 .body {
@@ -38,8 +39,11 @@ h1 {
 
 
 form {
-	width:459px;
+	width:300px;
 	margin:0 auto;
+
+	border-style: solid;
+    border-width: 1px;
 }
 
 label {
@@ -49,7 +53,7 @@ label {
 }
 
 input, textarea {
-	width:350px;
+	width:200px;
 	height:27px;
 	background:#efefef;
 	border-radius:5px;
@@ -60,6 +64,7 @@ input, textarea {
 	margin-top:3px;
 	font-size:0.9em;
 	color:#3a3a3a;
+	display:block;
 }
 
 	input:focus, textarea:focus {
@@ -90,4 +95,21 @@ footer a img {
 	border:none;
 	float:right;
 	margin:0px 59px 40px 0px;
+}
+.widget_1 {
+	position: absolute;
+  	left: 0px;
+ 	width: 150px;
+ 	display:block;
+
+}
+
+.widget_2 {  
+	margin-left: 400px;
+}
+
+}
+button{
+    padding:0.3em;
+    margin: 0.3em;
 }

@@ -2,63 +2,57 @@
 <html>
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" href="view1\assets\css\main.css">
-<title>Contact Form</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="view1\assets\css\main.css">
+	<title>Contact Form</title>
+	<style>.angular-google-map-container { height: 500px; }</style>
 </head>
 
 <body>
 
 <aside id="sidebar">
 
-    <section id="widget_1"></section>
-    <section id="widget_2"></section>
+    <section id="widget_1" class="widget_1">
+    	  <form name="tripDefinitionForm" ng-controller="tripDefinitionCtrl">
+
+	 		 <label>Trip name:</label>
+     			 <input type="text" name="input" ng-model="tripName.text"
+             ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
+      		
+
+    		 <label>Destination 1:</label>
+     			 <input type="text" name="input" ng-model="destination1.text"
+           ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
+    		      		
+    		      		<!--  <addbuttonsbutton></addbuttonsbutton>
+    		  <div id="space-for-input">
+    -->
+
+
+<!--
+    		  <div ng-controller="NumberPicker" class="container">
+  				  <h-number value="input.num" min="2" max="50" step="1" change="onChanged()"></h-number>
+			  </div>
+-->
+
+   </form>
+    </section>
+
+
+    <section id="widget_2" class="widget_2">
+    	<ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true">
+     			 <marker ng-repeat="marker in markers" coords="marker.coords" idKey="marker.idKey"></marker>
+    	</ui-gmap-google-map>
+
+    </section>
+
+
     <section id="widget_3"></section>
 </aside>
 
     <header class="body">
     </header>
 
-
-<form name="myForm" ng-controller="ExampleController">
-  <label>Single word:
-    <input type="text" name="input" ng-model="example.text"
-           ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
-  </label>
-
-
-
-  <div role="alert">
-    <span class="error" ng-show="myForm.input.$error.required">
-      Required!</span>
-    <span class="error" ng-show="myForm.input.$error.pattern">
-      Single word only!</span>
-  </div>
-  <tt>text = {{example.text}}</tt><br/>
-  <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
-  <tt>myForm.input.$error = {{myForm.input.$error}}</tt><br/>
-  <tt>myForm.$valid = {{myForm.$valid}}</tt><br/>
-  <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/>
- </form>
-
-
-
-    <section class="body">
-			<form ng-submit="submit()" ng-controller="ExampleController">
-        
-			<label>Trip Name</label>
-			<input name="name" placeholder="Type Here" ng-model="formData.name">
-            
-			<label>Email</label>
-			<input name="email" type="email" placeholder="Type Here" ng-model="formData.email">
-            
-			<label>Message</label>
-			<textarea name="message" placeholder="Type Here" ng-model="formData.message"></textarea>
-            
-			<input id="submit" name="submit" type="submit" value="Submit">
-        
-		</form>
-    </section>
 
     <footer class="body">
     </footer>

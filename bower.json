@@ -7,6 +7,8 @@
   "private": true,
   "dependencies": {
     "angular-loader": "~1.4.0",
-	"angular-google-maps": "latest"
+	  "angular-google-maps": "latest",
+    "angular-number-picker": "latest",
+    "bootstrap": "latest"
   }
 }
