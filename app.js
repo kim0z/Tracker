@@ -54,8 +54,17 @@ var extra = {
 
 var geocoder = require('/Users/fanadka/AppData/Roaming/npm/node_modules/node-geocoder')(geocoderProvider, httpAdapter, extra);
 
-// Using callback
-geocoder.geocode('paris', function(err, res) {
-    console.log(err,res);
-});
 
+
+//post - receive country and city name, return GeoCode from Google Maps API
+
+app.post('/getGeoCode', function(request, response){
+// Using callback
+console.log(request.body.city);
+
+	geocoder.geocode(request.body.city, function(err, res) {
+  	  console.log(err,res);
+  	  response.send(res);
+	});
+
+});

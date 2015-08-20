@@ -23,9 +23,7 @@ app.controller('View1Ctrl', function($scope) {
 		zoom: 13
 		};
 });
-
-
-			
+	
 			
 app.controller('ExampleController', ['$scope', '$http', function($scope, $http) {
 
@@ -46,6 +44,32 @@ app.controller('ExampleController', ['$scope', '$http', function($scope, $http) 
 				$scope.message='';
        // }
       };
-    }]);
+ }]);
 			
 			
+ app.controller('ExampleController', ['$scope','$http', function($scope, $http) {
+    $scope.example = {
+        text: 'guest',
+        word: /^\s*\w*\s*$/
+    };
+
+    $scope.onBlur = function($event) {
+
+    	var dataObj = {city: $scope.example.text};
+    	console.log($scope.example.text);
+
+        		var res = $http.post('/getGeoCode', dataObj);
+				res.success(function(data, status, headers, config) {
+				//$scope.message = data; //handle data back from server - not needed meanwhile
+					console.log(data);
+				});
+				res.error(function(data, status, headers, config) {
+					//alert( "failure message: " + JSON.stringify({data: data}));
+				});	
+
+
+    }
+
+
+ }]);
+
