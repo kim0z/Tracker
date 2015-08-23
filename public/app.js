@@ -14,8 +14,13 @@ var trackerApp = angular.module('myApp', [
   //
   // Now set up the states
   $stateProvider
+    .state('view0', {
+      url: "/view0",
+      templateUrl: "views/view0/view0.html",
+      controller: 'view0Ctrl'
+    })
     .state('view1', {
-      url: "/",
+      url: "/view1",
       templateUrl: "views/view1/view1.html",
       controller: 'view1Ctrl'
     })
@@ -23,6 +28,11 @@ var trackerApp = angular.module('myApp', [
       url: "/view2",
       templateUrl: "views/view2/view2.html",
       controller: 'view2Ctrl'
+    })
+    .state('view3', {
+      url: "/view3",
+      templateUrl: "views/view3/view3.html",
+      controller: 'view3Ctrl'
     });
 })
 

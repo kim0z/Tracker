@@ -57,14 +57,60 @@ var geocoder = require('/Users/fanadka/AppData/Roaming/npm/node_modules/node-geo
 
 
 //post - receive country and city name, return GeoCode from Google Maps API
-
 app.post('/getGeoCode', function(request, response){
 // Using callback
-console.log(request.body.city);
+//console.log(Server: request.body.city); // print the city name from UI
 
 	geocoder.geocode(request.body.city, function(err, res) {
-  	  console.log(err,res);
+  	//  console.log(err,res); //print the response from GeoLocation google API
   	  response.send(res);
 	});
 
+});
+
+
+
+//get last trip id from DB
+app.post('/getLastTripId', function(request, response){
+
+  myFirebaseRef.orderByKey().endAt("trip_id").on("child_added", function(snapshot) {
+          console.log("Server: Last trip id: "+snapshot.val().trip_id);
+           response.send(snapshot.val().trip_id); 
+        });
+
+
+
+/*
+  myFirebaseRef.on("child_added", function(snapshot, prevChildKey){
+     console.log("trip_id555: " + snapshot.val);
+    var newPost = snapshot.val();
+    console.log("trip_id: " + newPost.trip_id);
+  });
+*/
+    // echo the result back
+});
+
+
+//save cities list to Firbase:
+app.post('/saveCities', function(request, response){
+  console.log(request.body);      // your JSON
+  var citiesJson = request.body;
+
+
+  var jsonAllData = { 
+        trip_id: "10",
+        general:{
+        trip_name: "Iceland",
+        start_date: "15/09/2015",
+        end_date: "15/09/2015"
+      }
+    }
+
+     jsonAllData["cities"] = citiesJson;
+     console.log(jsonAllData);
+
+    myFirebaseRef.push(jsonAllData);
+
+
+  response.status(200).end();    // echo the result back - should be changed, validation required
 });

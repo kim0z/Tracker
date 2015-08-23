@@ -1,24 +1,22 @@
-<P>View 1 : Planning<P>
+<p>View 0 : Home<p>
 <aside id="sidebar">
 
     <section id="widget_1" class="widget_1">
     	  <form name="tripDefinitionForm">
 
-         <label>Trip id: {{lastTripId}}</label> 
 	 		 <label>Trip name:</label>
      			 <input type="text" name="input" ng-model="tripName.text"
              ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
 
-        <label>Start date:</label>
+              <label>Start date:</label>
 			<datepicker>
-			  <input ng-model="dateStart" type="text" />
+			  <input ng-model="date" type="text" />
 			</datepicker>
 
        <label>End date:</label>
 			<datepicker>
-			  <input ng-model="dateEnd" type="text" />
+			  <input ng-model="date" type="text" />
 			</datepicker>
-
       <div ng-repeat="dest in destinations">
             <label>Destination {{$index + 1}}:</label>
             <input type="text" name="input" ng-model="dest.city" ng-blur="onBlur(dest)">

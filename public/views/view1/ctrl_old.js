@@ -92,36 +92,3 @@ app.controller('NumberPicker', ['$scope', function($scope) {
    };
 }]);
 
-
-
-//Directive that returns an element which adds buttons on click which show an alert on click
-app.directive("addbuttonsbutton", function(){
-	return {
-		restrict: "E",
-		template: "<button addbuttons>Click to add buttons</button>"
-	}
-});
-
-//Directive for adding buttons on click that show an alert on click
-app.directive("addbuttons", function($compile){
-	
-	return function(scope, element, attrs){
-		element.bind("click", function(){
-			scope.count++;
-			angular.element(document.getElementById('space-for-input')).append($compile('<label>Destination 1:</label><input type="text" name="input" ng-model="destination1.text" ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)"')(scope));
-		});
-	};
-});
-
-//creates circles on the map
-app.controller('CircleSimpleCtrl', function($scope) {
-  $scope.cities = {
-    chicago: {population:2714856, position: [41.878113, -87.629798]},
-    newyork: {population:8405837, position: [40.714352, -74.005973]},
-    losangeles: {population:3857799, position: [34.052234, -118.243684]},
-    vancouver: {population:603502, position: [49.25, -123.1]},
-  }
-  $scope.getRadius = function(num) {
-    return Math.sqrt(num) * 100;
-  }
-});

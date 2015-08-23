@@ -1,4 +1,16 @@
-trackerApp.controller('view1Ctrl',function($scope, $http, googleMapsAPIService) {
+trackerApp.controller('view1Ctrl',function($scope, $http, googleMapsAPIService, dataBaseSerivce) {
+
+		dataBaseSerivce.getLastTripId()
+		.success(function(data, status, headers, config) {
+			//$scope.message = data; //handle data back from server - not needed meanwhile
+			$scope.lastTripId = data;
+				console.log(data);
+			})
+			.error(function(data, status, headers, config) {
+				alert( "failure message getLastTripId: " + JSON.stringify({data: data}));
+			});
+
+
 
 	$scope.destinations = [
 		{
@@ -6,7 +18,7 @@ trackerApp.controller('view1Ctrl',function($scope, $http, googleMapsAPIService) 
 		}
 	];
 
-	$scope.addNewDestination = function() {
+	$scope.addNewDestination = function(dest) {
 		$scope.destinations.push({
 			city: ""
 		});
@@ -29,15 +41,28 @@ trackerApp.controller('view1Ctrl',function($scope, $http, googleMapsAPIService) 
     $scope.onBlur = function(dest) {
 
     	//console.log(event.target.value);
-
+    	//get GeoLocation to the city
     	googleMapsAPIService.getGeoCode(dest)
 			.success(function(data, status, headers, config) {
 			//$scope.message = data; //handle data back from server - not needed meanwhile
 				console.log(data);
 			})
 			.error(function(data, status, headers, config) {
-				//alert( "failure message: " + JSON.stringify({data: data}));
+				alert( "failure message: " + JSON.stringify({data: data}));
 			});	
+
+
+			//save the cities list to data base
+		dataBaseSerivce.saveCities($scope.destinations)
+		.success(function(data, status, headers, config) {
+			//$scope.message = data; //handle data back from server - not needed meanwhile
+				console.log(data);
+			})
+			.error(function(data, status, headers, config) {
+				alert( "failure message: " + JSON.stringify({data: data}));
+			});	
+		
+
 
     };
 });
