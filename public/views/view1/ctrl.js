@@ -11,7 +11,7 @@ trackerApp.controller('view1Ctrl',function($scope, $http, googleMapsAPIService, 
 			});
 
 
-
+//Google maps section
 	$scope.destinations = [
 		{
 			city: ""
@@ -32,6 +32,38 @@ trackerApp.controller('view1Ctrl',function($scope, $http, googleMapsAPIService, 
 	zoom: 13
 	};
 
+ $scope.map = {center: {latitude: 44, longitude: -108 }, zoom: 4 };
+        $scope.options = {scrollwheel: false};
+        $scope.circles = [
+            {
+                id: 1,
+                center: {
+                    latitude: 44,
+                    longitude: -108
+                },
+                radius: 100000,
+                stroke: {
+                    color: '#08B21F',
+                    weight: 2,
+                    opacity: 1
+                },
+                fill: {
+                    color: '#08B21F',
+                    opacity: 0.5
+                },
+                geodesic: true, // optional: defaults to false
+                draggable: true, // optional: defaults to false
+                clickable: true, // optional: defaults to true
+                editable: true, // optional: defaults to false
+                visible: true, // optional: defaults to true
+                control: {}
+            }
+            ];
+
+
+
+
+//////// google maps section end ////////////////////
 
 	$scope.tripName = {
         text: 'Trip Name 1',

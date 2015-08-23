@@ -73,7 +73,7 @@ app.post('/getGeoCode', function(request, response){
 //get last trip id from DB
 app.post('/getLastTripId', function(request, response){
 
-  myFirebaseRef.orderByKey().endAt("trip_id").on("child_added", function(snapshot) {
+  myFirebaseRef.endAt().limitToFirst(1).once("child_added", function(snapshot) {
           console.log("Server: Last trip id: "+snapshot.val().trip_id);
            response.send(snapshot.val().trip_id); 
         });
