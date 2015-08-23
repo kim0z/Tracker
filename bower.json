@@ -9,6 +9,8 @@
     "angular-loader": "~1.4.0",
 	  "angular-google-maps": "latest",
     "angular-number-picker": "latest",
-    "bootstrap": "latest"
+    "bootstrap": "latest",
+    "angularjs-datepicker":"latest",
+    "angular-datepicker":"latest"
   }
 }

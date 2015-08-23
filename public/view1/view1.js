@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('myApp.view1', ['ngRoute','uiGmapgoogle-maps','angularNumberPicker'])
+var app = angular.module('myApp.view1', ['ngRoute','uiGmapgoogle-maps','angularNumberPicker','720kb.datepicker'])
 
 .config(['$routeProvider','uiGmapGoogleMapApiProvider', function($routeProvider,GoogleMapApiProviders) {
   $routeProvider.when('/view1', {
@@ -8,9 +8,10 @@ var app = angular.module('myApp.view1', ['ngRoute','uiGmapgoogle-maps','angularN
     controller: 'View1Ctrl',
 	controller: 'ExampleController',
 	controller: 'NumberPicker',
+	controller: 'date',
 	controller: 'View1Ctrl'
-	
   });
+
    GoogleMapApiProviders.configure({
             china: true
         });
@@ -25,6 +26,7 @@ app.controller('View1Ctrl', function($scope) {
 		zoom: 13
 		};
 });
+
 
 //submit
 app.controller('ExampleController', ['$scope', '$http', function($scope, $http) {
