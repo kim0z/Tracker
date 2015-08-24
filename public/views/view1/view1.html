@@ -4,30 +4,31 @@
     <section id="widget_1" class="widget_1">
     	  <form name="tripDefinitionForm">
 
-         <label>Trip id: {{lastTripId}}</label> 
+         <label>Trip id: {{lastTripId + 1}}</label> 
+
 	 		 <label>Trip name:</label>
-     			 <input type="text" name="input" ng-model="tripName.text"
+     			 <input type="text" name="inputTripName" ng-model="tripName.text"
              ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
 
         <label>Start date:</label>
-			<datepicker>
-			  <input ng-model="dateStart" type="text" />
-			</datepicker>
+			     <datepicker>
+			         <input name="inputStartDate" ng-model="dateStart.date" type="text" ng-blur="onBlur($event)"/>
+		      	</datepicker>
 
-       <label>End date:</label>
-			<datepicker>
-			  <input ng-model="dateEnd" type="text" />
-			</datepicker>
+         <label>End date:</label>
+			       <datepicker>
+			          <input name="inputEndDate" ng-model="dateEnd.date" type="text" ng-blur="onBlur($event)" />
+			       </datepicker>
 
       <div ng-repeat="dest in destinations">
             <label>Destination {{$index + 1}}:</label>
-            <input type="text" name="input" ng-model="dest.city" ng-blur="onBlur(dest)">
+            <input type="text" name="inputDest" ng-model="dest.city" ng-blur="onBlur(dest)">
       </div>
 
       <button ng-click="addNewDestination()">Add new</button>
 
 
-    		  <div id="space-for-input">
+    		 <!-- <div id="space-for-input"> -->
 
 
 

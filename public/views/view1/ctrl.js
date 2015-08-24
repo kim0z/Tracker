@@ -1,5 +1,6 @@
 trackerApp.controller('view1Ctrl',function($scope, $http, googleMapsAPIService, dataBaseSerivce) {
 
+		//get last trip id from server
 		dataBaseSerivce.getLastTripId()
 		.success(function(data, status, headers, config) {
 			//$scope.message = data; //handle data back from server - not needed meanwhile
@@ -70,31 +71,53 @@ trackerApp.controller('view1Ctrl',function($scope, $http, googleMapsAPIService, 
         word: /^\s*\w*\s*$/
     };
 
+
+// trip name, dates out of focus event
+$scope.onBlur = function(dest) {
+
+    	//create Json with trip id, name, dates
+    	//jsonTripData = {"trip_id": $scope.lastTripId + 1, general: {trip_name:, start_date:, end_date:}};
+    	alert('out of f');
+};
+
+
+
+
     $scope.onBlur = function(dest) {
 
-    	//console.log(event.target.value);
-    	//get GeoLocation to the city
-    	googleMapsAPIService.getGeoCode(dest)
+console.log(event.target.name);
+
+    	//create Json with trip id, name, dates
+    	var jsonTripData = {};
+    	if(event.target.name == 'inputTripName' || event.target.name == 'inputStartDate' || event.target.name == 'inputEndDate'  )
+    	{
+
+    			console.log($scope.tripName.text);
+    	}
+    	else if(event.target.name == 'inputDest'){
+ 
+    		//get GeoLocation to the city
+    		googleMapsAPIService.getGeoCode(dest)
+				.success(function(data, status, headers, config) {
+				//$scope.message = data; //handle data back from server - not needed meanwhile
+					console.log(data);
+				})
+				.error(function(data, status, headers, config) {
+					alert( "failure message: " + JSON.stringify({data: data}));
+				});	
+
+
+				//save the cities list to data base
+			dataBaseSerivce.saveCities($scope.destinations)
 			.success(function(data, status, headers, config) {
-			//$scope.message = data; //handle data back from server - not needed meanwhile
-				console.log(data);
-			})
-			.error(function(data, status, headers, config) {
-				alert( "failure message: " + JSON.stringify({data: data}));
-			});	
-
-
-			//save the cities list to data base
-		dataBaseSerivce.saveCities($scope.destinations)
-		.success(function(data, status, headers, config) {
-			//$scope.message = data; //handle data back from server - not needed meanwhile
-				console.log(data);
-			})
-			.error(function(data, status, headers, config) {
-				alert( "failure message: " + JSON.stringify({data: data}));
-			});	
+				//$scope.message = data; //handle data back from server - not needed meanwhile
+					console.log(data);
+				})
+				.error(function(data, status, headers, config) {
+					alert( "failure message: " + JSON.stringify({data: data}));
+				});	
 		
-
+		}
 
     };
 });

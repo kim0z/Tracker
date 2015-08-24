@@ -5,6 +5,9 @@
   border-bottom: 0.1em solid black;
   margin-bottom: 2em;
   padding: 0 0 0.5em;
+  background-color: #0096d6;
+  margin-top: 0px;
+  height: 40px;
 }
 
 .menu:before {
@@ -47,7 +50,6 @@ body {
   font-size:120%;
   font-family:Georgia, "Times New Roman", Times, serif;
   color:#3a3a3a;
-
 }
 
 .body {
@@ -55,6 +57,7 @@ body {
   margin:10px;  
   display:block;
 }
+
 
 h1 {
   width:498px;

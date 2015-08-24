@@ -72,11 +72,12 @@ app.post('/getGeoCode', function(request, response){
 
 //get last trip id from DB
 app.post('/getLastTripId', function(request, response){
-
+  var lastTripId = '';
   myFirebaseRef.endAt().limitToLast(1).on("child_added", function(snapshot) {
           console.log("Server: Last trip id: "+snapshot.val().trip_id);
-           response.send(snapshot.val().trip_id); 
+          lastTripId = snapshot.val().trip_id;
         });
+  response.send(lastTripId); 
 });
 
 //save cities list to Firbase:
