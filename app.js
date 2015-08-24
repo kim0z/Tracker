@@ -73,23 +73,11 @@ app.post('/getGeoCode', function(request, response){
 //get last trip id from DB
 app.post('/getLastTripId', function(request, response){
 
-  myFirebaseRef.endAt().limitToFirst(1).once("child_added", function(snapshot) {
+  myFirebaseRef.endAt().limitToLast(1).on("child_added", function(snapshot) {
           console.log("Server: Last trip id: "+snapshot.val().trip_id);
            response.send(snapshot.val().trip_id); 
         });
-
-
-
-/*
-  myFirebaseRef.on("child_added", function(snapshot, prevChildKey){
-     console.log("trip_id555: " + snapshot.val);
-    var newPost = snapshot.val();
-    console.log("trip_id: " + newPost.trip_id);
-  });
-*/
-    // echo the result back
 });
-
 
 //save cities list to Firbase:
 app.post('/saveCities', function(request, response){
@@ -98,7 +86,7 @@ app.post('/saveCities', function(request, response){
 
 
   var jsonAllData = { 
-        trip_id: "10",
+        trip_id: "100",
         general:{
         trip_name: "Iceland",
         start_date: "15/09/2015",
@@ -112,5 +100,5 @@ app.post('/saveCities', function(request, response){
     myFirebaseRef.push(jsonAllData);
 
 
-  response.status(200).end();    // echo the result back - should be changed, validation required
+  //response.status(200).end();    // echo the result back - should be changed, validation required
 });
