@@ -79,20 +79,20 @@ app.post('/getGeoCode', function(request, response){
 
 //get last trip id from DB
 app.post('/getLastTripId', function(request, response){
-  var lastTripId = '';
+  var lastTripId = '0';
   myFirebaseRef.endAt().limitToLast(1).on("child_added", function(snapshot) {
-          console.log("Server: Last trip id: "+snapshot.val().trip_id);
-          lastTripId = snapshot.val().trip_id;
+          lastTripId = snapshot.val().trip_id; 
         });
+  console.log("Server: Last trip id: "+lastTripId);
   response.send(lastTripId); 
 });
 
 //save cities list to Firbase:
-app.post('/saveCities', function(request, response){
-  console.log(request.body);      // your JSON
-  var citiesJson = request.body;
+app.post('/saveTrip', function(request, response){
+  console.log("Server: Cities from client -> "+request.body);      // your JSON
+  var jsonTrip = request.body;
 
-
+/*
   var jsonAllData = { 
         trip_id: "100",
         general:{
@@ -101,11 +101,19 @@ app.post('/saveCities', function(request, response){
         end_date: "15/09/2015"
       }
     }
+*/
+ //    jsonAllData["cities"] = request.body;
+  //   console.log(jsonAllData);
+/*
+  myFirebaseRef.once('value', function(snapshot) {
+  if (snapshot.hasChild('1')) {
+    console.log('exists');
+  }
+});
+*/
 
-     jsonAllData["cities"] = citiesJson;
-     console.log(jsonAllData);
 
-    myFirebaseRef.push(jsonAllData);
+    myFirebaseRef.push(jsonTrip);
 
 
   //response.status(200).end();    // echo the result back - should be changed, validation required

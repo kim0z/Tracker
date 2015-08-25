@@ -4,8 +4,7 @@ trackerApp.controller('view1Ctrl',function($scope, $http, googleMapsAPIService, 
 		dataBaseSerivce.getLastTripId()
 		.success(function(data, status, headers, config) {
 			//$scope.message = data; //handle data back from server - not needed meanwhile
-			$scope.lastTripId = data;
-				console.log(data);
+				$scope.lastTripId = data;
 			})
 			.error(function(data, status, headers, config) {
 				alert( "failure message getLastTripId: " + JSON.stringify({data: data}));
@@ -78,17 +77,6 @@ trackerApp.controller('view1Ctrl',function($scope, $http, googleMapsAPIService, 
     };
 
 
-// trip name, dates out of focus event
-$scope.onBlur = function(dest) {
-
-    	//create Json with trip id, name, dates
-    	//jsonTripData = {"trip_id": $scope.lastTripId + 1, general: {trip_name:, start_date:, end_date:}};
-    	alert('out of f');
-};
-
-
-
-
     $scope.onBlur = function(dest) {
 
 		console.log(event.target.name);
@@ -97,15 +85,16 @@ $scope.onBlur = function(dest) {
     	//create Json with trip id, name, dates
     	var jsonTripData = {};
     	var jsonTripCities = {};
-    	var arrayCities = [];
-    	if(event.target.name == 'inputTripName' || event.target.name == 'inputStartDate' || event.target.name == 'inputEndDate'  )
-    	{
+    	var jsonTrip = {};
+    	//if(event.target.name == 'inputTripName' || event.target.name == 'inputStartDate' || event.target.name == 'inputEndDate'  )
+    //	{
     		jsonTripData = {general: {trip_name: $scope.tripName.text, start_date: $scope.dateStart.text, end_date: $scope.dateEnd.text}};
     		console.log(jsonTripData);
-    	}
-    	else {//if(event.target.name == 'inputDest'){
+    	//}
+    	//else {//if(event.target.name == 'inputDest'){
  
     		//get GeoLocation to the city
+    		/*
     		googleMapsAPIService.getGeoCode(dest)
 				.success(function(data, status, headers, config) {
 				//$scope.message = data; //handle data back from server - not needed meanwhile
@@ -114,32 +103,36 @@ $scope.onBlur = function(dest) {
 				.error(function(data, status, headers, config) {
 					alert( "failure message: " + JSON.stringify({data: data}));
 				});	
+*/
+		//get the destination number from the laber text destination1 = 1, detination2 = 2
+		var r = /\d+/;
+		var s = event.target.name;
+		var cityNumber = s.match(r);
 
-//get the destination number from the laber text destination1 = 1, detination2 = 2
-var r = /\d+/;
-var s = event.target.name;
-var cityNumber = s.match(r);
+		//save all destination to json file
+		for(var i = 0; i < $scope.destinations.length ; i++){
+			jsonTripCities[i] = $scope.destinations[i].city;
+		}
 
-alert($scope);
+		//create the full trip json {trip_id: 2, jsonTripData, jsonTripCities}
+		console.log("here"+ $scope.lastTripId);
+		jsonTrip['trip_id'] = $scope.lastTripId + 1;
+		jsonTrip['general'] = jsonTripData;
+		jsonTrip['cities'] = jsonTripCities;
+		
+		//}
 
-			//	jsonTripCities[cityNumber] = angular.toJson(dest);
-			//	arrayCities.push(jsonTripCities);
-			//	console.log(arrayCities);
 
-
-
-
-				//save the cities list to data base
-			dataBaseSerivce.saveCities($scope.destinations)
+		//save the cities list to data base
+		dataBaseSerivce.saveTrip(jsonTrip)
 			.success(function(data, status, headers, config) {
 				//$scope.message = data; //handle data back from server - not needed meanwhile
-					console.log(data);
+					console.log(jsonTrip);
 				})
 				.error(function(data, status, headers, config) {
 					alert( "failure message: " + JSON.stringify({data: data}));
-				});	
-		
-		}
+			});	
+
 
     };
 });
