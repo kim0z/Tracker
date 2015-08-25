@@ -64,11 +64,17 @@ trackerApp.controller('view1Ctrl',function($scope, $http, googleMapsAPIService, 
 
 
 
-//////// google maps section end ////////////////////
+//////// set valuse for the trip ////////////////////
 
 	$scope.tripName = {
         text: 'Trip Name 1',
         word: /^\s*\w*\s*$/
+    };
+    $scope.dateStart = {
+    	text: ''
+    };
+    $scope.dateEnd = {
+    	text: ''
     };
 
 
@@ -85,16 +91,19 @@ $scope.onBlur = function(dest) {
 
     $scope.onBlur = function(dest) {
 
-console.log(event.target.name);
+		console.log(event.target.name);
+		//console.log(angular.toJson(dest));
 
     	//create Json with trip id, name, dates
     	var jsonTripData = {};
+    	var jsonTripCities = {};
+    	var arrayCities = [];
     	if(event.target.name == 'inputTripName' || event.target.name == 'inputStartDate' || event.target.name == 'inputEndDate'  )
     	{
-
-    			console.log($scope.tripName.text);
+    		jsonTripData = {general: {trip_name: $scope.tripName.text, start_date: $scope.dateStart.text, end_date: $scope.dateEnd.text}};
+    		console.log(jsonTripData);
     	}
-    	else if(event.target.name == 'inputDest'){
+    	else {//if(event.target.name == 'inputDest'){
  
     		//get GeoLocation to the city
     		googleMapsAPIService.getGeoCode(dest)
@@ -105,6 +114,19 @@ console.log(event.target.name);
 				.error(function(data, status, headers, config) {
 					alert( "failure message: " + JSON.stringify({data: data}));
 				});	
+
+//get the destination number from the laber text destination1 = 1, detination2 = 2
+var r = /\d+/;
+var s = event.target.name;
+var cityNumber = s.match(r);
+
+alert($scope);
+
+			//	jsonTripCities[cityNumber] = angular.toJson(dest);
+			//	arrayCities.push(jsonTripCities);
+			//	console.log(arrayCities);
+
+
 
 
 				//save the cities list to data base

@@ -12,17 +12,17 @@
 
         <label>Start date:</label>
 			     <datepicker>
-			         <input name="inputStartDate" ng-model="dateStart.date" type="text" ng-blur="onBlur($event)"/>
+			         <input name="inputStartDate" ng-model="dateStart.text" type="text" ng-blur="onBlur($event)"/>
 		      	</datepicker>
 
          <label>End date:</label>
 			       <datepicker>
-			          <input name="inputEndDate" ng-model="dateEnd.date" type="text" ng-blur="onBlur($event)" />
+			          <input name="inputEndDate" ng-model="dateEnd.text" type="text" ng-blur="onBlur($event)" />
 			       </datepicker>
 
       <div ng-repeat="dest in destinations">
             <label>Destination {{$index + 1}}:</label>
-            <input type="text" name="inputDest" ng-model="dest.city" ng-blur="onBlur(dest)">
+            <input type="text" name="inputDest{{$index + 1}}" ng-model="dest.city" ng-blur="onBlur(dest)">
       </div>
 
       <button ng-click="addNewDestination()">Add new</button>
