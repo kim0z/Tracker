@@ -9,5 +9,8 @@ trackerApp.service('dataBaseSerivce', ['$http', function($http) {
 		return $http.post('/getLastTripId');
 	};
 	
+	this.getTrip = function() {
+		return $http.post('/getTrip');
+	};
 	
 }]);

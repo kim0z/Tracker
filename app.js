@@ -87,37 +87,36 @@ app.post('/getLastTripId', function(request, response){
   response.send(lastTripId); 
 });
 
-//save cities list to Firbase:
+//save Trip to DB:
 app.post('/saveTrip', function(request, response){
-  console.log("Server: Cities from client -> "+request.body);      // your JSON
-  var jsonTrip = request.body;
-
-/*
-  var jsonAllData = { 
-        trip_id: "100",
-        general:{
-        trip_name: "Iceland",
-        start_date: "15/09/2015",
-        end_date: "15/09/2015"
-      }
-    }
-*/
- //    jsonAllData["cities"] = request.body;
-  //   console.log(jsonAllData);
-/*
-  myFirebaseRef.once('value', function(snapshot) {
-  if (snapshot.hasChild('1')) {
-    console.log('exists');
+    var jsonTrip = request.body;
+    var onComplete = function(error) {
+      if (error) {
+          console.log('Trip object saved in DB -> '+JSON.stringify(jsonTrip));
+      response.send('Trip object saved in DB -> '+JSON.stringify(jsonTrip)).end();
+  } else {
+    console.log('Trip object failed to be saved in DB -> '+JSON.stringify(jsonTrip));
+     response.send('Trip object failed to be saved in DB ').end();
   }
+};
+myFirebaseRef.set(jsonTrip, onComplete);
+// Same as the previous example, except we will also log a message
+// when the data has finished synchronizing
+
+
+     // echo the result back - should be changed, validation required
 });
-*/
 
+//Retrieving Trip to DB:
+app.post('/getTrip', function(request, response){
+    console.log("Server: Retrieving Trip data from DB"); 
 
-    myFirebaseRef.push(jsonTrip);
+  myFirebaseRef.on("value", function(snapshot) {
+   console.log('Server: Trip object retrieving from DB succeeded -> '+ JSON.stringify(snapshot.val()));
+   response.send(JSON.stringify(snapshot.val()) ).end(); //send retried object to client
+    }, function (errorObject) {
+   console.log('Server: Trip object retrieving from DB failed -> ' + errorObject.code);
+   response.send('Server: Trip object retrieving from DB failed -> ' + errorObject.code).end();
+  });
 
-
-  //response.status(200).end();    // echo the result back - should be changed, validation required
 });
-
-
-

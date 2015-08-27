@@ -7,7 +7,7 @@ trackerApp.controller('view1Ctrl',function($scope, $http, googleMapsAPIService, 
 				$scope.lastTripId = data;
 			})
 			.error(function(data, status, headers, config) {
-				alert( "failure message getLastTripId: " + JSON.stringify({data: data}));
+				console.log( "failure message getLastTripId: " + JSON.stringify({data: data}));
 			});
 
 
@@ -86,25 +86,10 @@ trackerApp.controller('view1Ctrl',function($scope, $http, googleMapsAPIService, 
     	var jsonTripData = {};
     	var jsonTripCities = {};
     	var jsonTrip = {};
-    	//if(event.target.name == 'inputTripName' || event.target.name == 'inputStartDate' || event.target.name == 'inputEndDate'  )
-    //	{
+    	
     		jsonTripData = {general: {trip_name: $scope.tripName.text, start_date: $scope.dateStart.text, end_date: $scope.dateEnd.text}};
     		console.log(jsonTripData);
-    	//}
-    	//else {//if(event.target.name == 'inputDest'){
- 
-    		//get GeoLocation to the city
-    		/*
-    		googleMapsAPIService.getGeoCode(dest)
-				.success(function(data, status, headers, config) {
-				//$scope.message = data; //handle data back from server - not needed meanwhile
-					console.log(data);
-				})
-				.error(function(data, status, headers, config) {
-					alert( "failure message: " + JSON.stringify({data: data}));
-				});	
-*/
-		//get the destination number from the laber text destination1 = 1, detination2 = 2
+
 		var r = /\d+/;
 		var s = event.target.name;
 		var cityNumber = s.match(r);
@@ -130,8 +115,14 @@ trackerApp.controller('view1Ctrl',function($scope, $http, googleMapsAPIService, 
 					console.log(jsonTrip);
 				})
 				.error(function(data, status, headers, config) {
-					alert( "failure message: " + JSON.stringify({data: data}));
+					console.log( "failure message: " + JSON.stringify({data: data}));
 			});	
+
+
+
+			var trip = JSON.parse(dataBaseSerivce.getTrip()); // get trip data from DB
+			// Call Gogle map to draw the cities geo location
+
 
 
     };
