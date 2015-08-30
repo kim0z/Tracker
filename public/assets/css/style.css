@@ -48,7 +48,7 @@
 
 body {
   font-size:120%;
-  font-family:Georgia, "Times New Roman", Times, serif;
+  font-family: "Comic Sans MS";
   color:#3a3a3a;
 }
 
@@ -142,7 +142,7 @@ footer a img {
   margin-left: 400px;
 }
 
-}
+
 button{
     padding:0.3em;
     margin: 0.3em;

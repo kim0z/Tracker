@@ -12,6 +12,7 @@
     "bootstrap": "latest",
     "angularjs-datepicker": "latest",
     "angular-datepicker": "latest",
-    "angular-ui-router": "~0.2.15"
+    "angular-ui-router": "~0.2.15",
+    "mustache": "~2.1.3"
   }
 }

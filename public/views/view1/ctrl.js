@@ -1,29 +1,33 @@
 trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService, dataBaseService) {
 
-    var circle = {
-        id: 1,
-        center: {
-            latitude: 44,
-            longitude: -108
-        },
-        radius: 100000,
-        stroke: {
-            color: '#08B21F',
-            weight: 2,
-            opacity: 1
-        },
-        fill: {
-            color: '#08B21F',
-            opacity: 0.5
-        },
-        geodesic: true, // optional: defaults to false
-        draggable: true, // optional: defaults to false
-        clickable: true, // optional: defaults to true
-        editable: true, // optional: defaults to false
-        visible: true, // optional: defaults to true
-        control: {}
-    };
+    function getTemplate() {
+        var circleTemplate = {
+            id: 1,
+            center: {
+                latitude: 44,
+                longitude: -108
+            },
+            radius: 10000,
+            stroke: {
+                color: '#08B21F',
+                weight: 2,
+                opacity: 1
+            },
+            fill: {
+                color: '#08B21F',
+                opacity: 0.5
+            },
+            geodesic: true, // optional: defaults to false
+            draggable: true, // optional: defaults to false
+            clickable: true, // optional: defaults to true
+            editable: true, // optional: defaults to false
+            visible: true, // optional: defaults to true
+            control: {}
+        };
+        return circleTemplate;
+    }
 
+  //  var circle =
 
     dataBaseService.getTrip().then(function (results) {
             // Do something with results
@@ -32,25 +36,29 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
 
 
             Promise.resolve($scope.geoCode).then(function (val) { // why 3 promises
-
                 for (var i = 0; i < val.length; i++) {
-                    Promise.resolve(val[i]).then(function (val2) {
-                        console.log('latitude: ' + val2.data[0].city);
+
+                    Promise.resolve(val[i]).then(function (val2) {   // recursive behave, first the val[1] then val[0], ask about it?
+                        console.log('city: ' + val2.data[0].city);
                         console.log('latitude: ' + val2.data[0].latitude);
                         console.log('longitude: ' + val2.data[0].longitude);
 
-                        console.log(i);
-                        circle['id'] = i;
+                        console.log('index '+i);
+                        var circle= getTemplate();
+                        circle['id'] = Math.floor((Math.random() * 100) + 2);
                         circle['center'].latitude = val2.data[0].latitude;
                         circle['center'].longitude = val2.data[0].longitude;
+                        console.log(circle);
 
                         $scope.circles.push(circle);
+                       // circleArray[circleArray.length+1] = circle;
 
-                        console.log($scope.circles );
+                           console.log($scope.circles);
+                       // console.log(circleArray);
                     })
                 }
             })
-            //   }
+
         }
     );
 
@@ -177,10 +185,45 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
                 console.log("failure message: " + JSON.stringify({data: data}));
             });
 
-        /*
-         var tripObj = JSON.parse(dataBaseService.getTrip()); // get trip data from DB
-         // Call Gogle map to draw the cities geo location
-         googleMapsAPIService.createCircles(tripObj.cities);*/
+
+
+
+
+        dataBaseService.getTrip().then(function (results) {
+                // Do something with results
+                var cities = results.data.cities;
+                $scope.geoCode = googleMapsAPIService.createCircles(cities);
+
+
+                Promise.resolve($scope.geoCode).then(function (val) { // why 3 promises
+                    for (var i = 0; i < val.length; i++) {
+
+                        Promise.resolve(val[i]).then(function (val2) {   // recursive behave, first the val[1] then val[0], ask about it?
+                            console.log('city: ' + val2.data[0].city);
+                            console.log('latitude: ' + val2.data[0].latitude);
+                            console.log('longitude: ' + val2.data[0].longitude);
+
+                            console.log('index '+i);
+                            var circle= getTemplate();
+                            circle['id'] = Math.floor((Math.random() * 10) + 2);
+                            circle['center'].latitude = val2.data[0].latitude;
+                            circle['center'].longitude = val2.data[0].longitude;
+                            console.log(circle);
+
+                            $scope.circles.push(circle);
+                            // circleArray[circleArray.length+1] = circle;
+
+                            console.log($scope.circles);
+                            // console.log(circleArray);
+                        })
+                    }
+                })
+
+            }
+        );
+
+
+
 
 
     };
