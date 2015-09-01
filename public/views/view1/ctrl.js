@@ -27,7 +27,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
         return circleTemplate;
     }
 
-  //  var circle =
+    //  var circle =
 
     dataBaseService.getTrip().then(function (results) {
             // Do something with results
@@ -43,18 +43,18 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
                         console.log('latitude: ' + val2.data[0].latitude);
                         console.log('longitude: ' + val2.data[0].longitude);
 
-                        console.log('index '+i);
-                        var circle= getTemplate();
+                        console.log('index ' + i);
+                        var circle = getTemplate();
                         circle['id'] = Math.floor((Math.random() * 100) + 2);
                         circle['center'].latitude = val2.data[0].latitude;
                         circle['center'].longitude = val2.data[0].longitude;
                         console.log(circle);
 
                         $scope.circles.push(circle);
-                       // circleArray[circleArray.length+1] = circle;
+                        // circleArray[circleArray.length+1] = circle;
 
-                           console.log($scope.circles);
-                       // console.log(circleArray);
+                        console.log($scope.circles);
+                        // console.log(circleArray);
                     })
                 }
             })
@@ -186,9 +186,6 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
             });
 
 
-
-
-
         dataBaseService.getTrip().then(function (results) {
                 // Do something with results
                 var cities = results.data.cities;
@@ -203,8 +200,8 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
                             console.log('latitude: ' + val2.data[0].latitude);
                             console.log('longitude: ' + val2.data[0].longitude);
 
-                            console.log('index '+i);
-                            var circle= getTemplate();
+                            console.log('index ' + i);
+                            var circle = getTemplate();
                             circle['id'] = Math.floor((Math.random() * 10) + 2);
                             circle['center'].latitude = val2.data[0].latitude;
                             circle['center'].longitude = val2.data[0].longitude;
@@ -223,10 +220,74 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
         );
 
 
-
-
-
     };
+
+
+    $scope.rowCollection = [
+        {
+            city: 'London',
+            flight: 'London Airlines',
+            hotel: 'London Hotel',
+            car: 'Mercedes SL',
+            action1: 'Big Ben'
+        },
+        {
+            city: 'London',
+            flight: 'London Airlines',
+            hotel: 'London Hotel',
+            car: 'Mercedes SL',
+            action1: 'Big Ben'
+        },
+        {
+            city: 'London',
+            flight: 'London Airlines',
+            hotel: 'London Hotel',
+            car: 'Mercedes SL',
+            action1: 'Big Ben'
+        },
+        {
+            city: 'London',
+            flight: 'London Airlines',
+            hotel: 'London Hotel',
+            car: 'Mercedes SL',
+            action1: 'Big Ben'
+        },
+        {
+            city: 'London',
+            flight: 'London Airlines',
+            hotel: 'London Hotel',
+            car: 'Mercedes SL',
+            action1: 'Big Ben'
+        },
+        {
+            city: 'London',
+            flight: 'London Airlines',
+            hotel: 'London Hotel',
+            car: 'Mercedes SL',
+            action1: 'Big Ben'
+        },
+        {
+            city: 'London',
+            flight: 'London Airlines',
+            hotel: 'London Hotel',
+            car: 'Mercedes SL',
+            action1: 'Big Ben'
+        },
+        {
+            city: 'London',
+            flight: 'London Airlines',
+            hotel: 'London Hotel',
+            car: 'Mercedes SL',
+            action1: 'Big Ben'
+        }
+
+    ];
+
+    // model for bs-table
+    //  $scope.contactList = [];
+
+// get contact list
+    //   $scope.contactList = SomeService.GetAll();
 
 
 });
