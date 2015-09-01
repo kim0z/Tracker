@@ -31,7 +31,36 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
 
     dataBaseService.getTrip().then(function (results) {
             // Do something with results
-            var cities = results.data.cities;
+            var tripData = results.data;
+            var cities = tripData.cities;
+
+            //if we already have the trip data then we will fill the fields
+            //////// set valuse for the trip ////////////////////
+            if (tripData.general.general["trip_name"]) {
+                $scope.tripName = {
+                    text: tripData.general.general["trip_name"],
+                    word: /^\s*\w*\s*$/
+                };
+                $scope.dateStart = {
+                    text: tripData.general.general["start_date"]
+                };
+                $scope.dateEnd = {
+                    text: tripData.general.general["end_date"]
+                };
+            }
+            if (cities) {
+                console.log('lsfsfsfsfsf' + cities.length)
+                for (var i = 0; i < cities.length; i++) {
+                    if (i < cities.length - 1) { // city input already exists
+                        $scope.addNewDestination();
+                    }
+
+                    $scope.destinations[i].city = cities[i];
+
+                }
+            }
+
+
             $scope.geoCode = googleMapsAPIService.createCircles(cities);
 
 
@@ -45,7 +74,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
 
                         console.log('index ' + i);
                         var circle = getTemplate();
-                        circle['id'] = Math.floor((Math.random() * 100) + 2);
+                        circle['id'] = Math.floor((Math.random() * 100) + 2); // remove the random to be serial id
                         circle['center'].latitude = val2.data[0].latitude;
                         circle['center'].longitude = val2.data[0].longitude;
                         console.log(circle);
@@ -122,20 +151,6 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
             control: {}
         }
     ];
-
-
-//////// set valuse for the trip ////////////////////
-
-    $scope.tripName = {
-        text: 'Trip Name 1',
-        word: /^\s*\w*\s*$/
-    };
-    $scope.dateStart = {
-        text: ''
-    };
-    $scope.dateEnd = {
-        text: ''
-    };
 
 
     $scope.onBlur = function (dest) {
