@@ -6,28 +6,28 @@
         <section id="widget_1" class="widget_1">
             <form name="tripDefinitionForm">
 
-                <label>Trip id: {{$lastTripId + 1}}</label>
+                <label class="label1">Trip id: {{$lastTripId + 1}}</label>
 
-                <label>Trip name:</label>
+                <label class="label1">Trip name:</label>
                 <input type="text" name="inputTripName" ng-model="tripName.text"
                        ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
 
-                <label>Start date:</label>
+                <label class="label1">Start date:</label>
                 <datepicker>
                     <input name="inputStartDate" ng-model="dateStart.text" type="text" ng-blur="onBlur($event)"/>
                 </datepicker>
 
-                <label>End date:</label>
+                <label class="label1">End date:</label>
                 <datepicker>
                     <input name="inputEndDate" ng-model="dateEnd.text" type="text" ng-blur="onBlur($event)"/>
                 </datepicker>
 
                 <div ng-repeat="dest in destinations">
-                    <label>Destination {{$index + 1}}:</label>
+                    <label class="label1">Destination {{$index + 1}}:</label>
                     <input type="text" name="inputDest{{$index + 1}}" ng-model="dest.city" ng-blur="onBlur(dest)">
                 </div>
 
-                <button ng-click="addNewDestination()">Add new</button>
+                <button ng-click="addNewDestination()">Add new city</button>
 
 
                 <!-- <div id="space-for-input"> -->
@@ -58,42 +58,127 @@
 
         <section id="widget_3" class="widget_3">
 
-            <table st-table="rowCollection">
+            <table st-table="rowCollection" data-toggle="table" calss="table-bordered">
                 <thead>
                 <tr>
-                    <th>Task/Date</th>
-                    <th>Day 1</th>
-                    <th>Day 2</th>
-                    <th>Day 3</th>
-                    <th>Day 4</th>
-                    <th>Day 5</th>
-                    <th>Day 6</th>
-                    <th>Day 7</th>
-                    <th>Day 8</th>
-                    <th>Day 9</th>
-                    <th>Day 10</th>
-                    <th>Day 11</th>
-                    <th>Day 12</th>
+                    <th><label class="label1">Task/Day</label></th>
+                    <th><label class="label1">Day 1</label></th>
+                    <th><label class="label1">Day 2</label></th>
+                    <th><label class="label1">Day 3</label></th>
+                    <th><label class="label1">Day 4</label></th>
+                    <th><label class="label1">Day 5</label></th>
+                    <th><label class="label1">Day 6</label></th>
+                    <th><label class="label1">Day 7</label></th>
+                    <th><label class="label1">Day 8</label></th>
+                    <th><label class="label1">Day 9</label></th>
+                    <th><label class="label1">Day 10</label></th>
+                    <th><label class="label1">Day 11</label></th>
+                    <th><label class="label1">Day 12</label></th>
                 </tr>
                 <tr>
-                <td>City</td>
-                <td>Flight</td>
-                <td>Hotel</td>
-                <td>Car</td>
-                <td>Action 1</td>
-                <td>Action 2</td>
-                <td>Action 3</td>
+                    <td><label class="label1">City</label></td>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+
                 </tr>
+
+                <tr>
+                    <td><label class="label1">Flight</label></td>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+
+                </tr>
+
+                <tr>
+                    <td><label class="label1">Hotel</label></td>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+
+                </tr>
+
+                <tr>
+                    <td><label class="label1">Car</label></td>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+
+                </tr>
+
+                <tr>
+                    <td><label class="label1">Action 1</label></td>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+
+                </tr>
+
+                <tr>
+                    <td><label class="label1">Action 2</label></td>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">Iceland</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+                    <th><label class="label1">London</label></th>
+
+                </tr>
+
+
                 </thead>
-                <tbody>
-                <tr ng-repeat="row in rowCollection">
-                    <td>{{row.city}}</td>
-                    <td>{{row.flight}}</td>
-                    <td>{{row.hotel}}</td>
-                    <td>{{row.car}}</td>
-                    <td>{{row.action1}}</td>
-                </tr>
-                </tbody>
             </table>
 
 
