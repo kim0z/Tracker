@@ -3,7 +3,7 @@ var express = require('express');
 var app = express(); 								// create our app w/ express
 var port = process.env.PORT || 9090;
 //var mongoose = require('mongoose'); 					// mongoose for mongodb				// set the port
-var database = require('./config/database'); 			// load the database config
+//var database = require('./config/database'); 			// load the database config
 var Firebase = require("firebase");                     //Firebase cloud Database No Sql
 
 //PostgresSQL
