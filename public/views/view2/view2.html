@@ -8,7 +8,7 @@
 
         <div id="list">
             <ul infinite-scroll ajax-call="loadItems()" class="ul_list">
-                <li ng-repeat="item in data"><strong>{{item.id}}.</strong> {{item.name}}: {{item.description}}</li>
+                <li class="list-group-item" ng-repeat="item in data"><strong>{{item.id}}.</strong> {{item.name}}: {{item.description}}</li>
             </ul>
         </div>
 
@@ -40,7 +40,7 @@
         <P style="text-decoration:underline;">Friends list:<P>
         <div id="list_friends">
             <ul infinite-scroll ajax-call="loadItems()" class="ul_list">
-                <li ng-repeat="item in data"><strong>{{item.id}}.</strong> {{item.name}}: {{item.description}}</li>
+                <li class="list-group-item" ng-repeat="item in data"><strong>{{item.id}}.</strong> {{item.name}}: {{item.description}}</li>
             </ul>
         </div>
 
