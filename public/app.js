@@ -43,4 +43,5 @@ var trackerApp = angular.module('myApp', [
             china: true
         });
 
-    }]);
+    }])
+

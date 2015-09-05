@@ -6,11 +6,13 @@ var port = process.env.PORT || 9090;
 //var database = require('./config/database'); 			// load the database config
 var Firebase = require("firebase");                     //Firebase cloud Database No Sql
 
+var Dropbox = require("dropbox");                       //dropbox - to get the files of GPS, XML format
 //PostgresSQL
 //var dbOperations = require("./dbOperations.js");
 //var pg = require('pg');
-//var conString = "postgres://postgres:789852@localhost/database"; should be saved as Env variable 
+//var conString = "postgres://postgres:789852@localhost/database"; should be saved as Env variable
 
+var config = require('./config');                       //general config, passwords, accounts, etc
 
 var morgan = require('morgan'); 		// log requests to the console (express4)
 var bodyParser = require('body-parser'); 	// pull information from HTML POST (express4)
@@ -120,3 +122,42 @@ app.post('/getTrip', function (request, response) {
         //response.send('Server: Trip object retrieving from DB failed -> ' + errorObject.code);
     });
 });
+
+
+
+// DropBox part
+
+// Server-side applications use both the API key and secret.
+var client = new Dropbox.Client({
+    key: config.dropbox.key,
+    secret: config.dropbox.secret,
+    sandbox     : false,
+    token       : config.dropbox.token,
+    tokenSecret : config.dropbox.token.secret
+});
+
+client.getAccountInfo(function(error, accountInfo) {
+    if (error) {
+        console.log(error);
+        //return showError(error);  // Something went wrong.
+    }
+
+    console.log("Hello, " + accountInfo.name + "!");
+});
+
+client.readFile("20150904.gpx", function(error, data) {
+    if (error) {
+        console.log(error);
+        //return showError(error);  // Something went wrong.
+    }
+        console.log(data);  // data has the file's contents
+});
+
+/*
+client.writeFile("hello_world.txt", "Hello, world!\n", function(error, stat) {
+    if (error) {
+       // return showError(error);  // Something went wrong.
+    }
+
+    console.log("File saved as revision " + stat.versionTag);
+});*/

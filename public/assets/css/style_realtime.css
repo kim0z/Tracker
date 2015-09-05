@@ -1,0 +1,47 @@
+.widget_list_tips {
+    position: absolute;
+    top: 100px;
+    float: right;
+    right: 0px;
+    height: 600px;
+    width: 300px;
+    display: block;
+}
+.widget_list_friends {
+    position: absolute;
+    top: 100px;
+    float: left;
+    left: 0px;
+    height: 600px;
+    width: 300px;
+    display: block;
+}
+.widget_photos {
+    background: #99CCFF;
+    width: 100%;
+    height: 230px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+.widget_map_realtime {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1000px;
+}
+
+.ul_list {
+    /* max-height: 500px; */
+    height: 580px;
+    width: 300px;
+    overflow: scroll;
+    list-style-type: none;
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0px;
+}
+
+#list{
+    overflow: auto;
+}
