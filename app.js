@@ -145,26 +145,7 @@ client.getAccountInfo(function(error, accountInfo) {
     console.log("Hello from DropBox, " + accountInfo.name + "!");
 });
 
-client.readFile("20150904.gpx", function(error, data) {
-    if (error) {
-        console.log(error);
-        //return showError(error);  // Something went wrong.
-    }
 
-
-       // console.log('got data: '+data);
-
-        var parseString = require('xml2js').parseString;
-        var xml = data;
-        parseString(xml, function (err, result) {
-            //console.log(result);
-            var gpsJson = result;
-            //Ponts data : gpsJson.gpx.trk[0].trkseg[0].trkpt
-            //Point :: gpsJson.gpx.trk[0].trkseg[0].trkpt[2]['$'] ... { lat: '37.422005', lon: '-422.08409333333327' }
-            console.log(gpsJson.gpx.trk[0].trkseg[0].trkpt[5]['$']);
-        });
-       // console.log(data);  // data has the file's contents
-});
 
 /*
 client.writeFile("hello_world.txt", "Hello, world!\n", function(error, stat) {
@@ -175,3 +156,36 @@ client.writeFile("hello_world.txt", "Hello, world!\n", function(error, stat) {
     console.log("File saved as revision " + stat.versionTag);
 });*/
 
+
+// Get GPS XML from DropBox -> Parse to JSON -> Send to client
+
+//Retrieving Trip to DB:
+app.post('/getGpsPoints', function (request, response) {
+    console.log("Server: get GPS points");
+
+    client.readFile("20150904.gpx", function(error, data) {
+        if (error) {
+            console.log(error);
+            //return showError(error);  // Something went wrong.
+        }
+
+
+        // console.log('got data: '+data);
+
+        var parseString = require('xml2js').parseString;
+        var xml = data;
+        parseString(xml, function (err, result) {
+            //console.log(result);
+            var gpsJson = result;
+            //Ponts data : gpsJson.gpx.trk[0].trkseg[0].trkpt
+            //Point :: gpsJson.gpx.trk[0].trkseg[0].trkpt[2]['$'] ... { lat: '37.422005', lon: '-422.08409333333327' }
+            //console.log(gpsJson.gpx.trk[0].trkseg[0].trkpt[5]['$']);
+            response.send(gpsJson.gpx.trk[0].trkseg[0]);
+        });
+        // console.log(data);  // data has the file's contents
+    });
+
+
+
+
+});
