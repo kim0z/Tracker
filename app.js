@@ -180,6 +180,7 @@ app.post('/getGpsPoints', function (request, response) {
             //Ponts data : gpsJson.gpx.trk[0].trkseg[0].trkpt
             //Point :: gpsJson.gpx.trk[0].trkseg[0].trkpt[2]['$'] ... { lat: '37.422005', lon: '-422.08409333333327' }
             //console.log(gpsJson.gpx.trk[0].trkseg[0].trkpt[5]['$']);
+            console.log(gpsJson.gpx.trk[0].trkseg[0]);
             response.send(gpsJson.gpx.trk[0].trkseg[0]);
         });
         // console.log(data);  // data has the file's contents
