@@ -66,7 +66,7 @@ var geocoder = require('/Users/fanadka/AppData/Roaming/npm/node_modules/node-geo
 app.post('/getGeoCode', function (request, response) {
 // Using callback
 //console.log(Server: request.body.city); // print the city name from UI
-    console.log('Server city name ' +request.body);
+    console.log('Server city name ' + request.body);
     geocoder.geocode(request.body, function (err, res) {
         //  console.log(err,res); //print the response from GeoLocation google API
         response.send(res);
@@ -95,7 +95,7 @@ app.post('/saveTrip', function (request, response) {
             response.send('Trip object failed to be saved in DB ').end();
         } else {
             console.log('Trip object saved in DB -> ' + JSON.stringify(jsonTrip));
-            response.send('Trip object saved in DB -> '+JSON.stringify(jsonTrip)).end();
+            response.send('Trip object saved in DB -> ' + JSON.stringify(jsonTrip)).end();
         }
     };
     myFirebaseRef.set(jsonTrip, onComplete);
@@ -124,19 +124,18 @@ app.post('/getTrip', function (request, response) {
 });
 
 
-
 // DropBox part
 
 // Server-side applications use both the API key and secret.
 var client = new Dropbox.Client({
     key: config.dropbox.key,
     secret: config.dropbox.secret,
-    sandbox     : false,
-    token       : config.dropbox.token,
-    tokenSecret : config.dropbox.token.secret
+    sandbox: false,
+    token: config.dropbox.token,
+    tokenSecret: config.dropbox.token.secret
 });
 
-client.getAccountInfo(function(error, accountInfo) {
+client.getAccountInfo(function (error, accountInfo) {
     if (error) {
         console.log(error);
         //return showError(error);  // Something went wrong.
@@ -146,15 +145,14 @@ client.getAccountInfo(function(error, accountInfo) {
 });
 
 
-
 /*
-client.writeFile("hello_world.txt", "Hello, world!\n", function(error, stat) {
-    if (error) {
-       // return showError(error);  // Something went wrong.
-    }
+ client.writeFile("hello_world.txt", "Hello, world!\n", function(error, stat) {
+ if (error) {
+ // return showError(error);  // Something went wrong.
+ }
 
-    console.log("File saved as revision " + stat.versionTag);
-});*/
+ console.log("File saved as revision " + stat.versionTag);
+ });*/
 
 
 // Get GPS XML from DropBox -> Parse to JSON -> Send to client
@@ -163,7 +161,7 @@ client.writeFile("hello_world.txt", "Hello, world!\n", function(error, stat) {
 app.post('/getGpsPoints', function (request, response) {
     console.log("Server: get GPS points");
 
-    client.readFile("20150904.gpx", function(error, data) {
+    client.readFile("20150904.gpx", function (error, data) {
         if (error) {
             console.log(error);
             //return showError(error);  // Something went wrong.
@@ -179,14 +177,23 @@ app.post('/getGpsPoints', function (request, response) {
             var gpsJson = result;
             //Ponts data : gpsJson.gpx.trk[0].trkseg[0].trkpt
             //Point :: gpsJson.gpx.trk[0].trkseg[0].trkpt[2]['$'] ... { lat: '37.422005', lon: '-422.08409333333327' }
-            //console.log(gpsJson.gpx.trk[0].trkseg[0].trkpt[5]['$']);
-            console.log(gpsJson.gpx.trk[0].trkseg[0]);
-            response.send(gpsJson.gpx.trk[0].trkseg[0]);
+            //console.log(gpsJson.gpx.trk[0].trkseg[0].trkpt);
+
+            var points = gpsJson.gpx.trk[0].trkseg[0].trkpt;
+
+            var pointsJson = [{id: 1, path: []}];
+
+            for (var i = 0; i < points.length; i++) {
+                //console.log(points[i]['$'].lat);
+                // console.log(points[i]['$'].lon);
+                pointsJson[0].path.push({latitude: points[i]['$'].lat, longitude: points[i]['$'].lon});
+            }
+
+            //   console.log(gpsJson.gpx.trk[0].trkseg[0]);
+            response.send(pointsJson[0]);
         });
         // console.log(data);  // data has the file's contents
     });
-
-
 
 
 });

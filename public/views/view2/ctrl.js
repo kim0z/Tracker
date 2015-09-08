@@ -1,10 +1,26 @@
 trackerApp.controller('view2Ctrl', function ($scope, $http, googleMapsAPIService, dataBaseService) {
 
     $scope.init = function () {
+
         // check if there is query in url
         // and fire search in case its value is not empty
         Promise.resolve(dataBaseService.getGpsPoints()).then(function (val) {
-            console.log(val.data.trkpt[0]['$']);
+            console.log(val.data);
+            $scope.polylines.push(val.data);
+            console.log('ploy1 '+   $scope.polylines[0].id )
+            console.log('ploy2 '+   $scope.polylines[1].id )
+
+            var output1 = '';
+            for (var property in $scope.polylines[0]) {
+                output1 += property + ': ' + $scope.polylines[0][property]+'; ';
+            }
+            console.log(output1);
+
+            var output = '';
+            for (var property in $scope.polylines[1]) {
+                output += property + ': ' + $scope.polylines[1][property]+'; ';
+            }
+            console.log(output);
         })
     };
 
@@ -84,6 +100,9 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, googleMapsAPIService
         }*/
     ];
 
+
+
+    //console.log('karim '+ $scope.polylines[0].id);
 
     $scope.map = {
         center: {
