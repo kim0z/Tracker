@@ -59,7 +59,7 @@ var extra = {
     formatter: null         // 'gpx', 'string', ...
 };
 
-var geocoder = require('/Users/fanadka/AppData/Roaming/npm/node_modules/node-geocoder')(geocoderProvider, httpAdapter, extra);
+var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
 
 
 //post - receive country and city name, return GeoCode from Google Maps API
@@ -139,9 +139,7 @@ client.getAccountInfo(function (error, accountInfo) {
     if (error) {
         console.log(error);
         //return showError(error);  // Something went wrong.
-    }
-
-    console.log("Hello from DropBox, " + accountInfo.name + "!");
+    }else console.log("Hello from DropBox, " + accountInfo.name + "!");
 });
 
 

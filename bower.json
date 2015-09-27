@@ -8,12 +8,15 @@
   "dependencies": {
     "angular-loader": "~1.4.0",
     "angular-google-maps": "latest",
+    "angular-simple-logger": "latest",
     "angular-number-picker": "latest",
     "bootstrap": "latest",
     "angularjs-datepicker": "latest",
     "angular-datepicker": "latest",
     "angular-ui-router": "~0.2.15",
     "mustache": "~2.1.3",
-    "angular-smart-table": "~2.1.3"
+    "angular-smart-table": "~2.1.3",
+    "material-design-icons": "~1.0",
+    "angular-material": "~0.11.1"
   }
 }

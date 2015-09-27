@@ -2,11 +2,15 @@
 
 // Declare app level module which depends on views, and components
 var trackerApp = angular.module('myApp', [
+    'nemLogging',
     'ui.router',
     'uiGmapgoogle-maps',
     'angularNumberPicker',
     '720kb.datepicker',
-    'smart-table'
+    'smart-table',
+    'ngMaterial',
+    'ngAnimate',
+    'ngAria'
 ])
     .config(function ($stateProvider, $urlRouterProvider) {
         //
@@ -44,4 +48,10 @@ var trackerApp = angular.module('myApp', [
         });
 
     }])
+
+    .config(function($mdThemingProvider) {
+        $mdThemingProvider.theme('blue')
+            .primaryPalette('blue')
+            .accentPalette('red');
+    });
 
