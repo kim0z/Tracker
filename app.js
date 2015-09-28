@@ -62,6 +62,11 @@ var extra = {
 var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
 
 
+
+
+
+//////////////////////// DB /////////////////////////////////////////////////
+
 //post - receive country and city name, return GeoCode from Google Maps API
 app.post('/getGeoCode', function (request, response) {
 // Using callback
@@ -79,12 +84,36 @@ app.post('/getGeoCode', function (request, response) {
 app.post('/getLastTripId', function (request, response) {
     var lastTripId = '0';
     myFirebaseRef.endAt().limitToLast(1).on("child_added", function (snapshot) {
-        lastTripId = snapshot.val().trip_id;
+        console.log('id'+snapshot.val());
+        lastTripId = snapshot.val();
         console.log("Server: Last trip id: " + lastTripId);
         response.send(lastTripId);
     });
 
 });
+
+
+//save NEWvTrip to DB:
+app.post('/saveNewTrip', function (request, response) {
+    var jsonTrip = request.body;
+    var onComplete = function (error) {
+        if (error) {
+            console.log('Trip object failed to be saved in DB -> ' + JSON.stringify(jsonTrip));
+            response.send('Trip object failed to be saved in DB ').end();
+        } else {
+            console.log('Trip object saved in DB -> ' + JSON.stringify(jsonTrip));
+            response.send('Trip object saved in DB -> ' + JSON.stringify(jsonTrip)).end();
+        }
+    };
+    myFirebaseRef.push(jsonTrip, onComplete);
+// Same as the previous example, except we will also log a message
+// when the data has finished synchronizing
+
+
+    // echo the result back - should be changed, validation required
+});
+
+
 
 //save Trip to DB:
 app.post('/saveTrip', function (request, response) {
@@ -106,7 +135,7 @@ app.post('/saveTrip', function (request, response) {
     // echo the result back - should be changed, validation required
 });
 
-//Retrieving Trip to DB:
+//Retrieving Trip from DB:
 app.post('/getTrip', function (request, response) {
     console.log("Server: Retrieving Trip data from DB");
 
@@ -124,7 +153,17 @@ app.post('/getTrip', function (request, response) {
 });
 
 
-// DropBox part
+//get record count in DB (to calculate the id of the new record
+app.post('/getTrip', function (request, response) {
+
+});
+
+
+
+
+//////////////////////////////////////////////////DB end ////////////////////////////////////
+
+////////////////////////////////////////////////// DropBox part ///////////////////////////
 
 // Server-side applications use both the API key and secret.
 var client = new Dropbox.Client({
@@ -155,7 +194,7 @@ client.getAccountInfo(function (error, accountInfo) {
 
 // Get GPS XML from DropBox -> Parse to JSON -> Send to client
 
-//Retrieving Trip to DB:
+//get GPS from DropBox and send to client:
 app.post('/getGpsPoints', function (request, response) {
     console.log("Server: get GPS points");
 
@@ -193,5 +232,5 @@ app.post('/getGpsPoints', function (request, response) {
         // console.log(data);  // data has the file's contents
     });
 
-
+/////////////////// DropBox end ///////////////////////////
 });

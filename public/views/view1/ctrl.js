@@ -28,7 +28,8 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
     }
 
     //  var circle =
-
+//this below shoould be used only in edit mode when called from the Trip List page
+    /*
     dataBaseService.getTrip().then(function (results) {
             // Do something with results
             var tripData = results.data;
@@ -91,12 +92,27 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
         }
     );
 
+*/
+    /*
+    dataBaseService.getLastTripId().then(function (results) {
+
+        //save New Trip when open the page
+        dataBaseService.saveNewTrip(jsonTrip)
+            .success(function (data, status, headers, config) {
+                //$scope.message = data; //handle data back from server - not needed meanwhile
+                console.log(jsonTrip);
+            })
+            .error(function (data, status, headers, config) {
+                console.log("failure message: " + JSON.stringify({data: data}));
+            });
+    });
+    */
 
     //get last trip id from server
     dataBaseService.getLastTripId()
         .success(function (data, status, headers, config) {
-            //$scope.message = data; //handle data back from server - not needed meanwhile
             $scope.lastTripId = data;
+            $scope.newTripId = parseInt($scope.lastTripId) + 1;
         })
         .error(function (data, status, headers, config) {
             console.log("failure message getLastTripId: " + JSON.stringify({data: data}));
@@ -159,48 +175,57 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
         //console.log(angular.toJson(dest));
 
         //create Json with trip id, name, dates
-        var jsonTripData = {};
-        var jsonTripCities = {};
-        var jsonTrip = {};
+        var jsonTripGeneralInfo = {};  // dates, name, could be more info added here
+        var jsonTripCities = {};  // {city1, city2, city3 ..} should be created in the first time only, when create the account, and then just updating.
+        var jsonTrip = {};  // {id:1,{general, cities}}
+        var jsonMain = {};  //{kareem9k{trips{tripId{general, cities}}}}
 
-        jsonTripData = {
-            general: {
+        //save all the general information about the trip
+        jsonTripGeneralInfo = {
                 trip_name: $scope.tripName.text,
                 start_date: $scope.dateStart.text,
-                end_date: $scope.dateEnd.text
-            }
+                end_date: $scope.dateEnd.text,
+                continent:'America'
         };
-        console.log(jsonTripData);
+
+        //save all destination (cities) to json file
+        for (var i = 0; i < $scope.destinations.length; i++) {
+            jsonTripCities[i] = $scope.destinations[i].city;
+        }
+
+        if($scope.newTripId >= 0 ){
+            jsonTrip = {'$scope.newTripId':[jsonTripGeneralInfo, jsonTripCities]};
+        }else{
+            jsonTrip = {'1':{'general':jsonTripGeneralInfo,'cities': jsonTripCities}};
+        }
+
+
+        jsonMain = {"kareem9k":{'trips':jsonTrip}};
+        console.log(jsonMain);
+
+
+
+
+
+      //  console.log(jsonTripData);
 
         var r = /\d+/;
         var s = event.target.name;
         var cityNumber = s.match(r);
 
-        //save all destination to json file
-        for (var i = 0; i < $scope.destinations.length; i++) {
-            jsonTripCities[i] = $scope.destinations[i].city;
-        }
-
-        //create the full trip json {trip_id: 2, jsonTripData, jsonTripCities}
-        console.log("here" + $scope.lastTripId);
-        jsonTrip['trip_id'] = $scope.lastTripId + 1;
-        jsonTrip['general'] = jsonTripData;
-        jsonTrip['cities'] = jsonTripCities;
-
-        //}
-
 
         //save the cities list to data base
-        dataBaseService.saveTrip(jsonTrip)
+        dataBaseService.saveTrip(jsonMain)
             .success(function (data, status, headers, config) {
                 //$scope.message = data; //handle data back from server - not needed meanwhile
-                console.log(jsonTrip);
+                console.log(jsonMain);
             })
             .error(function (data, status, headers, config) {
                 console.log("failure message: " + JSON.stringify({data: data}));
             });
 
 
+        //should be fixed according to the new structure
         dataBaseService.getTrip().then(function (results) {
                 // Do something with results
                 var cities = results.data.cities;

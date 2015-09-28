@@ -18,7 +18,7 @@
             <div class="md-toolbar-tools">
                 <md-button ng-click="toggleMenu()">Menu</md-button>
                 <h3>
-                    <span>Angular Inbox</span>
+                    <span>Your trips</span>
                 </h3>
             </div>
         </md-toolbar>
@@ -139,10 +139,18 @@
 <!-- <md-button  class="md-fab md-raised" ng-click="showAddButtons = !showAddButtons;" aria-label="New document">
     <md-icon icon="bower_components/material-design-icons/content/svg/production/ic_add_24px.svg" style="width: 24px; height: 24px;"></md-icon>
 </md-button> -->
+<md-button id="mainFab" class="md-fab md-raised" ng-click="openTripPlanPage($event)" aria-label="Photos">
+    <md-icon md-svg-src="bower_components/material-design-icons/content/svg/production/ic_add_24px.svg"
+             style="width: 24px; height: 24px;"></md-icon>
+</md-button>
+
+<!-- the Original button -->
+<!--
 <md-button id="mainFab" class="md-fab md-raised" ng-click="showAddButtons = !showAddButtons;" aria-label="Photos">
     <md-icon md-svg-src="bower_components/material-design-icons/content/svg/production/ic_add_24px.svg"
              style="width: 24px; height: 24px;"></md-icon>
 </md-button>
+-->
 
 <script src="/bower_components/angular/angular.js"></script>
 <script src="/bower_components/angular-aria/angular-aria.js"></script>

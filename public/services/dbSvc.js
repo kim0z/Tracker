@@ -5,6 +5,11 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/saveTrip', dataObj);
     };
 
+    this.saveNewTrip = function (dataObj) {
+        console.log('database service');
+        return $http.post('/saveNewTrip', dataObj);
+    };
+
     this.getLastTripId = function () {
         return $http.post('/getLastTripId');
     };

@@ -16,8 +16,11 @@ trackerApp.controller('view3Ctrl' ,function($scope, $http, googleMapsAPIService,
         // Main Controller
     //    app.controller('YourController', ['$scope', '$mdDialog', '$mdSidenav', function($scope, $mdDialog, $mdSidenav) {
 
+
+    $scope.openTripPlanPage = function($event) {
+        window.open ('#/view1','_self',false)
+    };
             $scope.openDialog = function($event) {
-                console.log('openDialog');
                 $mdDialog.show({
                     targetEvent: $event,
                     template: '<md-dialog>' +
