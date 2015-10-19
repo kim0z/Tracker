@@ -1,4 +1,4 @@
-trackerApp.controller('view3Ctrl' ,function($scope, $http, googleMapsAPIService,$mdDialog, $mdSidenav) {
+trackerApp.controller('view3Ctrl' ,function($scope, $http, googleMapsAPIService,$mdDialog, $mdSidenav, dataBaseService,  messages) {
     //start
 /*
     (function() {
@@ -13,12 +13,24 @@ trackerApp.controller('view3Ctrl' ,function($scope, $http, googleMapsAPIService,
                 .accentPalette('red');
         });
 */
-        // Main Controller
-    //    app.controller('YourController', ['$scope', '$mdDialog', '$mdSidenav', function($scope, $mdDialog, $mdSidenav) {
+    // Main Controller
 
-
+    //when click on create new test 'the red circule button'
     $scope.openTripPlanPage = function($event) {
-        window.open ('#/view1','_self',false)
+        //create new record, get the id and move to the planning page, and behave like editing
+        //1. push empty new record to trips table
+        //2. get the id of the trip
+        //3. save the trip id into messages service
+        //4. make sure the planning page open the message and update the record
+
+        //callback
+        dataBaseService.createNewTripRecord().then(function (results) {
+                //$scope.message = data; //handle data back from server - not needed meanwhile
+                console.log('Client:: View3:: Fun:: openTripPlanPage :: new empty trip record created');
+                window.open ('#/view1','_self',false)
+            })
+
+
     };
             $scope.openDialog = function($event) {
                 $mdDialog.show({

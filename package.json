@@ -16,7 +16,7 @@
     "googlemaps": "latest",
     "method-override": "~2.1.2",
     "morgan": "~1.2.2",
-    "pg": "^4.4.1",
+    "pg": "^4.4.3",
     "xml2js": "^0.4.12"
   }
 }

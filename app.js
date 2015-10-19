@@ -7,10 +7,17 @@ var port = process.env.PORT || 9090;
 var Firebase = require("firebase");                     //Firebase cloud Database No Sql
 
 var Dropbox = require("dropbox");                       //dropbox - to get the files of GPS, XML format
+
 //PostgresSQL
-//var dbOperations = require("./dbOperations.js");
-//var pg = require('pg');
-//var conString = "postgres://postgres:789852@localhost/database"; should be saved as Env variable
+var pg = require('pg');
+//var conString = "postgres://postgres:789852@localhost/database"; //should be saved as Env variable
+
+
+var conString = "pg://karim:1234@localhost:5432/karim";
+var client = new pg.Client(conString);
+//client.connect();
+
+
 
 var config = require('./config');                       //general config, passwords, accounts, etc
 
@@ -20,6 +27,7 @@ var methodOverride = require('method-override'); // simulate DELETE and PUT (exp
 var myFirebaseRef = new Firebase("https://luminous-torch-9364.firebaseio.com/"); //Firebase DB connection 
 
 // configuration ===============================================================
+
 //mongoose.connect(database.url); 	// connect to mongoDB database on modulus.io
 
 app.use(express.static(__dirname + '/public')); 				// set static path
@@ -31,6 +39,141 @@ app.use(methodOverride());
 
 // routes 
 require('./app/routes.js')(app);
+
+
+
+
+
+//REST calls for Postgres DB
+
+//Postgres :: Insert new trip to the table of trips with data
+app.post('/insertTrip', function (request, response) {
+
+    console.log('SERVER:: Postgres:: insert new record to trips table with data');
+    var jsonTrip = request.body;
+
+    var cities = '{'+jsonTrip['username'].trip.cities+'}';
+    var tripGeneral = jsonTrip['username'].trip.general;
+    tripGeneral.continent = '{'+ tripGeneral.continent +'}';
+
+
+    pg.connect(conString, function(err, client, done) {
+        if(err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("INSERT INTO trips(trip_name, start_date, end_date, continent, cities) values($1, $2, $3, $4, $5)",
+            [tripGeneral.trip_name, '03/03/2015', '03/03/2015', tripGeneral.continent , cities], function(err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+
+            if(err) {
+                return console.error('error running query', err);
+            }
+            console.log(result);
+            //output: 1
+        });
+    });
+    response.status(200).end();
+
+});
+
+
+//Postgres :: Insert new empty trip record to trips table
+app.post('/insertNewEmptyTrip', function (request, response) {
+
+    console.log('SERVER:: Postgres:: insert new empty record to trips table');
+
+    pg.connect(conString, function(err, client, done) {
+        if(err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("INSERT INTO trips(trip_name, start_date, end_date, continent, cities) values($1, $2, $3, $4, $5)",
+            ['', '01/01/2000', '01/01/2000', '{}' , '{}'], function(err, result) {
+                //call `done()` to release the client back to the pool
+                done();
+
+                if(err) {
+                    return console.error('error running query', err);
+                }
+                console.log(result);
+                //output: 1
+            });
+    });
+    response.status(200).end();
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//get last trip id from the trips table
+app.post('/getLastTripId', function (request, response) {
+    console.log('SERVER: get last trip id from trips table');
+
+    pg.connect(conString, function(err, client, done) {
+        if(err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("SELECT * limit 1", function(err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+
+            if(err) {
+                return console.error('error running query', err);
+            }
+            console.log('SERVER: last trip id: '+ result);
+            //output: 1
+        });
+    });
+    response.status(200).end();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //post - receive trip details
 
@@ -67,7 +210,7 @@ var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
 
 //////////////////////// DB /////////////////////////////////////////////////
 
-//post - receive country and city name, return GeoCode from Google Maps API
+//receive country and city name, return GeoCode from Google Maps API
 app.post('/getGeoCode', function (request, response) {
 // Using callback
 //console.log(Server: request.body.city); // print the city name from UI
@@ -80,12 +223,12 @@ app.post('/getGeoCode', function (request, response) {
 });
 
 
-//get last trip id from DB
+//get last trip id from DB // UNDER FIXING
 app.post('/getLastTripId', function (request, response) {
     var lastTripId = '0';
     myFirebaseRef.endAt().limitToLast(1).on("child_added", function (snapshot) {
-        console.log('id'+snapshot.val());
-        lastTripId = snapshot.val();
+        console.log('id'+snapshot.val().trips);
+        lastTripId = snapshot.val().trips;
         console.log("Server: Last trip id: " + lastTripId);
         response.send(lastTripId);
     });
@@ -115,7 +258,7 @@ app.post('/saveNewTrip', function (request, response) {
 
 
 
-//save Trip to DB:
+//save Trip to DB: //// OLD deprecated
 app.post('/saveTrip', function (request, response) {
     var jsonTrip = request.body;
     var onComplete = function (error) {
@@ -142,19 +285,34 @@ app.post('/getTrip', function (request, response) {
 
     myFirebaseRef.on("value", function (snapshot) {
         console.log('Server: Trip object retrieving from DB succeeded -> ' + JSON.stringify(snapshot.val()));
+        response.json(snapshot.val());
 
-        response.json(snapshot.val()); //send retried object to client
+    }, function (errorObject) {
+        console.log('Server: Trip object retrieving from DB failed -> ' + errorObject.code);
+        //response.send('Server: Trip object retrieving from DB failed -> ' + errorObject.code);
+    });
+});
+
+
+
+
+//get record count in DB (to calculate the id of the new record) for an user
+app.post('/getTripNumbers', function (request, response) {
+    console.log("Server: Retrieving Trip numbers for an user");
+
+
+    myFirebaseRef.on("value", function (snapshot) {
+        //console.log('Server: **** -> ' + JSON.stringify(snapshot.val()));
+        var userObject = snapshot.val();
+        var tripsNumber = userObject['kareem9k'].trips.length; //add catch incase object is not exits
+
+        response.json(tripsNumber);
 
     }, function (errorObject) {
         console.log('Server: Trip object retrieving from DB failed -> ' + errorObject.code);
 
         //response.send('Server: Trip object retrieving from DB failed -> ' + errorObject.code);
     });
-});
-
-
-//get record count in DB (to calculate the id of the new record
-app.post('/getTrip', function (request, response) {
 
 });
 
@@ -232,5 +390,9 @@ app.post('/getGpsPoints', function (request, response) {
         // console.log(data);  // data has the file's contents
     });
 
-/////////////////// DropBox end ///////////////////////////
+/////////////////// DropBox end //////////////////////////
+
+
+
+
 });

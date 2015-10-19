@@ -1,4 +1,4 @@
-trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService, dataBaseService) {
+trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService, dataBaseService, messages) {
 
     function getTemplate() {
         var circleTemplate = {
@@ -108,8 +108,8 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
     });
     */
 
-    //get last trip id from server
-    dataBaseService.getLastTripId()
+    //get trips number of this user
+    dataBaseService.getTripsNumber()
         .success(function (data, status, headers, config) {
             $scope.lastTripId = data;
             $scope.newTripId = parseInt($scope.lastTripId) + 1;
@@ -190,17 +190,26 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
 
         //save all destination (cities) to json file
         for (var i = 0; i < $scope.destinations.length; i++) {
-            jsonTripCities[i] = $scope.destinations[i].city;
+            jsonTripCities['city'+i] = $scope.destinations[i].city;
         }
 
+
+        // add if to check if the it's new trip or updating an exists trip
+        //reminder: when open the plan page it the creation then every things count as an update
+        /*
         if($scope.newTripId >= 0 ){
-            jsonTrip = {'$scope.newTripId':[jsonTripGeneralInfo, jsonTripCities]};
+            console.log('here mother fucker');
+            jsonTrip = {'3': {'general':jsonTripGeneralInfo, 'cities': jsonTripCities}};
+
         }else{
-            jsonTrip = {'1':{'general':jsonTripGeneralInfo,'cities': jsonTripCities}};
+            jsonTrip = {'1': {'general':jsonTripGeneralInfo,'cities': jsonTripCities}};
         }
+        */
 
+        jsonTrip = {'general':jsonTripGeneralInfo,'cities': jsonTripCities};
 
-        jsonMain = {"kareem9k":{'trips':jsonTrip}};
+        //jsonMain = {"username":{'trips':jsonTrip}};
+        jsonMain = {"username":{'trip':jsonTrip}};
         console.log(jsonMain);
 
 
@@ -215,7 +224,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
 
 
         //save the cities list to data base
-        dataBaseService.saveTrip(jsonMain)
+        dataBaseService.saveNewTrip(jsonMain)
             .success(function (data, status, headers, config) {
                 //$scope.message = data; //handle data back from server - not needed meanwhile
                 console.log(jsonMain);
@@ -224,7 +233,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
                 console.log("failure message: " + JSON.stringify({data: data}));
             });
 
-
+/*
         //should be fixed according to the new structure
         dataBaseService.getTrip().then(function (results) {
                 // Do something with results
@@ -258,6 +267,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
 
             }
         );
+        */
 
 
     };
