@@ -103,6 +103,38 @@ app.post('/insertNewEmptyTrip', function (request, response) {
 
 });
 
+//Postgres read trips table
+app.post('/readTrips', function (request, response) {
+
+
+    var results = [];
+
+    // Get a Postgres client from the connection pool
+    pg.connect(conString, function(err, client, done) {
+        // Handle connection errors
+        if(err) {
+            done();
+            console.log(err);
+            return response.status(500).json({ success: false, data: err});
+        }
+
+        // SQL Query > Select Data
+        var query = client.query("SELECT * FROM trips ORDER BY id ASC;");
+
+        // Stream results back one row at a time
+        query.on('row', function(row) {
+            results.push(row);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function() {
+            done();
+            return response.json(results);
+        });
+
+    });
+});
+
 
 
 

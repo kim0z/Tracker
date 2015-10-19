@@ -10,12 +10,29 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/insertNewEmptyTrip');
     };
 
+
     this.saveNewTrip = function (dataObj) { // in use
         console.log('Client::dataBaseService:: save new trip with data from the planning page');
         //return $http.post('/saveNewTrip', dataObj);
         return $http.post('/insertTrip', dataObj);
-
     };
+
+    //get all trips
+    this.getTrips = function () { // in use
+        console.log('Client::dataBaseService:: get all trips from table = trips');
+        return $http.post('/readTrips');
+    };
+
+
+
+
+
+
+
+
+
+
+
 
     this.getLastTripId = function () {  //deprecated
         return $http.post('/getLastTripId');
