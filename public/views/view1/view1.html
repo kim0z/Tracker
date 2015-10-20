@@ -9,17 +9,17 @@
                 <label class="label1">Trip id: {{newTripId}} </label>
 
                 <label class="label1">Trip name:</label>
-                <input type="text" name="inputTripName" ng-model="tripName.text"
+                <input type="text" name="inputTripName" ng-model="tripName"
                        ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
 
                 <label class="label1">Start date:</label>
                 <datepicker>
-                    <input name="inputStartDate" ng-model="dateStart.text" type="text" ng-blur="onBlur($event)"/>
+                    <input name="inputStartDate" ng-model="dateStart" type="text" ng-blur="onBlur($event)"/>
                 </datepicker>
 
                 <label class="label1">End date:</label>
                 <datepicker>
-                    <input name="inputEndDate" ng-model="dateEnd.text" type="text" ng-blur="onBlur($event)"/>
+                    <input name="inputEndDate" ng-model="dateEnd" type="text" ng-blur="onBlur($event)"/>
                 </datepicker>
 
                 <div ng-repeat="dest in destinations">

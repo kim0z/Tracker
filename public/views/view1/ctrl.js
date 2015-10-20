@@ -1,5 +1,9 @@
 trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService, dataBaseService, messages) {
 
+
+
+
+
     function getTemplate() {
         var circleTemplate = {
             id: 1,
@@ -26,41 +30,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
         };
         return circleTemplate;
     }
-
-    //  var circle =
-//this below shoould be used only in edit mode when called from the Trip List page
-    /*
-    dataBaseService.getTrip().then(function (results) {
-            // Do something with results
-            var tripData = results.data;
-            var cities = tripData.cities;
-
-            //if we already have the trip data then we will fill the fields
-            //////// set valuse for the trip ////////////////////
-            if (tripData.general.general["trip_name"]) {
-                $scope.tripName = {
-                    text: tripData.general.general["trip_name"],
-                    word: /^\s*\w*\s*$/
-                };
-                $scope.dateStart = {
-                    text: tripData.general.general["start_date"]
-                };
-                $scope.dateEnd = {
-                    text: tripData.general.general["end_date"]
-                };
-            }
-            if (cities) {
-                console.log('lsfsfsfsfsf' + cities.length)
-                for (var i = 0; i < cities.length; i++) {
-                    if (i < cities.length - 1) { // city input already exists
-                        $scope.addNewDestination();
-                    }
-
-                    $scope.destinations[i].city = cities[i];
-
-                }
-            }
-
+/*
 
             $scope.geoCode = googleMapsAPIService.createCircles(cities);
 
@@ -93,31 +63,6 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
     );
 
 */
-    /*
-    dataBaseService.getLastTripId().then(function (results) {
-
-        //save New Trip when open the page
-        dataBaseService.saveNewTrip(jsonTrip)
-            .success(function (data, status, headers, config) {
-                //$scope.message = data; //handle data back from server - not needed meanwhile
-                console.log(jsonTrip);
-            })
-            .error(function (data, status, headers, config) {
-                console.log("failure message: " + JSON.stringify({data: data}));
-            });
-    });
-    */
-
-    //get trips number of this user
-    dataBaseService.getTripsNumber()
-        .success(function (data, status, headers, config) {
-            $scope.lastTripId = data;
-            $scope.newTripId = parseInt($scope.lastTripId) + 1;
-        })
-        .error(function (data, status, headers, config) {
-            console.log("failure message getLastTripId: " + JSON.stringify({data: data}));
-        });
-
 
 //Google maps section
     $scope.destinations = [
@@ -171,6 +116,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
 
     $scope.onBlur = function (dest) {
 
+
         console.log(event.target.name);
         //console.log(angular.toJson(dest));
 
@@ -182,9 +128,9 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
 
         //save all the general information about the trip
         jsonTripGeneralInfo = {
-                trip_name: $scope.tripName.text,
-                start_date: $scope.dateStart.text,
-                end_date: $scope.dateEnd.text,
+                trip_name: $scope.tripName,
+                start_date: $scope.dateStart,
+                end_date: $scope.dateEnd,
                 continent:'America'
         };
 
@@ -193,30 +139,10 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
             jsonTripCities['city'+i] = $scope.destinations[i].city;
         }
 
-
-        // add if to check if the it's new trip or updating an exists trip
-        //reminder: when open the plan page it the creation then every things count as an update
-        /*
-        if($scope.newTripId >= 0 ){
-            console.log('here mother fucker');
-            jsonTrip = {'3': {'general':jsonTripGeneralInfo, 'cities': jsonTripCities}};
-
-        }else{
-            jsonTrip = {'1': {'general':jsonTripGeneralInfo,'cities': jsonTripCities}};
-        }
-        */
-
         jsonTrip = {'general':jsonTripGeneralInfo,'cities': jsonTripCities};
 
         //jsonMain = {"username":{'trips':jsonTrip}};
         jsonMain = {"username":{'trip':jsonTrip}};
-        console.log(jsonMain);
-
-
-
-
-
-      //  console.log(jsonTripData);
 
         var r = /\d+/;
         var s = event.target.name;
