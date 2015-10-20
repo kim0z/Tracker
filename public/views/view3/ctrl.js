@@ -60,7 +60,7 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, googleMapsAPIService
         //create Json list of trips in the Client
         for ( var i = 3 ; i < $scope.trips.length ; i++)
         {
-            var jsonTrip = {title: $scope.trips[i].trip_name, description: "kskskkskskskskkkskskksskksksksksksksksksk",
+            var jsonTrip = {title: $scope.trips[i].trip_name, description: $scope.trips[i].trip_description,
                 expanded: false, content: {type: "QUOTE", quotes: ["quotedfdsgfdsgfdsfsdfsdfsdfdsfs"]}};
             $scope.chunks[i] = jsonTrip;
         }

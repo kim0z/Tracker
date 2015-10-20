@@ -1,9 +1,5 @@
 trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService, dataBaseService, messages) {
 
-
-
-
-
     function getTemplate() {
         var circleTemplate = {
             id: 1,
@@ -129,6 +125,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
         //save all the general information about the trip
         jsonTripGeneralInfo = {
                 trip_name: $scope.tripName,
+                trip_description: $scope.tripDescription,
                 start_date: $scope.dateStart,
                 end_date: $scope.dateEnd,
                 continent:'America'

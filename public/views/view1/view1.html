@@ -12,6 +12,10 @@
                 <input type="text" name="inputTripName" ng-model="tripName"
                        ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
 
+                <label class="label1">Description:</label>
+                <input class="inputDesc" type="text" name="inputTripDesc" ng-model="tripDescription"
+                       ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
+
                 <label class="label1">Start date:</label>
                 <datepicker>
                     <input name="inputStartDate" ng-model="dateStart" type="text" ng-blur="onBlur($event)"/>
