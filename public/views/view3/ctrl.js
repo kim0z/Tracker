@@ -15,6 +15,13 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, googleMapsAPIService
      */
     // Main Controller
 
+
+
+    //Edit the current trip, get the trip id and send to planning page
+    $scope.editTrip = function(){
+        console.log('Edit');
+    }
+
     dataBaseService.getTrips().then(function (results) {
         $scope.trips = results.data;
         console.log('Client:: View3:: Fun run when load page :: list of trips: '+ $scope.trips.length);
@@ -60,7 +67,7 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, googleMapsAPIService
         //create Json list of trips in the Client
         for ( var i = 3 ; i < $scope.trips.length ; i++)
         {
-            var jsonTrip = {title: $scope.trips[i].trip_name, description: $scope.trips[i].trip_description,
+            var jsonTrip = {id:$scope.trips[i].id , title: $scope.trips[i].trip_name, description: $scope.trips[i].trip_description,
                 expanded: false, content: {type: "QUOTE", quotes: ["quotedfdsgfdsgfdsfsdfsdfsdfdsfs"]}};
             $scope.chunks[i] = jsonTrip;
         }
