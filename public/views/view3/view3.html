@@ -1,4 +1,5 @@
-<P>View 3 : My Trips<P>
+<P>View 3 : My Trips
+<P>
     <!DOCTYPE html>
     <html>
     <head>
@@ -11,8 +12,6 @@
     <body layout="vertical" md-theme="blue" layout-fill>
 
 
-
-
     <div layout="column" layout-fill>
         <md-toolbar scroll-shrink layout="row">
             <div class="md-toolbar-tools">
@@ -22,7 +21,6 @@
                 </h3>
             </div>
         </md-toolbar>
-
 
 
         <md-content layout="vertical" flex>
@@ -54,23 +52,22 @@
                 <md-list>
                     <div id="content">
                         <div ng-repeat="chunk in ::chunks">
-                            <p ng-if="chunk.divider">{{chunk.title}}</p>
-                            <md-card ng-if="!chunk.expanded && !chunk.divider" ng-click="chunk.expanded = !chunk.expanded"
-                                 ng-mouseover="hover = true" ng-mouseout="hover = false">
-                             <md-item layout="row">
-                        <div>
-                            <img class="round-face" src="http://placekitten.com/g/48/48"/>
-                        </div>
-                                 <div class="collapsed-row" layout="row" layout-align="start center" flex>
-                                     <input type="hidden" value= {{chunk.id}} />
-                                    <span flex="45"><b>{{ chunk.title }}</b></span>
-                                    <span flex="45">{{ chunk.description }}</span>
-                                    <span flex="5"></span>
+<p ng-if="chunk.divider">{{chunk.title}}</p>
+<md-card ng-if="!chunk.expanded && !chunk.divider" ng-click="chunk.expanded = !chunk.expanded"
+         ng-mouseover="hover = true" ng-mouseout="hover = false">
+    <md-item layout="row">
+        <div>
+            <img class="round-face" src="http://placekitten.com/g/48/48"/>
+        </div>
+        <div class="collapsed-row" layout="row" layout-align="start center" flex>
+            <span flex="45"><b>{{ chunk.title }}</b></span>
+            <span flex="45">{{ chunk.description }}</span>
+            <span flex="5"></span>
                                      <span flex="10" ng-if="hover"><md-icon
                                              md-svg-src="bower_components/material-design-icons/content/svg/production/ic_archive_24px.svg"
-                                              style="width: 24px; height: 24px;"></md-icon></span>
-                                      </div>
-                               </md-item>
+                                             style="width: 24px; height: 24px;"></md-icon></span>
+        </div>
+    </md-item>
 </md-card>
 <md-card ng-if="chunk.expanded && !chunk.divider" ng-click="chunk.expanded = !chunk.expanded">
     <div layout="column">
@@ -78,7 +75,7 @@
             <img class="round-face" src="http://placekitten.com/g/48/48"/>
         </div>
         <md-card-content>
-            <!-- <img src="http://placekitten.com/g/300/300"/> -->
+             <img src="https://lh4.googleusercontent.com/-xmo3wSOWUtw/UZeCCFz_0DI/AAAAAAAAAQw/iNDBzPvu_Jc/w640-h426-no/454ab7c5-62d4-417c-ade2-21a2d2c19585"/>
             <h2>{{ chunk.title }}</h2>
 
             <p>{{ chunk.description }}</p>
@@ -87,7 +84,7 @@
                 <md-button ng-click="show_quotes = !show_quotes; $event.stopPropagation();">Show
                     {{chunk.content.quotes.length}} more details
                 </md-button>
-                <md-button ng-click="edit_mode = !edit_mode; editTrip($event);$event.stopPropagation();">Edit
+                <md-button ng-click="edit_mode = !edit_mode; editTrip(chunk.id);$event.stopPropagation();">Edit
                 </md-button>
                 <div ng-if="show_quotes" ng-repeat="quote in ::chunk.content.quotes">
                     <md-whiteframe class="md-whiteframe-z1">

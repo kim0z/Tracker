@@ -18,8 +18,10 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, googleMapsAPIService
 
 
     //Edit the current trip, get the trip id and send to planning page
-    $scope.editTrip = function(){
-        console.log('Edit');
+    $scope.editTrip = function(id){
+        console.log('Client:: Click Edit trip :: id:: '+ id);
+
+        //now I have the id of the trip, I should open the planning page in edit mode
     }
 
     dataBaseService.getTrips().then(function (results) {
