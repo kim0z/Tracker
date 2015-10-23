@@ -106,7 +106,7 @@ app.post('/insertNewEmptyTrip', function (request, response) {
 //Postgres read trips table
 app.post('/readTrips', function (request, response) {
 
-
+    console.log('SERVER:: Postgres:: get all trip from trips table');
     var results = [];
 
     // Get a Postgres client from the connection pool
@@ -138,7 +138,39 @@ app.post('/readTrips', function (request, response) {
 
 
 
+//Postgres get trip by id
+app.post('/getTripById', function (request, response) {
 
+    console.log('SERVER:: Postgres:: get trip by id :: trip id ::'+request.body.trip_id);
+    var trip_id = request.body.trip_id;
+    var results = [];
+
+    // Get a Postgres client from the connection pool
+    pg.connect(conString, function(err, client, done) {
+        // Handle connection errors
+        if(err) {
+            done();
+            console.log(err);
+            return response.status(500).json({ success: false, data: err});
+        }
+
+        // SQL Query > Select Data
+        var query = client.query("SELECT * FROM trips WHERE id = "+trip_id+";");
+
+        // Stream results back one row at a time
+        query.on('row', function(row) {
+            results.push(row);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function() {
+            done();
+            console.log(results);
+            return response.json(results);
+        });
+
+    });
+});
 
 
 

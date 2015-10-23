@@ -1,6 +1,6 @@
 trackerApp.service('dataBaseService', ['$http', function ($http) {
 
-    this.saveTrip = function (dataObj) {
+    this.saveTrip = function (dataObj) { //not sure it still in use, if not then I soud remove
         console.log('database service');
         return $http.post('/saveTrip', dataObj);
     };
@@ -23,6 +23,11 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/readTrips');
     };
 
+    //get all trip by id
+    this.getTripById = function (dataTripId) { // in use
+        console.log('Client::dataBaseService:: get all trips from table = trips');
+        return $http.post('/getTripById', dataTripId);
+    };
 
 
 

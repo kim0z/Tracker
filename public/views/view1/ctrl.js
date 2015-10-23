@@ -1,5 +1,37 @@
 trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService, dataBaseService, messages) {
 
+    //get trip data to the page
+
+    $scope.trip_id = messages.getTripID();
+    var dataTripId = {trip_id: $scope.trip_id };
+    dataBaseService.getTripById(dataTripId).then(function (results) {
+        $scope.tripById = results.data;
+        console.log('Client:: View3:: get trip by id::' + messages.getTripID());
+        //exmple for how to get data from results console.log('trip  '+$scope.tripById[0].id);
+
+        //fill all field
+        //
+         console.log($scope.tripById[0].end_date);
+        console.log($scope.tripById[0].start_date);
+        console.log($scope.tripById[0].trip_description);
+
+        $scope.tripName = $scope.tripById[0].trip_name;
+        $scope.tripDescription = $scope.tripById[0].trip_description;
+        $scope.dateStart = $scope.tripById[0].start_date;
+        $scope.dateEnd = $scope.tripById[0].end_date;
+
+
+
+
+
+
+
+
+
+
+    });
+
+
     function getTemplate() {
         var circleTemplate = {
             id: 1,
@@ -155,42 +187,6 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
             .error(function (data, status, headers, config) {
                 console.log("failure message: " + JSON.stringify({data: data}));
             });
-
-/*
-        //should be fixed according to the new structure
-        dataBaseService.getTrip().then(function (results) {
-                // Do something with results
-                var cities = results.data.cities;
-                $scope.geoCode = googleMapsAPIService.createCircles(cities);
-
-
-                Promise.resolve($scope.geoCode).then(function (val) { // why 3 promises
-                    for (var i = 0; i < val.length; i++) {
-
-                        Promise.resolve(val[i]).then(function (val2) {   // recursive behave, first the val[1] then val[0], ask about it?
-                            console.log('city: ' + val2.data[0].city);
-                            console.log('latitude: ' + val2.data[0].latitude);
-                            console.log('longitude: ' + val2.data[0].longitude);
-
-                            console.log('index ' + i);
-                            var circle = getTemplate();
-                            circle['id'] = Math.floor((Math.random() * 10) + 2);
-                            circle['center'].latitude = val2.data[0].latitude;
-                            circle['center'].longitude = val2.data[0].longitude;
-                            console.log(circle);
-
-                            $scope.circles.push(circle);
-                            // circleArray[circleArray.length+1] = circle;
-
-                            console.log($scope.circles);
-                            // console.log(circleArray);
-                        })
-                    }
-                })
-
-            }
-        );
-        */
 
 
     };
