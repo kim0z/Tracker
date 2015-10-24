@@ -1,11 +1,6 @@
 trackerApp.service('dataBaseService', ['$http', function ($http) {
 
-    this.saveTrip = function (dataObj) { //not sure it still in use, if not then I soud remove
-        console.log('database service');
-        return $http.post('/saveTrip', dataObj);
-    };
-
-    this.createNewTripRecord = function () { //in use
+    this.createNewTripRecord = function () { //create empty trip record
         console.log('Client::dataBaseService:: create new trip record');
         return $http.post('/insertNewEmptyTrip');
     };
@@ -29,35 +24,11 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/getTripById', dataTripId);
     };
 
+    //updateTrip
 
-
-
-
-
-
-
-
-
-
-    this.getLastTripId = function () {  //deprecated
-        return $http.post('/getLastTripId');
-    };
-
-    this.getTripsNumber = function () {
-        return $http.post('/getTripNumbers');
-    };
-
-
-    this.getTrip = function () {
-        return $http.post('/getTrip');
-/*
-        console.log('ffff');
-       // return $http.post('/getTrip');
-
-        return $http.post('/getTrip').then(function(results) {
-            // Just return the HTTP body
-            return results.data;
-        });*/
+    this.updateTrip = function (dataObj) { //create empty trip record
+        console.log('Client::dataBaseService:: update trip record');
+        return $http.post('/updateTrip',dataObj);
     };
 
     //get GPS from server "server is getting the data from DropBox that was saved by Android"

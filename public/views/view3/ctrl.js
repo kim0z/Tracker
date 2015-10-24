@@ -24,6 +24,26 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, googleMapsAPIService
         window.open ('#/view1', '_self', false);
     }
 
+    //when click on create new test 'the red circule button'
+    $scope.openTripPlanPage = function ($event) {
+        //create new record, get the id and move to the planning page, and behave like editing
+        //1. push empty new record to trips table
+        //2. get the id of the trip
+        //3. save the trip id into messages service
+        //4. make sure the planning page open the message and update the record
+
+        //callback
+        dataBaseService.createNewTripRecord().then(function (results) {
+            //$scope.message = data; //handle data back from server - not needed meanwhile
+            console.log('Client:: View3:: Fun:: openTripPlanPage :: new empty trip record created with id:: '+results.data);
+
+            messages.saveTripID(results.data);
+            window.open ('#/view1', '_self', false)
+        })
+    };
+
+
+
     dataBaseService.getTrips().then(function (results) {
         $scope.trips = results.data;
         console.log('Client:: View3:: Fun run when load page :: list of trips: '+ $scope.trips.length);
@@ -79,23 +99,7 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, googleMapsAPIService
     });
 
 
-    //when click on create new test 'the red circule button'
-    $scope.openTripPlanPage = function ($event) {
-        //create new record, get the id and move to the planning page, and behave like editing
-        //1. push empty new record to trips table
-        //2. get the id of the trip
-        //3. save the trip id into messages service
-        //4. make sure the planning page open the message and update the record
 
-        //callback
-        dataBaseService.createNewTripRecord().then(function (results) {
-            //$scope.message = data; //handle data back from server - not needed meanwhile
-            console.log('Client:: View3:: Fun:: openTripPlanPage :: new empty trip record created');
-            window.open ('#/view1', '_self', false)
-        })
-
-
-    };
     $scope.openDialog = function ($event) {
         $mdDialog.show({
             targetEvent: $event,

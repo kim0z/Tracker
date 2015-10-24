@@ -1,9 +1,8 @@
 trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService, dataBaseService, messages) {
 
     //get trip data to the page
-
     $scope.trip_id = messages.getTripID();
-    var dataTripId = {trip_id: $scope.trip_id };
+    var dataTripId = {trip_id: $scope.trip_id};
     dataBaseService.getTripById(dataTripId).then(function (results) {
         $scope.tripById = results.data;
         console.log('Client:: View3:: get trip by id::' + messages.getTripID());
@@ -11,7 +10,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
 
         //fill all field
         //
-         console.log($scope.tripById[0].end_date);
+        console.log($scope.tripById[0].end_date);
         console.log($scope.tripById[0].start_date);
         console.log($scope.tripById[0].trip_description);
 
@@ -19,16 +18,6 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
         $scope.tripDescription = $scope.tripById[0].trip_description;
         $scope.dateStart = $scope.tripById[0].start_date;
         $scope.dateEnd = $scope.tripById[0].end_date;
-
-
-
-
-
-
-
-
-
-
     });
 
 
@@ -58,39 +47,40 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
         };
         return circleTemplate;
     }
-/*
 
-            $scope.geoCode = googleMapsAPIService.createCircles(cities);
+    /*
+
+     $scope.geoCode = googleMapsAPIService.createCircles(cities);
 
 
-            Promise.resolve($scope.geoCode).then(function (val) { // why 3 promises
-                for (var i = 0; i < val.length; i++) {
+     Promise.resolve($scope.geoCode).then(function (val) { // why 3 promises
+     for (var i = 0; i < val.length; i++) {
 
-                    Promise.resolve(val[i]).then(function (val2) {   // recursive behave, first the val[1] then val[0], ask about it?
-                        console.log('city: ' + val2.data[0].city);
-                        console.log('latitude: ' + val2.data[0].latitude);
-                        console.log('longitude: ' + val2.data[0].longitude);
+     Promise.resolve(val[i]).then(function (val2) {   // recursive behave, first the val[1] then val[0], ask about it?
+     console.log('city: ' + val2.data[0].city);
+     console.log('latitude: ' + val2.data[0].latitude);
+     console.log('longitude: ' + val2.data[0].longitude);
 
-                        console.log('index ' + i);
-                        var circle = getTemplate();
-                        circle['id'] = Math.floor((Math.random() * 100) + 2); // remove the random to be serial id
-                        circle['center'].latitude = val2.data[0].latitude;
-                        circle['center'].longitude = val2.data[0].longitude;
-                        console.log(circle);
+     console.log('index ' + i);
+     var circle = getTemplate();
+     circle['id'] = Math.floor((Math.random() * 100) + 2); // remove the random to be serial id
+     circle['center'].latitude = val2.data[0].latitude;
+     circle['center'].longitude = val2.data[0].longitude;
+     console.log(circle);
 
-                        $scope.circles.push(circle);
-                        // circleArray[circleArray.length+1] = circle;
+     $scope.circles.push(circle);
+     // circleArray[circleArray.length+1] = circle;
 
-                        console.log($scope.circles);
-                        // console.log(circleArray);
-                    })
-                }
-            })
+     console.log($scope.circles);
+     // console.log(circleArray);
+     })
+     }
+     })
 
-        }
-    );
+     }
+     );
 
-*/
+     */
 
 //Google maps section
     $scope.destinations = [
@@ -146,38 +136,37 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
 
 
         console.log(event.target.name);
-        //console.log(angular.toJson(dest));
 
-        //create Json with trip id, name, dates
-        var jsonTripGeneralInfo = {};  // dates, name, could be more info added here
-        var jsonTripCities = {};  // {city1, city2, city3 ..} should be created in the first time only, when create the account, and then just updating.
-        var jsonTrip = {};  // {id:1,{general, cities}}
-        var jsonMain = {};  //{kareem9k{trips{tripId{general, cities}}}}
+        var jsonTripGeneralInfo = {};
+        var jsonTripCities = {};
+        var jsonTrip = {};
+        var jsonMain = {};
 
         //save all the general information about the trip
         jsonTripGeneralInfo = {
-                trip_name: $scope.tripName,
-                trip_description: $scope.tripDescription,
-                start_date: $scope.dateStart,
-                end_date: $scope.dateEnd,
-                continent:'America'
+            trip_id : messages.getTripID(), //internal use for updating
+            trip_name: $scope.tripName,
+            trip_description: $scope.tripDescription,
+            start_date: $scope.dateStart,
+            end_date: $scope.dateEnd,
+            continent: 'America'
         };
 
         //save all destination (cities) to json file
         for (var i = 0; i < $scope.destinations.length; i++) {
-            jsonTripCities['city'+i] = $scope.destinations[i].city;
+            jsonTripCities['city' + i] = $scope.destinations[i].city;
         }
 
-        jsonTrip = {'general':jsonTripGeneralInfo,'cities': jsonTripCities};
+        jsonTrip = {'general': jsonTripGeneralInfo, 'cities': jsonTripCities};
 
         //jsonMain = {"username":{'trips':jsonTrip}};
-        jsonMain = {"username":{'trip':jsonTrip}};
+        jsonMain = {"username": {'trip': jsonTrip}};
 
         var r = /\d+/;
         var s = event.target.name;
         var cityNumber = s.match(r);
 
-
+/*
         //save the cities list to data base
         dataBaseService.saveNewTrip(jsonMain)
             .success(function (data, status, headers, config) {
@@ -187,9 +176,23 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
             .error(function (data, status, headers, config) {
                 console.log("failure message: " + JSON.stringify({data: data}));
             });
+*/
 
+        console.log('CCCCCCKKKKKKKCCCCCCKKKKKKKCCCCCCCKKKKKK '+jsonMain['username'].trip.general.trip_name);
+        //save the cities list to data base
+        dataBaseService.updateTrip(jsonMain)
+            .success(function (data, status, headers, config) {
+                //$scope.message = data; //handle data back from server - not needed meanwhile
+                console.log(jsonMain);
+            })
+            .error(function (data, status, headers, config) {
+                console.log("failure message: " + JSON.stringify({data: data}));
+            });
 
     };
+
+
+
 
 
     $scope.rowCollection = [

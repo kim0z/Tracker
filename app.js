@@ -87,8 +87,47 @@ app.post('/insertNewEmptyTrip', function (request, response) {
         if(err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("INSERT INTO trips(trip_name, start_date, end_date, continent, cities) values($1, $2, $3, $4, $5)",
+        client.query("INSERT INTO trips(trip_name, start_date, end_date, continent, cities) values($1, $2, $3, $4, $5) RETURNING id",
             ['', '01/01/2000', '01/01/2000', '{}' , '{}'], function(err, result) {
+                //call `done()` to release the client back to the pool
+                done();
+
+                if(err) {
+                    return console.error('error running query', err);
+                }
+                console.log(result);
+                return response.json(result.rows[0].id);
+
+                //output: 1
+            });
+    });
+   // response.status(200).end();
+
+});
+
+//Postgres :: update trip record to trips table
+app.post('/updateTrip', function (request, response) {
+
+    //var id = request.body.trip_id;
+   // console.log('kariiiim'+id);
+    console.log('SERVER:: Postgres:: update trip'+request.body);
+
+    var jsonTrip = request.body;
+
+    var cities = '{'+jsonTrip['username'].trip.cities+'}';
+    var tripGeneral = jsonTrip['username'].trip.general;
+    tripGeneral.continent = '{'+ tripGeneral.continent +'}';
+
+
+    //    client.query("UPDATE items SET text=($1), complete=($2) WHERE id=($3)", [data.text, data.complete, id]);
+
+    pg.connect(conString, function(err, client, done) {
+        if(err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3) , continent = ($4), cities = ($5), trip_description = ($6) WHERE id = ($7)",
+            [tripGeneral.trip_name, '03/03/2015', '03/03/2015', tripGeneral.continent , cities, tripGeneral.trip_description, tripGeneral.trip_id]
+            ,function(err, result) {
                 //call `done()` to release the client back to the pool
                 done();
 
