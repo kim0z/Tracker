@@ -18,11 +18,28 @@
     <link rel="stylesheet" href="bower_components/angularjs-datepicker/dist/angular-datepicker.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
 
-    <!-- <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script> -->
 
+    <link rel="stylesheet" href="/bower_components/angular-material/angular-material.css">
+    <link rel="stylesheet" href="/assets/css/style_tripList.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
 
 
 </head>
+
+<md-toolbar scroll-shrink layout="row" ng-contoller="mainIndex">
+    <div class="md-toolbar-tools" ng-controller="mainIndexCtrl">
+        <h3>
+            <md-button ng-click="menuClick('Home')">Home</md-button>
+            <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
+            <md-button ng-click="menuClick('Plan Trip')">Plan Trip</md-button>
+            <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
+
+        </h3>
+    </div>
+</md-toolbar>
+
+
+<!--
 <body class="body1">
 <ul class="menu">
     <li><a class="a" href="#/view0">Home</a></li>
@@ -30,6 +47,7 @@
     <li><a class="a" href="#/view1">Plan Trip</a></li>
     <li><a class="a" href="#/view2">Rel-Time Travelers</a></li>
 </ul>
+-->
 
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade

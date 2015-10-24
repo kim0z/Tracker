@@ -55,3 +55,24 @@ var trackerApp = angular.module('myApp', [
             .accentPalette('red');
     });
 
+
+trackerApp.controller('mainIndexCtrl', function ($scope) {
+    $scope.menuClick = function (buttonText) {
+        switch(buttonText) {
+            case 'Home':
+                window.open ('#/view0', '_self', false);
+                break;
+            case 'My Trips':
+                window.open ('#/view3', '_self', false);
+                break;
+            case 'Plan Trip':
+                window.open ('#/view1', '_self', false);
+                break;
+            case 'Rel-Time Travelers':
+                window.open ('#/view2', '_self', false);
+                break;
+            default: window.open ('#/view0', '_self', false);
+        }
+
+    };
+});
