@@ -2,24 +2,37 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
 
     //get trip data to the page
     $scope.trip_id = messages.getTripID();
-    var dataTripId = {trip_id: $scope.trip_id};
-    dataBaseService.getTripById(dataTripId).then(function (results) {
-        $scope.tripById = results.data;
-        console.log('Client:: View3:: get trip by id::' + messages.getTripID());
-        //exmple for how to get data from results console.log('trip  '+$scope.tripById[0].id);
 
-        //fill all field
-        //
-        console.log($scope.tripById[0].end_date);
-        console.log($scope.tripById[0].start_date);
-        console.log($scope.tripById[0].trip_description);
+    if ($scope.trip_id == '') {
+        window.open ('#/viewError', '_self', false);
+    }
+    else {
 
-        $scope.tripName = $scope.tripById[0].trip_name;
-        $scope.tripDescription = $scope.tripById[0].trip_description;
-        $scope.dateStart = $scope.tripById[0].start_date;
-        $scope.dateEnd = $scope.tripById[0].end_date;
-    });
+        var dataTripId = {trip_id: $scope.trip_id};
+        dataBaseService.getTripById(dataTripId).then(function (results) {
+            $scope.tripById = results.data;
+            console.log('Client:: View3:: get trip by id::' + messages.getTripID());
+            //exmple for how to get data from results console.log('trip  '+$scope.tripById[0].id);
 
+            //fill all field
+            //
+            console.log($scope.tripById[0].end_date);
+            console.log($scope.tripById[0].start_date);
+            console.log($scope.tripById[0].trip_description);
+
+            $scope.tripName = $scope.tripById[0].trip_name;
+            $scope.tripDescription = $scope.tripById[0].trip_description;
+            $scope.dateStart = $scope.tripById[0].start_date;
+            $scope.dateEnd = $scope.tripById[0].end_date;
+        });
+
+        dataBaseService.createTable(dataTripId).then(function (results) {
+            $scope.table = results.data;
+            console.log('Client:: View3:: Create Table::' +  $scope.table);
+        });
+
+
+    }
 
     function getTemplate() {
         var circleTemplate = {
@@ -138,9 +151,12 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
         console.log(event.target.name);
 
         var jsonTripGeneralInfo = {};
-        var jsonTripCities = {};
+        var jsonTripTableCity = {};
+        var tableArray = []
         var jsonTrip = {};
         var jsonMain = {};
+
+        var jsonTablePlan = [];
 
         //save all the general information about the trip
         jsonTripGeneralInfo = {
@@ -154,10 +170,14 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
 
         //save all destination (cities) to json file
         for (var i = 0; i < $scope.destinations.length; i++) {
-            jsonTripCities['city' + i] = $scope.destinations[i].city;
+            jsonTripTableCity['city' + i] = $scope.destinations[i].city;
+            jsonTripTableCity['days' + i] = $scope.destinations[i].days;
+            jsonTripTableCity['general' + i] = {flight:'',hotel:'',car:'',action1:'',action2:''};
+            tableArray.push(jsonTripTableCity)
+            jsonTripTableCity = {};
         }
 
-        jsonTrip = {'general': jsonTripGeneralInfo, 'cities': jsonTripCities};
+        jsonTrip = {'general': jsonTripGeneralInfo, 'table_plan': tableArray};
 
         //jsonMain = {"username":{'trips':jsonTrip}};
         jsonMain = {"username": {'trip': jsonTrip}};
@@ -178,7 +198,8 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
             });
 */
 
-        console.log('CCCCCCKKKKKKKCCCCCCKKKKKKKCCCCCCCKKKKKK '+jsonMain['username'].trip.general.trip_name);
+        //console.log('Client:: Trip Def page :: the trip sent to server:: '+jsonMain['username'].trip.general.trip_name);
+
         //save the cities list to data base
         dataBaseService.updateTrip(jsonMain)
             .success(function (data, status, headers, config) {
@@ -188,6 +209,28 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
             .error(function (data, status, headers, config) {
                 console.log("failure message: " + JSON.stringify({data: data}));
             });
+
+
+
+
+
+
+
+
+/*
+       // Create the table
+
+        var tableJson = '{"Flight": "United",' +
+            '"City": "London",' +
+            '"Hotel": "Hilton",' +
+            '"Car": "Hertz",' +
+            '"Action1": "Do something",' +
+            '"Action2": "Do another thing"}';
+
+        var tableArray = [];
+
+        tableArray.push(tableJson);
+        */
 
     };
 

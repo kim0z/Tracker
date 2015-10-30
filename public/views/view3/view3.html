@@ -87,6 +87,8 @@
                 </md-button>
                 <md-button ng-click="edit_mode = !edit_mode; editTrip(chunk.id);$event.stopPropagation();">Edit
                 </md-button>
+                <md-button ng-click="edit_mode = !edit_mode; editTrip(chunk.id);$event.stopPropagation();">Share
+                </md-button>
                 <div ng-if="show_quotes" ng-repeat="quote in ::chunk.content.quotes">
                     <md-whiteframe class="md-whiteframe-z1">
                         <blockquote>{{ quote }}</blockquote>

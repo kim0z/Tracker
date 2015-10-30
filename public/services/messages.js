@@ -1,6 +1,6 @@
 trackerApp.service('messages', function () {
 
-    var trip_id;
+    var trip_id ='';
 
     this.saveTripID = function (id) {
         console.log('get trip id - Messages service');

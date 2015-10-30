@@ -29,6 +29,11 @@
                 <div ng-repeat="dest in destinations">
                     <label class="label1">Destination {{$index + 1}}:</label>
                     <input type="text" name="inputDest{{$index + 1}}" ng-model="dest.city" ng-blur="onBlur(dest)">
+
+                    <label class="label1">Days:</label>
+                    <input type="text" name="inputDays{{$index + 1}}" ng-model="dest.days" ng-blur="onBlur(dest)">
+
+
                 </div>
 
                 <button ng-click="addNewDestination()">Add new city</button>
@@ -58,6 +63,12 @@
             </ui-gmap-google-map>
 
         </section>
+
+
+
+
+
+
 
 
         <section id="widget_3" class="widget_3">

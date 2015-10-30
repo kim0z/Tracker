@@ -18,17 +18,22 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/readTrips');
     };
 
-    //get all trip by id
+    //get trip by id
     this.getTripById = function (dataTripId) { // in use
-        console.log('Client::dataBaseService:: get all trips from table = trips');
+        console.log('Client::dataBaseService:: get trip by id::'+dataTripId);
         return $http.post('/getTripById', dataTripId);
     };
 
     //updateTrip
-
     this.updateTrip = function (dataObj) { //create empty trip record
         console.log('Client::dataBaseService:: update trip record');
         return $http.post('/updateTrip',dataObj);
+    };
+
+    //createTable
+    this.createTable = function (dataTripId) { //create empty trip record
+        console.log('Client::dataBaseService:: Create table for trip id::'+dataTripId);
+        return $http.post('/createTable',dataTripId);
     };
 
     //get GPS from server "server is getting the data from DropBox that was saved by Android"

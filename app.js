@@ -40,10 +40,16 @@ app.use(methodOverride());
 // routes 
 require('./app/routes.js')(app);
 
+//######################################################################################################################
 
 
+// General variables
 
+/////////////////////
 
+//#####################################################
+//# Rest Calls                                       #
+//####################################################
 //REST calls for Postgres DB
 
 //Postgres :: Insert new trip to the table of trips with data
@@ -114,7 +120,13 @@ app.post('/updateTrip', function (request, response) {
 
     var jsonTrip = request.body;
 
-    var cities = '{'+jsonTrip['username'].trip.cities+'}';
+    //var cities = '{'+jsonTrip['username'].trip.cities+'}';
+    var table_plan = jsonTrip['username'].trip.table_plan;
+
+
+
+    // example:: get city days :: jsonTrip['username'].trip.cities['days0']
+
     var tripGeneral = jsonTrip['username'].trip.general;
     tripGeneral.continent = '{'+ tripGeneral.continent +'}';
 
@@ -125,8 +137,8 @@ app.post('/updateTrip', function (request, response) {
         if(err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3) , continent = ($4), cities = ($5), trip_description = ($6) WHERE id = ($7)",
-            [tripGeneral.trip_name, '03/03/2015', '03/03/2015', tripGeneral.continent , cities, tripGeneral.trip_description, tripGeneral.trip_id]
+        client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3) , continent = ($4), table_plan = ($5), trip_description = ($6) WHERE id = ($7)",
+            [tripGeneral.trip_name, '03/03/2015', '03/03/2015', tripGeneral.continent , table_plan, tripGeneral.trip_description, tripGeneral.trip_id]
             ,function(err, result) {
                 //call `done()` to release the client back to the pool
                 done();
@@ -204,12 +216,111 @@ app.post('/getTripById', function (request, response) {
         // After all data is returned, close connection and return results
         query.on('end', function() {
             done();
-            console.log(results);
+            console.log(results); // looks like : [{....}]
+            tripById = results;
             return response.json(results);
         });
 
     });
 });
+
+
+
+//this function should be called
+
+
+//Create trip table
+app.post('/createTable', function (request, response){
+    var table = [];
+
+    console.log('SERVER:: Postgres:: Create trip table');
+    var trip_id = request.body.trip_id;
+    var results = [];
+
+    // Get a Postgres client from the connection pool
+    pg.connect(conString, function(err, client, done) {
+        // Handle connection errors
+        if(err) {
+            done();
+            console.log(err);
+            return response.status(500).json({ success: false, data: err});
+        }
+
+        // SQL Query > Select Data
+        var query = client.query("SELECT table_plan FROM trips WHERE id = "+trip_id+";");
+
+        // Stream results back one row at a time
+        query.on('row', function(row) {
+            results.push(row);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function() {
+            done();
+            console.log(results); // looks like : [{....}]
+            jsonTable = results;
+
+            var dayNumber = 0;
+            //create Json Table
+            for (var i = 0; i < results[0].table_plan.length ; i++) {
+                
+                for (var j=0; j < results[0].table_plan[i]['days'+i] ; j++){
+                    dayNumber++;
+                    var day = {
+                        day:dayNumber, city:results[0].table_plan[i]['city'+i], flight:'', car:'', action1:'', action2:''
+                    };
+
+                    table.push(day);
+
+                    day = '';
+                }
+
+            }
+            console.log('SERVER:: Create table:: '+table);
+            return response.json(table);
+
+        });
+    });
+
+
+
+
+/*
+
+    // Create the table
+
+    jsonTable = '{"Flight": "United",' +
+        '"City": "London",' +
+        '"Hotel": "Hilton",' +
+        '"Car": "Hertz",' +
+        '"Action1": "Do something",' +
+        '"Action2": "Do another thing"}';
+
+    var tableArray = [];
+
+    tableArray.push(tableJson);
+*/
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

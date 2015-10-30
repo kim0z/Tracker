@@ -38,6 +38,11 @@ var trackerApp = angular.module('myApp', [
                 url: "/view3",
                 templateUrl: "views/view3/view3.html",
                 controller: 'view3Ctrl'
+            })
+            .state('viewError', {
+                url: "/viewError",
+                templateUrl: "views/viewError/404.html",
+                controller: 'viewErrorCtrl'
             });
     })
 
