@@ -10,7 +10,9 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
 
         var dataTripId = {trip_id: $scope.trip_id};
         dataBaseService.getTripById(dataTripId).then(function (results) {
+
             $scope.tripById = results.data;
+
             console.log('Client:: View3:: get trip by id::' + messages.getTripID());
             //exmple for how to get data from results console.log('trip  '+$scope.tripById[0].id);
 
@@ -24,6 +26,24 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
             $scope.tripDescription = $scope.tripById[0].trip_description;
             $scope.dateStart = $scope.tripById[0].start_date;
             $scope.dateEnd = $scope.tripById[0].end_date;
+
+
+
+            if (results.data[0].table_plan) {
+                $scope.destinations = []; //clean destinations textboxes
+
+            for (var i = 0; i < results.data[0].table_plan.length; i++) {
+                console.log('DELETE MEEEEEE' + results.data[0].table_plan[i]['city' + i]);
+                console.log('DELETE MEEEEEE' + results.data[0].table_plan[i]['days' + i]);
+
+
+                $scope.destinations.push({
+                    city: $scope.tripById[0].table_plan[i]['city' + i],
+                    days: $scope.tripById[0].table_plan[i]['days' + i]
+                });
+            }
+        }
+
         });
 
         dataBaseService.createTable(dataTripId).then(function (results) {
@@ -209,28 +229,6 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService
             .error(function (data, status, headers, config) {
                 console.log("failure message: " + JSON.stringify({data: data}));
             });
-
-
-
-
-
-
-
-
-/*
-       // Create the table
-
-        var tableJson = '{"Flight": "United",' +
-            '"City": "London",' +
-            '"Hotel": "Hilton",' +
-            '"Car": "Hertz",' +
-            '"Action1": "Do something",' +
-            '"Action2": "Do another thing"}';
-
-        var tableArray = [];
-
-        tableArray.push(tableJson);
-        */
 
     };
 

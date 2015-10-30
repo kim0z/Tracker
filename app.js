@@ -262,23 +262,27 @@ app.post('/createTable', function (request, response){
 
             var dayNumber = 0;
             //create Json Table
-            for (var i = 0; i < results[0].table_plan.length ; i++) {
-                
-                for (var j=0; j < results[0].table_plan[i]['days'+i] ; j++){
-                    dayNumber++;
-                    var day = {
-                        day:dayNumber, city:results[0].table_plan[i]['city'+i], flight:'', car:'', action1:'', action2:''
-                    };
+            if(results[0].table_plan) {
+                for (var i = 0; i < results[0].table_plan.length; i++) {
+                    for (var j = 0; j < results[0].table_plan[i]['days' + i]; j++) {
+                        dayNumber++;
+                        var day = {
+                            day: dayNumber,
+                            city: results[0].table_plan[i]['city' + i],
+                            flight: '',
+                            car: '',
+                            action1: '',
+                            action2: ''
+                        };
 
-                    table.push(day);
+                        table.push(day);
 
-                    day = '';
+                        day = '';
+                    }
                 }
-
+                console.log('SERVER:: Create table:: ' + table);
+                return response.json(table);
             }
-            console.log('SERVER:: Create table:: '+table);
-            return response.json(table);
-
         });
     });
 
