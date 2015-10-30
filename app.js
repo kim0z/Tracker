@@ -263,6 +263,7 @@ app.post('/createTable', function (request, response){
             var dayNumber = 0;
             //create Json Table
             if(results[0].table_plan) {
+                console.log('insideeeeeeeeeee');
                 for (var i = 0; i < results[0].table_plan.length; i++) {
                     for (var j = 0; j < results[0].table_plan[i]['days' + i]; j++) {
                         dayNumber++;
