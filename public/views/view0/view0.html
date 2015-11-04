@@ -3,7 +3,7 @@
 <head>
     <style>
         #example1 {
-            background-image: url('../../assets/images/comp.jpg');
+           /* background-image: url('../../assets/images/comp.jpg'); */
             background-position: center top;
             background-repeat: no-repeat, repeat;
             padding: 800px;
@@ -25,23 +25,106 @@
             filter: alpha(opacity=40); /* For IE8 and earlier */
 
         }
+
+        div {
+            height: 100px;
+
+            width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+
+        }
+
+
     </style>
 </head>
 
-    <body class="background">
-        <p>View 0 : Home<p>
+<body style="">
 
-            <div id="example1">
-            <a ng-href='#/view1"' ng-click='go()' >click me</a>
-            <li><a href="#/view1" ng-click='go()'>Plan a new Trip</a></li>
+<p>View 0 : Home
+
+    <a ng-href='#/view1"' ng-click='go()'>click me</a>
+<li><a href="#/view1" ng-click='go()'>Plan a new Trip</a></li>
+
+<div id="example1">
+
+</div>
+
+<div>
+    <h1 style="
+     font-size: 50px;
+            font-weight: 700;
+  position: absolute;
+  margin: auto;
+  top: 300px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 700px;
+  height: 100px;
+ text-align: center;
+  border-radius: 3px;
+            color: black;
+
+            ">
+        Discover the world
+    </h1>
+
+    <h1 style="
+      font-size: 30px;
+  font-weight: 700;
+  position: absolute;
+  margin: auto;
+  top: 450px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 700px;
+  height: 100px;
+ text-align: center;
+  border-radius: 3px;
+            color: black;
+            ">
+        Plan your trip wisely, execute and share
+    </h1>
+</div>
 
 
-        </div>
 
 
+<video id="myVideo" autoplay
+       style="
+    position: fixed;
+    top: 60%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: 900px;
+    height: 400px;
+    z-index: -100;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    /* background: url(polina.jpg) no-repeat; */
+    background-size: cover;
+"
+>
 
-    </body>
 
+    Your browser does not support the video tag.
+</video>
+
+
+<script>
+
+
+</script>
+
+</body>
 
 
 </html>
