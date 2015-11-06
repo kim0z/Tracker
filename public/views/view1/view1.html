@@ -65,136 +65,102 @@
         </section>
 
 
-
-
-
-
-
-
         <section id="widget_3" class="widget_3">
 
-            <table st-table="rowCollection" data-toggle="table" calss="table-bordered">
-                <thead>
-                <tr>
-                    <th><label class="label1">Task/Day</label></th>
-                    <th><label class="label1">Day 1</label></th>
-                    <th><label class="label1">Day 2</label></th>
-                    <th><label class="label1">Day 3</label></th>
-                    <th><label class="label1">Day 4</label></th>
-                    <th><label class="label1">Day 5</label></th>
-                    <th><label class="label1">Day 6</label></th>
-                    <th><label class="label1">Day 7</label></th>
-                    <th><label class="label1">Day 8</label></th>
-                    <th><label class="label1">Day 9</label></th>
-                    <th><label class="label1">Day 10</label></th>
-                    <th><label class="label1">Day 11</label></th>
-                    <th><label class="label1">Day 12</label></th>
+
+            <table ng-table="usersTable" class="table table-striped">
+                <tr ng-repeat="user in data">
+                    <td data-title="'Id'" >
+                        {{user.id}}
+                    </td>
+                    <td data-title="'First Name'" >
+                        {{user.first_name}}
+                    </td>
+                    <td data-title="'Last Name'" >
+                        {{user.last_name}}
+                    </td>
+                    <td data-title="'e-mail'" >
+                        {{user.email}}
+                    </td>
+                    <td data-title="'Country'">
+                        {{user.country}}
+                    </td>
+                    <td data-title="'IP'" >
+                        {{user.ip_address}}
+                    </td>
                 </tr>
-                <tr>
-                    <td><label class="label1">City</label></td>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-
-                </tr>
-
-                <tr>
-                    <td><label class="label1">Flight</label></td>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-
-                </tr>
-
-                <tr>
-                    <td><label class="label1">Hotel</label></td>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-
-                </tr>
-
-                <tr>
-                    <td><label class="label1">Car</label></td>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-
-                </tr>
-
-                <tr>
-                    <td><label class="label1">Action 1</label></td>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-
-                </tr>
-
-                <tr>
-                    <td><label class="label1">Action 2</label></td>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">Iceland</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-                    <th><label class="label1">London</label></th>
-
-                </tr>
-
-
-                </thead>
             </table>
+
+
+<!--
+
+            <table ng-table="vm.tableParams" class="table" show-filter="false">
+
+                <tr>
+                    <td>
+                        Day
+                    </td>
+
+                    <td ng-repeat="item in $data">
+                        {{item.day}}
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td>
+                        City
+                    </td>
+
+                    <td>
+                        London
+                    </td>
+
+                </tr>
+
+                <td>
+                    Flight
+                </td>
+
+
+                </tr>
+                <tr>
+                    <td>
+                        Car
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td>
+                        Action1
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td>
+                        Action2
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td>
+                        Extra
+                    </td>
+
+
+                </tr>
+
+
+
+
+
+
+
+            </table>
+-->
 
 
         </section>

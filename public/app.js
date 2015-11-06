@@ -10,7 +10,8 @@ var trackerApp = angular.module('myApp', [
     'smart-table',
     'ngMaterial',
     'ngAnimate',
-    'ngAria'
+    'ngAria',
+    'ngTable'
 ])
     .config(function ($stateProvider, $urlRouterProvider) {
         //
