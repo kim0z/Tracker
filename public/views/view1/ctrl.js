@@ -246,20 +246,6 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
         var s = event.target.name;
         var cityNumber = s.match(r);
 
-/*
-        //save the cities list to data base
-        dataBaseService.saveNewTrip(jsonMain)
-            .success(function (data, status, headers, config) {
-                //$scope.message = data; //handle data back from server - not needed meanwhile
-                console.log(jsonMain);
-            })
-            .error(function (data, status, headers, config) {
-                console.log("failure message: " + JSON.stringify({data: data}));
-            });
-*/
-
-        //console.log('Client:: Trip Def page :: the trip sent to server:: '+jsonMain['username'].trip.general.trip_name);
-
         //save the cities list to data base
         dataBaseService.updateTrip(jsonMain)
             .success(function (data, status, headers, config) {
@@ -269,11 +255,7 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
             .error(function (data, status, headers, config) {
                 console.log("failure message: " + JSON.stringify({data: data}));
             });
-
-
-
-
-
+        
         //build table
 
         dataBaseService.createTable(dataTripId).then(function (results) {
