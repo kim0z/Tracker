@@ -51,14 +51,16 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
             $scope.table = results.data;
             //$scope.data = [$scope.table[0]];
 
-            var self = this;
-            var data = [{name: "Moroni", age: 50},{name: "Moroni", age: 50}];
-            self.tableParams = new NgTableParams({}, { dataset: data});
+            //var self = this;
+            //var data = [{name: "Moroni", age: 50},{name: "Moroni", age: 50}];
+            //self.tableParams = new NgTableParams({}, { dataset: data});
 
 
+            var itemsArray = [];
+            for(var i = 0; i < $scope.table.length ; i++)
+                itemsArray.push($scope.table[i]);
 
-
-            $scope.users = [{day:'1', city:'London'},{day:'2', city:'TLV'}];
+            $scope.items = itemsArray;
 
 
 
@@ -66,16 +68,16 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
                 page: 1,
                 count: 10
             }, {
-                total: $scope.users.length,
+                total: $scope.items.length,
                 getData: function ($defer, params) {
-                    $scope.data = $scope.users.slice((params.page() - 1) * params.count(), params.page() * params.count());
+                    $scope.data = $scope.items.slice((params.page() - 1) * params.count(), params.page() * params.count());
                     $defer.resolve($scope.data);
                 }
             });
 
 
             console.log('Client:: View3:: Create Table::' +  $scope.table);
-            console.log(self.tableParams);
+            console.log($scope.table.length);
         });
 
 
@@ -267,6 +269,45 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
             .error(function (data, status, headers, config) {
                 console.log("failure message: " + JSON.stringify({data: data}));
             });
+
+
+
+
+
+        //build table
+
+        dataBaseService.createTable(dataTripId).then(function (results) {
+            $scope.table = results.data;
+            //$scope.data = [$scope.table[0]];
+
+            //var self = this;
+            //var data = [{name: "Moroni", age: 50},{name: "Moroni", age: 50}];
+            //self.tableParams = new NgTableParams({}, { dataset: data});
+
+
+            var itemsArray = [];
+            for(var i = 0; i < $scope.table.length ; i++)
+                itemsArray.push($scope.table[i]);
+
+            $scope.items = itemsArray;
+
+
+
+            $scope.usersTable = new NgTableParams({
+                page: 1,
+                count: 10
+            }, {
+                total: $scope.items.length,
+                getData: function ($defer, params) {
+                    $scope.data = $scope.items.slice((params.page() - 1) * params.count(), params.page() * params.count());
+                    $defer.resolve($scope.data);
+                }
+            });
+
+
+            console.log('Client:: View3:: Create Table::' +  $scope.table);
+            console.log($scope.table.length);
+        });
 
     };
 

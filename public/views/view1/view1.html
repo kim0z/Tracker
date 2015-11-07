@@ -1,12 +1,8 @@
-<P>View 1 : Planning
-<P>
 
     <aside id="sidebar">
 
-        <section id="widget_1" class="widget_1">
+        <section id="widget_1" class="widget_1" style="overflow:scroll">
             <form name="tripDefinitionForm">
-
-                <label class="label1">TRIP </label>
 
                 <label class="label1">Trip name:</label>
                 <input type="text" name="inputTripName" ng-model="tripName"
@@ -59,15 +55,16 @@
                                 radius="c.radius"
                                 visible="c.visible" geodesic="c.geodesic" editable="c.editable" draggable="c.draggable"
                                 clickable="c.clickable" control="c.control"></ui-gmap-circle>
-
             </ui-gmap-google-map>
 
         </section>
 
 
+
+
+
+
         <section id="widget_3" class="widget_3">
-
-
             <table ng-table="usersTable" class="table table-striped">
 
                 <tr>
@@ -95,105 +92,6 @@
                 <tr>
                     <td>Expense</td>
                 </tr>
-
-
-
-                <!--     <tr ng-repeat="user in data">
-
-                         <td data-title="'Day'" >
-                             {{user.day}}
-                         </td>
-
-                         <td data-title="'City'" >
-                             {{user.city}}
-                         </td>
-                         <td data-title="'Flight'" >
-                             {{user.last_name}}
-                         </td>
-                         <td data-title="'Car'" >
-                             {{user.email}}
-                         </td>
-                         <td data-title="'Action1'">
-                             {{user.country}}
-                         </td>
-                         <td data-title="'Exra'" >
-                             {{user.ip_address}}
-                         </td>
-
-                     </tr>-->
             </table>
-
-
-            <!--
-
-                        <table ng-table="vm.tableParams" class="table" show-filter="false">
-
-                            <tr>
-                                <td>
-                                    Day
-                                </td>
-
-                                <td ng-repeat="item in $data">
-                                    {{item.day}}
-                                </td>
-
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    City
-                                </td>
-
-                                <td>
-                                    London
-                                </td>
-
-                            </tr>
-
-                            <td>
-                                Flight
-                            </td>
-
-
-                            </tr>
-                            <tr>
-                                <td>
-                                    Car
-                                </td>
-
-
-                            </tr>
-                            <tr>
-                                <td>
-                                    Action1
-                                </td>
-
-
-                            </tr>
-                            <tr>
-                                <td>
-                                    Action2
-                                </td>
-
-
-                            </tr>
-                            <tr>
-                                <td>
-                                    Extra
-                                </td>
-
-
-                            </tr>
-
-
-
-
-
-
-
-                        </table>
-            -->
-
-
         </section>
     </aside>
