@@ -1,97 +1,89 @@
+<aside id="sidebar">
 
-    <aside id="sidebar">
+    <section id="widget_1" class="widget_1" style="overflow:scroll">
+        <form name="tripDefinitionForm">
 
-        <section id="widget_1" class="widget_1" style="overflow:scroll">
-            <form name="tripDefinitionForm">
+            <label class="label1">Trip name:</label>
+            <input type="text" name="inputTripName" ng-model="tripName"
+                   ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
 
-                <label class="label1">Trip name:</label>
-                <input type="text" name="inputTripName" ng-model="tripName"
-                       ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
+            <label class="label1">Description:</label>
+            <input class="inputDesc" type="text" name="inputTripDesc" ng-model="tripDescription"
+                   ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
 
-                <label class="label1">Description:</label>
-                <input class="inputDesc" type="text" name="inputTripDesc" ng-model="tripDescription"
-                       ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
+            <label class="label1">Start date:</label>
+            <datepicker>
+                <input name="inputStartDate" ng-model="dateStart" type="text" ng-blur="onBlur($event)"/>
+            </datepicker>
 
-                <label class="label1">Start date:</label>
-                <datepicker>
-                    <input name="inputStartDate" ng-model="dateStart" type="text" ng-blur="onBlur($event)"/>
-                </datepicker>
+            <label class="label1">End date:</label>
+            <datepicker>
+                <input name="inputEndDate" ng-model="dateEnd" type="text" ng-blur="onBlur($event)"/>
+            </datepicker>
 
-                <label class="label1">End date:</label>
-                <datepicker>
-                    <input name="inputEndDate" ng-model="dateEnd" type="text" ng-blur="onBlur($event)"/>
-                </datepicker>
+            <div ng-repeat="dest in destinations">
+                <label class="label1">Destination {{$index + 1}}:</label>
+                <input type="text" name="inputDest{{$index + 1}}" ng-model="dest.city" ng-blur="onBlur(dest)">
 
-                <div ng-repeat="dest in destinations">
-                    <label class="label1">Destination {{$index + 1}}:</label>
-                    <input type="text" name="inputDest{{$index + 1}}" ng-model="dest.city" ng-blur="onBlur(dest)">
-
-                    <label class="label1">Days:</label>
-                    <input type="text" name="inputDays{{$index + 1}}" ng-model="dest.days" ng-blur="onBlur(dest)">
-
-
-                </div>
-
-                <button ng-click="addNewDestination()">Add new city</button>
+                <label class="label1">Days:</label>
+                <input type="text" name="inputDays{{$index + 1}}" ng-model="dest.days" ng-blur="onBlur(dest)">
 
 
-                <!-- <div id="space-for-input"> -->
+            </div>
+
+            <button ng-click="addNewDestination()">Add new city</button>
+
+        </form>
+    </section>
 
 
-                <!--
-                              <div ng-controller="NumberPicker" class="container">
-                                    <h-number value="input.num" min="2" max="50" step="1" change="onChanged()"></h-number>
-                              </div>
-                -->
-
-            </form>
-        </section>
-
-
-        <section id="widget_2" class="widget_2">
-            <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true">
-
-                <ui-gmap-circle ng-repeat="c in circles track by c.id" center="c.center" stroke="c.stroke" fill="c.fill"
-                                radius="c.radius"
-                                visible="c.visible" geodesic="c.geodesic" editable="c.editable" draggable="c.draggable"
-                                clickable="c.clickable" control="c.control"></ui-gmap-circle>
-            </ui-gmap-google-map>
-
-        </section>
+    <section id="widget_2" class="widget_2">
+        <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true">
 
 
 
+        <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
+                          geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"
+                          icons='p.icons'></ui-gmap-polyline>
+
+            <ui-gmap-circle ng-repeat="c in circles track by c.id" center="c.center" stroke="c.stroke" fill="c.fill"
+                            radius="c.radius"
+                            visible="c.visible" geodesic="c.geodesic" editable="c.editable" draggable="c.draggable"
+                            clickable="c.clickable" control="c.control"></ui-gmap-circle>
+        </ui-gmap-google-map>
 
 
+    </section>
 
-        <section id="widget_3" class="widget_3">
-            <table ng-table="usersTable" class="table table-striped">
 
-                <tr>
-                    <td>Action/Day</td>
-                    <td ng-repeat="item in data">{{item.day}}</td>
-                </tr>
+    <section id="widget_3" class="widget_3">
+        <table ng-table="usersTable" class="table table-striped">
 
-                <tr>
-                    <td>City</td>
-                    <td ng-repeat="item in data">{{item.city}}</td>
-                </tr>
+            <tr>
+                <td>Action/Day</td>
+                <td ng-repeat="item in data">{{item.day}}</td>
+            </tr>
 
-                <tr>
-                    <td>Hotel</td>
-                </tr>
+            <tr>
+                <td>City</td>
+                <td ng-repeat="item in data">{{item.city}}</td>
+            </tr>
 
-                <tr>
-                    <td>Car</td>
-                </tr>
+            <tr>
+                <td>Hotel</td>
+            </tr>
 
-                <tr>
-                    <td>Action1</td>
-                </tr>
+            <tr>
+                <td>Car</td>
+            </tr>
 
-                <tr>
-                    <td>Expense</td>
-                </tr>
-            </table>
-        </section>
-    </aside>
+            <tr>
+                <td>Action1</td>
+            </tr>
+
+            <tr>
+                <td>Expense</td>
+            </tr>
+        </table>
+    </section>
+</aside>

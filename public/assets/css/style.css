@@ -155,7 +155,7 @@ footer a img {
 
     float: left;
     position: relative;
-    background: #B5E3FF;
+    /* background: #B5E3FF; */
 }
 
 .widget_2 {
@@ -206,10 +206,6 @@ table, th, td {
     border-collapse: collapse;
     border: 1px solid black;
 }
-
-
-
-
 
 
 ::-webkit-scrollbar {

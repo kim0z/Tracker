@@ -4,7 +4,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, googleMapsAPIService
 
         // check if there is query in url
         // and fire search in case its value is not empty
-        Promise.resolve(dataBaseService.getGpsPoints()).then(function (val) {
+/*        Promise.resolve(dataBaseService.getGpsPoints()).then(function (val) {
             console.log(val.data);
             $scope.polylines.push(val.data);
             console.log('ploy1 '+   $scope.polylines[0].id )
@@ -21,7 +21,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, googleMapsAPIService
                 output += property + ': ' + $scope.polylines[1][property]+'; ';
             }
             console.log(output);
-        })
+        })*/
     };
 
 

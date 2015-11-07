@@ -50,7 +50,8 @@ var trackerApp = angular.module('myApp', [
     .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApiProviders) {
 
         GoogleMapApiProviders.configure({
-            china: true
+            china: true,
+            libraries: 'geometry,visualization'
         });
 
     }])

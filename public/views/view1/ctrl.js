@@ -1,6 +1,8 @@
-trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService, dataBaseService ,messages, NgTableParams) {
+trackerApp.controller('view1Ctrl', function ($scope, $http, googleMapsAPIService, dataBaseService, messages, NgTableParams) {
 
 
+    var dataTripId;
+    $scope.polylines = [];
     //get trip data to the page
     $scope.trip_id = messages.getTripID();
 
@@ -9,7 +11,7 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
     }
     else {
 
-        var dataTripId = {trip_id: $scope.trip_id};
+        dataTripId = {trip_id: $scope.trip_id};
         dataBaseService.getTripById(dataTripId).then(function (results) {
 
             $scope.tripById = results.data;
@@ -17,8 +19,7 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
             console.log('Client:: View3:: get trip by id::' + messages.getTripID());
             //exmple for how to get data from results console.log('trip  '+$scope.tripById[0].id);
 
-            //fill all field
-            //
+            //################################### Fill all fields of Trip definition #########################
             console.log($scope.tripById[0].end_date);
             console.log($scope.tripById[0].start_date);
             console.log($scope.tripById[0].trip_description);
@@ -29,24 +30,85 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
             $scope.dateEnd = $scope.tripById[0].end_date;
 
 
-
             if (results.data[0].table_plan) {
                 $scope.destinations = []; //clean destinations textboxes
 
-            for (var i = 0; i < results.data[0].table_plan.length; i++) {
-                console.log('DELETE MEEEEEE' + results.data[0].table_plan[i]['city' + i]);
-                console.log('DELETE MEEEEEE' + results.data[0].table_plan[i]['days' + i]);
+                for (var i = 0; i < results.data[0].table_plan.length; i++) {
+                    console.log('DELETE MEEEEEE' + results.data[0].table_plan[i]['city' + i]);
+                    console.log('DELETE MEEEEEE' + results.data[0].table_plan[i]['days' + i]);
 
 
-                $scope.destinations.push({
-                    city: $scope.tripById[0].table_plan[i]['city' + i],
-                    days: $scope.tripById[0].table_plan[i]['days' + i]
-                });
+                    $scope.destinations.push({
+                        city: $scope.tripById[0].table_plan[i]['city' + i],
+                        days: $scope.tripById[0].table_plan[i]['days' + i]
+                    });
+                }
             }
-        }
+
+            //############################### Google maps - Circles #######################################
+            var cities = [];
+            //get city name :: console.log($scope.tripById[0].table_plan[0]['city0']);
+            for (var cityN = 0; cityN < $scope.tripById[0].table_plan.length; cityN++) {
+                console.log($scope.tripById[0].table_plan[cityN]['city' + cityN]);
+                cities.push($scope.tripById[0].table_plan[cityN]['city' + cityN]);
+
+            }
+
+            $scope.geoCode = googleMapsAPIService.createCircles(cities);
+
+
+            Promise.resolve($scope.geoCode).then(function (val) { // why 3 promises
+                for (var i = 0; i < val.length; i++) {
+
+                    Promise.resolve(val[i]).then(function (val2) {   // recursive behave, first the val[1] then val[0], ask about it?
+                        console.log('city: ' + val2.data[0].city);
+                        console.log('latitude: ' + val2.data[0].latitude);
+                        console.log('longitude: ' + val2.data[0].longitude);
+
+                        console.log('index ' + i);
+                        var circle = getTemplate(); //get circle template
+                        var polyline = getTemplatePolyLine(); // get polyline template
+
+
+                        circle['id'] = Math.floor((Math.random() * 100) + 2); // remove the random to be serial id
+                        circle['center'].latitude = val2.data[0].latitude;
+                        circle['center'].longitude = val2.data[0].longitude;
+
+
+                        polyline[0].path.push({
+                            latitude: val2.data[0].latitude,
+                            longitude: val2.data[0].longitude
+                        })
+
+
+
+
+
+
+                        console.log(circle);
+
+                        $scope.circles.push(circle);
+                        $scope.polylines.push(polyline[0]);
+
+
+
+                        // circleArray[circleArray.length+1] = circle;
+
+                        console.log($scope.circles);
+                        // console.log(circleArray);
+
+                        //PolyLine
+
+
+                        console.log(polyline[0].path);
+                    })
+                }
+            })
+
 
         });
 
+        //##################################### Create Table ####################################
         dataBaseService.createTable(dataTripId).then(function (results) {
             $scope.table = results.data;
             //$scope.data = [$scope.table[0]];
@@ -57,11 +119,10 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
 
 
             var itemsArray = [];
-            for(var i = 0; i < $scope.table.length ; i++)
+            for (var i = 0; i < $scope.table.length; i++)
                 itemsArray.push($scope.table[i]);
 
             $scope.items = itemsArray;
-
 
 
             $scope.usersTable = new NgTableParams({
@@ -76,84 +137,12 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
             });
 
 
-            console.log('Client:: View3:: Create Table::' +  $scope.table);
+            console.log('Client:: View3:: Create Table::' + $scope.table);
             console.log($scope.table.length);
         });
 
-
-        //########################## Table ####################################
-
-
-
-
-        //#####################################################################
-
-
-
     }
 
-
-
-    function getTemplate() {
-        var circleTemplate = {
-            id: 1,
-            center: {
-                latitude: 44,
-                longitude: -108
-            },
-            radius: 10000,
-            stroke: {
-                color: '#08B21F',
-                weight: 2,
-                opacity: 1
-            },
-            fill: {
-                color: '#08B21F',
-                opacity: 0.5
-            },
-            geodesic: true, // optional: defaults to false
-            draggable: true, // optional: defaults to false
-            clickable: true, // optional: defaults to true
-            editable: true, // optional: defaults to false
-            visible: true, // optional: defaults to true
-            control: {}
-        };
-        return circleTemplate;
-    }
-
-    /*
-
-     $scope.geoCode = googleMapsAPIService.createCircles(cities);
-
-
-     Promise.resolve($scope.geoCode).then(function (val) { // why 3 promises
-     for (var i = 0; i < val.length; i++) {
-
-     Promise.resolve(val[i]).then(function (val2) {   // recursive behave, first the val[1] then val[0], ask about it?
-     console.log('city: ' + val2.data[0].city);
-     console.log('latitude: ' + val2.data[0].latitude);
-     console.log('longitude: ' + val2.data[0].longitude);
-
-     console.log('index ' + i);
-     var circle = getTemplate();
-     circle['id'] = Math.floor((Math.random() * 100) + 2); // remove the random to be serial id
-     circle['center'].latitude = val2.data[0].latitude;
-     circle['center'].longitude = val2.data[0].longitude;
-     console.log(circle);
-
-     $scope.circles.push(circle);
-     // circleArray[circleArray.length+1] = circle;
-
-     console.log($scope.circles);
-     // console.log(circleArray);
-     })
-     }
-     })
-
-     }
-     );
-
-     */
 
 //Google maps section
     $scope.destinations = [
@@ -220,7 +209,7 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
 
         //save all the general information about the trip
         jsonTripGeneralInfo = {
-            trip_id : messages.getTripID(), //internal use for updating
+            trip_id: messages.getTripID(), //internal use for updating
             trip_name: $scope.tripName,
             trip_description: $scope.tripDescription,
             start_date: $scope.dateStart,
@@ -232,7 +221,7 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
         for (var i = 0; i < $scope.destinations.length; i++) {
             jsonTripTableCity['city' + i] = $scope.destinations[i].city;
             jsonTripTableCity['days' + i] = $scope.destinations[i].days;
-            jsonTripTableCity['general' + i] = {flight:'',hotel:'',car:'',action1:'',action2:''};
+            jsonTripTableCity['general' + i] = {flight: '', hotel: '', car: '', action1: '', action2: ''};
             tableArray.push(jsonTripTableCity)
             jsonTripTableCity = {};
         }
@@ -255,9 +244,8 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
             .error(function (data, status, headers, config) {
                 console.log("failure message: " + JSON.stringify({data: data}));
             });
-        
-        //build table
 
+        //build table
         dataBaseService.createTable(dataTripId).then(function (results) {
             $scope.table = results.data;
             //$scope.data = [$scope.table[0]];
@@ -268,11 +256,10 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
 
 
             var itemsArray = [];
-            for(var i = 0; i < $scope.table.length ; i++)
+            for (var i = 0; i < $scope.table.length; i++)
                 itemsArray.push($scope.table[i]);
 
             $scope.items = itemsArray;
-
 
 
             $scope.usersTable = new NgTableParams({
@@ -287,14 +274,46 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
             });
 
 
-            console.log('Client:: View3:: Create Table::' +  $scope.table);
+            console.log('Client:: View3:: Create Table::' + $scope.table);
             console.log($scope.table.length);
         });
 
+        //Google maps
+        var cities = [];
+        //get city name :: console.log($scope.tripById[0].table_plan[0]['city0']);
+        for (var cityN = 0; cityN < $scope.tripById[0].table_plan.length; cityN++) {
+            console.log($scope.tripById[0].table_plan[cityN]['city' + cityN]);
+            cities.push($scope.tripById[0].table_plan[cityN]['city' + cityN]);
+
+        }
+
+        $scope.geoCode = googleMapsAPIService.createCircles(cities);
+
+        Promise.resolve($scope.geoCode).then(function (val) { // why 3 promises
+            for (var i = 0; i < val.length; i++) {
+
+                Promise.resolve(val[i]).then(function (val2) {   // recursive behave, first the val[1] then val[0], ask about it?
+                    console.log('city: ' + val2.data[0].city);
+                    console.log('latitude: ' + val2.data[0].latitude);
+                    console.log('longitude: ' + val2.data[0].longitude);
+
+                    console.log('index ' + i);
+                    var circle = getTemplate();
+                    circle['id'] = Math.floor((Math.random() * 100) + 2); // remove the random to be serial id
+                    circle['center'].latitude = val2.data[0].latitude;
+                    circle['center'].longitude = val2.data[0].longitude;
+                    console.log(circle);
+
+                    $scope.circles.push(circle);
+                    // circleArray[circleArray.length+1] = circle;
+
+                    console.log($scope.circles);
+                    // console.log(circleArray);
+                })
+            }
+        })
+
     };
-
-
-
 
 
     $scope.rowCollection = [
@@ -362,6 +381,70 @@ trackerApp.controller('view1Ctrl' ,function ($scope, $http, googleMapsAPIService
 
 // get contact list
     //   $scope.contactList = SomeService.GetAll();
+
+
+    function getTemplate() {
+        var circleTemplate = {
+            id: 1,
+            center: {
+                latitude: 44,
+                longitude: -108
+            },
+            radius: 10000,
+            stroke: {
+                color: '#08B21F',
+                weight: 2,
+                opacity: 1
+            },
+            fill: {
+                color: '#08B21F',
+                opacity: 0.5
+            },
+            geodesic: true, // optional: defaults to false
+            draggable: true, // optional: defaults to false
+            clickable: true, // optional: defaults to true
+            editable: true, // optional: defaults to false
+            visible: true, // optional: defaults to true
+            control: {}
+        };
+        return circleTemplate;
+    }
+
+    function getTemplatePolyLine() {
+
+        var polylinesTemplate = [
+            {
+                id: 1,
+                path: [
+                    {
+                        latitude: 45,
+                        longitude: -74
+                    },
+                    {
+                        latitude: 30,
+                        longitude: -89
+                    }
+                ],
+                stroke: {
+                    color: '#6060FB',
+                    weight: 3
+                },
+                editable: true,
+                draggable: true,
+                geodesic: true,
+                visible: true,
+                icons: [{
+                    icon: {
+                        path: google.maps.SymbolPath.BACKWARD_OPEN_ARROW
+                    },
+                    offset: '25px',
+                    repeat: '50px'
+                }]
+            }
+        ];
+
+        return polylinesTemplate;
+    }
 
 
 });
