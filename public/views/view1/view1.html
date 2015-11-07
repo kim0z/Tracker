@@ -69,98 +69,130 @@
 
 
             <table ng-table="usersTable" class="table table-striped">
-                <tr ng-repeat="user in data">
-                    <td data-title="'Id'" >
-                        {{user.id}}
-                    </td>
-                    <td data-title="'First Name'" >
-                        {{user.first_name}}
-                    </td>
-                    <td data-title="'Last Name'" >
-                        {{user.last_name}}
-                    </td>
-                    <td data-title="'e-mail'" >
-                        {{user.email}}
-                    </td>
-                    <td data-title="'Country'">
-                        {{user.country}}
-                    </td>
-                    <td data-title="'IP'" >
-                        {{user.ip_address}}
-                    </td>
+
+                <tr>
+                    <td>Action/Day</td>
+                    <td ng-repeat="item in data">{{item.day}}</td>
                 </tr>
+
+                <tr>
+                    <td>City</td>
+                    <td ng-repeat="item in data">{{item.city}}</td>
+                </tr>
+
+                <tr>
+                    <td>Hotel</td>
+                </tr>
+
+                <tr>
+                    <td>Car</td>
+                </tr>
+
+                <tr>
+                    <td>Action1</td>
+                </tr>
+
+                <tr>
+                    <td>Expense</td>
+                </tr>
+
+
+
+                <!--     <tr ng-repeat="user in data">
+
+                         <td data-title="'Day'" >
+                             {{user.day}}
+                         </td>
+
+                         <td data-title="'City'" >
+                             {{user.city}}
+                         </td>
+                         <td data-title="'Flight'" >
+                             {{user.last_name}}
+                         </td>
+                         <td data-title="'Car'" >
+                             {{user.email}}
+                         </td>
+                         <td data-title="'Action1'">
+                             {{user.country}}
+                         </td>
+                         <td data-title="'Exra'" >
+                             {{user.ip_address}}
+                         </td>
+
+                     </tr>-->
             </table>
 
 
-<!--
+            <!--
 
-            <table ng-table="vm.tableParams" class="table" show-filter="false">
+                        <table ng-table="vm.tableParams" class="table" show-filter="false">
 
-                <tr>
-                    <td>
-                        Day
-                    </td>
+                            <tr>
+                                <td>
+                                    Day
+                                </td>
 
-                    <td ng-repeat="item in $data">
-                        {{item.day}}
-                    </td>
+                                <td ng-repeat="item in $data">
+                                    {{item.day}}
+                                </td>
 
-                </tr>
+                            </tr>
 
-                <tr>
-                    <td>
-                        City
-                    </td>
+                            <tr>
+                                <td>
+                                    City
+                                </td>
 
-                    <td>
-                        London
-                    </td>
+                                <td>
+                                    London
+                                </td>
 
-                </tr>
+                            </tr>
 
-                <td>
-                    Flight
-                </td>
-
-
-                </tr>
-                <tr>
-                    <td>
-                        Car
-                    </td>
+                            <td>
+                                Flight
+                            </td>
 
 
-                </tr>
-                <tr>
-                    <td>
-                        Action1
-                    </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Car
+                                </td>
 
 
-                </tr>
-                <tr>
-                    <td>
-                        Action2
-                    </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Action1
+                                </td>
 
 
-                </tr>
-                <tr>
-                    <td>
-                        Extra
-                    </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Action2
+                                </td>
 
 
-                </tr>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Extra
+                                </td>
 
 
+                            </tr>
 
 
 
 
 
-            </table>
--->
+
+
+                        </table>
+            -->
 
 
         </section>
