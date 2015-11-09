@@ -3,33 +3,75 @@
     <section id="widget_1" class="widget_1" style="overflow:scroll">
         <form name="tripDefinitionForm">
 
-            <label class="label1">Trip name:</label>
-            <input type="text" name="inputTripName" ng-model="tripName"
-                   ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
 
-            <label class="label1">Description:</label>
-            <input class="inputDesc" type="text" name="inputTripDesc" ng-model="tripDescription"
-                   ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
-
-            <label class="label1">Start date:</label>
-            <datepicker>
-                <input name="inputStartDate" ng-model="dateStart" type="text" ng-blur="onBlur($event)"/>
-            </datepicker>
-
-            <label class="label1">End date:</label>
-            <datepicker>
-                <input name="inputEndDate" ng-model="dateEnd" type="text" ng-blur="onBlur($event)"/>
-            </datepicker>
-
-            <div ng-repeat="dest in destinations">
-                <label class="label1">Destination {{$index + 1}}:</label>
-                <input type="text" name="inputDest{{$index + 1}}" ng-model="dest.city" ng-blur="onBlur(dest)">
-
-                <label class="label1">Days:</label>
-                <input type="text" name="inputDays{{$index + 1}}" ng-model="dest.days" ng-blur="onBlur(dest)">
+            <table class="fixed">
+                <col width="150px"/>
+                <col width="300px"/>
+                <tr>
+                    <td><label class="label1">Trip name:</label></td>
+                    <td><input type="text" name="inputTripName" ng-model="tripName"
+                               ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
+                    </td>
+                </tr>
 
 
-            </div>
+                <tr>
+                    <td>
+                        <label class="label1">Description:</label>
+                    </td>
+                    <td>
+                        <input class="inputDesc" type="text" name="inputTripDesc" ng-model="tripDescription"
+                               ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
+
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>
+                        <label class="label1">Start date:</label>
+                    </td>
+                    <td>
+                        <datepicker>
+                            <input name="inputStartDate" ng-model="dateStart" type="text" ng-blur="onBlur($event)"/>
+                        </datepicker>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label class="label1">End date:</label>
+                    </td>
+                    <td>
+                        <datepicker>
+                            <input name="inputEndDate" ng-model="dateEnd" type="text" ng-blur="onBlur($event)"/>
+                        </datepicker>
+                    </td>
+                </tr>
+
+            </table>
+
+            <table ng-repeat="dest in destinations" class="fixed">
+                <col width="150px"/>
+                <col width="300px"/>
+                <tr>
+                    <td>
+                        <label class="label1">Destination {{$index + 1}}:</label>
+                    </td>
+                    <td>
+                        <input type="text" name="inputDest{{$index + 1}}" ng-model="dest.city" ng-blur="onBlur(dest)">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="label1">Days:</label>
+                    </td>
+                    <td>
+                        <input type="text" name="inputDays{{$index + 1}}" ng-model="dest.days" ng-blur="onBlur(dest)">
+                    </td>
+                </tr>
+            </table>
+
 
             <button ng-click="addNewDestination()">Add new city</button>
 
@@ -41,10 +83,9 @@
         <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true">
 
 
-
-        <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
-                          geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"
-                          icons='p.icons'></ui-gmap-polyline>
+            <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
+                              geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"
+                              icons='p.icons'></ui-gmap-polyline>
 
             <ui-gmap-circle ng-repeat="c in circles track by c.id" center="c.center" stroke="c.stroke" fill="c.fill"
                             radius="c.radius"
