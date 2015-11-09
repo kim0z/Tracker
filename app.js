@@ -225,10 +225,6 @@ app.post('/getTripById', function (request, response) {
 });
 
 
-
-//this function should be called
-
-
 //Create trip table
 app.post('/createTable', function (request, response){
     var table = [];
@@ -286,56 +282,7 @@ app.post('/createTable', function (request, response){
             }
         });
     });
-
-
-
-
-/*
-
-    // Create the table
-
-    jsonTable = '{"Flight": "United",' +
-        '"City": "London",' +
-        '"Hotel": "Hilton",' +
-        '"Car": "Hertz",' +
-        '"Action1": "Do something",' +
-        '"Action2": "Do another thing"}';
-
-    var tableArray = [];
-
-    tableArray.push(tableJson);
-*/
-
-
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -432,69 +379,13 @@ var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
 //receive country and city name, return GeoCode from Google Maps API
 app.post('/getGeoCode', function (request, response) {
 // Using callback
-//console.log(Server: request.body.city); // print the city name from UI
-    console.log('Server city name ' + request.body);
-    geocoder.geocode(request.body, function (err, res) {
+console.log('Server::: Get GeoCode for city::'+ request.body); // print the city name from UI
+    console.log('Server city name ' + request.body.city);
+    geocoder.geocode(request.body.city, function (err, res) {
         //  console.log(err,res); //print the response from GeoLocation google API
         response.send(res);
     });
 
-});
-
-
-//get last trip id from DB // UNDER FIXING
-app.post('/getLastTripId', function (request, response) {
-    var lastTripId = '0';
-    myFirebaseRef.endAt().limitToLast(1).on("child_added", function (snapshot) {
-        console.log('id'+snapshot.val().trips);
-        lastTripId = snapshot.val().trips;
-        console.log("Server: Last trip id: " + lastTripId);
-        response.send(lastTripId);
-    });
-
-});
-
-
-//save NEWvTrip to DB:
-app.post('/saveNewTrip', function (request, response) {
-    var jsonTrip = request.body;
-    var onComplete = function (error) {
-        if (error) {
-            console.log('Trip object failed to be saved in DB -> ' + JSON.stringify(jsonTrip));
-            response.send('Trip object failed to be saved in DB ').end();
-        } else {
-            console.log('Trip object saved in DB -> ' + JSON.stringify(jsonTrip));
-            response.send('Trip object saved in DB -> ' + JSON.stringify(jsonTrip)).end();
-        }
-    };
-    myFirebaseRef.push(jsonTrip, onComplete);
-// Same as the previous example, except we will also log a message
-// when the data has finished synchronizing
-
-
-    // echo the result back - should be changed, validation required
-});
-
-
-
-//save Trip to DB: //// OLD deprecated
-app.post('/saveTrip', function (request, response) {
-    var jsonTrip = request.body;
-    var onComplete = function (error) {
-        if (error) {
-            console.log('Trip object failed to be saved in DB -> ' + JSON.stringify(jsonTrip));
-            response.send('Trip object failed to be saved in DB ').end();
-        } else {
-            console.log('Trip object saved in DB -> ' + JSON.stringify(jsonTrip));
-            response.send('Trip object saved in DB -> ' + JSON.stringify(jsonTrip)).end();
-        }
-    };
-    myFirebaseRef.set(jsonTrip, onComplete);
-// Same as the previous example, except we will also log a message
-// when the data has finished synchronizing
-
-
-    // echo the result back - should be changed, validation required
 });
 
 //Retrieving Trip from DB:
@@ -511,31 +402,6 @@ app.post('/getTrip', function (request, response) {
         //response.send('Server: Trip object retrieving from DB failed -> ' + errorObject.code);
     });
 });
-
-
-
-
-//get record count in DB (to calculate the id of the new record) for an user
-app.post('/getTripNumbers', function (request, response) {
-    console.log("Server: Retrieving Trip numbers for an user");
-
-
-    myFirebaseRef.on("value", function (snapshot) {
-        //console.log('Server: **** -> ' + JSON.stringify(snapshot.val()));
-        var userObject = snapshot.val();
-        var tripsNumber = userObject['kareem9k'].trips.length; //add catch incase object is not exits
-
-        response.json(tripsNumber);
-
-    }, function (errorObject) {
-        console.log('Server: Trip object retrieving from DB failed -> ' + errorObject.code);
-
-        //response.send('Server: Trip object retrieving from DB failed -> ' + errorObject.code);
-    });
-
-});
-
-
 
 
 //////////////////////////////////////////////////DB end ////////////////////////////////////

@@ -1,10 +1,10 @@
 trackerApp.service('googleMapsAPIService', ['$http', function ($http) {
 
-    this.getGeoCode = function (dataObj) {
-        return $http.post('/getGeoCode', dataObj);
+    this.getGeoCode = function (cityObj) {
+        return $http.post('/getGeoCode', cityObj);
     };
 
-    this.createCircles = function (citiesObj) {
+    this.getGeoCodeForArray = function (citiesObj) {
         var citiesGeo = [];
 
         for (var i = 0; i < citiesObj.length; i++) {
