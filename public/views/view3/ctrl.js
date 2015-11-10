@@ -1,4 +1,4 @@
-trackerApp.controller('view3Ctrl', function ($scope, $http, googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages) {
+trackerApp.controller('view3Ctrl', function ($scope, $http,$window, googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages) {
     //start
     /*
      (function() {
@@ -22,6 +22,16 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, googleMapsAPIService
         console.log('Client:: Click Edit trip :: id:: '+ trip_id);
         messages.saveTripID(trip_id); //save trip id into message
         window.open ('#/view1', '_self', false);
+    }
+
+    $scope.deleteTrip = function(trip_id){
+        dataTripId = {trip_id: trip_id};
+        dataBaseService.deleteTripById(dataTripId).then(function (results) {
+            //$scope.message = data; //handle data back from server - not needed meanwhile
+            console.log('Client:: View3:: Fun:: openTripPlanPage :: Delete trip id:: '+trip_id);
+            $window.location.reload();
+            //$route.reload();
+        })
     }
 
     //when click on create new test 'the red circule button'

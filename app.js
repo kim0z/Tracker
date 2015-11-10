@@ -224,6 +224,41 @@ app.post('/getTripById', function (request, response) {
     });
 });
 
+//Postgres Delete trip by id
+app.post('/deleteTripById', function (request, response) {
+
+    console.log('SERVER:: Postgres:: delete trip by id :: trip id ::'+request.body.trip_id);
+    var trip_id = request.body.trip_id;
+    var results = [];
+
+    // Get a Postgres client from the connection pool
+    pg.connect(conString, function(err, client, done) {
+        // Handle connection errors
+        if(err) {
+            done();
+            console.log(err);
+            return response.status(500).json({ success: false, data: err});
+        }
+
+        // SQL Query > Select Data
+        var query = client.query("DELETE FROM trips WHERE id = "+trip_id+";");
+
+        // Stream results back one row at a time
+     //   query.on('row', function(row) {
+       //     results.push(row);
+      //  });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function() {
+            done();
+            console.log(results); // looks like : [{....}]
+          //  tripById = results;
+            return response.json(results);
+        });
+
+    });
+});
+
 
 //Create trip table
 app.post('/createTable', function (request, response){
@@ -309,52 +344,6 @@ app.post('/getLastTripId', function (request, response) {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//post - receive trip details
-
-app.post('/postTrip', function (request, response) {
-    console.log(request.body);      // your JSON
-
-    myFirebaseRef.set({
-        name: request.body.name,
-        email: request.body.email,
-        message: request.body.message
-    });
-
-    response.status(200).end();    // echo the result back
-});
-
 app.listen(port);
 console.log("App listening on port " + port);
 
@@ -386,21 +375,6 @@ console.log('Server::: Get GeoCode for city::'+ request.body); // print the city
         response.send(res);
     });
 
-});
-
-//Retrieving Trip from DB:
-app.post('/getTrip', function (request, response) {
-    console.log("Server: Retrieving Trip data from DB");
-
-
-    myFirebaseRef.on("value", function (snapshot) {
-        console.log('Server: Trip object retrieving from DB succeeded -> ' + JSON.stringify(snapshot.val()));
-        response.json(snapshot.val());
-
-    }, function (errorObject) {
-        console.log('Server: Trip object retrieving from DB failed -> ' + errorObject.code);
-        //response.send('Server: Trip object retrieving from DB failed -> ' + errorObject.code);
-    });
 });
 
 

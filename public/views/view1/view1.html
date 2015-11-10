@@ -1,3 +1,5 @@
+
+
 <aside id="sidebar">
 
     <table>
@@ -12,6 +14,27 @@
                         <col width="150px"/>
                         <col width="300px"/>
                         <tr>
+                            <!-- Single button using template-url -->
+                            <div class="btn-group" uib-dropdown>
+                                <button id="button-template-url" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+                                    Dropdown using template <span class="caret"></span>
+                                </button>
+                                <ul class="uib-dropdown-menu" template-url="dropdown.html" aria-labelledby="button-template-url">
+                                </ul>
+
+
+                                <script type="text/ng-template" id="dropdown.html">
+                                    <ul class="uib-dropdown-menu" role="menu" aria-labelledby="button-template-url">
+                                        <li role="menuitem"><a href="#">Action in Template</a></li>
+                                        <li role="menuitem"><a href="#">Another action in Template</a></li>
+                                        <li role="menuitem"><a href="#">Something else here</a></li>
+                                        <li class="divider"></li>
+                                        <li role="menuitem"><a href="#">Separated link in Template</a></li>
+                                    </ul>
+                                </script>
+
+
+
                             <td><label class="label1">Trip name:</label></td>
                             <td><input type="text" name="inputTripName" ng-model="tripName"
                                        ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">

@@ -24,6 +24,13 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/getTripById', dataTripId);
     };
 
+    //deleteTripById
+    this.deleteTripById = function (dataTripId) { // in use
+        console.log('Client::dataBaseService:: delete trip id::'+ dataTripId);
+        return $http.post('/deleteTripById', dataTripId);
+    };
+
+
     //updateTrip
     this.updateTrip = function (dataObj) { //create empty trip record
         console.log('Client::dataBaseService:: update trip record');
