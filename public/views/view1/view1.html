@@ -1,8 +1,6 @@
-
-
 <aside id="sidebar">
 
-    <table>
+    <table class="table table-striped">
         <col width="400px"/>
         <col width="1200px"/>
         <col width="900px"/>
@@ -14,25 +12,6 @@
                         <col width="150px"/>
                         <col width="300px"/>
                         <tr>
-                            <!-- Single button using template-url -->
-                            <div class="btn-group" uib-dropdown>
-                                <button id="button-template-url" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
-                                    Dropdown using template <span class="caret"></span>
-                                </button>
-                                <ul class="uib-dropdown-menu" template-url="dropdown.html" aria-labelledby="button-template-url">
-                                </ul>
-
-
-                                <script type="text/ng-template" id="dropdown.html">
-                                    <ul class="uib-dropdown-menu" role="menu" aria-labelledby="button-template-url">
-                                        <li role="menuitem"><a href="#">Action in Template</a></li>
-                                        <li role="menuitem"><a href="#">Another action in Template</a></li>
-                                        <li role="menuitem"><a href="#">Something else here</a></li>
-                                        <li class="divider"></li>
-                                        <li role="menuitem"><a href="#">Separated link in Template</a></li>
-                                    </ul>
-                                </script>
-
 
 
                             <td><label class="label1">Trip name:</label></td>
@@ -59,19 +38,22 @@
                                 <label class="label1">Start date:</label>
                             </td>
                             <td>
-                                <datepicker>
+                                <datepicker date-format="MMMM d, y"
+                                            style="position: absolute; width: 100px; height: 150px;">
                                     <input name="inputStartDate" ng-model="dateStart" type="text"
                                            ng-blur="onBlur($event)"/>
                                 </datepicker>
                             </td>
                         </tr>
 
+
                         <tr>
                             <td>
                                 <label class="label1">End date:</label>
                             </td>
                             <td>
-                                <datepicker>
+                                <datepicker date-format="MMMM d, y"
+                                            style="position: absolute; width: 100px; height: 150px;">
                                     <input name="inputEndDate" ng-model="dateEnd" type="text" ng-blur="onBlur($event)"/>
                                 </datepicker>
                             </td>
@@ -110,7 +92,6 @@
             </td>
             <td>
 
-
                 <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" doRebuildAll="true">
 
 
@@ -134,10 +115,15 @@
         <tr>
 
 
-            <table ng-table="usersTable" class="table table-striped">
+            <table ng-table="usersTable" class="table table-striped" style="text-align: center;">
 
                 <tr>
-                    <td>Action/Day</td>
+                    <td>Date</td>
+                    <td ng-repeat="item in data">{{tripById[0].start_date}}</td>
+                </tr>
+
+                <tr>
+                    <td>Day number</td>
                     <td ng-repeat="item in data">{{item.day}}</td>
                 </tr>
 
@@ -147,19 +133,89 @@
                 </tr>
 
                 <tr>
+                    <td>Flight</td>
+                    <td ng-repeat="item in data">
+                        <!-- Split button -->
+                        <div class="btn-group" dropdown>
+                            <button type="button" class="btn btn-danger">Get Flight</button>
+                            <button type="button" class="btn btn-danger dropdown-toggle">
+                                <span class="caret"></span>
+                                <span class="sr-only">Split button!</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Action</a>
+                                </li>
+                                <li><a href="#">Another action</a>
+                                </li>
+                                <li><a href="#">Something else here</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
                     <td>Hotel</td>
+                    <td ng-repeat="item in data">
+                        <!-- Split button -->
+                        <div class="btn-group" dropdown>
+                            <button type="button" class="btn btn-danger">Get Hotel</button>
+                            <button type="button" class="btn btn-danger dropdown-toggle">
+                                <span class="caret"></span>
+                                <span class="sr-only">Split button!</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Action</a>
+                                </li>
+                                <li><a href="#">Another action</a>
+                                </li>
+                                <li><a href="#">Something else here</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
                 </tr>
 
                 <tr>
                     <td>Car</td>
+                    <td ng-repeat="item in data">
+                        <!-- Split button -->
+                        <div class="btn-group" dropdown>
+                            <button type="button" class="btn btn-danger"> Get Car </button>
+                            <button type="button" class="btn btn-danger dropdown-toggle">
+                                <span class="caret"></span>
+                                <span class="sr-only">Split button!</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Action</a>
+                                </li>
+                                <li><a href="#">Another action</a>
+                                </li>
+                                <li><a href="#">Something else here</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
                 </tr>
 
                 <tr>
                     <td>Action1</td>
+                    <td ng-repeat="item in data"><input ng-model="col"></td>
                 </tr>
 
                 <tr>
                     <td>Expense</td>
+                    <td ng-repeat="item in data"><input ng-model="col"></td>
                 </tr>
             </table>
 

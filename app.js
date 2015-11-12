@@ -62,13 +62,15 @@ app.post('/insertTrip', function (request, response) {
     var tripGeneral = jsonTrip['username'].trip.general;
     tripGeneral.continent = '{'+ tripGeneral.continent +'}';
 
+    console.log(tripGeneral.start_date);
+    console.log(tripGeneral.end_date);
 
     pg.connect(conString, function(err, client, done) {
         if(err) {
             return console.error('error fetching client from pool', err);
         }
         client.query("INSERT INTO trips(trip_name, start_date, end_date, continent, cities, trip_description) values($1, $2, $3, $4, $5, $6)",
-            [tripGeneral.trip_name, '03/03/2015', '03/03/2015', tripGeneral.continent , cities, tripGeneral.trip_description], function(err, result) {
+            [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent , cities, tripGeneral.trip_description], function(err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -93,8 +95,8 @@ app.post('/insertNewEmptyTrip', function (request, response) {
         if(err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("INSERT INTO trips(trip_name, start_date, end_date, continent, cities) values($1, $2, $3, $4, $5) RETURNING id",
-            ['', '01/01/2000', '01/01/2000', '{}' , '{}'], function(err, result) {
+        client.query("INSERT INTO trips(trip_name) values($1) RETURNING id", //generate auto name
+            [''], function(err, result) {
                 //call `done()` to release the client back to the pool
                 done();
 
@@ -138,7 +140,7 @@ app.post('/updateTrip', function (request, response) {
             return console.error('error fetching client from pool', err);
         }
         client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3) , continent = ($4), table_plan = ($5), trip_description = ($6) WHERE id = ($7)",
-            [tripGeneral.trip_name, '03/03/2015', '03/03/2015', tripGeneral.continent , table_plan, tripGeneral.trip_description, tripGeneral.trip_id]
+            [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent , table_plan, tripGeneral.trip_description, tripGeneral.trip_id]
             ,function(err, result) {
                 //call `done()` to release the client back to the pool
                 done();

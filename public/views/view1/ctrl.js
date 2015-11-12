@@ -75,11 +75,6 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, googleMapsAPISer
             //##################################### Create Table ####################################
             dataBaseService.createTable(dataTripId).then(function (results) {
                 $scope.table = results.data;
-                //$scope.data = [$scope.table[0]];
-
-                //var self = this;
-                //var data = [{name: "Moroni", age: 50},{name: "Moroni", age: 50}];
-                //self.tableParams = new NgTableParams({}, { dataset: data});
 
 
                 var itemsArray = [];
