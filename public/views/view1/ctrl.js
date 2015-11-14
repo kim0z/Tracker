@@ -4,6 +4,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, googleMapsAPISer
         var dataTripId;
         $scope.polylines = [];
         $scope.circles = [];
+        $scope.dates = [];
 
         //get trip data to the page
         $scope.trip_id = messages.getTripID();
@@ -22,25 +23,49 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, googleMapsAPISer
                 //example for how to get data from results console.log('trip  '+$scope.tripById[0].id);
 
                 //################################### Fill all fields of Trip definition #########################
-                console.log($scope.tripById[0].end_date);
-                console.log($scope.tripById[0].start_date);
-                console.log($scope.tripById[0].trip_description);
+                console.log('end date: '+$scope.tripById[0].end_date);
+                console.log('start day: '+$scope.tripById[0].start_date);
+                console.log('trip desc: '+$scope.tripById[0].trip_description);
 
                 $scope.tripName = $scope.tripById[0].trip_name;
                 $scope.tripDescription = $scope.tripById[0].trip_description;
                 $scope.dateStart = $scope.tripById[0].start_date;
                 $scope.dateEnd = $scope.tripById[0].end_date;
 
+                var daysSum = 0;
 
                 if (results.data[0].table_plan) {
-                    $scope.destinations = []; //clean destinations textboxes
-
+                    $scope.destinations = []; //clean destinations input
+                    //get city name and number of days and fill into input fields
                     for (var i = 0; i < results.data[0].table_plan.length; i++) {
                         $scope.destinations.push({
                             city: $scope.tripById[0].table_plan[i]['city' + i],
                             days: $scope.tripById[0].table_plan[i]['days' + i]
                         });
+                        daysSum = daysSum + parseInt($scope.tripById[0].table_plan[i]['days' + i]);
                     }
+                }
+
+
+                //dates for table
+                //convert date to object to allow me do action on it like increase the date in the table
+                var startDate = $scope.tripById[0].start_date;
+                var dateInNumberFormat = new Date(startDate).getTime();
+                //create array for the dates to show it on table, each cell will have 1 extra day
+                var day = 1000 * 3600 * 24; //day in miliseconds 1000 * 3600 = hour
+                var month = new Date(dateInNumberFormat).getUTCMonth() + 1; //months from 1-12
+                var day = new Date(dateInNumberFormat).getUTCDate();
+                var year = new Date(dateInNumberFormat).getUTCFullYear();
+                $scope.dates[0] = month+'/'+day+'/'+year;
+
+                for(var i = 1; i < daysSum ; i++){
+                    day = 1000 * 3600 * (i * 24);
+                    //$scope.dates[i] = new Date(dateInNumberFormat + day).toString("MMMM yyyy");
+
+                    var month = new Date(dateInNumberFormat + day).getUTCMonth() + 1; //months from 1-12
+                    var day = new Date(dateInNumberFormat + day).getUTCDate();
+                    var year = new Date(dateInNumberFormat + day).getUTCFullYear();
+                    $scope.dates[i] = month+'/'+day+'/'+year;
                 }
 
                 //############################### Google maps - Circles + Polyline #######################################

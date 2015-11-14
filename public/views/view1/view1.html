@@ -119,7 +119,7 @@
 
                 <tr>
                     <td>Date</td>
-                    <td ng-repeat="item in data">{{tripById[0].start_date}}</td>
+                    <td ng-repeat="date in dates track by $index">{{date}}</td>
                 </tr>
 
                 <tr>
@@ -137,8 +137,8 @@
                     <td ng-repeat="item in data">
                         <!-- Split button -->
                         <div class="btn-group" dropdown>
-                            <button type="button" class="btn btn-danger">Get Flight</button>
-                            <button type="button" class="btn btn-danger dropdown-toggle">
+                            <button type="button" class="btn btn-info">Get Flight</button>
+                            <button type="button" class="btn btn-info dropdown-toggle">
                                 <span class="caret"></span>
                                 <span class="sr-only">Split button!</span>
                             </button>
@@ -162,8 +162,8 @@
                     <td ng-repeat="item in data">
                         <!-- Split button -->
                         <div class="btn-group" dropdown>
-                            <button type="button" class="btn btn-danger">Get Hotel</button>
-                            <button type="button" class="btn btn-danger dropdown-toggle">
+                            <button type="button" class="btn btn-info">Get Hotel</button>
+                            <button type="button" class="btn btn-info dropdown-toggle">
                                 <span class="caret"></span>
                                 <span class="sr-only">Split button!</span>
                             </button>
@@ -187,8 +187,8 @@
                     <td ng-repeat="item in data">
                         <!-- Split button -->
                         <div class="btn-group" dropdown>
-                            <button type="button" class="btn btn-danger"> Get Car </button>
-                            <button type="button" class="btn btn-danger dropdown-toggle">
+                            <button type="button" class="btn btn-info"> Get Car </button>
+                            <button type="button" class="btn btn-info dropdown-toggle">
                                 <span class="caret"></span>
                                 <span class="sr-only">Split button!</span>
                             </button>
