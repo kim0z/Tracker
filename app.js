@@ -293,10 +293,10 @@ app.post('/createTable', function (request, response){
             console.log(results); // looks like : [{....}]
             jsonTable = results;
 
+            //create array of cities and days, if London have 2 days then 2 cells will be added to the array shown the city name and the day number
             var dayNumber = 0;
             //create Json Table
             if(results[0].table_plan) {
-                console.log('insideeeeeeeeeee');
                 for (var i = 0; i < results[0].table_plan.length; i++) {
                     for (var j = 0; j < results[0].table_plan[i]['days' + i]; j++) {
                         dayNumber++;

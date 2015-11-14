@@ -88,6 +88,17 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, googleMapsAPISer
                             longitude: result[i]['data'][0]['longitude']
                         });
 
+                        //set map center to be the first destination
+                        if(i == 0){
+                            $scope.map = {
+                                center: {
+                                    latitude: result[i]['data'][0]['latitude'],
+                                    longitude: result[i]['data'][0]['longitude']
+                                },
+                                zoom: 4
+                            };
+                        }
+
                         $scope.polylines = polyline;
                     }
                 }, function (result) {
@@ -109,6 +120,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, googleMapsAPISer
                 $scope.items = itemsArray;
 
 
+//this $scope.userTable --> not sure if reuired because I'm using $scope.items in the ng repeat
                 $scope.usersTable = new NgTableParams({
                     page: 1,
                     count: 10
@@ -121,7 +133,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, googleMapsAPISer
                 });
 
 
-                console.log('Client:: View3:: Create Table::' + $scope.table);
+                console.log('Client:: View3:: Create Table::' + $scope.data);
                 console.log($scope.table.length);
             });
 

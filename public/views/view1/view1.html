@@ -9,7 +9,7 @@
             <td>
                 <form name="tripDefinitionForm" style="overflow:scroll;   height: 600px; ">
                     <table class="fixed">
-                        <col width="150px"/>
+                        <col width="200px"/>
                         <col width="300px"/>
                         <tr>
 
@@ -114,27 +114,26 @@
 
         <tr>
 
-
+<!-- I think no need for usersTable, I am using $scope.items instead -->
             <table ng-table="usersTable" class="table table-striped" style="text-align: center;">
-
                 <tr>
                     <td>Date</td>
                     <td ng-repeat="date in dates track by $index">{{date}}</td>
                 </tr>
 
                 <tr>
-                    <td>Day number</td>
-                    <td ng-repeat="item in data">{{item.day}}</td>
+                    <td>Day</td>
+                    <td ng-repeat="item in items">{{item.day}}</td>
                 </tr>
 
                 <tr>
                     <td>City</td>
-                    <td ng-repeat="item in data">{{item.city}}</td>
+                    <td ng-repeat="item in items">{{item.city}}</td>
                 </tr>
 
                 <tr>
                     <td>Flight</td>
-                    <td ng-repeat="item in data">
+                    <td ng-repeat="item in items">
                         <!-- Split button -->
                         <div class="btn-group" dropdown>
                             <button type="button" class="btn btn-info">Get Flight</button>
@@ -159,7 +158,7 @@
 
                 <tr>
                     <td>Hotel</td>
-                    <td ng-repeat="item in data">
+                    <td ng-repeat="item in items">
                         <!-- Split button -->
                         <div class="btn-group" dropdown>
                             <button type="button" class="btn btn-info">Get Hotel</button>
@@ -184,7 +183,7 @@
 
                 <tr>
                     <td>Car</td>
-                    <td ng-repeat="item in data">
+                    <td ng-repeat="item in items">
                         <!-- Split button -->
                         <div class="btn-group" dropdown>
                             <button type="button" class="btn btn-info"> Get Car </button>
@@ -210,12 +209,12 @@
 
                 <tr>
                     <td>Action1</td>
-                    <td ng-repeat="item in data"><input ng-model="col"></td>
+                    <td ng-repeat="item in items"><input ng-model="col"></td>
                 </tr>
 
                 <tr>
                     <td>Expense</td>
-                    <td ng-repeat="item in data"><input ng-model="col"></td>
+                    <td ng-repeat="item in items"><input ng-model="col"></td>
                 </tr>
             </table>
 
