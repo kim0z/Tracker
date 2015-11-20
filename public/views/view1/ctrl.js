@@ -1,4 +1,4 @@
-trackerApp.controller('view1Ctrl', function ($scope, $http, $q, googleMapsAPIService, dataBaseService, messages, NgTableParams) {
+trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleMapsAPIService, dataBaseService, messages, NgTableParams) {
 
 
         var dataTripId;
@@ -29,8 +29,11 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, googleMapsAPISer
 
                 $scope.tripName = $scope.tripById[0].trip_name;
                 $scope.tripDescription = $scope.tripById[0].trip_description;
-                $scope.dateStart = $scope.tripById[0].start_date;
-                $scope.dateEnd = $scope.tripById[0].end_date;
+                //$scope.dateStart = $scope.tripById[0].start_date;
+                //$scope.dateEnd = $scope.tripById[0].end_date;
+
+                $scope.dateStart = $filter('date')($scope.tripById[0].start_date, 'MMM d, y');
+                $scope.dateEnd = $filter('date')($scope.tripById[0].end_date,'MMM d, y');
 
                 var daysSum = 0;
 
@@ -52,19 +55,19 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, googleMapsAPISer
                 var startDate = $scope.tripById[0].start_date;
                 var dateInNumberFormat = new Date(startDate).getTime();
                 //create array for the dates to show it on table, each cell will have 1 extra day
-                var day = 1000 * 3600 * 24; //day in miliseconds 1000 * 3600 = hour
+                //var day = 1000 * 3600 * 24; //day in miliseconds 1000 * 3600 = hour
                 var month = new Date(dateInNumberFormat).getUTCMonth() + 1; //months from 1-12
                 var day = new Date(dateInNumberFormat).getUTCDate();
                 var year = new Date(dateInNumberFormat).getUTCFullYear();
                 $scope.dates[0] = month+'/'+day+'/'+year;
 
                 for(var i = 1; i < daysSum ; i++){
-                    day = 1000 * 3600 * (i * 24);
+                    var anotherDay = 1000 * 3600 * (i * 24);
                     //$scope.dates[i] = new Date(dateInNumberFormat + day).toString("MMMM yyyy");
 
-                    var month = new Date(dateInNumberFormat + day).getUTCMonth() + 1; //months from 1-12
-                    var day = new Date(dateInNumberFormat + day).getUTCDate();
-                    var year = new Date(dateInNumberFormat + day).getUTCFullYear();
+                    var month = new Date(dateInNumberFormat + anotherDay).getUTCMonth() + 1; //months from 1-12
+                    var day = new Date(dateInNumberFormat + anotherDay).getUTCDate();
+                    var year = new Date(dateInNumberFormat + anotherDay).getUTCFullYear();
                     $scope.dates[i] = month+'/'+day+'/'+year;
                 }
 
@@ -307,9 +310,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, googleMapsAPISer
                 });
             });
 
-
             //################################# Google map ends ####################################
-
 
         }
 //################################################ Blur event end here #################################

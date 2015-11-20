@@ -15,4 +15,8 @@ trackerApp.service('googleMapsAPIService', ['$http', function ($http) {
         return citiesGeo;
     }
 
+    this.getFlight = function () {
+        return $http.post('/getGeoCode');
+    };
+
 }]);

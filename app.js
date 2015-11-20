@@ -1,4 +1,17 @@
 // set up ======================================================================
+//                    @@@ Karim Fanadka @@
+//   ** Be the agent of your self, plan, execute and share **
+//
+//
+// #############################################################################
+
+
+// Google API's
+// Google flights : 764755235403-acq12nfulcu93pilc1fa189mu7f4h1mb.apps.googleusercontent.com
+// Google flights : hqYL2H9wJK2pqN92XYYPhiv2
+// Google maps  : AIzaSyBgSxdli3zXpI3dPtFR9H0fbVZIcSZOvyo
+
+
 var express = require('express');
 var app = express(); 								// create our app w/ express
 var port = process.env.PORT || 9090;
@@ -453,7 +466,55 @@ app.post('/getGpsPoints', function (request, response) {
 
 /////////////////// DropBox end //////////////////////////
 
+});
 
 
+// ################### Google Flights ############################## //
 
+app.post('/getFlight', function (request, response) {
+    // create http request client to consume the QPX API
+    var request = require("request")
+
+    // JSON to be passed to the QPX Express API
+    var requestData = {
+        "request": {
+            "slice": [
+                {
+                    "origin": "ZRH",
+                    "destination": "DUS",
+                    "date": "2015-12-02"
+                }
+            ],
+            "passengers": {
+                "adultCount": 1,
+                "infantInLapCount": 0,
+                "infantInSeatCount": 0,
+                "childCount": 0,
+                "seniorCount": 0
+            },
+            "solutions": 2,
+            "refundable": false
+        }
+    }
+
+    // QPX REST API URL
+    url = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=AIzaSyBgSxdli3zXpI3dPtFR9H0fbVZIcSZOvyo"
+
+    // fire request
+    request({
+        url: url,
+        method: "POST",
+        json: requestData
+
+    }, function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+            console.log(body)
+        }
+        else {
+
+            console.log("error: " + error)
+            console.log("response.statusCode: " + response.statusCode)
+            console.log("response.statusText: " + response.statusText)
+        }
+    })
 });

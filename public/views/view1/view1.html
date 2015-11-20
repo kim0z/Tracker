@@ -9,8 +9,8 @@
             <td>
                 <form name="tripDefinitionForm" style="overflow:scroll;   height: 600px; ">
                     <table class="fixed">
+                        <col width="150px"/>
                         <col width="200px"/>
-                        <col width="300px"/>
                         <tr>
 
 
@@ -63,24 +63,25 @@
 
                     <table ng-repeat="dest in destinations" class="fixed">
                         <col width="150px"/>
-                        <col width="300px"/>
+                        <col width="150px"/>
                         <tr>
-                            <td>
+                            <td style="width: 150px">
                                 <label class="label1">Destination {{$index + 1}}:</label>
                             </td>
-                            <td>
+                            <td style="width: 100px">
                                 <input type="text" name="inputDest{{$index + 1}}" ng-model="dest.city"
+                                       ng-blur="onBlur(dest)">
+                            </td>
+                            <td style="width: 50px">
+                                <label class="label1">Days:</label>
+                            </td>
+                            <td style="width: 50px">
+                                <input style="width: 30px" type="text" name="inputDays{{$index + 1}}" ng-model="dest.days"
                                        ng-blur="onBlur(dest)">
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <label class="label1">Days:</label>
-                            </td>
-                            <td>
-                                <input type="text" name="inputDays{{$index + 1}}" ng-model="dest.days"
-                                       ng-blur="onBlur(dest)">
-                            </td>
+
                         </tr>
                     </table>
 
