@@ -1,10 +1,11 @@
-trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleMapsAPIService, dataBaseService, messages, NgTableParams) {
+trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleMapsAPIService, dataBaseService, algorithmsService, messages, NgTableParams) {
 
 
         var dataTripId;
         $scope.polylines = [];
         $scope.circles = [];
         $scope.dates = [];
+        $scope.table = {};
 
         //get trip data to the page
         $scope.trip_id = messages.getTripID();
@@ -73,7 +74,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
 
                 //############################### Google maps - Circles + Polyline #######################################
 
-                //load geoCode foe the trio cities
+                //load geoCode for the trip cities
                 var polyline = getTemplatePolyLine(); // get polyline template
 
                 Promise.resolve(LoadGeoCode($scope.tripById[0])).then(function (result) {
@@ -113,31 +114,55 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
 
             //##################################### Create Table ####################################
             dataBaseService.createTable(dataTripId).then(function (results) {
-                $scope.table = results.data;
+               // $scope.table = results.data;
+                algorithmsService.whenFlightNeeded(results.data).then(function (results) {
+                    $scope.table = results.data;
 
 
-                var itemsArray = [];
-                for (var i = 0; i < $scope.table.length; i++)
-                    itemsArray.push($scope.table[i]);
+                    /*
+                     response example: [{"day":1,"city":"haifa","flight":"","car":"","action1":"","action2":""},{"day":2,"city":"london","flight":"","car":"","action1":"","action2":""},{"day":3,"city":"london","flight":"","car":"","action1":"","action2":""},{"day":4,"city":"london","flight":"","car":"","action1":"","action2":""},{"day":5,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":6,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":7,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":8,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":9,"city":"paris","flight":"","car":"","action1":"","action2":""},{"day":10,"city":"paris","flight":"","car":"","action1":"","action2":""},{"day":11,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":12,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":13,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":14,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":15,"city":"mali","flight":"","car":"","action1":"","action2":""},{"day":16,"city":"chad","flight":"","car":"","action1":"","action2":""}]
+                     */
 
-                $scope.items = itemsArray;
+                    var itemsArray = [];
+                    for (var i = 0; i < $scope.table.length; i++)
+                        itemsArray.push($scope.table[i]);
+
+                    $scope.items = itemsArray;
 
 
 //this $scope.userTable --> not sure if reuired because I'm using $scope.items in the ng repeat
-                $scope.usersTable = new NgTableParams({
-                    page: 1,
-                    count: 10
-                }, {
-                    total: $scope.items.length,
-                    getData: function ($defer, params) {
-                        $scope.data = $scope.items.slice((params.page() - 1) * params.count(), params.page() * params.count());
-                        $defer.resolve($scope.data);
-                    }
-                });
+                    $scope.usersTable = new NgTableParams({
+                        page: 1,
+                        count: 10
+                    }, {
+                        total: $scope.items.length,
+                        getData: function ($defer, params) {
+                            $scope.data = $scope.items.slice((params.page() - 1) * params.count(), params.page() * params.count());
+                            $defer.resolve($scope.data);
+                        }
+                    });
 
 
-                console.log('Client:: View3:: Create Table::' + $scope.data);
-                console.log($scope.table.length);
+
+
+
+
+
+
+
+                })
+
+
+               // console.log('Client:: View3:: Create Table::' + $scope.data);
+                //console.log($scope.table.length);
+
+
+
+
+
+                //check with algorithmsService about flights
+
+
             });
 
         }

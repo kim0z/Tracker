@@ -316,7 +316,7 @@ app.post('/createTable', function (request, response){
                         var day = {
                             day: dayNumber,
                             city: results[0].table_plan[i]['city' + i],
-                            flight: '',
+                            flight: {flight: false, price:0},
                             car: '',
                             action1: '',
                             action2: ''
@@ -471,7 +471,7 @@ app.post('/getGpsPoints', function (request, response) {
 
 // ################### Google Flights ############################## //
 
-app.post('/getFlight', function (request, response) {
+app.post('/getFlights', function (request, response) {
     // create http request client to consume the QPX API
     var request = require("request")
 
@@ -480,8 +480,8 @@ app.post('/getFlight', function (request, response) {
         "request": {
             "slice": [
                 {
-                    "origin": "ZRH",
-                    "destination": "DUS",
+                    "origin": "TLV",
+                    "destination": "JFK",
                     "date": "2015-12-02"
                 }
             ],
@@ -492,7 +492,7 @@ app.post('/getFlight', function (request, response) {
                 "childCount": 0,
                 "seniorCount": 0
             },
-            "solutions": 2,
+            "solutions": 100,
             "refundable": false
         }
     }
@@ -506,9 +506,10 @@ app.post('/getFlight', function (request, response) {
         method: "POST",
         json: requestData
 
-    }, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            console.log(body)
+    }, function (error, res, body) {
+        if (!error && res.statusCode === 200) {
+            console.log(body);
+            response.send(body);
         }
         else {
 
