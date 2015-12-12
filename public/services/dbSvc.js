@@ -49,4 +49,10 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
     };
 
 
+    //get GPS from server "server is getting the data from DropBox that was saved by Android"
+
+
+
+
+
 }]);

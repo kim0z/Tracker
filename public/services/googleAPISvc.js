@@ -14,9 +14,16 @@ trackerApp.service('googleMapsAPIService', ['$http', function ($http) {
         }
         return citiesGeo;
     }
-
+/*
     this.getFlights = function (flighReq) {
         return $http.post('/getFlights',flighReq);
+    };*/
+
+    this.getFlights = function (flightParam) {
+        //send example json : {origin: "TLV", destination:"JFK", date:"2015-12-30", solutions: 10};
+
+        //flightParam = {origin: "TLV", destination:"JFK", date:"2015-12-30", solutions: 10};
+        return $http.post('/getFlights', flightParam);
     };
 
 }]);

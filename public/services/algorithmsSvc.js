@@ -23,6 +23,13 @@ trackerApp.service('algorithmsService', ['$http', function ($http) {
     };
 
 
+    this.arrangeFlights = function (flights) {
+
+
+
+
+    };
+
 
 
 }]);

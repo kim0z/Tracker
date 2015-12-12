@@ -1,6 +1,5 @@
 trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleMapsAPIService, dataBaseService, algorithmsService, messages, NgTableParams) {
 
-
         var dataTripId;
         $scope.polylines = [];
         $scope.circles = [];
@@ -115,19 +114,31 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
             //##################################### Create Table ####################################
             dataBaseService.createTable(dataTripId).then(function (results) {
                // $scope.table = results.data;
-                algorithmsService.whenFlightNeeded(results.data).then(function (results) {
-                    $scope.table = results.data;
+                //algorithmsService.whenFlightNeeded(results.data).then(function (results) {
+               $scope.table =  algorithmsService.whenFlightNeeded(results.data); // This alg check weather flight needed and give true
+                    //$scope.table = results.data;
 
+                //Request flight for each true flight
+                //{origin: "TLV", destination:"JFK", date:"2015-12-30", solutions: 10};
+                //var flightParam = {origin: "TLV", destination:"JFK", date:"2015-12-30", solutions: 10};
+                //dataBaseService.getFlights();
 
                     /*
                      response example: [{"day":1,"city":"haifa","flight":"","car":"","action1":"","action2":""},{"day":2,"city":"london","flight":"","car":"","action1":"","action2":""},{"day":3,"city":"london","flight":"","car":"","action1":"","action2":""},{"day":4,"city":"london","flight":"","car":"","action1":"","action2":""},{"day":5,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":6,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":7,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":8,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":9,"city":"paris","flight":"","car":"","action1":"","action2":""},{"day":10,"city":"paris","flight":"","car":"","action1":"","action2":""},{"day":11,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":12,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":13,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":14,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":15,"city":"mali","flight":"","car":"","action1":"","action2":""},{"day":16,"city":"chad","flight":"","car":"","action1":"","action2":""}]
                      */
 
                     var itemsArray = [];
-                    for (var i = 0; i < $scope.table.length; i++)
+                    var flightsFlag = [];
+                    for (var i = 0; i < $scope.table.length; i++) {
                         itemsArray.push($scope.table[i]);
 
+                        flightsFlag[i] = $scope.table[i].flight.flight; // update each day in the table with the flag
+
+                    }
+
                     $scope.items = itemsArray;
+
+                    $scope.flightsFlag = flightsFlag;
 
 
 //this $scope.userTable --> not sure if reuired because I'm using $scope.items in the ng repeat
@@ -143,22 +154,25 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                     });
 
 
+                //go over all the days in table, check the flag of flight if True then get flights for that day, to the next day
+
+                for(var dayIndex = 0 ; dayIndex < $scope.table.length ; dayIndex++){
+                    if($scope.table[0].flight.flight && dayIndex < $scope.table.length - 1){
+                        var flightParam = {origin: $scope.table[dayIndex].city, destination:$scope.table[dayIndex+1].city, date:"2015-12-30", solutions: 10};
+                        console.log(flightParam);
+                        googleMapsAPIService.getFlights(flightParam);
+                    }
+                }
 
 
 
 
 
-
-
-                })
+               // })
 
 
                // console.log('Client:: View3:: Create Table::' + $scope.data);
                 //console.log($scope.table.length);
-
-
-
-
 
                 //check with algorithmsService about flights
 

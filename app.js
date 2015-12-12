@@ -31,7 +31,6 @@ var client = new pg.Client(conString);
 //client.connect();
 
 
-
 var config = require('./config');                       //general config, passwords, accounts, etc
 
 var morgan = require('morgan'); 		// log requests to the console (express4)
@@ -57,7 +56,7 @@ require('./app/routes.js')(app);
 
 
 // General variables
-
+var tripById = '';
 /////////////////////
 
 //#####################################################
@@ -71,28 +70,28 @@ app.post('/insertTrip', function (request, response) {
     console.log('SERVER:: Postgres:: insert new record to trips table with data');
     var jsonTrip = request.body;
 
-    var cities = '{'+jsonTrip['username'].trip.cities+'}';
+    var cities = '{' + jsonTrip['username'].trip.cities + '}';
     var tripGeneral = jsonTrip['username'].trip.general;
-    tripGeneral.continent = '{'+ tripGeneral.continent +'}';
+    tripGeneral.continent = '{' + tripGeneral.continent + '}';
 
     console.log(tripGeneral.start_date);
     console.log(tripGeneral.end_date);
 
-    pg.connect(conString, function(err, client, done) {
-        if(err) {
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
             return console.error('error fetching client from pool', err);
         }
         client.query("INSERT INTO trips(trip_name, start_date, end_date, continent, cities, trip_description) values($1, $2, $3, $4, $5, $6)",
-            [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent , cities, tripGeneral.trip_description], function(err, result) {
-            //call `done()` to release the client back to the pool
-            done();
+            [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent, cities, tripGeneral.trip_description], function (err, result) {
+                //call `done()` to release the client back to the pool
+                done();
 
-            if(err) {
-                return console.error('error running query', err);
-            }
-            console.log(result);
-            //output: 1
-        });
+                if (err) {
+                    return console.error('error running query', err);
+                }
+                console.log(result);
+                //output: 1
+            });
     });
     response.status(200).end();
 
@@ -104,16 +103,16 @@ app.post('/insertNewEmptyTrip', function (request, response) {
 
     console.log('SERVER:: Postgres:: insert new empty record to trips table');
 
-    pg.connect(conString, function(err, client, done) {
-        if(err) {
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
             return console.error('error fetching client from pool', err);
         }
         client.query("INSERT INTO trips(trip_name) values($1) RETURNING id", //generate auto name
-            [''], function(err, result) {
+            [''], function (err, result) {
                 //call `done()` to release the client back to the pool
                 done();
 
-                if(err) {
+                if (err) {
                     return console.error('error running query', err);
                 }
                 console.log(result);
@@ -122,7 +121,7 @@ app.post('/insertNewEmptyTrip', function (request, response) {
                 //output: 1
             });
     });
-   // response.status(200).end();
+    // response.status(200).end();
 
 });
 
@@ -130,8 +129,8 @@ app.post('/insertNewEmptyTrip', function (request, response) {
 app.post('/updateTrip', function (request, response) {
 
     //var id = request.body.trip_id;
-   // console.log('kariiiim'+id);
-    console.log('SERVER:: Postgres:: update trip'+request.body);
+    // console.log('kariiiim'+id);
+    console.log('SERVER:: Postgres:: update trip' + request.body);
 
     var jsonTrip = request.body;
 
@@ -139,26 +138,25 @@ app.post('/updateTrip', function (request, response) {
     var table_plan = jsonTrip['username'].trip.table_plan;
 
 
-
     // example:: get city days :: jsonTrip['username'].trip.cities['days0']
 
     var tripGeneral = jsonTrip['username'].trip.general;
-    tripGeneral.continent = '{'+ tripGeneral.continent +'}';
+    tripGeneral.continent = '{' + tripGeneral.continent + '}';
 
 
     //    client.query("UPDATE items SET text=($1), complete=($2) WHERE id=($3)", [data.text, data.complete, id]);
 
-    pg.connect(conString, function(err, client, done) {
-        if(err) {
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
             return console.error('error fetching client from pool', err);
         }
         client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3) , continent = ($4), table_plan = ($5), trip_description = ($6) WHERE id = ($7)",
-            [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent , table_plan, tripGeneral.trip_description, tripGeneral.trip_id]
-            ,function(err, result) {
+            [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent, table_plan, tripGeneral.trip_description, tripGeneral.trip_id]
+            , function (err, result) {
                 //call `done()` to release the client back to the pool
                 done();
 
-                if(err) {
+                if (err) {
                     return console.error('error running query', err);
                 }
                 console.log(result);
@@ -176,24 +174,24 @@ app.post('/readTrips', function (request, response) {
     var results = [];
 
     // Get a Postgres client from the connection pool
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         // Handle connection errors
-        if(err) {
+        if (err) {
             done();
             console.log(err);
-            return response.status(500).json({ success: false, data: err});
+            return response.status(500).json({success: false, data: err});
         }
 
         // SQL Query > Select Data
         var query = client.query("SELECT * FROM trips ORDER BY id ASC;");
 
         // Stream results back one row at a time
-        query.on('row', function(row) {
+        query.on('row', function (row) {
             results.push(row);
         });
 
         // After all data is returned, close connection and return results
-        query.on('end', function() {
+        query.on('end', function () {
             done();
             return response.json(results);
         });
@@ -202,37 +200,36 @@ app.post('/readTrips', function (request, response) {
 });
 
 
-
-
 //Postgres get trip by id
 app.post('/getTripById', function (request, response) {
 
-    console.log('SERVER:: Postgres:: get trip by id :: trip id ::'+request.body.trip_id);
+    console.log('SERVER:: Postgres:: get trip by id :: trip id ::' + request.body.trip_id);
     var trip_id = request.body.trip_id;
     var results = [];
 
     // Get a Postgres client from the connection pool
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         // Handle connection errors
-        if(err) {
+        if (err) {
             done();
             console.log(err);
-            return response.status(500).json({ success: false, data: err});
+            return response.status(500).json({success: false, data: err});
         }
 
         // SQL Query > Select Data
-        var query = client.query("SELECT * FROM trips WHERE id = "+trip_id+";");
+        var query = client.query("SELECT * FROM trips WHERE id = " + trip_id + ";");
 
         // Stream results back one row at a time
-        query.on('row', function(row) {
+        query.on('row', function (row) {
             results.push(row);
         });
 
         // After all data is returned, close connection and return results
-        query.on('end', function() {
+        query.on('end', function () {
             done();
             console.log(results); // looks like : [{....}]
-            tripById = results;
+            //tripById = results;
+            tripById = results; //save instance of the trip to be used in other places, like get the date while creating the table
             return response.json(results);
         });
 
@@ -242,32 +239,32 @@ app.post('/getTripById', function (request, response) {
 //Postgres Delete trip by id
 app.post('/deleteTripById', function (request, response) {
 
-    console.log('SERVER:: Postgres:: delete trip by id :: trip id ::'+request.body.trip_id);
+    console.log('SERVER:: Postgres:: delete trip by id :: trip id ::' + request.body.trip_id);
     var trip_id = request.body.trip_id;
     var results = [];
 
     // Get a Postgres client from the connection pool
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         // Handle connection errors
-        if(err) {
+        if (err) {
             done();
             console.log(err);
-            return response.status(500).json({ success: false, data: err});
+            return response.status(500).json({success: false, data: err});
         }
 
         // SQL Query > Select Data
-        var query = client.query("DELETE FROM trips WHERE id = "+trip_id+";");
+        var query = client.query("DELETE FROM trips WHERE id = " + trip_id + ";");
 
         // Stream results back one row at a time
-     //   query.on('row', function(row) {
-       //     results.push(row);
-      //  });
+        //   query.on('row', function(row) {
+        //     results.push(row);
+        //  });
 
         // After all data is returned, close connection and return results
-        query.on('end', function() {
+        query.on('end', function () {
             done();
             console.log(results); // looks like : [{....}]
-          //  tripById = results;
+            //  tripById = results;
             return response.json(results);
         });
 
@@ -276,47 +273,50 @@ app.post('/deleteTripById', function (request, response) {
 
 
 //Create trip table
-app.post('/createTable', function (request, response){
+app.post('/createTable', function (request, response) {
     var table = [];
+    var start_date = '';
 
     console.log('SERVER:: Postgres:: Create trip table');
     var trip_id = request.body.trip_id;
     var results = [];
 
-    // Get a Postgres client from the connection pool
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         // Handle connection errors
-        if(err) {
+        if (err) {
             done();
             console.log(err);
-            return response.status(500).json({ success: false, data: err});
+            return response.status(500).json({success: false, data: err});
         }
 
+
         // SQL Query > Select Data
-        var query = client.query("SELECT table_plan FROM trips WHERE id = "+trip_id+";");
+        var query = client.query("SELECT table_plan FROM trips WHERE id = " + trip_id + ";");
+
 
         // Stream results back one row at a time
-        query.on('row', function(row) {
+        query.on('row', function (row) {
             results.push(row);
         });
 
         // After all data is returned, close connection and return results
-        query.on('end', function() {
+        query.on('end', function () {
             done();
             console.log(results); // looks like : [{....}]
             jsonTable = results;
 
-            //create array of cities and days, if London have 2 days then 2 cells will be added to the array shown the city name and the day number
+            //create array of cities and days, if London have 2 days then 2 cells will be added to the array showing the city name and the day number
             var dayNumber = 0;
             //create Json Table
-            if(results[0].table_plan) {
+            if (results[0].table_plan) {
                 for (var i = 0; i < results[0].table_plan.length; i++) {
                     for (var j = 0; j < results[0].table_plan[i]['days' + i]; j++) {
                         dayNumber++;
                         var day = {
+                            date: tripById[0].start_date,
                             day: dayNumber,
                             city: results[0].table_plan[i]['city' + i],
-                            flight: {flight: false, price:0},
+                            flight: {flight: false, price: 0},
                             car: '',
                             action1: '',
                             action2: ''
@@ -327,31 +327,59 @@ app.post('/createTable', function (request, response){
                         day = '';
                     }
                 }
-                console.log('SERVER:: Create table:: ' + table);
+
+                // push to DB
+
+     /*           pg.connect(conString, function (err, client, done) {
+                    if (err) {
+                        return console.error('error fetching client from pool', err);
+                    }
+                    client.query("UPDATE trips SET table_plan = ($1) WHERE id = "+trip_id,
+                        [table]
+                        , function (err, result) {
+                            //call `done()` to release the client back to the pool
+                            done();
+
+                            if (err) {
+                                return console.error('error running query', err);
+                            }
+                            console.log(result);
+                            //output: 1
+                        });
+                });
+*/
+
+                console.log('SERVER:: Create JSON table:: ' + table);
                 return response.json(table);
+
+
+
+
+
+
+
             }
         });
     });
 });
 
 
-
 //get last trip id from the trips table
 app.post('/getLastTripId', function (request, response) {
     console.log('SERVER: get last trip id from trips table');
 
-    pg.connect(conString, function(err, client, done) {
-        if(err) {
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("SELECT * limit 1", function(err, result) {
+        client.query("SELECT * limit 1", function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
-            if(err) {
+            if (err) {
                 return console.error('error running query', err);
             }
-            console.log('SERVER: last trip id: '+ result);
+            console.log('SERVER: last trip id: ' + result);
             //output: 1
         });
     });
@@ -375,15 +403,12 @@ var extra = {
 var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
 
 
-
-
-
 //////////////////////// DB /////////////////////////////////////////////////
 
 //receive country and city name, return GeoCode from Google Maps API
 app.post('/getGeoCode', function (request, response) {
 // Using callback
-console.log('Server::: Get GeoCode for city::'+ request.body); // print the city name from UI
+    console.log('Server::: Get GeoCode for city::' + request.body); // print the city name from UI
     console.log('Server city name ' + request.body.city);
     geocoder.geocode(request.body.city, function (err, res) {
         //  console.log(err,res); //print the response from GeoLocation google API
@@ -410,7 +435,7 @@ client.getAccountInfo(function (error, accountInfo) {
     if (error) {
         console.log(error);
         //return showError(error);  // Something went wrong.
-    }else console.log("Hello from DropBox, " + accountInfo.name + "!");
+    } else console.log("Hello from DropBox, " + accountInfo.name + "!");
 });
 
 
@@ -472,17 +497,20 @@ app.post('/getGpsPoints', function (request, response) {
 // ################### Google Flights ############################## //
 
 app.post('/getFlights', function (request, response) {
+
+    var flightParam = request.body; // {origin:"TLV", destination:"JFK", date:"2015-12-02", solutions: 10};
+
     // create http request client to consume the QPX API
-    var request = require("request")
+    var request = require("request");
 
     // JSON to be passed to the QPX Express API
     var requestData = {
         "request": {
             "slice": [
                 {
-                    "origin": "TLV",
-                    "destination": "JFK",
-                    "date": "2015-12-02"
+                    "origin": flightParam.origin,
+                    "destination": flightParam.destination,
+                    "date": flightParam.date
                 }
             ],
             "passengers": {
@@ -492,10 +520,12 @@ app.post('/getFlights', function (request, response) {
                 "childCount": 0,
                 "seniorCount": 0
             },
-            "solutions": 100,
+            "solutions": flightParam.solutions,
             "refundable": false
         }
     }
+
+    console.log(flightParam);
 
     // QPX REST API URL
     url = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=AIzaSyBgSxdli3zXpI3dPtFR9H0fbVZIcSZOvyo"
@@ -513,9 +543,10 @@ app.post('/getFlights', function (request, response) {
         }
         else {
 
-            console.log("error: " + error)
-            console.log("response.statusCode: " + response.statusCode)
-            console.log("response.statusText: " + response.statusText)
+            console.log("error: " + error);
+            console.log("response.statusCode: " + response.statusCode);
+            console.log("response.statusText: " + response.statusText);
+
         }
     })
 });
