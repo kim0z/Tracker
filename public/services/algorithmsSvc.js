@@ -9,7 +9,7 @@ trackerApp.service('algorithmsService', ['$http', function ($http) {
 
 
     this.whenFlightNeeded = function (table) {
-
+        console.log('Algorithms service:: When Flight needed started');
         for (var i = 0; i < table.length - 1; i++) {
 
             if (table[i].city == table[i + 1].city)
@@ -23,13 +23,14 @@ trackerApp.service('algorithmsService', ['$http', function ($http) {
     };
 
 
-    this.arrangeFlights = function (flights) {
+    this.getFlightsByPrice = function (flights){
+        console.log('Algorithms service:: Get flights by price');
+        var flightsByPrice = '';
 
+        console.log(flights.trips.tripOption);
 
-
-
-    };
-
+        return flights.trips.tripOption;
+    }
 
 
 }]);

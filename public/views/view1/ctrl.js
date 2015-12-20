@@ -5,12 +5,13 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
         $scope.circles = [];
         $scope.dates = [];
         $scope.table = {};
+        $scope.flights = [];
 
         //get trip data to the page
         $scope.trip_id = messages.getTripID();
 
         if ($scope.trip_id == '') {
-            window.open ('#/viewError', '_self', false);
+            window.open('#/viewError', '_self', false);
         }
         else {
 
@@ -23,9 +24,9 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                 //example for how to get data from results console.log('trip  '+$scope.tripById[0].id);
 
                 //################################### Fill all fields of Trip definition #########################
-                console.log('end date: '+$scope.tripById[0].end_date);
-                console.log('start day: '+$scope.tripById[0].start_date);
-                console.log('trip desc: '+$scope.tripById[0].trip_description);
+                console.log('end date: ' + $scope.tripById[0].end_date);
+                console.log('start day: ' + $scope.tripById[0].start_date);
+                console.log('trip desc: ' + $scope.tripById[0].trip_description);
 
                 $scope.tripName = $scope.tripById[0].trip_name;
                 $scope.tripDescription = $scope.tripById[0].trip_description;
@@ -33,7 +34,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                 //$scope.dateEnd = $scope.tripById[0].end_date;
 
                 $scope.dateStart = $filter('date')($scope.tripById[0].start_date, 'MMM d, y');
-                $scope.dateEnd = $filter('date')($scope.tripById[0].end_date,'MMM d, y');
+                $scope.dateEnd = $filter('date')($scope.tripById[0].end_date, 'MMM d, y');
 
                 var daysSum = 0;
 
@@ -59,16 +60,16 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                 var month = new Date(dateInNumberFormat).getUTCMonth() + 1; //months from 1-12
                 var day = new Date(dateInNumberFormat).getUTCDate();
                 var year = new Date(dateInNumberFormat).getUTCFullYear();
-                $scope.dates[0] = month+'/'+day+'/'+year;
+                $scope.dates[0] = month + '/' + day + '/' + year;
 
-                for(var i = 1; i < daysSum ; i++){
+                for (var i = 1; i < daysSum; i++) {
                     var anotherDay = 1000 * 3600 * (i * 24);
                     //$scope.dates[i] = new Date(dateInNumberFormat + day).toString("MMMM yyyy");
 
                     var month = new Date(dateInNumberFormat + anotherDay).getUTCMonth() + 1; //months from 1-12
                     var day = new Date(dateInNumberFormat + anotherDay).getUTCDate();
                     var year = new Date(dateInNumberFormat + anotherDay).getUTCFullYear();
-                    $scope.dates[i] = month+'/'+day+'/'+year;
+                    $scope.dates[i] = month + '/' + day + '/' + year;
                 }
 
                 //############################### Google maps - Circles + Polyline #######################################
@@ -92,7 +93,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                         });
 
                         //set map center to be the first destination
-                        if(i == 0){
+                        if (i == 0) {
                             $scope.map = {
                                 center: {
                                     latitude: result[i]['data'][0]['latitude'],
@@ -113,65 +114,92 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
 
             //##################################### Create Table ####################################
             dataBaseService.createTable(dataTripId).then(function (results) {
-               // $scope.table = results.data;
+                // $scope.table = results.data;
                 //algorithmsService.whenFlightNeeded(results.data).then(function (results) {
-               $scope.table =  algorithmsService.whenFlightNeeded(results.data); // This alg check weather flight needed and give true
-                    //$scope.table = results.data;
+                $scope.table = algorithmsService.whenFlightNeeded(results.data); // This alg check weather flight needed and give true
+                //$scope.table = results.data;
 
                 //Request flight for each true flight
                 //{origin: "TLV", destination:"JFK", date:"2015-12-30", solutions: 10};
                 //var flightParam = {origin: "TLV", destination:"JFK", date:"2015-12-30", solutions: 10};
                 //dataBaseService.getFlights();
 
-                    /*
-                     response example: [{"day":1,"city":"haifa","flight":"","car":"","action1":"","action2":""},{"day":2,"city":"london","flight":"","car":"","action1":"","action2":""},{"day":3,"city":"london","flight":"","car":"","action1":"","action2":""},{"day":4,"city":"london","flight":"","car":"","action1":"","action2":""},{"day":5,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":6,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":7,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":8,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":9,"city":"paris","flight":"","car":"","action1":"","action2":""},{"day":10,"city":"paris","flight":"","car":"","action1":"","action2":""},{"day":11,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":12,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":13,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":14,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":15,"city":"mali","flight":"","car":"","action1":"","action2":""},{"day":16,"city":"chad","flight":"","car":"","action1":"","action2":""}]
-                     */
+                /*
+                 response example: [{"day":1,"city":"haifa","flight":"","car":"","action1":"","action2":""},{"day":2,"city":"london","flight":"","car":"","action1":"","action2":""},{"day":3,"city":"london","flight":"","car":"","action1":"","action2":""},{"day":4,"city":"london","flight":"","car":"","action1":"","action2":""},{"day":5,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":6,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":7,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":8,"city":"new york","flight":"","car":"","action1":"","action2":""},{"day":9,"city":"paris","flight":"","car":"","action1":"","action2":""},{"day":10,"city":"paris","flight":"","car":"","action1":"","action2":""},{"day":11,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":12,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":13,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":14,"city":"madrid","flight":"","car":"","action1":"","action2":""},{"day":15,"city":"mali","flight":"","car":"","action1":"","action2":""},{"day":16,"city":"chad","flight":"","car":"","action1":"","action2":""}]
+                 */
 
-                    var itemsArray = [];
-                    var flightsFlag = [];
-                    for (var i = 0; i < $scope.table.length; i++) {
-                        itemsArray.push($scope.table[i]);
+                var itemsArray = [];
+                var flightsFlag = [];
+                for (var i = 0; i < $scope.table.length; i++) {
+                    itemsArray.push($scope.table[i]);
 
-                        flightsFlag[i] = $scope.table[i].flight.flight; // update each day in the table with the flag
+                    flightsFlag[i] = $scope.table[i].flight.flight; // update each day in the table with the flag
 
-                    }
+                }
 
-                    $scope.items = itemsArray;
+                $scope.items = itemsArray;
 
-                    $scope.flightsFlag = flightsFlag;
+                $scope.flightsFlag = flightsFlag;
 
 
 //this $scope.userTable --> not sure if reuired because I'm using $scope.items in the ng repeat
-                    $scope.usersTable = new NgTableParams({
-                        page: 1,
-                        count: 10
-                    }, {
-                        total: $scope.items.length,
-                        getData: function ($defer, params) {
-                            $scope.data = $scope.items.slice((params.page() - 1) * params.count(), params.page() * params.count());
-                            $defer.resolve($scope.data);
-                        }
-                    });
+                $scope.usersTable = new NgTableParams({
+                    page: 1,
+                    count: 10
+                }, {
+                    total: $scope.items.length,
+                    getData: function ($defer, params) {
+                        $scope.data = $scope.items.slice((params.page() - 1) * params.count(), params.page() * params.count());
+                        $defer.resolve($scope.data);
+                    }
+                });
 
 
                 //go over all the days in table, check the flag of flight if True then get flights for that day, to the next day
 
-                for(var dayIndex = 0 ; dayIndex < $scope.table.length ; dayIndex++){
-                    if($scope.table[0].flight.flight && dayIndex < $scope.table.length - 1){
-                        var flightParam = {origin: $scope.table[dayIndex].city, destination:$scope.table[dayIndex+1].city, date:"2015-12-30", solutions: 10};
+                for (var dayIndex = 0; dayIndex < $scope.table.length; dayIndex++) {
+                    if ($scope.table[0].flight.flight && dayIndex < $scope.table.length - 1) {
+
+                        //get the city name and the dist city name, airport code name required, will be handled later, meanwhile I'm using hardcode example
+                        var flightParam = {
+                            origin: $scope.table[dayIndex].city,
+                            destination: $scope.table[dayIndex + 1].city,
+                            date: "2015-12-30",
+                            solutions: 10
+                        };
                         console.log(flightParam);
-                        googleMapsAPIService.getFlights(flightParam);
+
+                        // each result of an flight should be handled in a smart algorithm
+
+                        //   $scope.table.push(algorithmsService.getFlightsByPrice(googleMapsAPIService.getFlights(flightParam)));
+
                     }
                 }
 
+                googleMapsAPIService.getFlights(flightParam).success(function (data) {
+                        $scope.table.push(algorithmsService.getFlightsByPrice(data));
+                        console.log($scope.flights)
+                    })
+                    .error(function (data, status) {
+                        console.error('error', status, data);
+                    })
+                    .finally(function () {
+                        console.log('finally');
+                    });
+
+                /*
+                 Promise.resolve(googleMapsAPIService.getFlights(flightParam)).then(function (result) {
+                 $scope.flights.push(algorithmsService.getFlightsByPrice(googleMapsAPIService.getFlights(result)));
+                 console.log($scope.flights);
+                 });
+
+                 */
 
 
+                // })
 
 
-               // })
-
-
-               // console.log('Client:: View3:: Create Table::' + $scope.data);
+                // console.log('Client:: View3:: Create Table::' + $scope.data);
                 //console.log($scope.table.length);
 
                 //check with algorithmsService about flights
@@ -418,15 +446,15 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                 {
                     id: 1,
                     path: [/*
-                        {
-                            latitude: 45,
-                            longitude: -74
-                        },
-                        {
-                            latitude: 30,
-                            longitude: -89
-                        }
-                    */],
+                     {
+                     latitude: 45,
+                     longitude: -74
+                     },
+                     {
+                     latitude: 30,
+                     longitude: -89
+                     }
+                     */],
                     stroke: {
                         color: '#6060FB',
                         weight: 3
