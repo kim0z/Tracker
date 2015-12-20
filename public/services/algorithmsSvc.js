@@ -30,6 +30,7 @@ trackerApp.service('algorithmsService', ['$http', function ($http) {
         console.log(flights.trips.tripOption);
 
         return flights.trips.tripOption;
+
     }
 
 

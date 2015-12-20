@@ -134,24 +134,20 @@
 
                 <tr>
                     <td>Flight</td>
-                    <td ng-repeat="item in flightsFlag track by $index">
+                    <td ng-repeat="item in flights track by $index">
                         <!-- Split button -->
 
 
 
 
                         <div class="btn-group dropdown">
-                            <button type="button" class="btn btn-info">test</button>
+                            <button type="button" class="btn btn-info">Price</button>
                             <button type="button" class="btn btn-info dropdown-toggle" id="mydp" data-toggle="dropdown" aria-haspopup="true" >
                                 <span class="caret"></span>
                                 <span class="sr-only">Split button!</span>
                             </button>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="mydp">
-                                <li><a href="#">Action</a>
-                                </li>
-                                <li><a href="#">Another action</a>
-                                </li>
-                                <li><a href="#">Something else here</a>
+                                <li ng-repeat="item in flights[$index]"><a href="#">{{item.saleTotal}}</a>
                                 </li>
                                 <li class="divider"></li>
                                 <li><a href="#">Separated link</a>
