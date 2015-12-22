@@ -23,7 +23,7 @@ trackerApp.service('algorithmsService', ['$http', function ($http) {
     };
 
 
-    this.getFlightsByPrice = function (flights){
+    this.getFlightsByPrice = function (flights) {
         console.log('Algorithms service:: Get flights by price');
         var flightsByPrice = '';
 
