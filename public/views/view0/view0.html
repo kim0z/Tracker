@@ -1,6 +1,7 @@
 <html>
 
 <head>
+
     <style>
         #example1 {
             /* background-image: url('../../assets/images/comp.jpg'); */
@@ -28,7 +29,6 @@
 
         div {
             height: 100px;
-
             width: 800px;
             margin: 0 auto;
             text-align: center;
@@ -37,7 +37,31 @@
             bottom: 0;
             left: 0;
             right: 0;
+        }
 
+        #intentions ul.intentions li span {
+            display: inline-block;
+            padding: 16px 21px 11px 16px;
+            box-shadow: 0 0 0 2px #fff inset;
+            font-family: CanalBoldItalique, Futura, helvetica, sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            cursor: pointer;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #intentions {
+            position: absolute;
+            width: 100%;
+            height: 230px;
+            bottom: 150px;
+            left: 0;
+            z-index: 2;
+            color: white;
+            opacity: 1;
+            -webkit-transition: all 500ms cubic-bezier(0.19, 1, 0.22, 1);
+            -moz-transition: all 500ms cubic-bezier(0.19, 1, 0.22, 1);
+            transition: all 500ms cubic-bezier(0.19, 1, 0.22, 1);
         }
 
 
@@ -92,7 +116,9 @@
             ">
         Plan your trip wisely, execute and share
     </h1>
+
 </div>
+
 
 
 <video id="myVideo" autoplay
@@ -111,9 +137,28 @@
           background-size: cover;
 ">
 
-
     Your browser does not support the video tag.
 </video>
+
+
+
+
+<div id="intentions" class="">
+    <h1>How would you like the scene <br> played this time ?</h1>
+    <ul class="intentions">
+        <li><span>+ Art house Film</span></li><li><span>+ Teen movie</span></li><li><span>+ Western</span></li><li><span>+ Horror</span></li><!--v-repeat-intentions-->
+    </ul>
+    <div class="actions">
+        <span class="cta">Other intentions</span>
+        <a href="#" class="button-reload">
+            <i></i>
+        </a>
+    </div>
+</div>
+
+
+
+
 
 
 <script>
