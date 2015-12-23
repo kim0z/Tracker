@@ -13,9 +13,9 @@ trackerApp.service('algorithmsService', ['$http', function ($http) {
         for (var i = 0; i < table.length - 1; i++) {
 
             if (table[i].city == table[i + 1].city)
-                table[i].flight.flight = 'false';
+                table[i].flight.flight = false;
             else
-                table[i].flight.flight = 'true';
+                table[i].flight.flight = true;
 
             console.log('Algorithms service:: ' + table[i].flight.flight);
         }
