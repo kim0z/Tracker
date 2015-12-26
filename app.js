@@ -272,6 +272,8 @@ app.post('/deleteTripById', function (request, response) {
 });
 
 
+
+/*
 //Create trip table
 app.post('/createTable', function (request, response) {
     var table = [];
@@ -332,7 +334,7 @@ app.post('/createTable', function (request, response) {
         });
     });
 });
-
+*/
 
 //get last trip id from the trips table
 app.post('/getLastTripId', function (request, response) {
