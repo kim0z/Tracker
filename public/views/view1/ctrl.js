@@ -165,6 +165,8 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
             continent: 'America'
         };
 
+
+        //not relevant to update table in DB in this way, the data that should be updates is the selected data
         //save all destination (cities) to json file
         for (var i = 0; i < $scope.destinations.length; i++) {
             jsonTripTableCity['city' + i] = $scope.destinations[i].city;
@@ -192,44 +194,45 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
             .error(function (data, status, headers, config) {
                 console.log("failure message: " + JSON.stringify({data: data}));
             });
+        //################# Table ############################
 
-        //##################################### Create Table ####################################
+        Promise.resolve(createTable()).then(function (result) {
+            algorithmsService.whenFlightNeeded(result).then(function (result) {
+                $scope.table = result;
+                for (let dayIndex = 0; dayIndex < $scope.table.length - 1; dayIndex++) {
+                    if (!$scope.table[dayIndex].flight.flight) {
+                        $scope.flightsByPrice[dayIndex] = false; //it means no need to get flight for this day
+                    } else {
+                        //get flights for this day
+                        //get the city name and the dist city name, airport code name required, will be handled later, meanwhile I'm using hardcoded example
+                        var flightParam = {
+                            origin: $scope.table[dayIndex].city,
+                            destination: $scope.table[dayIndex + 1].city,
+                            date: "2015-12-30",
+                            solutions: 10
+                        };
+                        console.log(flightParam);
 
-        drawCircles($scope.trip_id);
-
-        //############################### Google maps - Circles + Polyline #######################################
-
-        //get trip again because maybe new cities where added
-        dataTripId = {trip_id: $scope.trip_id};
-        dataBaseService.getTripById(dataTripId).then(function (results) {
-            console.log($scope.circles);
-            //load geoCode foe the trio cities
-            var polyline = getTemplatePolyLine(); // get polyline template
-
-            Promise.resolve(LoadGeoCode($scope.tripById[0])).then(function (result) {
-                //loop the results to find the latitude, longitude
-                //push each point to google maps circle and polyline
-                for (var i = 0; i < result.length; i++) {
-
-                    var circle = getTemplate();
-                    circle['id'] = i + $scope.circles.length;
-                    circle['center'].latitude = result[i]['data'][0]['latitude'];
-                    circle['center'].longitude = result[i]['data'][0]['longitude'];
-                    $scope.circles.push(circle);
-
-                    polyline[0].path.push({
-                        latitude: result[i]['data'][0]['latitude'],
-                        longitude: result[i]['data'][0]['longitude']
-                    });
-
-                    $scope.polylines = polyline;
+                        // each result of an flight should be handled in a smart algorithm
+                        googleMapsAPIService.getFlights(flightParam).success(function (data) {
+                                $scope.flightsByPrice[dayIndex] = algorithmsService.getFlightsByPrice(data);
+                            })
+                            .error(function (data, status) {
+                                console.error('error', status, data);
+                            })
+                            .finally(function () {
+                                console.log('finally');
+                            });
+                    }
+                    console.log($scope.flightsByPrice);
                 }
-            }, function (result) {
-                //not called
             });
         });
+        //################# End Table ############################
+        //############################### Google maps - Circles + Polyline #######################################
+        drawCircles($scope.trip_id);
 
-        //################################# Google map ends ####################################
+        //############################### End Google maps - Circles + Polyline #######################################
 
     }
 
@@ -345,7 +348,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                     date: getDateAfterDays($scope.dateStart, dayNumber),
                     day: dayNumber,
                     city: $scope.destinations[i].city,
-                    flight: {flight: false, price: 0},
+                    flight: {flight: false, airport: [], price: 0},
                     car: '',
                     action1: '',
                     action2: ''

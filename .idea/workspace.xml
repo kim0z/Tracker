@@ -21,11 +21,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/views/view1/ctrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.20515268">
-              <caret line="344" column="70" selection-start-line="344" selection-start-column="70" selection-end-line="344" selection-end-column="70" />
+            <state vertical-scroll-proportion="-46.907406">
+              <caret line="168" column="110" selection-start-line="168" selection-start-column="110" selection-end-line="168" selection-end-column="110" />
               <folding />
             </state>
           </provider>
@@ -41,11 +41,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-21.407408">
-              <caret line="152" column="121" selection-start-line="152" selection-start-column="111" selection-end-line="152" selection-end-column="121" />
+            <state vertical-scroll-proportion="0.9209302">
+              <caret line="530" column="5" selection-start-line="530" selection-start-column="5" selection-end-line="530" selection-end-column="5" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -171,8 +171,8 @@
         <option value="$PROJECT_DIR$/public/views/view1/view1.html" />
         <option value="$PROJECT_DIR$/public/services/algorithmsSvc.js" />
         <option value="$PROJECT_DIR$/public/oldCode.js" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/public/views/view1/ctrl.js" />
+        <option value="$PROJECT_DIR$/app.js" />
       </list>
     </option>
   </component>
@@ -728,16 +728,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-21.407408">
-          <caret line="152" column="121" selection-start-line="152" selection-start-column="111" selection-end-line="152" selection-end-column="121" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/views/view1/view1.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-72.57692">
@@ -774,9 +764,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/views/view1/ctrl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.20515268">
-          <caret line="344" column="70" selection-start-line="344" selection-start-column="70" selection-end-line="344" selection-end-column="70" />
+        <state vertical-scroll-proportion="-46.907406">
+          <caret line="168" column="110" selection-start-line="168" selection-start-column="110" selection-end-line="168" selection-end-column="110" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.9209302">
+          <caret line="530" column="5" selection-start-line="530" selection-start-column="5" selection-end-line="530" selection-end-column="5" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
