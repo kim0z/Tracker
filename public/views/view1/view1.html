@@ -119,26 +119,23 @@
             <table ng-table="usersTable" class="table table-striped" style="text-align: center;">
                 <tr>
                     <td>Date</td>
-                    <td ng-repeat="date in dates track by $index">{{date}}</td>
+                    <td ng-repeat="item in table track by $index">{{item.date}}</td>
                 </tr>
 
                 <tr>
                     <td>Day</td>
-                    <td ng-repeat="item in items">{{item.day}}</td>
+                    <td ng-repeat="item in table">{{item.day}}</td>
                 </tr>
 
                 <tr>
                     <td>City</td>
-                    <td ng-repeat="item in items">{{item.city}}</td>
+                    <td ng-repeat="item in table">{{item.city}}</td>
                 </tr>
 
                 <tr>
                     <td>Flight</td>
                     <td ng-repeat="item in flightsByPrice track by $index">
                         <!-- Split button -->
-
-
-
 
                         <div ng-if="item != false " class="btn-group dropdown">
                             <button type="button" class="btn btn-info">Price</button>

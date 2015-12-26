@@ -1,4 +1,4 @@
-trackerApp.service('algorithmsService', ['$http', function ($http) {
+trackerApp.service('algorithmsService', ['$http', '$q', function ($http, $q) {
 
     /*
      #this service get the table content and return when flight needed
@@ -9,7 +9,9 @@ trackerApp.service('algorithmsService', ['$http', function ($http) {
 
 
     this.whenFlightNeeded = function (table) {
+        var deferred = $q.defer();
         console.log('Algorithms service:: When Flight needed started');
+
         for (var i = 0; i < table.length - 1; i++) {
 
             if (table[i].city == table[i + 1].city)
@@ -19,7 +21,10 @@ trackerApp.service('algorithmsService', ['$http', function ($http) {
 
             console.log('Algorithms service:: ' + table[i].flight.flight);
         }
-        return table;
+        deferred.resolve(table);
+        return deferred.promise;
+
+        //return table;
     };
 
 

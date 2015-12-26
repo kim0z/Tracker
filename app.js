@@ -289,10 +289,8 @@ app.post('/createTable', function (request, response) {
             return response.status(500).json({success: false, data: err});
         }
 
-
         // SQL Query > Select Data
         var query = client.query("SELECT table_plan FROM trips WHERE id = " + trip_id + ";");
-
 
         // Stream results back one row at a time
         query.on('row', function (row) {
@@ -302,7 +300,8 @@ app.post('/createTable', function (request, response) {
         // After all data is returned, close connection and return results
         query.on('end', function () {
             done();
-            console.log(results); // looks like : [{....}]
+            console.log('table plan');
+            console.log(results[0].table_plan); // looks like : [{....}]
             jsonTable = results;
 
             //create array of cities and days, if London have 2 days then 2 cells will be added to the array showing the city name and the day number
@@ -327,37 +326,8 @@ app.post('/createTable', function (request, response) {
                         day = '';
                     }
                 }
-
-                // push to DB
-
-     /*           pg.connect(conString, function (err, client, done) {
-                    if (err) {
-                        return console.error('error fetching client from pool', err);
-                    }
-                    client.query("UPDATE trips SET table_plan = ($1) WHERE id = "+trip_id,
-                        [table]
-                        , function (err, result) {
-                            //call `done()` to release the client back to the pool
-                            done();
-
-                            if (err) {
-                                return console.error('error running query', err);
-                            }
-                            console.log(result);
-                            //output: 1
-                        });
-                });
-*/
-
                 console.log('SERVER:: Create JSON table:: ' + table);
                 return response.json(table);
-
-
-
-
-
-
-
             }
         });
     });
