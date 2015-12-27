@@ -116,7 +116,7 @@
         <tr>
 
 <!-- I think no need for usersTable, I am using $scope.items instead -->
-            <table ng-table="usersTable" class="table table-striped" style="text-align: center;">
+            <table ng-table="usersTable" class="table table-striped" style="text-align: center;" border="1">
                 <tr>
                     <td>Date</td>
                     <td ng-repeat="item in table track by $index">{{item.date}}</td>
@@ -138,12 +138,12 @@
                         <!-- Split button -->
 
                         <div ng-if="item != false " class="btn-group dropdown">
-                            <button type="button" class="btn btn-info">Price</button>
+                            <button type="button" class="btn btn-info" style="width: 200px">Select Flight</button>
                             <button type="button" class="btn btn-info dropdown-toggle" id="mydp" data-toggle="dropdown" aria-haspopup="true" >
                                 <span class="caret"></span>
                                 <span class="sr-only">Split button!</span>
                             </button>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="mydp">
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="mydp" style="width: 200px">
                                 <li ng-repeat="item in flightsByPrice[$index]"><a href="#">{{item.saleTotal}}</a>
                                 </li>
                                 <li class="divider"></li>
@@ -210,12 +210,31 @@
 
                 <tr>
                     <td>Action1</td>
-                    <td ng-repeat="item in items"><input ng-model="col"></td>
+                    <td align="center" ng-repeat="item in table">
+
+                        <div class="btn-group dropdown">
+                            <button type="button" class="btn btn-info" style="width: 200px">Select Action</button>
+                            <button type="button" class="btn btn-info dropdown-toggle" id="actions" data-toggle="dropdown" aria-haspopup="true" >
+                                <span class="caret"></span>
+                                <span class="sr-only">Split button!</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="mydp" style="width: 200px">
+                                <li><a href="#">Actions</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
                 </tr>
 
                 <tr>
                     <td>Expense</td>
-                    <td ng-repeat="item in items"><input ng-model="col"></td>
+                    <td align="center" ng-repeat="item in table">
+                        <input style="width: 230px; height: 60px" type="text" name="input" ng-model="action.text"
+                               ng-pattern="example.word" required ng-trim="false">
+                    </td>
                 </tr>
             </table>
 
