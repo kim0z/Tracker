@@ -5,6 +5,7 @@ var trackerApp = angular.module('myApp', [
     'nemLogging',
     'ui.router',
     'uiGmapgoogle-maps',
+    'ngAutocomplete',
     'angularNumberPicker',
     '720kb.datepicker',
     'smart-table',

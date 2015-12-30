@@ -24,31 +24,9 @@
       <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/views/view1/ctrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-46.907406">
-              <caret line="168" column="110" selection-start-line="168" selection-start-column="110" selection-end-line="168" selection-end-column="110" />
+            <state vertical-scroll-proportion="-4.4074073">
+              <caret line="70" column="74" selection-start-line="70" selection-start-column="74" selection-end-line="70" selection-end-column="74" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="oldCode.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/oldCode.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.037037">
-              <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.481482">
-              <caret line="415" column="13" selection-start-line="415" selection-start-column="13" selection-end-line="415" selection-end-column="13" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -56,28 +34,8 @@
       <file leaf-file-name="algorithmsSvc.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/services/algorithmsSvc.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-12.592592">
-              <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dbSvc.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/services/dbSvc.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.444445">
-              <caret line="15" column="9" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="googleAPISvc.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/services/googleAPISvc.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="24" column="10" selection-start-line="24" selection-start-column="10" selection-end-line="24" selection-end-column="10" />
+            <state vertical-scroll-proportion="-13.851851">
+              <caret line="22" column="9" selection-start-line="22" selection-start-column="9" selection-end-line="22" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -86,12 +44,11 @@
       <file leaf-file-name="view1.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/views/view1/view1.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4944238">
-              <caret line="220" column="109" selection-start-line="220" selection-start-column="109" selection-end-line="220" selection-end-column="109" />
+            <state vertical-scroll-proportion="0.5687732">
+              <caret line="196" column="70" selection-start-line="196" selection-start-column="70" selection-end-line="196" selection-end-column="70" />
               <folding>
                 <element signature="n#style#0;n#form#0;n#td#0;n#tr#0;n#table#0;n#aside#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#datepicker#0;n#td#1;n#tr#2;n#table#0;n#form#0;n#td#0;n#tr#0;n#table#0;n#aside#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#datepicker#0;n#td#1;n#tr#3;n#table#0;n#form#0;n#td#0;n#tr#0;n#table#0;n#aside#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#table#0;n#form#0;n#td#0;n#tr#0;n#table#0;n#aside#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#td#0;n#tr#0;n#table#1;n#form#0;n#td#0;n#tr#0;n#table#0;n#aside#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#td#1;n#tr#0;n#table#1;n#form#0;n#td#0;n#tr#0;n#table#0;n#aside#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#td#2;n#tr#0;n#table#1;n#form#0;n#td#0;n#tr#0;n#table#0;n#aside#0;n#!!top" expanded="true" />
@@ -100,6 +57,8 @@
                 <element signature="n#style#0;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#button#0;n#div#0;n#td#1;n#tr#3;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#ul#0;n#div#0;n#td#1;n#tr#3;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#button#0;n#div#0;n#td#1;n#tr#4;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#button#0;n#div#0;n#td#1;n#tr#5;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#button#0;n#div#0;n#td#1;n#tr#6;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#ul#0;n#div#0;n#td#1;n#tr#6;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#input#0;n#td#1;n#tr#7;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
@@ -108,21 +67,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="view0.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/views/view0/view0.html">
+      <file leaf-file-name="googleAPISvc.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/services/googleAPISvc.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="126" column="5" selection-start-line="126" selection-start-column="5" selection-end-line="126" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/assets/css/main.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="1343" column="0" selection-start-line="1343" selection-start-column="0" selection-end-line="1343" selection-end-column="0" />
+            <state vertical-scroll-proportion="-15.111111">
+              <caret line="24" column="10" selection-start-line="24" selection-start-column="10" selection-end-line="24" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -161,22 +110,22 @@
         <option value="$PROJECT_DIR$/public/views/view0/ctrl.js" />
         <option value="$PROJECT_DIR$/public/assets/css/style_realtime.css" />
         <option value="$PROJECT_DIR$/public/views/view2/view2.html" />
-        <option value="$PROJECT_DIR$/public/app.js" />
         <option value="$PROJECT_DIR$/public/views/view2/ctrl.js" />
         <option value="$PROJECT_DIR$/public/views/view3/ctrl.js" />
         <option value="$PROJECT_DIR$/public/assets/css/style.css" />
         <option value="$PROJECT_DIR$/public/services/algorithms.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/public/views/view3/view3.html" />
-        <option value="$PROJECT_DIR$/public/index.html" />
         <option value="$PROJECT_DIR$/public/services/googleAPISvc.js" />
         <option value="$PROJECT_DIR$/public/assets/css/main.css" />
         <option value="$PROJECT_DIR$/public/views/view0/view0.html" />
         <option value="$PROJECT_DIR$/public/services/dbSvc.js" />
-        <option value="$PROJECT_DIR$/public/services/algorithmsSvc.js" />
         <option value="$PROJECT_DIR$/public/oldCode.js" />
-        <option value="$PROJECT_DIR$/public/views/view1/ctrl.js" />
         <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/public/app.js" />
+        <option value="$PROJECT_DIR$/public/index.html" />
+        <option value="$PROJECT_DIR$/public/services/algorithmsSvc.js" />
+        <option value="$PROJECT_DIR$/public/views/view1/ctrl.js" />
         <option value="$PROJECT_DIR$/public/views/view1/view1.html" />
       </list>
     </option>
@@ -245,6 +194,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tracker" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tracker" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="services" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -422,20 +389,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/routes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitattributes">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.bowerrc">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -686,21 +639,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.58921933">
-          <caret line="93" column="0" selection-start-line="93" selection-start-column="0" selection-end-line="99" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/services/googleAPISvc.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="24" column="10" selection-start-line="24" selection-start-column="10" selection-end-line="24" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/assets/css/main.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -725,34 +663,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/services/algorithmsSvc.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.592592">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.11069767">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/oldCode.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.037037">
           <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/views/view1/ctrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-46.907406">
-          <caret line="168" column="110" selection-start-line="168" selection-start-column="110" selection-end-line="168" selection-end-column="110" />
           <folding />
         </state>
       </provider>
@@ -767,14 +681,72 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6491897">
+          <caret line="104" column="43" selection-start-line="104" selection-start-column="43" selection-end-line="104" selection-end-column="43" />
+          <folding>
+            <marker date="1451498448000" expanded="true" signature="2070:2223" placeholder="..." />
+            <marker date="1451498448000" expanded="true" signature="2163:2191" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/webstorm.jar!/resources/html5-schema/html5/web-forms.rnc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21597096">
+          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.089302324">
+          <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/bower_components/angularjs-datepicker/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/services/googleAPISvc.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-15.111111">
+          <caret line="24" column="10" selection-start-line="24" selection-start-column="10" selection-end-line="24" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/services/algorithmsSvc.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.851851">
+          <caret line="22" column="9" selection-start-line="22" selection-start-column="9" selection-end-line="22" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/views/view1/ctrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.4074073">
+          <caret line="70" column="74" selection-start-line="70" selection-start-column="74" selection-end-line="70" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/views/view1/view1.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4944238">
-          <caret line="220" column="109" selection-start-line="220" selection-start-column="109" selection-end-line="220" selection-end-column="109" />
+        <state vertical-scroll-proportion="0.5687732">
+          <caret line="196" column="70" selection-start-line="196" selection-start-column="70" selection-end-line="196" selection-end-column="70" />
           <folding>
             <element signature="n#style#0;n#form#0;n#td#0;n#tr#0;n#table#0;n#aside#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#datepicker#0;n#td#1;n#tr#2;n#table#0;n#form#0;n#td#0;n#tr#0;n#table#0;n#aside#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#datepicker#0;n#td#1;n#tr#3;n#table#0;n#form#0;n#td#0;n#tr#0;n#table#0;n#aside#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#table#0;n#form#0;n#td#0;n#tr#0;n#table#0;n#aside#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#td#0;n#tr#0;n#table#1;n#form#0;n#td#0;n#tr#0;n#table#0;n#aside#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#td#1;n#tr#0;n#table#1;n#form#0;n#td#0;n#tr#0;n#table#0;n#aside#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#td#2;n#tr#0;n#table#1;n#form#0;n#td#0;n#tr#0;n#table#0;n#aside#0;n#!!top" expanded="true" />
@@ -783,6 +755,8 @@
             <element signature="n#style#0;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#button#0;n#div#0;n#td#1;n#tr#3;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#ul#0;n#div#0;n#td#1;n#tr#3;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#div#0;n#td#1;n#tr#4;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#div#0;n#td#1;n#tr#5;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#button#0;n#div#0;n#td#1;n#tr#6;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#ul#0;n#div#0;n#td#1;n#tr#6;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#input#0;n#td#1;n#tr#7;n#table#0;n#tr#1;n#table#0;n#aside#0;n#!!top" expanded="true" />

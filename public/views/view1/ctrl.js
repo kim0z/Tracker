@@ -1,5 +1,15 @@
 trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleMapsAPIService, dataBaseService, algorithmsService, messages, NgTableParams) {
     "use strict";
+
+    /*
+    $scope.result1 = 'initial value';
+    $scope.options1 = null;
+    $scope.details1 = '';
+    */
+
+
+
+
     var dataTripId;
     $scope.polylines = [];
     $scope.circles = [];
@@ -58,7 +68,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
             Promise.resolve(createTable()).then(function (result) {
                 algorithmsService.whenFlightNeeded(result).then(function (result) {
                     $scope.table = result;
-                    for (let dayIndex = 0; dayIndex < $scope.table.length - 1; dayIndex++) {
+                    for (let dayIndex = 0; dayIndex < $scope.table.length ; dayIndex++) {
                         if (!$scope.table[dayIndex].flight.flight) {
                             $scope.flightsByPrice[dayIndex] = false; //it means no need to get flight for this day
                         } else {

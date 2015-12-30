@@ -8,14 +8,14 @@
         <tr>
             <td>
                 <form name="tripDefinitionForm" style="overflow:scroll;   height: 600px; ">
-                    <table class="fixed">
+                    <table class="fixed" border="0" style="text-align: center;">
                         <col width="150px"/>
                         <col width="200px"/>
                         <tr>
 
 
                             <td><label class="label1">Trip name:</label></td>
-                            <td><input type="text" name="inputTripName" ng-model="tripName"
+                            <td><input type="text" name="inputTripName" ng-model="tripName" class="form-control"
                                        ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
                             </td>
                         </tr>
@@ -26,7 +26,7 @@
                                 <label class="label1">Description:</label>
                             </td>
                             <td>
-                                <input class="inputDesc" type="text" name="inputTripDesc" ng-model="tripDescription"
+                                <input type="text" name="inputTripDesc" class="form-control" ng-model="tripDescription"
                                        ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
 
                             </td>
@@ -38,9 +38,8 @@
                                 <label class="label1">Start date:</label>
                             </td>
                             <td>
-                                <datepicker date-format="MMMM d, y"
-                                            style="position: absolute; width: 100px; height: 150px;">
-                                    <input name="inputStartDate" ng-model="dateStart" type="text"
+                                <datepicker date-format="MMMM d, y" datepicker-append-to-body=true>
+                                    <input name="inputStartDate" ng-model="dateStart" class="form-control" type="text"
                                            ng-blur="onBlur($event)"/>
                                 </datepicker>
                             </td>
@@ -52,16 +51,16 @@
                                 <label class="label1">End date:</label>
                             </td>
                             <td>
-                                <datepicker date-format="MMMM d, y"
-                                            style="position: absolute; width: 100px; height: 150px;">
-                                    <input name="inputEndDate" ng-model="dateEnd" type="text" ng-blur="onBlur($event)"/>
+                                <datepicker date-format="MMMM d, y">
+                                        <!--    style="position: absolute; width: 100px; height: 150px;"> -->
+                                    <input name="inputEndDate" ng-model="dateEnd" type="text" class="form-control" ng-blur="onBlur($event)"/>
                                 </datepicker>
                             </td>
                         </tr>
 
                     </table>
 
-                    <table ng-repeat="dest in destinations" class="fixed">
+                    <table ng-repeat="dest in destinations" class="fixed" border="0">
                         <col width="150px"/>
                         <col width="150px"/>
                         <tr>
@@ -69,14 +68,19 @@
                                 <label class="label1">Destination {{$index + 1}}:</label>
                             </td>
                             <td style="width: 100px">
+                                <!--
                                 <input type="text" name="inputDest{{$index + 1}}" ng-model="dest.city"
                                        ng-blur="onBlur(dest)">
+                                 -->
+                                <input type="text" name="inputDest{{$index + 1}}" id="Autocomplete" class="form-control" ng-autocomplete ng-model="dest.city" ng-blur="onBlur(dest)" />
+
+
                             </td>
                             <td style="width: 50px">
                                 <label class="label1">Days:</label>
                             </td>
                             <td style="width: 50px">
-                                <input style="width: 30px" type="text" name="inputDays{{$index + 1}}" ng-model="dest.days"
+                                <input style="width: 30px" type="text" name="inputDays{{$index + 1}}" class="form-control" ng-model="dest.days"
                                        ng-blur="onBlur(dest)">
                             </td>
                         </tr>
@@ -86,7 +90,7 @@
                     </table>
 
 
-                    <button ng-click="addNewDestination()">Add new city</button>
+                    <button class="btn btn-info" ng-click="addNewDestination()">Add new city</button>
 
                 </form>
 
@@ -95,12 +99,11 @@
 
                 <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" doRebuildAll="true">
 
-
-                    <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
+                    <ui-gmap-polyline ng-repeat="p in polylines track by $index" path="p.path" stroke="p.stroke" visible='p.visible'
                                       geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"
                                       icons='p.icons'></ui-gmap-polyline>
 
-                    <ui-gmap-circle ng-repeat="c in circles track by c.id" center="c.center" stroke="c.stroke"
+                    <ui-gmap-circle ng-repeat="c in circles track by $index" center="c.center" stroke="c.stroke"
                                     fill="c.fill"
                                     radius="c.radius"
                                     visible="c.visible" geodesic="c.geodesic" editable="c.editable"
@@ -116,7 +119,7 @@
         <tr>
 
 <!-- I think no need for usersTable, I am using $scope.items instead -->
-            <table ng-table="usersTable" class="table table-striped" style="text-align: center;" border="1">
+            <table ng-table="usersTable" class="table table-striped" style="text-align: center;" border="0">
                 <tr>
                     <td>Date</td>
                     <td ng-repeat="item in table track by $index">{{item.date}}</td>
@@ -152,6 +155,10 @@
                             </ul>
                         </div>
 
+                        <label ng-if="item == false" >
+                            Flight not required!
+                        </label>
+
 
 
                     </td>
@@ -159,10 +166,10 @@
 
                 <tr>
                     <td>Hotel</td>
-                    <td ng-repeat="item in items">
+                    <td ng-repeat="item in table">
                         <!-- Split button -->
                         <div class="btn-group" dropdown>
-                            <button type="button" class="btn btn-info">Get Hotel</button>
+                            <button type="button" style="width: 200px" class="btn btn-info">Get Hotel</button>
                             <button type="button" class="btn btn-info dropdown-toggle">
                                 <span class="caret"></span>
                                 <span class="sr-only">Split button!</span>
@@ -184,10 +191,10 @@
 
                 <tr>
                     <td>Car</td>
-                    <td ng-repeat="item in items">
+                    <td ng-repeat="item in table">
                         <!-- Split button -->
                         <div class="btn-group" dropdown>
-                            <button type="button" class="btn btn-info"> Get Car </button>
+                            <button type="button" style="width: 200px" class="btn btn-info"> Get Car </button>
                             <button type="button" class="btn btn-info dropdown-toggle">
                                 <span class="caret"></span>
                                 <span class="sr-only">Split button!</span>
@@ -232,7 +239,7 @@
                 <tr>
                     <td>Expense</td>
                     <td align="center" ng-repeat="item in table">
-                        <input style="width: 230px; height: 60px" type="text" name="input" ng-model="action.text"
+                        <input class="form-control" style="width: 230px; height: 60px" type="text" name="input" ng-model="action.text"
                                ng-pattern="example.word" required ng-trim="false">
                     </td>
                 </tr>
