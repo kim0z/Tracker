@@ -48,10 +48,10 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/getGpsPoints');
     };
 
-
-    //get GPS from server "server is getting the data from DropBox that was saved by Android"
-
-
+    //get GPS points - from Firebase
+    this.getGpsTrack = function () {
+        return $http.post('/getGpsTrack');
+    };
 
 
 

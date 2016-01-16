@@ -2,66 +2,74 @@
     <link rel="stylesheet" href="assets/css/style_realtime.css">
 </head>
 
-<bod class="text-center">
-    <section id="widget_1" class="widget_list_tips">
-        <P style="text-decoration:underline;">Real-Time Tips from travellers
 
-        <P>
+<table class="table table-striped">
+    <col width="200px"/>
+    <col width="1200px"/>
+    <col width="200px"/>
 
-        <div id="list">
-            <ul infinite-scroll ajax-call="loadItems()" class="ul_list">
-                <li class="list-group-item" ng-repeat="item in data"><strong>{{item.id}}.</strong> {{item.name}}:
-                    {{item.description}}
-                </li>
-            </ul>
-        </div>
-    </section>
+    <tr>
+        <td>
+            <P style="text-decoration:underline;">Real-Time Tips from travellers
 
+            <P>
 
-    <section id="widget_2" class="widget_map_realtime">
-        <P style="text-decoration:underline;">Find travellers around the world, learn, join and share ..
-
-        <P>
-            <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" data-ng-init="init()">
+            <div id="list">
+                <ul infinite-scroll ajax-call="loadItems()" class="ul_list">
+                    <li class="list-group-item" ng-repeat="item in data"><strong>{{item.id}}.</strong> {{item.name}}:
+                        {{item.description}}
+                    </li>
+                </ul>
+            </div>
 
 
-                <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
-                                  geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"
-                                  icons='p.icons'></ui-gmap-polyline>
+        </td>
+
+        <td>
+            <P style="text-decoration:underline;">Find travellers around the world, learn, join and share ..
+
+            <P>
+                <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" data-ng-init="init()">
 
 
-                <ui-gmap-circle ng-repeat="c in circles track by c.id" center="c.center" stroke="c.stroke" fill="c.fill"
-                                radius="c.radius"
-                                visible="c.visible" geodesic="c.geodesic" editable="c.editable" draggable="c.draggable"
-                                clickable="c.clickable" control="c.control"></ui-gmap-circle>
-
-            </ui-gmap-google-map>
-
-    </section>
+                    <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
+                                      geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"
+                                      icons='p.icons'></ui-gmap-polyline>
 
 
-    <section id="widget_3" class="widget_photos ">
-        <P style="text-decoration:underline;">Latest photos, shared by travellers
+                    <ui-gmap-circle ng-repeat="c in circles track by c.id" center="c.center" stroke="c.stroke"
+                                    fill="c.fill"
+                                    radius="c.radius"
+                                    visible="c.visible" geodesic="c.geodesic" editable="c.editable"
+                                    draggable="c.draggable"
+                                    clickable="c.clickable" control="c.control"></ui-gmap-circle>
 
-        <P>
+                </ui-gmap-google-map>
 
-    </section>
+        </td>
 
-    <section id="widget_4" class="widget_list_friends">
+        <td>
+            <P style="text-decoration:underline;">Friends list:
 
-        <P style="text-decoration:underline;">Friends list:
+            <P>
 
-        <P>
-
-        <div id="list_friends">
-            <ul infinite-scroll ajax-call="loadItems()" class="ul_list">
-                <li class="list-group-item" ng-repeat="item in data"><strong>{{item.id}}.</strong> {{item.name}}:
-                    {{item.description}}
-                </li>
-            </ul>
-        </div>
+            <div id="list_friends">
+                <ul infinite-scroll ajax-call="loadItems()" class="ul_list">
+                    <li class="list-group-item" ng-repeat="item in data"><strong>{{item.id}}.</strong> {{item.name}}:
+                        {{item.description}}
+                    </li>
+                </ul>
+            </div>
 
 
-    </section>
+        </td>
 
-</bod>
+
+
+    </tr>
+    <tr>
+
+
+    </tr>
+</table>
+

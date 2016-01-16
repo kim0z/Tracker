@@ -2,34 +2,33 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, googleMapsAPIService
 
     $scope.init = function () {
 
-        // check if there is query in url
-        // and fire search in case its value is not empty
-/*        Promise.resolve(dataBaseService.getGpsPoints()).then(function (val) {
-            console.log(val.data);
-            $scope.polylines.push(val.data);
-            console.log('ploy1 '+   $scope.polylines[0].id )
-            console.log('ploy2 '+   $scope.polylines[1].id )
+        Promise.resolve(dataBaseService.getGpsTrack()).then(function (val) {
+            //console.log(val.data);
 
-            var output1 = '';
-            for (var property in $scope.polylines[0]) {
-                output1 += property + ': ' + $scope.polylines[0][property]+'; ';
-            }
-            console.log(output1);
+            for (var k in val.data) {
 
-            var output = '';
-            for (var property in $scope.polylines[1]) {
-                output += property + ': ' + $scope.polylines[1][property]+'; ';
-            }
-            console.log(output);
-        })*/
+                console.log(val.data[k].latitude);
+                console.log(val.data[k].longitude);
+                $scope.polylines[0].path.push({latitude: val.data[k].latitude, longitude: val.data[k].longitude  });
+             }
+
+            console.log($scope.polylines[0].path);
+        })
+
+
+        var socket = io.connect('http://localhost:8080');
+        socket.on('GpsPoint', function (data) {
+            console.log(data);
+            socket.emit('my other event', { my: 'data' });
+        });
+
     };
-
 
     $scope.polylines = [
         {
             id: 1,
             path: [
-                {
+              /*  {
                     latitude: 45,
                     longitude: -74
                 },
@@ -45,6 +44,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, googleMapsAPIService
                     latitude: 60,
                     longitude: -95
                 }
+                */
             ],
             stroke: {
                 color: '#6060FB',
