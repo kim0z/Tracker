@@ -92,6 +92,7 @@ require('./app/routes.js')(app);
 ////################# Sabre Services Config ended #############################
 // General variables
 var tripById = '';
+var sockets=[];
 /////////////////////
 
 //#####################################################
@@ -520,13 +521,28 @@ app.post('/getGpsTrack', function (request, response) {
 
 });
 
+io.on('connection', function (socket) {
+    console.log('New socket: '+ socket);
+    sockets.push(socket);
+});
+
 //When new GPS point added - Listener
 FirebaseRef.endAt().limitToLast(1).on('child_added', function (childSnapshot, prevChildKey) {
     console.log('new GPS point added ' + childSnapshot.val());
+    //sendGpsPointToClient(childSnapshot.val());
 
-    io.on('connection', function (socket) {
-        console.log('new GPS point added 2' + childSnapshot.val());
+    for(var i=0;i<sockets.length;++i) {
+        console.log('Socket'+sockets[i]);
+        socket=sockets[i];
         socket.volatile.emit('GpsPoint', childSnapshot.val());
+    }
+});
+
+function sendGpsPointToClient(GpsPoint){
+console.log('STAM');
+    io.on('connection', function (socket) {
+        console.log('new GPS point added 2' + GpsPoint);
+        socket.emit('GpsPoint', GpsPoint);
 
         socket.on('my other event', function (data) {
             console.log(data);
@@ -534,10 +550,7 @@ FirebaseRef.endAt().limitToLast(1).on('child_added', function (childSnapshot, pr
     });
 
 
-
-});
-
-
+}
 
 
 

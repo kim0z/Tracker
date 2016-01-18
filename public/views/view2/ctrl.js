@@ -19,7 +19,9 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, googleMapsAPIService
         var socket = io.connect('http://localhost:8080');
         socket.on('GpsPoint', function (data) {
             console.log(data);
-            socket.emit('my other event', { my: 'data' });
+            console.log('GPS new point: '+data);
+            $scope.polylines[0].path.push({latitude: data.latitude, longitude: data.longitude  });
+            //socket.emit('my other event', { my: 'data' });
         });
 
     };
