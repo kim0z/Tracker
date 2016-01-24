@@ -33,6 +33,7 @@
             <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
             <md-button ng-click="menuClick('Plan Trip')">Plan Trip</md-button>
             <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
+            <md-button ng-click="menuClick('Login')">Login</md-button>
 
         </h3>
     </div>
@@ -63,7 +64,9 @@
 <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
 <script src="app.js"></script>
 <!-- Google maps-->
-<script src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>
+<!-- <script src='https://maps.googleapis.com/maps/api/js?sensor=false'></script> -->
+<!-- city autoComplete google API libraries-->
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 <script src='bower_components/lodash/lodash.min.js'></script>
 <script src='bower_components/angular-google-maps/dist/angular-google-maps.min.js'></script>
 <script src='bower_components/angular-simple-logger/dist/index.js'></script>
@@ -106,8 +109,13 @@
 <!-- city search auto complete -->
 <script src='bower_components/ngAutocomplete/src/ngAutocomplete.js'></script>
 
-<!-- city autoComplete google API libraries-->
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+
+
+<script src="bower_components/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
+
+<!-- this angular facebook login module should be replaced with bower install (bower didn't work for me, check again) -->
+<script data-require"angular.js@1.1.5" data-semver="1.1.5" src="http://rawgithub.com/Ciul/angular-facebook/master/lib/angular-facebook.js"></script>
+
 
 <script src="services/googleAPISvc.js"></script>
 <script src="services/dbSvc.js"></script>
@@ -119,6 +127,7 @@
 <script src="views/view3/ctrl.js"></script>
 <script src="views/view3/ctrlDialog.js"></script>
 <script src="views/view3/ctrlLeft.js"></script>
+<script src="views/login/login.js"></script>
 
 
 </body>

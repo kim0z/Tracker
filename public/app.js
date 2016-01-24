@@ -3,6 +3,7 @@
 // Declare app level module which depends on views, and components
 var trackerApp = angular.module('myApp', [
     'nemLogging',
+    'facebook',
     'ui.router',
     'uiGmapgoogle-maps',
     'ngAutocomplete',
@@ -45,9 +46,14 @@ var trackerApp = angular.module('myApp', [
                 url: "/viewError",
                 templateUrl: "views/viewError/404.html",
                 controller: 'viewErrorCtrl'
+            })
+            .state('login', {
+                url: "/login",
+                templateUrl: "views/login/login.html",
+                controller: 'login'
             });
     })
-
+/*
     .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApiProviders) {
 
         GoogleMapApiProviders.configure({
@@ -55,6 +61,32 @@ var trackerApp = angular.module('myApp', [
             libraries: 'geometry,visualization'
         });
 
+    }])
+*/
+    .config([
+        'FacebookProvider',
+        function(FacebookProvider) {
+            var myAppId = '942317529184852';
+
+            // You can set appId with setApp method
+            // FacebookProvider.setAppId('myAppId');
+
+            /**
+             * After setting appId you need to initialize the module.
+             * You can pass the appId on the init method as a shortcut too.
+             */
+            FacebookProvider.init(myAppId);
+
+        }
+    ])
+
+
+    .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApi) {
+        GoogleMapApi.configure({
+            //    key: 'your api key',
+            v: '3.17',
+            libraries: 'weather,geometry,visualization'
+        });
     }])
 
     .config(function($mdThemingProvider) {
@@ -79,7 +111,10 @@ trackerApp.controller('mainIndexCtrl', function ($scope) {
             case 'Rel-Time Travelers':
                 window.open ('#/view2', '_self', false);
                 break;
-            default: window.open ('#/view0', '_self', false);
+            case 'Login':
+                window.open ('#/login', '_self', false);
+                break;
+            default: window.open ('#/login', '_self', false);
         }
 
     };

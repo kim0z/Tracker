@@ -512,7 +512,7 @@ app.post('/getGpsPoints', function (request, response) {
 app.post('/getGpsTrack', function (request, response) {
 
     FirebaseRef.on("value", function (snapshot) {
-        console.log(snapshot.val());
+        //console.log(snapshot.val());
         response.send(snapshot.val());
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
@@ -522,7 +522,7 @@ app.post('/getGpsTrack', function (request, response) {
 });
 
 io.on('connection', function (socket) {
-    console.log('New socket: '+ socket);
+    console.log('New socket id: '+ socket.id);
     sockets.push(socket);
 });
 

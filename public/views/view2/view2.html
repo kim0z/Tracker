@@ -1,7 +1,17 @@
+<!DOCTYPE html>
 <head>
     <link rel="stylesheet" href="assets/css/style_realtime.css">
-</head>
 
+    <style type="text/css">
+        #map{
+            height:500px;
+            width:1000px;
+            box-shadow: 3px 3px 10px gray;
+        }
+    </style>
+
+</head>
+<body>
 
 <table class="table table-striped">
     <col width="200px"/>
@@ -29,22 +39,10 @@
             <P style="text-decoration:underline;">Find travellers around the world, learn, join and share ..
 
             <P>
-                <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" data-ng-init="init()">
+
+            <div id="map" ></div>
 
 
-                    <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
-                                      geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"
-                                      icons='p.icons'></ui-gmap-polyline>
-
-
-                    <ui-gmap-circle ng-repeat="c in circles track by c.id" center="c.center" stroke="c.stroke"
-                                    fill="c.fill"
-                                    radius="c.radius"
-                                    visible="c.visible" geodesic="c.geodesic" editable="c.editable"
-                                    draggable="c.draggable"
-                                    clickable="c.clickable" control="c.control"></ui-gmap-circle>
-
-                </ui-gmap-google-map>
 
         </td>
 

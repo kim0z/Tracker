@@ -7,8 +7,8 @@
   "private": true,
   "dependencies": {
     "angular-loader": "~1.4.0",
-    "angular-google-maps": "latest",
-    "angular-simple-logger": "latest",
+    "angular-google-maps": "~2.3.0",
+    "angular-simple-logger": "~0.1.5",
     "angular-number-picker": "latest",
     "bootstrap": "latest",
     "angularjs-datepicker": "latest",
@@ -20,6 +20,7 @@
     "angular-material": "~0.11.1",
     "ng-table": "~0.8.3",
     "ngAutocomplete": "~1.0.0",
-    "socket.io": "~1.4.4"
+    "socket.io": "~1.4.4",
+    "angular-facebook": "~0.2.3"
   }
 }
