@@ -21,6 +21,7 @@
     "ng-table": "~0.8.3",
     "ngAutocomplete": "~1.0.0",
     "socket.io": "~1.4.4",
-    "angular-facebook": "~0.2.3"
+    "angular-facebook": "~0.2.3",
+    "satellizer": "~0.13.4"
   }
 }

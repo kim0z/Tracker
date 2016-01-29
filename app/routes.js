@@ -2,7 +2,7 @@ var Contact = require('./models/contacts');
 
 module.exports = function(app) {
 	/* API */
-	
+
 	// get all contacts
 	app.get('/api/contacts', function(req, res) {
 
@@ -16,11 +16,11 @@ module.exports = function(app) {
 			res.json(contacts); // return all contacts
 		});
 	});
-	
+
 	// get contact form data and do someething ...
 	app.post('/api/contact', function(req, res) {
-		
-		// insert new contact			
+
+		// insert new contact
 		Contact.create({
 			name : req.body.form_data.name,
 			email: req.body.form_data.email,
@@ -37,9 +37,9 @@ module.exports = function(app) {
 				res.send({status:congrats + " Your form has been sent!"});
 			});
 		});
-		
+
 	});
-	
+
 
 	/* APPLICATION */
 	app.get('*', function(req, res) {

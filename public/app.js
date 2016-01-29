@@ -3,7 +3,6 @@
 // Declare app level module which depends on views, and components
 var trackerApp = angular.module('myApp', [
     'nemLogging',
-    'facebook',
     'ui.router',
     'uiGmapgoogle-maps',
     'ngAutocomplete',
@@ -13,7 +12,9 @@ var trackerApp = angular.module('myApp', [
     'ngMaterial',
     'ngAnimate',
     'ngAria',
-    'ngTable'
+    'ngTable',
+    'satellizer',
+    'facebook'
 ])
     .config(function ($stateProvider, $urlRouterProvider) {
         //
@@ -53,16 +54,6 @@ var trackerApp = angular.module('myApp', [
                 controller: 'login'
             });
     })
-/*
-    .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApiProviders) {
-
-        GoogleMapApiProviders.configure({
-            china: true,
-            libraries: 'geometry,visualization'
-        });
-
-    }])
-*/
     .config([
         'FacebookProvider',
         function(FacebookProvider) {
@@ -79,8 +70,16 @@ var trackerApp = angular.module('myApp', [
 
         }
     ])
+/*
+    .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApiProviders) {
 
+        GoogleMapApiProviders.configure({
+            china: true,
+            libraries: 'geometry,visualization'
+        });
 
+    }])
+*/
     .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApi) {
         GoogleMapApi.configure({
             //    key: 'your api key',
