@@ -2,7 +2,8 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, dataBaseService, mes
 
 
         $scope.user = messages.getUser();
-
+        $scope.travelersList = [];
+        $scope.data = [];
         //$scope.init = function () {
         var trackCoordinates = [];
         $scope.map;
@@ -12,17 +13,6 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, dataBaseService, mes
             zoom: 5
         });
 
-        /*
-         Promise.resolve(dataBaseService.getGpsTrack()).then(function (val) {
-         for (var k in val.data) {
-
-         console.log(val.data[k].latitude);
-         console.log(val.data[k].longitude);
-         $scope.polylines[0].path.push({latitude: val.data[k].latitude, longitude: val.data[k].longitude});
-         }
-         console.log($scope.polylines[0].path);
-         });
-         */
         var socket = io.connect('http://localhost:8080');
         socket.on('GpsPoint', function (data) {
             console.log(data);
@@ -44,20 +34,29 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, dataBaseService, mes
 
         });
 
-        $scope.data = [];
-        $scope.id = 1;
 
-        loadItems = function () {
-            for (var i = 0; i < 50; i++) {
-                $scope.data.push({
-                    id: $scope.id,
-                    name: "Name " + $scope.id,
-                    description: "Description " + $scope.id
-                });
-                $scope.id++;
+        //get users names to push it into the list of active travelers
+        dataBaseService.getUsersList().then(function (results) {
+            console.log(results.data.rows.length);
+            for(var i = 0 ; i < results.data.rows.length ; i++){
+                $scope.travelersList.push(results.data.rows[i].name);
             }
-        }
-        loadItems();
+            loadItems = function () {
+                for (var i = 0; i < $scope.travelersList.length; i++) {
+                    $scope.data.push({
+                        id: i+1,
+                        name: $scope.travelersList[i],
+                        description: "City: Panama"
+                    });
+                    $scope.id++;
+                }
+            }
+            loadItems();
+        })
+
+//        $scope.id = 1;
+
+
 
     })
 

@@ -66,4 +66,9 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/addNewUser', user);
     };
 
+    //get all users
+    this.getUsersList = function () {
+        return $http.post('/getUsersList');
+    };
+
 }]);
