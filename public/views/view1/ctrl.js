@@ -6,10 +6,6 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
     $scope.options1 = null;
     $scope.details1 = '';
     */
-
-
-
-
     var dataTripId;
     $scope.polylines = [];
     $scope.circles = [];

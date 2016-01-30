@@ -53,6 +53,17 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/getGpsTrack');
     };
 
+    //############ User Auth management #################
+    //##################################################
 
+    //Check if user exists -- should be encrypted
+    this.checkUserExistsByEmail = function (user) {
+        return $http.post('/checkUserExistsByEmail', user);
+    };
+
+    //Add new user
+    this.addNewUser = function (user) {
+        return $http.post('/addNewUser', user);
+    };
 
 }]);

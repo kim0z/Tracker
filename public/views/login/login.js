@@ -2,9 +2,8 @@
  * Created by karim on 23/01/2016.
  */
 trackerApp.controller('login',
-    ['$scope', '$timeout', 'Facebook', function ($scope, $timeout, Facebook) {
+    ['$scope', '$timeout', 'Facebook', 'dataBaseService', 'messages', function ($scope, $timeout, Facebook, dataBaseService, messages) {
 
-    console.log('TEST');
         // Define user empty data :/
         $scope.user = {};
 
@@ -63,12 +62,36 @@ trackerApp.controller('login',
          * me
          */
         $scope.me = function () {
-            Facebook.api('/me', function (response) {
+            Facebook.api('/me?fields=id,name,email,timezone', function (response) {
                 /**
                  * Using $scope.$apply since this happens outside angular framework.
                  */
                 $scope.$apply(function () {
                     $scope.user = response;
+
+                    console.log($scope.user);
+                    //looks like:
+                    // Object {id: "102211533498839", name: "Aladdin The Tracker", email: "aladdin_dejvjmt_tracker@tfbnw.net", timezone: 0}
+
+                    //check if user exists
+                    dataBaseService.checkUserExistsByEmail($scope.user).then(function (results) {
+                        console.log(results.data.rows[0].exists);
+                        messages.saveUser($scope.user); //save user anyway in client, anyway the user will be added.
+
+                        if (!results.data.rows[0].exists) {
+
+                            //add new user
+                            dataBaseService.addNewUser($scope.user).then(function (results) {
+
+                            });
+                        }
+
+                    })
+
+                    //if user is not exists then add new user
+
+                    //if user is exists then do nothing meanwhile
+
                 });
 
             });
@@ -112,22 +135,22 @@ trackerApp.controller('login',
         })
     }])
 
-/**
- * Just for debugging purposes.
- * Shows objects in a pretty way
- */
-.directive('debug', function() {
-    return {
-        restrict:	'E',
-        scope: {
-            expression: '=val'
-        },
-        template:	'<pre>{{debug(expression)}}</pre>',
-        link:	function(scope) {
-            // pretty-prints
-            scope.debug = function(exp) {
-                return angular.toJson(exp, true);
-            };
+    /**
+     * Just for debugging purposes.
+     * Shows objects in a pretty way
+     */
+    .directive('debug', function () {
+        return {
+            restrict: 'E',
+            scope: {
+                expression: '=val'
+            },
+            template: '<pre>{{debug(expression)}}</pre>',
+            link: function (scope) {
+                // pretty-prints
+                scope.debug = function (exp) {
+                    return angular.toJson(exp, true);
+                };
+            }
         }
-    }
-});
+    });

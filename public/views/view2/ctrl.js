@@ -1,26 +1,28 @@
-trackerApp.controller('view2Ctrl', function ($scope, $http, dataBaseService) {
+trackerApp.controller('view2Ctrl', function ($scope, $http, dataBaseService, messages) {
 
+
+        $scope.user = messages.getUser();
 
         //$scope.init = function () {
         var trackCoordinates = [];
         $scope.map;
 
-            $scope.map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: 34.397, lng: 40.644},
-                zoom: 5
-            });
-
-    /*
-        Promise.resolve(dataBaseService.getGpsTrack()).then(function (val) {
-            for (var k in val.data) {
-
-                console.log(val.data[k].latitude);
-                console.log(val.data[k].longitude);
-                $scope.polylines[0].path.push({latitude: val.data[k].latitude, longitude: val.data[k].longitude});
-            }
-            console.log($scope.polylines[0].path);
+        $scope.map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 34.397, lng: 40.644},
+            zoom: 5
         });
-*/
+
+        /*
+         Promise.resolve(dataBaseService.getGpsTrack()).then(function (val) {
+         for (var k in val.data) {
+
+         console.log(val.data[k].latitude);
+         console.log(val.data[k].longitude);
+         $scope.polylines[0].path.push({latitude: val.data[k].latitude, longitude: val.data[k].longitude});
+         }
+         console.log($scope.polylines[0].path);
+         });
+         */
         var socket = io.connect('http://localhost:8080');
         socket.on('GpsPoint', function (data) {
             console.log(data);
