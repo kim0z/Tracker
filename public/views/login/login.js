@@ -86,6 +86,8 @@ trackerApp.controller('login',
                             });
                         }
 
+                        window.open ('#/view0', '_self', false);
+
                     })
 
                     //if user is not exists then add new user

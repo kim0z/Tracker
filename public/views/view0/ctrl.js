@@ -1,5 +1,8 @@
-trackerApp.controller('view0Ctrl',function($scope, $http, googleMapsAPIService) {
+trackerApp.controller('view0Ctrl',function($scope, $http, googleMapsAPIService, messages, localStorageService) {
 
+
+    $scope.helloUser = localStorageService.get('user');
+    console.log($scope.helloUser);
 
  $scope.go = function() {
 

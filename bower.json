@@ -22,6 +22,7 @@
     "ngAutocomplete": "~1.0.0",
     "socket.io": "~1.4.4",
     "angular-facebook": "~0.2.3",
-    "satellizer": "~0.13.4"
+    "satellizer": "~0.13.4",
+    "angular-local-storage": "~0.2.3"
   }
 }

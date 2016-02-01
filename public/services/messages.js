@@ -14,13 +14,13 @@ trackerApp.service('messages', function () {
     };
 
     this.saveUser = function (user) {
-        console.log('Messages service - save user');
-        this.user = user;
+        console.log('Messages service - save user:' + user);
+        this.user = user.name;
     };
 
     this.getUser = function () {
-        console.log('Messages service - get user');
-        return (this.user);
+        console.log('Messages service - get user: '+ user);
+        return user;
     };
 
 });

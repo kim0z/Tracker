@@ -26,6 +26,8 @@
 
 </head>
 
+<body>
+
 <md-toolbar scroll-shrink layout="row" ng-contoller="mainIndex">
     <div class="md-toolbar-tools" ng-controller="mainIndexCtrl">
         <h3>
@@ -33,22 +35,17 @@
             <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
             <md-button ng-click="menuClick('Plan Trip')">Plan Trip</md-button>
             <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
-            <md-button ng-click="menuClick('Login')">Login</md-button>
+         <!--   <md-button ng-click="menuClick('Login')">Login</md-button> -->
+
+            <md-button ng-controller="login1" type="button" class="btn btn-primary btn-large" data-ng-show="!logged" data-ng-disabled="!facebookReady" data-ng-click="IntentLogin()">Login with Facebook</md-button>
+            <md-button ng-controller="login1" type="button" class="btn btn-danger btn-large" data-ng-show="logged" data-ng-disabled="!facebookReady" data-ng-click="logout()">Logout</md-button>
+
+
 
         </h3>
     </div>
 </md-toolbar>
 
-
-<!--
-<body class="body1">
-<ul class="menu">
-    <li><a class="a" href="#/view0">Home</a></li>
-    <li><a class="a" href="#/view3">My Trips</a></li>
-    <li><a class="a" href="#/view1">Plan Trip</a></li>
-    <li><a class="a" href="#/view2">Rel-Time Travelers</a></li>
-</ul>
--->
 
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
@@ -109,6 +106,9 @@
 <!-- city search auto complete -->
 <script src='bower_components/ngAutocomplete/src/ngAutocomplete.js'></script>
 
+<!-- Local storage, session storage -->
+<script src='bower_components/angular-local-storage/dist/angular-local-storage.js'></script>
+
 
 <!-- satellizer Auth-->
 <!--
@@ -121,6 +121,11 @@
 
 <!-- this angular facebook login module should be replaced with bower install (bower didn't work for me, check again) -->
 <script data-require"angular.js@1.1.5" data-semver="1.1.5" src="http://rawgithub.com/Ciul/angular-facebook/master/lib/angular-facebook.js"></script>
+
+
+
+
+
 
 
 <script src="services/googleAPISvc.js"></script>

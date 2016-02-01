@@ -14,7 +14,8 @@ var trackerApp = angular.module('myApp', [
     'ngAria',
     'ngTable',
     'satellizer',
-    'facebook'
+    'facebook',
+    'LocalStorageModule'
 ])
     .config(function ($stateProvider, $urlRouterProvider) {
         //
@@ -92,8 +93,13 @@ var trackerApp = angular.module('myApp', [
         $mdThemingProvider.theme('blue')
             .primaryPalette('blue')
             .accentPalette('red');
-    });
+    })
 
+    //change from local storage to session storage
+.config(function (localStorageServiceProvider) {
+    localStorageServiceProvider
+        .setStorageType('sessionStorage');
+});
 
 trackerApp.controller('mainIndexCtrl', function ($scope) {
     $scope.menuClick = function (buttonText) {
@@ -118,3 +124,180 @@ trackerApp.controller('mainIndexCtrl', function ($scope) {
 
     };
 });
+
+//Login Facebook
+trackerApp.controller('login1',
+    ['$scope', '$timeout', 'Facebook', 'dataBaseService', 'messages', 'localStorageService', function ($scope, $timeout, Facebook, dataBaseService, messages, localStorageService) {
+
+        $scope.user = {};
+
+        // Defining user logged status
+        $scope.logged = false;
+
+        // And some fancy flags to display messages upon user status change
+        $scope.byebye = false;
+        $scope.salutation = false;
+
+        /**
+         * Watch for Facebook to be ready.
+         * There's also the event that could be used
+         */
+        $scope.$watch(
+            function () {
+                return Facebook.isReady();
+            },
+            function (newVal) {
+                if (newVal)
+                    $scope.facebookReady = true;
+            }
+        );
+
+        var userIsConnected = false;
+
+        Facebook.getLoginStatus(function (response) {
+            if (response.status == 'connected') {
+                userIsConnected = true;
+            }
+        });
+
+        /**
+         * IntentLogin
+         */
+        $scope.IntentLogin = function () {
+            if (!userIsConnected) {
+                $scope.login();
+            }
+        };
+
+        /**
+         * Login
+         */
+        $scope.login = function () {
+            Facebook.login(function (response) {
+                if (response.status == 'connected') {
+                    $scope.logged = true;
+                    $scope.me();
+                }
+
+            });
+        };
+
+        /**
+         * me
+         */
+        $scope.me = function () {
+            Facebook.api('/me?fields=id,name,email,timezone', function (response) {
+                /**
+                 * Using $scope.$apply since this happens outside angular framework.
+                 */
+                $scope.$apply(function () {
+                    $scope.user = response;
+
+                    console.log($scope.user);
+                    //looks like:
+                    // Object {id: "102211533498839", name: "Aladdin The Tracker", email: "aladdin_dejvjmt_tracker@tfbnw.net", timezone: 0}
+
+                    //check if user exists
+                    dataBaseService.checkUserExistsByEmail($scope.user).then(function (results) {
+
+                        console.log(results.data.rows[0].exists);
+                        messages.saveUser($scope.user); //save user anyway in client, anyway the user will be added.
+
+
+
+                        localStorageService.set('user', $scope.user.name);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        if (!results.data.rows[0].exists) {
+
+                            //add new user
+                            dataBaseService.addNewUser($scope.user).then(function (results) {
+
+                            });
+                        }
+
+                        window.open ('#/view0', '_self', false);
+
+                    })
+
+                    //if user is not exists then add new user
+
+                    //if user is exists then do nothing meanwhile
+
+                });
+
+            });
+        };
+
+        /**
+         * Logout
+         */
+        $scope.logout = function () {
+            Facebook.logout(function () {
+                $scope.$apply(function () {
+                    $scope.user = {};
+                    $scope.logged = false;
+                });
+            });
+        }
+
+        /**
+         * Taking approach of Events :D
+         */
+        $scope.$on('Facebook:statusChange', function (ev, data) {
+            console.log('Status: ', data);
+            if (data.status == 'connected') {
+                $scope.$apply(function () {
+                    $scope.salutation = true;
+                    $scope.byebye = false;
+                });
+            } else {
+                $scope.$apply(function () {
+                    $scope.salutation = false;
+                    $scope.byebye = true;
+
+                    // Dismiss byebye message after two seconds
+                    $timeout(function () {
+                        $scope.byebye = false;
+                    }, 2000)
+                });
+            }
+
+
+        })
+    }])
+
+    /**
+     * Just for debugging purposes.
+     * Shows objects in a pretty way
+     */
+    .directive('debug1', function () {
+        return {
+            restrict: 'E',
+            scope: {
+                expression: '=val'
+            },
+            template: '<pre>{{debug(expression)}}</pre>',
+            link: function (scope) {
+                // pretty-prints
+                scope.debug = function (exp) {
+                    return angular.toJson(exp, true);
+                };
+            }
+        }
+    });
