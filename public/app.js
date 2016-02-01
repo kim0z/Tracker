@@ -204,22 +204,10 @@ trackerApp.controller('login1',
                         messages.saveUser($scope.user); //save user anyway in client, anyway the user will be added.
 
 
-
+                        //save to session storage
+                        //should add, check what kind of storage
+                        //should add, check is storage supported by browser
                         localStorageService.set('user', $scope.user.name);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -231,7 +219,7 @@ trackerApp.controller('login1',
                             });
                         }
 
-                        window.open ('#/view0', '_self', false);
+                        window.open ('#/view0', '_self', false).location.reload();
 
                     })
 

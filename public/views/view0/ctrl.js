@@ -4,6 +4,12 @@ trackerApp.controller('view0Ctrl',function($scope, $http, googleMapsAPIService, 
     $scope.helloUser = localStorageService.get('user');
     console.log($scope.helloUser);
 
+    $scope.$watch('helloUser', function() {
+        alert($scope.helloUser);
+    });
+
+
+
  $scope.go = function() {
 
     $scope.msg = 'clicked';
