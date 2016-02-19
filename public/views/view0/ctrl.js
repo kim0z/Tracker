@@ -2,10 +2,12 @@ trackerApp.controller('view0Ctrl',function($scope, $http, googleMapsAPIService, 
 
 
     $scope.helloUser = localStorageService.get('user');
+    $scope.logged = localStorageService.get('email');
     console.log($scope.helloUser);
 
     $scope.$watch('helloUser', function() {
-        alert($scope.helloUser);
+        alert($scope.helloUser+' + '+ $scope.logged);
+
     });
 
 

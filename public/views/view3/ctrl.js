@@ -1,4 +1,4 @@
-trackerApp.controller('view3Ctrl', function ($scope, $http,$window, googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages) {
+trackerApp.controller('view3Ctrl', function ($scope, $http,$window, googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages, localStorageService) {
     //start
     /*
      (function() {
@@ -54,14 +54,14 @@ trackerApp.controller('view3Ctrl', function ($scope, $http,$window, googleMapsAP
 
 
 
-    dataBaseService.getTrips().then(function (results) {
+    dataBaseService.getTrips({email:localStorageService.get('email')}).then(function (results) {
         $scope.trips = results.data;
         console.log('Client:: View3:: Fun run when load page :: list of trips: '+ $scope.trips.length);
 
 
 
 
-        $scope.chunks = [{
+        $scope.chunks = [ {
             title: "Today",
             divider: true
         }, {
@@ -72,7 +72,7 @@ trackerApp.controller('view3Ctrl', function ($scope, $http,$window, googleMapsAP
                 type: "QUOTE",
                 quotes: ["A year after spending $24.9 billion taking his computer company private", " Mr. Dell will try to persuade people that his company is about far more than the personal computers and computer servers it has been known for, with products intended for things as varied as the cloud computing networks of global enterprises and handy personal devices.", " a transformation(...)he actually started six years ago, spending $18 billion on 40 acquisitions", "The new Dell has software, equipment for data storage and computer networking, services and sensors. It is developing software that measures facial expressions, voice tone, even how we individually swipe key cards. There is a device that can make a hotel room’s digital television into a secure corporate computer. A Dell tablet is the world’s thinnest and lightest,(...)And, of course, there are lots of new personal computers.", " The question is: Can Dell ignite sales enough to become less reliant on the same old business?", "As a private firm, its deals move faster — exactly what Mr. Dell wanted. Last March, Dell bought Statsoft, a(...)maker of predictive analytic software.(...)it took two meetings with Mr. Dell lasting a total of two hours and 15 minutes. “In a public company, there would be at least one board meeting about this, maybe two, so that would be two quarters", "Dell had about 110,000 employees(...) and(...)now(...)90,000. It is unclear how many more cuts there will be.", " his three-quarter stake in Dell is a significant amount of his net worth, estimated at $16 billion"]
             }
-        },{
+        } /*,{
             title: "Yesterday",
             divider: true
         }, {
@@ -94,14 +94,14 @@ trackerApp.controller('view3Ctrl', function ($scope, $http,$window, googleMapsAP
                 type: "QUOTE",
                 quotes: ["And he saw that it was good"]
             }
-        }];
+        } */];
 
         //create Json list of trips in the Client
-        for ( var i = 3 ; i < $scope.trips.length ; i++)
+        for ( var i = 0 ; i < $scope.trips.length ; i++)
         {
             var jsonTrip = {id:$scope.trips[i].id , title: $scope.trips[i].trip_name, description: $scope.trips[i].trip_description,
                 expanded: false, content: {type: "QUOTE", quotes: ["quotedfdsgfdsgfdsfsdfsdfsdfdsfs"]}};
-            $scope.chunks[i] = jsonTrip;
+            $scope.chunks.push(jsonTrip);
         }
 
 

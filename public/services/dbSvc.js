@@ -12,10 +12,10 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/insertTrip', dataObj);
     };
 
-    //get all trips
-    this.getTrips = function () { // in use
-        console.log('Client::dataBaseService:: get all trips from table = trips');
-        return $http.post('/readTrips');
+    //get all trips by user email
+    this.getTrips = function (userEmail) { // in use
+        console.log('Client::dataBaseService:: get all trips from table = trips by user email');
+        return $http.post('/getTrips', userEmail);
     };
 
     //get trip by id

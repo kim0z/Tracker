@@ -288,36 +288,46 @@ app.post('/updateTrip', function (request, response) {
 });
 
 //Postgres read trips table
-app.post('/readTrips', function (request, response) {
+app.post('/getTrips', function (request, response) {
 
-    console.log('SERVER:: Postgres:: get all trip from trips table');
-    var results = [];
+    // add validation to the email is valid - add function to do the validation
+    //else return nothing
 
-    // Get a Postgres client from the connection pool
-    pg.connect(conString, function (err, client, done) {
-        // Handle connection errors
-        if (err) {
-            done();
-            console.log(err);
-            return response.status(500).json({success: false, data: err});
-        }
 
-        // SQL Query > Select Data
-        var query = client.query("SELECT * FROM trips ORDER BY id ASC;");
+    if (request.body.email == '') {
+        response.status(200);
+    } else {
+        console.log('SERVER:: Postgres:: get all trip from trips table by user email');
+        console.log(request.body.email);
+        var results = [];
 
-        // Stream results back one row at a time
-        query.on('row', function (row) {
-            results.push(row);
+        // Get a Postgres client from the connection pool
+        pg.connect(conString, function (err, client, done) {
+            // Handle connection errors
+            if (err) {
+                done();
+                console.log(err);
+                return response.status(500).json({success: false, data: err});
+            }
+            //var email = "'" + request.body.email + "'";
+            // SQL Query > Select Data
+            var query = client.query("SELECT * FROM trips WHERE email = \'" + request.body.email + "\' ORDER BY id ASC  ;");
+
+            // Stream results back one row at a time
+            query.on('row', function (row) {
+                results.push(row);
+            });
+
+            // After all data is returned, close connection and return results
+            query.on('end', function () {
+                done();
+                return response.json(results);
+            });
+
         });
-
-        // After all data is returned, close connection and return results
-        query.on('end', function () {
-            done();
-            return response.json(results);
-        });
-
-    });
+    }
 });
+
 
 
 //Postgres get trip by id
@@ -594,15 +604,12 @@ app.post('/getGpsPoints', function (request, response) {
  });
  */
 app.post('/getGpsTrack', function (request, response) {
-
     FirebaseRef.on("value", function (snapshot) {
         //console.log(snapshot.val());
         response.send(snapshot.val());
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
     });
-
-
 });
 
 io.on('connection', function (socket) {

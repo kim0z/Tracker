@@ -1,4 +1,4 @@
-trackerApp.controller('view2Ctrl', function ($scope, $http, dataBaseService, messages) {
+trackerApp.controller('view2Ctrl', function ($scope, $http, $document, dataBaseService, messages) {
 
 
         $scope.user = messages.getUser();
@@ -7,6 +7,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, dataBaseService, mes
         //$scope.init = function () {
         var trackCoordinates = [];
         $scope.map;
+        $scope.lastGPSpoint = "";
 
         $scope.map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: 34.397, lng: 40.644},
@@ -19,18 +20,35 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, dataBaseService, mes
             console.log('GPS new point: ' + data);
 
 
-            trackCoordinates.push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
+            //check if JSON is sign from a user about start GPS / or adding a new GPS point
+            var userStatus = document.getElementById( data.email );
 
-            var trackPath = new google.maps.Polyline({
-                path: trackCoordinates,
-                geodesic: true,
-                strokeColor: '#FF0000',
-                strokeOpacity: 1.0,
-                strokeWeight: 2
-            });
-            console.log(trackCoordinates);
+            if (data.hasOwnProperty('active')) {
+                if(data.active == 'true'){
+                    userStatus.style.background = "green";
+                }else{
+                    userStatus.style.background = "red";
+                }
 
-            trackPath.setMap($scope.map);
+
+
+
+
+            } else {
+
+                trackCoordinates.push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
+
+                var trackPath = new google.maps.Polyline({
+                    path: trackCoordinates,
+                    geodesic: true,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2
+                });
+                console.log(trackCoordinates);
+
+                trackPath.setMap($scope.map);
+            }
 
         });
 
@@ -38,15 +56,15 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, dataBaseService, mes
         //get users names to push it into the list of active travelers
         dataBaseService.getUsersList().then(function (results) {
             console.log(results.data.rows.length);
-            for(var i = 0 ; i < results.data.rows.length ; i++){
-                $scope.travelersList.push(results.data.rows[i].name);
+            for (var i = 0; i < results.data.rows.length; i++) {
+                $scope.travelersList.push(results.data.rows[i].name, results.data.rows[i].email);
             }
             loadItems = function () {
                 for (var i = 0; i < $scope.travelersList.length; i++) {
                     $scope.data.push({
-                        id: i+1,
+                        id: i + 1,
                         name: $scope.travelersList[i],
-                        description: "City: Panama"
+                        email: $scope.travelersList[i + 1]
                     });
                     $scope.id++;
                 }
@@ -55,7 +73,6 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, dataBaseService, mes
         })
 
 //        $scope.id = 1;
-
 
 
     })

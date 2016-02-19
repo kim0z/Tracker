@@ -2,21 +2,21 @@
 
 // Declare app level module which depends on views, and components
 var trackerApp = angular.module('myApp', [
-    'nemLogging',
-    'ui.router',
-    'uiGmapgoogle-maps',
-    'ngAutocomplete',
-    'angularNumberPicker',
-    '720kb.datepicker',
-    'smart-table',
-    'ngMaterial',
-    'ngAnimate',
-    'ngAria',
-    'ngTable',
-    'satellizer',
-    'facebook',
-    'LocalStorageModule'
-])
+        'nemLogging',
+        'ui.router',
+        'uiGmapgoogle-maps',
+        'ngAutocomplete',
+        'angularNumberPicker',
+        '720kb.datepicker',
+        'smart-table',
+        'ngMaterial',
+        'ngAnimate',
+        'ngAria',
+        'ngTable',
+        'satellizer',
+        'facebook',
+        'LocalStorageModule'
+    ])
     .config(function ($stateProvider, $urlRouterProvider) {
         //
         // For any unmatched url, redirect to /state1
@@ -57,7 +57,7 @@ var trackerApp = angular.module('myApp', [
     })
     .config([
         'FacebookProvider',
-        function(FacebookProvider) {
+        function (FacebookProvider) {
             var myAppId = '942317529184852';
 
             // You can set appId with setApp method
@@ -71,16 +71,16 @@ var trackerApp = angular.module('myApp', [
 
         }
     ])
-/*
-    .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApiProviders) {
+    /*
+     .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApiProviders) {
 
-        GoogleMapApiProviders.configure({
-            china: true,
-            libraries: 'geometry,visualization'
-        });
+     GoogleMapApiProviders.configure({
+     china: true,
+     libraries: 'geometry,visualization'
+     });
 
-    }])
-*/
+     }])
+     */
     .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApi) {
         GoogleMapApi.configure({
             //    key: 'your api key',
@@ -89,37 +89,38 @@ var trackerApp = angular.module('myApp', [
         });
     }])
 
-    .config(function($mdThemingProvider) {
+    .config(function ($mdThemingProvider) {
         $mdThemingProvider.theme('blue')
             .primaryPalette('blue')
             .accentPalette('red');
     })
 
     //change from local storage to session storage
-.config(function (localStorageServiceProvider) {
-    localStorageServiceProvider
-        .setStorageType('sessionStorage');
-});
+    .config(function (localStorageServiceProvider) {
+        localStorageServiceProvider
+            .setStorageType('sessionStorage');
+    });
 
 trackerApp.controller('mainIndexCtrl', function ($scope) {
     $scope.menuClick = function (buttonText) {
-        switch(buttonText) {
+        switch (buttonText) {
             case 'Home':
-                window.open ('#/view0', '_self', false);
+                window.open('#/view0', '_self', false);
                 break;
             case 'My Trips':
-                window.open ('#/view3', '_self', false);
+                window.open('#/view3', '_self', false);
                 break;
             case 'Plan Trip':
-                window.open ('#/view1', '_self', false);
+                window.open('#/view1', '_self', false);
                 break;
             case 'Rel-Time Travelers':
-                window.open ('#/view2', '_self', false);
+                window.open('#/view2', '_self', false);
                 break;
             case 'Login':
-                window.open ('#/login', '_self', false);
+                window.open('#/login', '_self', false);
                 break;
-            default: window.open ('#/login', '_self', false);
+            default:
+                window.open('#/login', '_self', false);
         }
 
     };
@@ -135,8 +136,8 @@ trackerApp.controller('login1',
         $scope.logged = false;
 
         // And some fancy flags to display messages upon user status change
-        $scope.byebye = false;
-        $scope.salutation = false;
+        // $scope.byebye = false;
+        // $scope.salutation = false;
 
         /**
          * Watch for Facebook to be ready.
@@ -157,6 +158,9 @@ trackerApp.controller('login1',
         Facebook.getLoginStatus(function (response) {
             if (response.status == 'connected') {
                 userIsConnected = true;
+                //alert(userIsConnected);
+            }else{
+                userIsConnected = false;
             }
         });
 
@@ -203,13 +207,11 @@ trackerApp.controller('login1',
                         console.log(results.data.rows[0].exists);
                         messages.saveUser($scope.user); //save user anyway in client, anyway the user will be added.
 
-
                         //save to session storage
                         //should add, check what kind of storage
                         //should add, check is storage supported by browser
                         localStorageService.set('user', $scope.user.name);
-
-
+                        localStorageService.set('email', $scope.user.email);
 
                         if (!results.data.rows[0].exists) {
 
@@ -219,16 +221,10 @@ trackerApp.controller('login1',
                             });
                         }
 
-                        window.open ('#/view0', '_self', false).location.reload();
+                        window.open('#/view0', '_self', false).location.reload();
 
                     })
-
-                    //if user is not exists then add new user
-
-                    //if user is exists then do nothing meanwhile
-
                 });
-
             });
         };
 
@@ -240,6 +236,9 @@ trackerApp.controller('login1',
                 $scope.$apply(function () {
                     $scope.user = {};
                     $scope.logged = false;
+                    localStorageService.set('user', 'Guest');
+                    localStorageService.set('email', '');
+                    localStorageService.set('logged', $scope.logged);
                 });
             });
         }
@@ -251,18 +250,27 @@ trackerApp.controller('login1',
             console.log('Status: ', data);
             if (data.status == 'connected') {
                 $scope.$apply(function () {
-                    $scope.salutation = true;
-                    $scope.byebye = false;
+                    //  $scope.salutation = true;
+                    //   $scope.byebye = false;
+                    $scope.logged = true;
+
+                   // alert($scope.user.email);
+                   // alert('email saved local:  '+localStorageService.get('email'));
+                    localStorageService.set('logged', $scope.logged);
                 });
             } else {
                 $scope.$apply(function () {
-                    $scope.salutation = false;
-                    $scope.byebye = true;
+                    //   $scope.salutation = false;
+                    //    $scope.byebye = true;
+                    $scope.logged = false;
+                    localStorageService.set('logged', $scope.logged);
 
-                    // Dismiss byebye message after two seconds
-                    $timeout(function () {
-                        $scope.byebye = false;
-                    }, 2000)
+                    /*
+                     // Dismiss byebye message after two seconds
+                     $timeout(function () {
+                     $scope.byebye = false;
+                     }, 2000)
+                     */
                 });
             }
 
