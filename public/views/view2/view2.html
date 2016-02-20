@@ -5,59 +5,37 @@
     -->
 
     <style type="text/css">
-        #map{
-            height:800px;
-            width:1800px;
+        #map {
+            height: 800px;
+            width: 1800px;
             box-shadow: 3px 3px 10px gray;
         }
-        li{
-
-            margin-bottom:0.5em;
-            text-indent:0.4em;
-            font-weight:bold;
-
-            /* background: red; */
-            padding: 0 0 50px 0;
-            display: inline-block;
-
-        }
-
-
     </style>
-
 </head>
 <body>
 
 <table class="table table-striped">
     <col width="500px"/>
     <col width="1300"/>
-    <col width="300px"/>
+    <col width="300px" height="600px"/>
 
     <tr>
         <td>
             <P style="text-decoration:underline;">Travellers list
-
             <P>
 
-            <div id="list">
-                <ul infinite-scroll ajax-call="loadUsers()" class="ul_list" style=>
-                    <li class="list-group-item"  ng-repeat="item in data" id={{item.email}} style="background: url('../../assets/images/offline.png') left center/20px 20px no-repeat">
-                        {{item.name}}
-                    </li>
-                </ul>
+            <div class="list-group" ng-repeat="item in data">
+                <button type="button" class="list-group-item" id={{item.email}}
+                        style="padding-left: 25px; background: url('../../assets/images/offline.png') left center/20px 20px no-repeat">{{item.name}}</button>
             </div>
-
 
         </td>
 
         <td>
             <P style="text-decoration:underline;">Find travellers around the world, learn, join and share ..
-
             <P>
 
-            <div id="map" ></div>
-
-
+            <div id="map"></div>
 
         </td>
 
@@ -66,28 +44,20 @@
 
             <P>
 
-            <div id="list_friends">
-                <ul infinite-scroll class="ul_list">
-                    <li class="list-group-item" ng-repeat="tip in tips">
-                        {{tip.email}} <br/>
-                        {{tip.message}} <br/>
-                        {{tip.timestamp}}
-                    </li>
-                </ul>
-
-
+                <div class="list-group" ng-repeat="tip in tips">
+                    <a href="#" class="list-group-item active">
+                        <h4 class="list-group-item-heading">{{tip.email}}</h4>
+            <p class="list-group-item-text">{{tip.message}}</p>
+            <p class="list-group-item-text">{{tip.timestamp}}</p>
+            </a>
 
             </div>
 
-
         </td>
     </tr>
-
-
     <tr>
         <td></td>
 
     </tr>
 
 </table>
-

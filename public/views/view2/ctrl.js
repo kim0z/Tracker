@@ -39,7 +39,6 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                 $scope.tips.push(data);
                 $scope.$apply(); //when we use non angular like JQuery then I need to use this function to update view after pushing data to array scope
 
-
                 trackCoordinates.push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
 
                 var trackPath = new google.maps.Polyline({
