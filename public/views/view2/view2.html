@@ -1,33 +1,48 @@
 <!DOCTYPE html>
 <head>
+    <!--
     <link rel="stylesheet" href="assets/css/style_realtime.css">
+    -->
 
     <style type="text/css">
         #map{
-            height:500px;
-            width:1000px;
+            height:800px;
+            width:1800px;
             box-shadow: 3px 3px 10px gray;
         }
+        li{
+
+            margin-bottom:0.5em;
+            text-indent:0.4em;
+            font-weight:bold;
+
+            /* background: red; */
+            padding: 0 0 50px 0;
+            display: inline-block;
+
+        }
+
+
     </style>
 
 </head>
 <body>
 
 <table class="table table-striped">
-    <col width="200px"/>
-    <col width="1200px"/>
-    <col width="200px"/>
+    <col width="500px"/>
+    <col width="1300"/>
+    <col width="300px"/>
 
     <tr>
         <td>
-            <P style="text-decoration:underline;">Real-Time Tips from travellers, Welcome {{user.name}}
+            <P style="text-decoration:underline;">Travellers list
 
             <P>
 
             <div id="list">
-                <ul infinite-scroll ajax-call="loadItems()" class="ul_list">
-                    <li class="list-group-item" ng-repeat="item in data" id={{item.email}}><strong>{{item.id}}.</strong> {{item.name}}:
-                        {{item.email}}
+                <ul infinite-scroll ajax-call="loadUsers()" class="ul_list" style=>
+                    <li class="list-group-item"  ng-repeat="item in data" id={{item.email}} style="background: url('../../assets/images/offline.png') left center/20px 20px no-repeat">
+                        {{item.name}}
                     </li>
                 </ul>
             </div>
@@ -47,16 +62,21 @@
         </td>
 
         <td>
-            <P style="text-decoration:underline;">Friends list:
+            <P style="text-decoration:underline;">Real-Time Tips from travellers
 
             <P>
 
             <div id="list_friends">
-                <ul infinite-scroll ajax-call="loadItems()" class="ul_list">
-                    <li class="list-group-item" ng-repeat="item in data"><strong>{{item.id}}.</strong> {{item.name}}:
-                        {{item.description}}
+                <ul infinite-scroll class="ul_list">
+                    <li class="list-group-item" ng-repeat="tip in tips">
+                        {{tip.email}} <br/>
+                        {{tip.message}} <br/>
+                        {{tip.timestamp}}
                     </li>
                 </ul>
+
+
+
             </div>
 
 

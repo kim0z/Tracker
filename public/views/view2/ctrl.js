@@ -1,9 +1,13 @@
-trackerApp.controller('view2Ctrl', function ($scope, $http, $document, dataBaseService, messages) {
-
+trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $document, dataBaseService, messages) {
 
         $scope.user = messages.getUser();
         $scope.travelersList = [];
-        $scope.data = [];
+        $scope.data = []; // Travellers from PG DB
+        $scope.tips = []; // Tips from Firebase, based on GPS point
+
+        // Get a database reference to our posts
+        var ref = new Firebase("https://luminous-torch-9364.firebaseio.com/");
+
         //$scope.init = function () {
         var trackCoordinates = [];
         $scope.map;
@@ -21,20 +25,20 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, $document, dataBaseS
 
 
             //check if JSON is sign from a user about start GPS / or adding a new GPS point
-            var userStatus = document.getElementById( data.email );
+            var userStatus = document.getElementById(data.email);
 
             if (data.hasOwnProperty('active')) {
-                if(data.active == 'true'){
-                    userStatus.style.background = "green";
-                }else{
-                    userStatus.style.background = "red";
+                if (data.active == 'true') {
+                    userStatus.style.background = "url('../../assets/images/online.png') left center/30px 30px no-repeat";
+                } else {
+                    userStatus.style.background = "url('../../assets/images/offline.png') left center/20px 20px no-repeat";
                 }
-
-
-
-
-
             } else {
+
+
+                $scope.tips.push(data);
+                $scope.$apply(); //when we use non angular like JQuery then I need to use this function to update view after pushing data to array scope
+
 
                 trackCoordinates.push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
 
@@ -46,7 +50,10 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, $document, dataBaseS
                     strokeWeight: 2
                 });
                 console.log(trackCoordinates);
-
+                //each new gps point means that the user is Active
+                var userStatus = document.getElementById(data.email);
+                userStatus.style.background = "url('../../assets/images/online.png') left center/30px 30px no-repeat";
+                //update map
                 trackPath.setMap($scope.map);
             }
 
@@ -55,24 +62,36 @@ trackerApp.controller('view2Ctrl', function ($scope, $http, $document, dataBaseS
 
         //get users names to push it into the list of active travelers
         dataBaseService.getUsersList().then(function (results) {
-            console.log(results.data.rows.length);
-            for (var i = 0; i < results.data.rows.length; i++) {
-                $scope.travelersList.push(results.data.rows[i].name, results.data.rows[i].email);
-            }
-            loadItems = function () {
-                for (var i = 0; i < $scope.travelersList.length; i++) {
+            loadUsers = function () {
+                for (var i = 0; i < results.data.rows.length; i++) {
                     $scope.data.push({
                         id: i + 1,
-                        name: $scope.travelersList[i],
-                        email: $scope.travelersList[i + 1]
+                        name: results.data.rows[i].name,
+                        email: results.data.rows[i].email
                     });
                     $scope.id++;
                 }
             }
-            loadItems();
+            loadUsers();
         })
 
-//        $scope.id = 1;
+        //load tips (messages from Firebase)
+        // Attach an asynchronous callback to read the data at our posts reference
+        ref.once("value", function(snapshot) {
+            // The callback function will get called twice, once for "fred" and once for "barney"
+            snapshot.forEach(function(childSnapshot) {
+                // key will be "fred" the first time and "barney" the second time
+                var key = childSnapshot.key();
+                // childData will be the actual contents of the child
+                var childData = childSnapshot.val();
+
+                if(!childData.hasOwnProperty('active')) { //if Object include active then it means it's not a GPS point with message
+                   // console.log(childData);
+                    $scope.tips.push(childData);
+                    $scope.$apply(); //when we use non angular like JQuery then I need to use this function to update view after pushing data to array scope
+                }
+            });
+        });
 
 
     })
