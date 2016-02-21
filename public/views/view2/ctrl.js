@@ -36,9 +36,19 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
             } else {
 
 
-                $scope.tips.push(data);
+                $scope.tips.unshift(data);
                 $scope.$apply(); //when we use non angular like JQuery then I need to use this function to update view after pushing data to array scope
 
+
+                //zoom to the new GPS point
+
+                //gMap = new google.maps.Map(document.getElementById('map'));
+                $scope.map.setZoom(11);      // This will trigger a zoom_changed on the map
+                $scope.map.setCenter(new google.maps.LatLng(data.latitude, data.longitude));
+                //gMap.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+
+
+                //add the GPS point to trqckPath to draw the line in map
                 trackCoordinates.push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
 
                 var trackPath = new google.maps.Polyline({
@@ -86,7 +96,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
                 if(!childData.hasOwnProperty('active')) { //if Object include active then it means it's not a GPS point with message
                    // console.log(childData);
-                    $scope.tips.push(childData);
+                    $scope.tips.unshift(childData);
                     $scope.$apply(); //when we use non angular like JQuery then I need to use this function to update view after pushing data to array scope
                 }
             });
