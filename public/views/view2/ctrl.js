@@ -18,6 +18,115 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
             zoom: 5
         });
 
+//////////////
+    /// Maps overlay
+
+/*
+        var overlay;
+        USGSOverlay.prototype = new google.maps.OverlayView();
+
+
+        var bounds = new google.maps.LatLngBounds(
+            new google.maps.LatLng(62.281819, -150.287132),
+            new google.maps.LatLng(62.400471, -150.005608));
+
+
+        // The photograph is courtesy of the U.S. Geological Survey.
+        var srcImage = 'https://developers.google.com/maps/documentation/' +
+            'javascript/examples/full/images/talkeetna.png';
+
+        // The custom USGSOverlay object contains the USGS image,
+        // the bounds of the image, and a reference to the map.
+        overlay = new USGSOverlay(bounds, srcImage, map);
+
+
+        /!** @constructor *!/
+        function USGSOverlay(bounds, image, map) {
+
+            // Initialize all properties.
+            this.bounds_ = bounds;
+            this.image_ = image;
+            this.map_ = map;
+
+            // Define a property to hold the image's div. We'll
+            // actually create this div upon receipt of the onAdd()
+            // method so we'll leave it null for now.
+            this.div_ = null;
+
+            // Explicitly call setMap on this overlay.
+            this.setMap($scope.map);
+        }
+
+
+
+        /!**
+         * onAdd is called when the map's panes are ready and the overlay has been
+         * added to the map.
+         *!/
+        USGSOverlay.prototype.onAdd = function() {
+
+            var div = document.createElement('div');
+            div.style.borderStyle = 'none';
+            div.style.borderWidth = '0px';
+            div.style.position = 'absolute';
+
+            // Create the img element and attach it to the div.
+            var img = document.createElement('img');
+            img.src = this.image_;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.position = 'absolute';
+            div.appendChild(img);
+
+            this.div_ = div;
+
+            // Add the element to the "overlayLayer" pane.
+            var panes = this.getPanes();
+            panes.overlayLayer.appendChild(div);
+        };
+
+        USGSOverlay.prototype.draw = function() {
+
+            // We use the south-west and north-east
+            // coordinates of the overlay to peg it to the correct position and size.
+            // To do this, we need to retrieve the projection from the overlay.
+            var overlayProjection = this.getProjection();
+
+            // Retrieve the south-west and north-east coordinates of this overlay
+            // in LatLngs and convert them to pixel coordinates.
+            // We'll use these coordinates to resize the div.
+            var sw = overlayProjection.fromLatLngToDivPixel(this.bounds_.getSouthWest());
+            var ne = overlayProjection.fromLatLngToDivPixel(this.bounds_.getNorthEast());
+
+            // Resize the image's div to fit the indicated dimensions.
+            var div = this.div_;
+            div.style.left = sw.x + 'px';
+            div.style.top = ne.y + 'px';
+            div.style.width = (ne.x - sw.x) + 'px';
+            div.style.height = (sw.y - ne.y) + 'px';
+        };
+
+
+*/
+
+
+
+////////// Done
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         var socket = io.connect('http://localhost:8080');
         socket.on('GpsPoint', function (data) {
             console.log(data);
@@ -35,10 +144,10 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                 }
             } else {
 
-
-                $scope.tips.unshift(data);
-                $scope.$apply(); //when we use non angular like JQuery then I need to use this function to update view after pushing data to array scope
-
+                if(data.message != "") { //if message is empty then no need to add and show
+                    $scope.tips.unshift(data);
+                    $scope.$apply(); //when we use non angular like JQuery then I need to use this function to update view after pushing data to array scope
+                }
 
                 //zoom to the new GPS point
 
@@ -51,12 +160,25 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                 //add the GPS point to trqckPath to draw the line in map
                 trackCoordinates.push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
 
+                // Define a symbol using SVG path notation, with an opacity of 1.
+                //dashed line
+                var lineSymbol = {
+                    path: 'M 0,-1 0,1',
+                    strokeOpacity: 1,
+                    scale: 4
+                };
+
                 var trackPath = new google.maps.Polyline({
                     path: trackCoordinates,
                     geodesic: true,
                     strokeColor: '#FF0000',
-                    strokeOpacity: 1.0,
-                    strokeWeight: 2
+                    strokeOpacity: 0,
+                    strokeWeight: 2,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '0',
+                        repeat: '20px'
+                    }]
                 });
                 console.log(trackCoordinates);
                 //each new gps point means that the user is Active
@@ -65,7 +187,6 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                 //update map
                 trackPath.setMap($scope.map);
             }
-
         });
 
 
@@ -96,8 +217,10 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
                 if(!childData.hasOwnProperty('active')) { //if Object include active then it means it's not a GPS point with message
                    // console.log(childData);
-                    $scope.tips.unshift(childData);
-                    $scope.$apply(); //when we use non angular like JQuery then I need to use this function to update view after pushing data to array scope
+                    if(childData.message != "") { //if message is empty then no need ro add and show
+                        $scope.tips.unshift(childData);
+                        $scope.$apply(); //when we use non angular like JQuery then I need to use this function to update view after pushing data to array scope
+                    }
                 }
             });
         });
