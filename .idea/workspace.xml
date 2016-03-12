@@ -24,8 +24,8 @@
       <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/views/view2/ctrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33209303">
-              <caret line="160" column="0" selection-start-line="160" selection-start-column="0" selection-end-line="160" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.49023256">
+              <caret line="65" column="108" selection-start-line="65" selection-start-column="108" selection-end-line="65" selection-end-column="108" />
               <folding />
             </state>
           </provider>
@@ -730,6 +730,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="45" column="13" selection-start-line="45" selection-start-column="11" selection-end-line="45" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -847,8 +848,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/views/view2/ctrl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33209303">
-          <caret line="160" column="0" selection-start-line="160" selection-start-column="0" selection-end-line="160" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.49023256">
+          <caret line="65" column="108" selection-start-line="65" selection-start-column="108" selection-end-line="65" selection-end-column="108" />
           <folding />
         </state>
       </provider>

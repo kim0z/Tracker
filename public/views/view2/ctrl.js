@@ -5,31 +5,13 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
         $scope.data = []; // Travellers from PG DB
         $scope.tips = []; // Tips from Firebase, based on GPS point
         var users_hash = {};
+        var polys = []; // will hold poly for each user
 
         // Get a database reference to our posts
         var ref = new Firebase("https://luminous-torch-9364.firebaseio.com/");
 
         //$scope.init = function () {
         var trackCoordinates = []; // for new GPS points
-
-
-        var coordinates = {
-            "feed1": [
-                {lat: 25.774252, lang: -80.190262},
-                {lat: 35.774252, lang: -80.190262}
-            ],
-
-            "feed2": [
-                {lat: 25.774252, lang: -80.190262},
-                {lat: 26.774252, lang: -80.190262}
-            ],
-
-            "feed3": [
-                {lat: 25.774252, lang: -50.190262},
-                {lat: 75.774252, lang: -80.190262}
-            ]
-        };
-
 
         $scope.map;
         $scope.lastGPSpoint = "";
@@ -73,16 +55,23 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                 //zoom to the new GPS point
 
                 //gMap = new google.maps.Map(document.getElementById('map'));
-                $scope.map.setZoom(15);      // This will trigger a zoom_changed on the map
+                $scope.map.setZoom(13);      // This will trigger a zoom_changed on the map
                 $scope.map.setCenter(new google.maps.LatLng(data.latitude, data.longitude));
                 //$scope.map.center =  {lat: data.latitude, lng: data.longitude};
                 //gMap.setMapTypeId(google.maps.MapTypeId.ROADMAP);
 
 
+                // get polyline from map (reminder: each polyline name by email)
+                var currentPath = polys[data.email].getPath();
+                currentPath.push(new google.maps.LatLng(JSON.parse(data.latitude),JSON.parse(data.longitude)));
+
+
+
                 //add the GPS point to trqckPath to draw the line in map
-                trackCoordinates.push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
+              //  trackCoordinates.push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
 
 
+                /*
                 // Define a symbol using SVG path notation, with an opacity of 1.
                 //dashed line
                 var lineSymbol = {
@@ -103,6 +92,8 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                         repeat: '20px'
                     }]
                 });
+*/
+
 
 
                 console.log(trackCoordinates);
@@ -110,7 +101,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                 var userStatus = document.getElementById(data.email);
                 userStatus.style.background = "url('../../assets/images/online.png') left center/30px 30px no-repeat";
                 //update map
-                trackPath.setMap($scope.map);
+              //  trackPath.setMap($scope.map);
             }
         });
 
@@ -151,7 +142,8 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                 //loop hashtable
                 var color_index = -1;
                 for (key_name in users_hash) {
-                    console.log(key_name);
+                    console.log(key_name); // the key_name = email, the HashTable mapped email -> Points from FireBase
+
 
                     var path = []; // new path for each user in hashtable
                     var colors = ['#0000FF', '#D2691E', '#FF0000', '#DAA520']
@@ -166,11 +158,8 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                             lat: JSON.parse(users_hash[key_name][i].latitude),
                             lng: JSON.parse(users_hash[key_name][i].longitude)
                         });
-                        //trackCoordinates.push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
                     }
-                    // trackPath['path'].push(path);
 
-// Define a symbol using SVG path notation, with an opacity of 1.
                     //dashed line
                     var lineSymbol = {
                         path: 'M 0,-1 0,1',
@@ -178,7 +167,10 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                         scale: 4
                     };
 
-                    var trackPath_users = new google.maps.Polyline({
+
+
+                  //  var trackPath_users
+                    polys[key_name]  = new google.maps.Polyline({
                         path: path,
                         geodesic: true,
                         strokeColor: colors[color_index],
@@ -191,7 +183,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                         }]
                     });
 
-                    trackPath_users.setMap($scope.map);
+                    polys[key_name].setMap($scope.map);
 
                 }
 
