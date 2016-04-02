@@ -130,7 +130,7 @@
         <tr>
 
 <!-- I think no need for usersTable, I am using $scope.items instead -->
-            <table ng-table="usersTable" class="table table-striped" style="text-align: center;" border="0">
+            <table ng-table="usersTable" class="table table-striped" style="text-align: center; overflow:scroll; height:200px; width: 1000px" border="0">
                 <tr>
                     <td>Date</td>
                     <td ng-repeat="item in table track by $index">{{item.date}}</td>

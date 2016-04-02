@@ -489,8 +489,8 @@ function addFlightsToTable(){
                     if (i == result.length - 1) { //we already have the Lat, Long of each city, now let's create the line between the cities
 
                         $scope.map = new google.maps.Map(document.getElementById('map'), {
-                            center: {lat: 34.397, lng: 40.644},
-                            zoom: 5,
+                            center: path[path.length - 1],
+                            zoom: 3,
                             mapTypeId: google.maps.MapTypeId.TERRAIN
                         });
 
