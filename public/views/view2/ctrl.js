@@ -134,7 +134,8 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                     var childData = childSnapshot.val();
 
                     if (!childData.hasOwnProperty('active')) { //if Object include active then it means it's not a GPS point with message
-                        users_hash[childData.email].push(childData);
+                        console.log(childData);
+                         users_hash[childData.email].push(childData);
                     }
                 });
 

@@ -1,6 +1,7 @@
 trackerApp.service('googleMapsAPIService', ['$http', function ($http) {
 
     this.getGeoCode = function (cityObj) {
+        console.log('Google Service:: getGeoCode :: City name :: '+ cityObj.city);
         return $http.post('/getGeoCode', cityObj);
     };
 

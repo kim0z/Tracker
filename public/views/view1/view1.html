@@ -1,3 +1,11 @@
+<style type="text/css">
+    #map {
+        height: 600px;
+        width: 1400px;
+        box-shadow: 3px 3px 10px gray;
+    }
+</style>
+
 <aside id="sidebar">
 
     <table class="table table-striped">
@@ -97,6 +105,9 @@
             </td>
             <td>
 
+                <div id="map"></div>
+                <!--
+
                 <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" doRebuildAll="true">
 
                     <ui-gmap-polyline ng-repeat="p in polylines track by $index" path="p.path" stroke="p.stroke" visible='p.visible'
@@ -111,7 +122,7 @@
                                     clickable="c.clickable" control="c.control"></ui-gmap-circle>
                 </ui-gmap-google-map>
 
-
+-->
             </td>
 
         </tr>

@@ -2,10 +2,10 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
     "use strict";
 
     /*
-    $scope.result1 = 'initial value';
-    $scope.options1 = null;
-    $scope.details1 = '';
-    */
+     $scope.result1 = 'initial value';
+     $scope.options1 = null;
+     $scope.details1 = '';
+     */
     var dataTripId;
     $scope.polylines = [];
     $scope.circles = [];
@@ -15,6 +15,17 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
 
     //get trip data to the page
     $scope.trip_id = messages.getTripID();
+
+
+    //$scope.map;
+
+    //Map configuration
+    $scope.map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 34.397, lng: 40.644},
+        zoom: 5,
+        mapTypeId: google.maps.MapTypeId.TERRAIN
+    });
+
 
     if ($scope.trip_id == '') {
         window.open('#/viewError', '_self', false);
@@ -64,7 +75,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
             Promise.resolve(createTable()).then(function (result) {
                 algorithmsService.whenFlightNeeded(result).then(function (result) {
                     $scope.table = result;
-                    for (let dayIndex = 0; dayIndex < $scope.table.length ; dayIndex++) {
+                    for (let dayIndex = 0; dayIndex < $scope.table.length; dayIndex++) {
                         if (!$scope.table[dayIndex].flight.flight) {
                             $scope.flightsByPrice[dayIndex] = false; //it means no need to get flight for this day
                         } else {
@@ -110,16 +121,22 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
         });
     };
 
-    $scope.map = {
-        center: {
-            latitude: 37.79,
-            longitude: -122.4175
-        },
-        zoom: 13
-    };
 
-    $scope.map = {center: {latitude: 44, longitude: -108}, zoom: 4};
-    $scope.options = {scrollwheel: false};
+    /*
+     $scope.map = {
+     center: {
+     latitude: 37.79,
+     longitude: -122.4175
+     },
+     zoom: 13
+     };
+
+     $scope.map = {center: {latitude: 44, longitude: -108}, zoom: 4};
+     $scope.options = {scrollwheel: false};
+
+     */
+
+
     /*     $scope.circles = [
      {
      id: 1,
@@ -374,15 +391,26 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
     function drawCircles(tripId) {
         // dataTripId = {trip_id: $scope.trip_id};
         dataTripId = {trip_id: tripId};
+        var path = [];
+
+
+
+
 
         dataBaseService.getTripById(dataTripId).then(function (results) {
             console.log($scope.circles);
             //load geoCode foe the trio cities
             var polyline = getTemplatePolyLine(); // get polyline template
 
+
+
+
+
             Promise.resolve(LoadGeoCode($scope.tripById[0])).then(function (result) {
                 //loop the results to find the latitude, longitude
                 //push each point to google maps circle and polyline
+
+
                 for (var i = 0; i < result.length; i++) {
 
                     //set map center to be the first destination
@@ -396,24 +424,78 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                         };
                     }
 
+                    console.log('inside')
                     var circle = getTemplate();
                     circle['id'] = i + $scope.circles.length;
                     circle['center'].latitude = result[i]['data'][0]['latitude'];
                     circle['center'].longitude = result[i]['data'][0]['longitude'];
                     $scope.circles.push(circle);
 
-                    polyline[0].path.push({
-                        latitude: result[i]['data'][0]['latitude'],
-                        longitude: result[i]['data'][0]['longitude']
+                    /*
+                     polyline[0].path.push({
+                     latitude: result[i]['data'][0]['latitude'],
+                     longitude: result[i]['data'][0]['longitude']
+                     });
+                     */
+
+                    path.push({
+                        lat: result[i]['data'][0]['latitude'],
+                        lng: result[i]['data'][0]['longitude']
                     });
 
+                    //end
 
-                    $scope.polylines = polyline;
+                    if (i == result.length - 1) { //we already have the Lat, Long of each city, now let's create the line between the cities
+                        //dashed line
+                        var lineSymbol = {
+                            path: 'M 0,-1 0,1',
+                            strokeOpacity: 1,
+                            scale: 4
+                        };
+                        //  var trackPath_users
+
+                        $scope.map = new google.maps.Map(document.getElementById('map'), {
+                            center: {lat: 34.397, lng: 40.644},
+                            zoom: 5,
+                            mapTypeId: google.maps.MapTypeId.TERRAIN
+                        });
+
+
+
+                        var poly = new google.maps.Polyline({
+                            path: path,
+                            map: $scope.map,
+                            geodesic: true,
+                            strokeColor: '#0000FF',
+                            strokeOpacity: 0,
+                            strokeWeight: 2,
+                            icons: [{
+                                icon: lineSymbol,
+                                offset: '0',
+                                repeat: '20px'
+                            }]
+                        });
+
+                   //     poly.setMap($scope.map);
+
+
+                    }
+
+                    // $scope.polylines = polyline;
                 }
+
+                console.log('outside loop');
             }, function (result) {
                 //not called
             });
+
+            console.log('outside');
+
+
         });
+
+
+
     }
 
     function getDateAfterDays(date, days) {
