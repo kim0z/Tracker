@@ -1,4 +1,4 @@
-trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleMapsAPIService, dataBaseService, algorithmsService, messages, NgTableParams) {
+trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleMapsAPIService, dataBaseService, algorithmsService, messages, NgTableParams, localStorageService) {
     "use strict";
 
     /*
@@ -68,42 +68,19 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
             }
             //############################### Google maps - Circles + Polyline #######################################
 
-            drawCircles($scope.trip_id);
+            //help function
+            drawOnMap($scope.trip_id);
 
             //################# Table ############################
 
-            Promise.resolve(createTable()).then(function (result) {
-                algorithmsService.whenFlightNeeded(result).then(function (result) {
-                    $scope.table = result;
-                    for (let dayIndex = 0; dayIndex < $scope.table.length; dayIndex++) {
-                        if (!$scope.table[dayIndex].flight.flight) {
-                            $scope.flightsByPrice[dayIndex] = false; //it means no need to get flight for this day
-                        } else {
-                            //get flights for this day
-                            //get the city name and the dist city name, airport code name required, will be handled later, meanwhile I'm using hardcoded example
-                            var flightParam = {
-                                origin: $scope.table[dayIndex].city,
-                                destination: $scope.table[dayIndex + 1].city,
-                                date: "2015-12-30",
-                                solutions: 10
-                            };
-                            console.log(flightParam);
+            //help function
+            addFlightsToTable();
 
-                            // each result of an flight should be handled in a smart algorithm
-                            googleMapsAPIService.getFlights(flightParam).success(function (data) {
-                                    $scope.flightsByPrice[dayIndex] = algorithmsService.getFlightsByPrice(data);
-                                })
-                                .error(function (data, status) {
-                                    console.error('error', status, data);
-                                })
-                                .finally(function () {
-                                    console.log('finally');
-                                });
-                        }
-                        console.log($scope.flightsByPrice);
-                    }
-                });
-            });
+
+
+
+
+
         });
     }
 
@@ -180,6 +157,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
 
         //save all the general information about the trip
         jsonTripGeneralInfo = {
+            email: localStorageService.get('email'),
             trip_id: messages.getTripID(), //internal use for updating
             trip_name: $scope.tripName,
             trip_description: $scope.tripDescription,
@@ -219,6 +197,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
             });
         //################# Table ############################
 
+        /*
         Promise.resolve(createTable()).then(function (result) {
             algorithmsService.whenFlightNeeded(result).then(function (result) {
                 $scope.table = result;
@@ -251,9 +230,23 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                 }
             });
         });
+        */
+
+        addFlightsToTable();
+
+
         //################# End Table ############################
         //############################### Google maps - Circles + Polyline #######################################
-        drawCircles($scope.trip_id);
+
+        //first get trip again to be updated with new saved data
+        dataTripId = {trip_id: $scope.trip_id};
+        dataBaseService.getTripById(dataTripId).then(function (results) {
+
+            $scope.tripById = results.data;
+
+            drawOnMap($scope.trip_id);
+        });
+
 
         //############################### End Google maps - Circles + Polyline #######################################
 
@@ -388,12 +381,55 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
     }
 
 
-    function drawCircles(tripId) {
+    // table - get flights
+function addFlightsToTable(){
+
+    Promise.resolve(createTable()).then(function (result) {
+        algorithmsService.whenFlightNeeded(result).then(function (result) {
+            $scope.table = result;
+            for (let dayIndex = 0; dayIndex < $scope.table.length; dayIndex++) {
+                if (!$scope.table[dayIndex].flight.flight) {
+                    $scope.flightsByPrice[dayIndex] = false; //it means no need to get flight for this day
+                } else {
+                    //get flights for this day
+                    //get the city name and the dist city name, airport code name required, will be handled later, meanwhile I'm using hardcoded example
+                    var flightParam = {
+                        origin: $scope.table[dayIndex].city,
+                        destination: $scope.table[dayIndex + 1].city,
+                        date: "2015-12-30",
+                        solutions: 10
+                    };
+                    console.log(flightParam);
+
+                    // each result of an flight should be handled in a smart algorithm
+                    googleMapsAPIService.getFlights(flightParam).success(function (data) {
+                            $scope.flightsByPrice[dayIndex] = algorithmsService.getFlightsByPrice(data);
+                        })
+                        .error(function (data, status) {
+                            console.error('error', status, data);
+                        })
+                        .finally(function () {
+                            console.log('finally');
+                        });
+                }
+                console.log($scope.flightsByPrice);
+            }
+        });
+    });
+
+
+}
+
+
+
+
+
+
+// draw path + icons on google maps
+    function drawOnMap(tripId) {
         // dataTripId = {trip_id: $scope.trip_id};
         dataTripId = {trip_id: tripId};
         var path = [];
-
-
 
 
 
@@ -409,6 +445,8 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
             Promise.resolve(LoadGeoCode($scope.tripById[0])).then(function (result) {
                 //loop the results to find the latitude, longitude
                 //push each point to google maps circle and polyline
+
+
 
 
                 for (var i = 0; i < result.length; i++) {
@@ -443,9 +481,21 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                         lng: result[i]['data'][0]['longitude']
                     });
 
+
+
+
                     //end
 
                     if (i == result.length - 1) { //we already have the Lat, Long of each city, now let's create the line between the cities
+
+                        $scope.map = new google.maps.Map(document.getElementById('map'), {
+                            center: {lat: 34.397, lng: 40.644},
+                            zoom: 5,
+                            mapTypeId: google.maps.MapTypeId.TERRAIN
+                        });
+
+
+
                         //dashed line
                         var lineSymbol = {
                             path: 'M 0,-1 0,1',
@@ -453,12 +503,6 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                             scale: 4
                         };
                         //  var trackPath_users
-
-                        $scope.map = new google.maps.Map(document.getElementById('map'), {
-                            center: {lat: 34.397, lng: 40.644},
-                            zoom: 5,
-                            mapTypeId: google.maps.MapTypeId.TERRAIN
-                        });
 
 
 
@@ -475,6 +519,22 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                                 repeat: '20px'
                             }]
                         });
+
+                        poly.setMap($scope.map);
+
+                        for(var i = 0 ; i < path.length ; i++){
+
+
+                            var marker = new google.maps.Marker({
+                                position: path[i],
+                                label: i.toString(),
+                                map: $scope.map
+                            });
+
+
+                            marker.setMap($scope.map);
+                        }
+
 
                    //     poly.setMap($scope.map);
 
