@@ -517,9 +517,8 @@ app.post('/getGeoCode', function (request, response) {
     });
 
 });
-
-
 //////////////////////////////////////////////////DB end ////////////////////////////////////
+
 
 ////////////////////////////////////////////////// DropBox part ///////////////////////////
 
@@ -596,7 +595,6 @@ app.post('/getGpsPoints', function (request, response) {
 
 
 // ################### FireBase - GPS Points from mobile device ############################## //
-
 /*
  //this code should be used to listen for an change in FireBase, when add new GPS point then to push a notification to the client
  FirebaseRef.on('child_added', function(childSnapshot, prevChildKey) {
@@ -642,14 +640,61 @@ function sendGpsPointToClient(GpsPoint) {
 
 
 }
+// #############################   End Firebase    ############################ //
 
 
-// #################################################################
+
+
+
+// ################### SITA           ############################## //
+//https://www.developer.aero/Airport-API/Try-it-Now
+// key1 :: f1aeb34aba3d0613f7cbb81cfd4b9d09
+// key2 :: 76011c36815e36733d4e83188a46c369
+
+//by using this API I can find the X airports close to the lat, long point I will pass to the API.
+
+app.post('/getNearestAirports', function (request, response){
+//curl -v  -X GET "https://airport.api.aero/airport/nearest/31.0461/34.8516?maxAirports=4&user_key=f1aeb34aba3d0613f7cbb81cfd4b9d09"
+
+    var http = require('https'); // get it to the top
+
+//The url we want is: 'www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new'
+    var options = {
+        host: 'airport.api.aero',
+        path: '/airport/nearest/31.0461/34.8516?maxAirports=1&user_key=f1aeb34aba3d0613f7cbb81cfd4b9d09'
+    };
+
+    callback = function(res) {
+        var str = '';
+
+        //another chunk of data has been recieved, so append it to `str`
+        res.on('data', function (chunk) {
+            str += chunk;
+            console.log(str);
+        });
+
+        //the whole response has been recieved, so we just print it out here
+        res.on('end', function () {
+            console.log(str);
+            response.send(str);
+        });
+    }
+
+    http.request(options, callback).end();
+
+
+});
+
+
+//################### End SITA        ############################## //
+
+
+
 
 // ################### Google Flights ############################## //
 
 app.post('/getFlights', function (request, response) {
-
+//Google flights API
     var flightParam = request.body; // {origin:"TLV", destination:"JFK", date:"2015-12-02", solutions: 10};
 
     // create http request client to consume the QPX API
