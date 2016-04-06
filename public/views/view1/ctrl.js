@@ -408,7 +408,6 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                         var destination, destinationAirportCode, destinationAirportName;
 
 
-
                         //get origin city lat, lng to give this to be able to find the nearest airport
                         Promise.resolve(LoadGeoCodeForCity($scope.table[dayIndex]).then(function (resultGeoCodeOrigin) {
 
@@ -418,21 +417,13 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                                 lng: resultGeoCodeOrigin.data[0].longitude
                             };
 
-                            json[origin+dayIndex] = origin;
-
                             //get origin airport code by using SITA service, with the city lat, lng
                             Promise.resolve(flightAPIService.getNearestAirports(origin)).then(function (resultOriginAirport) {
-
-                                // the result return in JSON format
-
-                                console.log(resultOriginAirport.data['airportResponse']['airports'][0]['airports'][0]['code']);
-                                console.log(resultOriginAirport.data['airportResponse']['airports'][0]['airports'][0]['$']['name']);
 
                                 originAirportCode = resultOriginAirport.data['airportResponse']['airports'][0]['airports'][0]['code'];
                                 originAirportName = resultOriginAirport.data['airportResponse']['airports'][0]['airports'][0]['$']['name'];
 
-                                json[originAirportCode+dayIndex] = resultOriginAirport.data['airportResponse']['airports'][0]['airports'][0]['code'];
-                                json[originAirportName+dayIndex] = resultOriginAirport.data['airportResponse']['airports'][0]['airports'][0]['$']['name'];
+                                json['from' + dayIndex] = resultOriginAirport.data['airportResponse']['airports'][0]['airports'][0]['code'];
 
                                 //get destination city lat, lng to give this to be able to find the nearest airport
                                 Promise.resolve(LoadGeoCodeForCity($scope.table[dayIndex + 1]).then(function (resultGeoCodeDes) {
@@ -443,34 +434,17 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                                         lng: resultGeoCodeDes.data[0].longitude
                                     };
 
-                                    json[destination+dayIndex] = destination;
 
                                     //get destination airport code by using SITA service, with the city lat, lng
                                     Promise.resolve(flightAPIService.getNearestAirports(destination)).then(function (resultDestinationAirport) {
 
-                                        // the result return in JSON format
-
-                                        console.log(resultDestinationAirport.data['airportResponse']['airports'][0]['airports'][0]['code']);
-                                        console.log(resultDestinationAirport.data['airportResponse']['airports'][0]['airports'][0]['$']['name']);
-
                                         destinationAirportCode = resultDestinationAirport.data['airportResponse']['airports'][0]['airports'][0]['code'];
                                         destinationAirportName = resultDestinationAirport.data['airportResponse']['airports'][0]['airports'][0]['$']['name'];
 
-                                        json[destinationAirportCode+dayIndex] = resultDestinationAirport.data['airportResponse']['airports'][0]['airports'][0]['code'];
-                                        json[destinationAirportName+dayIndex] =  resultDestinationAirport.data['airportResponse']['airports'][0]['airports'][0]['$']['name'];
-
+                                        json['to' + dayIndex] = resultDestinationAirport.data['airportResponse']['airports'][0]['airports'][0]['code'];
 
 
                                         console.log(json);
-                                        console.log(origin);
-                                        console.log(originAirportCode);
-                                        console.log(originAirportName);
-
-                                        console.log(destination);
-                                        console.log(destinationAirportCode);
-                                        console.log(destinationAirportName);
-
-
 
                                     });
 
@@ -481,10 +455,6 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                         }));
 
                         console.log(json);
-
-
-
-
 
 
                         /*
