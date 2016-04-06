@@ -80,7 +80,6 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
             addFlightsToTable();
 
 
-
         });
     }
 
@@ -198,39 +197,39 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
         //################# Table ############################
 
         /*
-        Promise.resolve(createTable()).then(function (result) {
-            algorithmsService.whenFlightNeeded(result).then(function (result) {
-                $scope.table = result;
-                for (let dayIndex = 0; dayIndex < $scope.table.length - 1; dayIndex++) {
-                    if (!$scope.table[dayIndex].flight.flight) {
-                        $scope.flightsByPrice[dayIndex] = false; //it means no need to get flight for this day
-                    } else {
-                        //get flights for this day
-                        //get the city name and the dist city name, airport code name required, will be handled later, meanwhile I'm using hardcoded example
-                        var flightParam = {
-                            origin: $scope.table[dayIndex].city,
-                            destination: $scope.table[dayIndex + 1].city,
-                            date: "2015-12-30",
-                            solutions: 10
-                        };
-                        console.log(flightParam);
+         Promise.resolve(createTable()).then(function (result) {
+         algorithmsService.whenFlightNeeded(result).then(function (result) {
+         $scope.table = result;
+         for (let dayIndex = 0; dayIndex < $scope.table.length - 1; dayIndex++) {
+         if (!$scope.table[dayIndex].flight.flight) {
+         $scope.flightsByPrice[dayIndex] = false; //it means no need to get flight for this day
+         } else {
+         //get flights for this day
+         //get the city name and the dist city name, airport code name required, will be handled later, meanwhile I'm using hardcoded example
+         var flightParam = {
+         origin: $scope.table[dayIndex].city,
+         destination: $scope.table[dayIndex + 1].city,
+         date: "2015-12-30",
+         solutions: 10
+         };
+         console.log(flightParam);
 
-                        // each result of an flight should be handled in a smart algorithm
-                        googleMapsAPIService.getFlights(flightParam).success(function (data) {
-                                $scope.flightsByPrice[dayIndex] = algorithmsService.getFlightsByPrice(data);
-                            })
-                            .error(function (data, status) {
-                                console.error('error', status, data);
-                            })
-                            .finally(function () {
-                                console.log('finally');
-                            });
-                    }
-                    console.log($scope.flightsByPrice);
-                }
-            });
-        });
-        */
+         // each result of an flight should be handled in a smart algorithm
+         googleMapsAPIService.getFlights(flightParam).success(function (data) {
+         $scope.flightsByPrice[dayIndex] = algorithmsService.getFlightsByPrice(data);
+         })
+         .error(function (data, status) {
+         console.error('error', status, data);
+         })
+         .finally(function () {
+         console.log('finally');
+         });
+         }
+         console.log($scope.flightsByPrice);
+         }
+         });
+         });
+         */
 
         addFlightsToTable();
 
@@ -256,6 +255,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
 //################################################ Blur event end here #################################
 
 // ##################### Google maps ###########################
+    //Load GeoCode for all cities in trip
     function LoadGeoCode(trip) {
 
         var deferred = $q.defer(); // init
@@ -283,6 +283,13 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
             });
 
         return deferred.promise; //return
+    }
+
+    // Load GeoCode for 1 city, day is from table, it's an object that contain data from trip, city name and more
+    function LoadGeoCodeForCity(day) {
+
+        return googleMapsAPIService.getGeoCode(day)
+
     }
 
     //############################ Google maps end ################################
@@ -383,97 +390,177 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
 
 
     // table - get flights
-function addFlightsToTable(){
-
-    var destinationInfo = {};
-    Promise.resolve(createTable()).then(function (result) {
-        algorithmsService.whenFlightNeeded(result).then(function (result) {
-            $scope.table = result;
-            for (let dayIndex = 0; dayIndex < $scope.table.length; dayIndex++) {
-                if (!$scope.table[dayIndex].flight.flight) {
-                    $scope.flightsByPrice[dayIndex] = false; //it means no need to get flight for this day
-                } else {
-                    //get flights for this day
-                    //get the city name and the dist city name, airport code name required, will be handled later, meanwhile I'm using hardcoded example
-
-
-
-                    // get lat lng of the destination city, to be able to check what is the airport code belwo next
-                    Promise.resolve(LoadGeoCode($scope.tripById[0])).then(function (result) {
-                        city_Lat_Lng = result;
-                        var cityDataFromGoogle = getAirPortCode($scope.table[dayIndex + 1].city);
-
-                        //create the object with maxAirports, lat, lang, city name
-                        destinationInfo = {city: $scope.table[dayIndex + 1].city, lat: cityDataFromGoogle.latitude, lng: cityDataFromGoogle.longitude };
-
-                        //get airport code by using SITA service, with the city lat, lng
-                        Promise.resolve(flightAPIService.getNearestAirports(destinationInfo)).then(function (result) {
-
-                            // the result return in JSONP format
-                            //var airportCode = result.data;
-                           // var jsonp = "..";
-
-                            function callback(result) {
-                                alert(result.success); // alerts "Sample Description"
-                            }
-
-                            callback(result);
+    function addFlightsToTable() {
+        var json = {};
+        var destinationInfo = {};
+        Promise.resolve(createTable()).then(function (result) {
+            algorithmsService.whenFlightNeeded(result).then(function (result) {
+                $scope.table = result;
+                for (let dayIndex = 0; dayIndex < $scope.table.length; dayIndex++) {
+                    if (!$scope.table[dayIndex].flight.flight) {
+                        $scope.flightsByPrice[dayIndex] = false; //it means no need to get flight for this day
+                    } else {
+                        //get flights for this day
+                        //get the city name and the dist city name, airport code name required, will be handled later, meanwhile I'm using hardcoded example
 
 
-                            var flightParam = {
-                                origin: $scope.table[dayIndex].city,
-                                destination: $scope.table[dayIndex + 1].city,
-                                date: "2015-12-30",
-                                solutions: 10
+                        var origin, originAirportCode, originAirportName;
+                        var destination, destinationAirportCode, destinationAirportName;
+
+
+
+                        //get origin city lat, lng to give this to be able to find the nearest airport
+                        Promise.resolve(LoadGeoCodeForCity($scope.table[dayIndex]).then(function (resultGeoCodeOrigin) {
+
+                            origin = {
+                                city: $scope.table[dayIndex].city,
+                                lat: resultGeoCodeOrigin.data[0].latitude,
+                                lng: resultGeoCodeOrigin.data[0].longitude
                             };
-                            console.log(flightParam);
 
-                            // each result of an flight should be handled in a smart algorithm
-                            googleMapsAPIService.getFlights(flightParam).success(function (data) {
-                                    $scope.flightsByPrice[dayIndex] = algorithmsService.getFlightsByPrice(data);
-                                })
-                                .error(function (data, status) {
-                                    console.error('error', status, data);
-                                })
-                                .finally(function () {
-                                    console.log('finally');
-                                });
+                            json[origin+dayIndex] = origin;
+
+                            //get origin airport code by using SITA service, with the city lat, lng
+                            Promise.resolve(flightAPIService.getNearestAirports(origin)).then(function (resultOriginAirport) {
+
+                                // the result return in JSON format
+
+                                console.log(resultOriginAirport.data['airportResponse']['airports'][0]['airports'][0]['code']);
+                                console.log(resultOriginAirport.data['airportResponse']['airports'][0]['airports'][0]['$']['name']);
+
+                                originAirportCode = resultOriginAirport.data['airportResponse']['airports'][0]['airports'][0]['code'];
+                                originAirportName = resultOriginAirport.data['airportResponse']['airports'][0]['airports'][0]['$']['name'];
+
+                                json[originAirportCode+dayIndex] = resultOriginAirport.data['airportResponse']['airports'][0]['airports'][0]['code'];
+                                json[originAirportName+dayIndex] = resultOriginAirport.data['airportResponse']['airports'][0]['airports'][0]['$']['name'];
+
+                                //get destination city lat, lng to give this to be able to find the nearest airport
+                                Promise.resolve(LoadGeoCodeForCity($scope.table[dayIndex + 1]).then(function (resultGeoCodeDes) {
+
+                                    destination = {
+                                        city: $scope.table[dayIndex + 1].city,
+                                        lat: resultGeoCodeDes.data[0].latitude,
+                                        lng: resultGeoCodeDes.data[0].longitude
+                                    };
+
+                                    json[destination+dayIndex] = destination;
+
+                                    //get destination airport code by using SITA service, with the city lat, lng
+                                    Promise.resolve(flightAPIService.getNearestAirports(destination)).then(function (resultDestinationAirport) {
+
+                                        // the result return in JSON format
+
+                                        console.log(resultDestinationAirport.data['airportResponse']['airports'][0]['airports'][0]['code']);
+                                        console.log(resultDestinationAirport.data['airportResponse']['airports'][0]['airports'][0]['$']['name']);
+
+                                        destinationAirportCode = resultDestinationAirport.data['airportResponse']['airports'][0]['airports'][0]['code'];
+                                        destinationAirportName = resultDestinationAirport.data['airportResponse']['airports'][0]['airports'][0]['$']['name'];
+
+                                        json[destinationAirportCode+dayIndex] = resultDestinationAirport.data['airportResponse']['airports'][0]['airports'][0]['code'];
+                                        json[destinationAirportName+dayIndex] =  resultDestinationAirport.data['airportResponse']['airports'][0]['airports'][0]['$']['name'];
 
 
 
-                        });
+                                        console.log(json);
+                                        console.log(origin);
+                                        console.log(originAirportCode);
+                                        console.log(originAirportName);
+
+                                        console.log(destination);
+                                        console.log(destinationAirportCode);
+                                        console.log(destinationAirportName);
+
+
+
+                                    });
+
+                                }));
+
+                            });
+
+                        }));
+
+                        console.log(json);
 
 
 
 
-                    });
 
 
+                        /*
+                         // get lat lng of the destination city, to be able to check what is the airport code below next
+                         Promise.resolve(LoadGeoCodeForCity($scope.table[dayIndex])).then(function (result) {
+                         //city_Lat_Lng = result;
+                         var cityDataFromGoogle = getAirPortCode($scope.table[dayIndex].city);
+
+                         //create the object with maxAirports, lat, lang, city name
+                         destinationInfo = {
+                         city: $scope.table[dayIndex + 1].city,
+                         lat: cityDataFromGoogle.latitude,
+                         lng: cityDataFromGoogle.longitude
+                         };
+
+                         //get airport code by using SITA service, with the city lat, lng
+                         Promise.resolve(flightAPIService.getNearestAirports(destinationInfo)).then(function (result) {
+
+                         // the result return in JSON format
+
+                         console.log(result.data['airportResponse']['airports'][0]['airports'][0]['code']);
+                         console.log(result.data['airportResponse']['airports'][0]['airports'][0]['$']['name']);
+
+                         var airportCode = result.data['airportResponse']['airports'][0]['airports'][0]['code'];
+                         var airportName = result.data['airportResponse']['airports'][0]['airports'][0]['$']['name'];
+
+
+                         var flightParam = {
+                         origin: $scope.table[dayIndex].city,
+                         destination: $scope.table[dayIndex + 1].city,
+                         date: "2015-12-30",
+                         solutions: 10
+                         };
+                         console.log(flightParam);
+
+                         // each result of an flight should be handled in a smart algorithm
+                         googleMapsAPIService.getFlights(flightParam).success(function (data) {
+                         $scope.flightsByPrice[dayIndex] = algorithmsService.getFlightsByPrice(data);
+                         })
+                         .error(function (data, status) {
+                         console.error('error', status, data);
+                         })
+                         .finally(function () {
+                         console.log('finally');
+                         });
+
+
+                         });
+
+
+                         });
+                         */
+
+                    }
+                    console.log($scope.flightsByPrice);
                 }
-                console.log($scope.flightsByPrice);
-            }
+            });
         });
-    });
 
 
-}
-
-
-function getAirPortCode(city){
-
-    if(city_Lat_Lng){
-        for(var i = 0 ; i < city_Lat_Lng.length ; i++ ){
-            if(city.indexOf( city_Lat_Lng[i].data[0].city) > -1){
-                return city_Lat_Lng[i].data[0]
-                break;
-            }
-        }
     }
 
 
+    function getAirPortCode(city) {
 
-}
+        if (city_Lat_Lng) {
+            for (var i = 0; i < city_Lat_Lng.length; i++) {
+                if (city.indexOf(city_Lat_Lng[i].data[0].city) > -1) {
+                    return city_Lat_Lng[i].data[0]
+                    break;
+                }
+            }
+        }
 
+
+    }
 
 
 // draw path + icons on google maps
@@ -483,14 +570,10 @@ function getAirPortCode(city){
         var path = [];
 
 
-
         dataBaseService.getTripById(dataTripId).then(function (results) {
             console.log($scope.circles);
             //load geoCode foe the trio cities
             var polyline = getTemplatePolyLine(); // get polyline template
-
-
-
 
 
             Promise.resolve(LoadGeoCode($scope.tripById[0])).then(function (result) {
@@ -498,7 +581,7 @@ function getAirPortCode(city){
                 //push each point to google maps circle and polyline
 
 
-               // city_Lat_Lng = result;
+                // city_Lat_Lng = result;
 
                 for (var i = 0; i < result.length; i++) {
 
@@ -533,8 +616,6 @@ function getAirPortCode(city){
                     });
 
 
-
-
                     //end
 
                     if (i == result.length - 1) { //we already have the Lat, Long of each city, now let's create the line between the cities
@@ -546,7 +627,6 @@ function getAirPortCode(city){
                         });
 
 
-
                         //dashed line
                         var lineSymbol = {
                             path: 'M 0,-1 0,1',
@@ -554,7 +634,6 @@ function getAirPortCode(city){
                             scale: 4
                         };
                         //  var trackPath_users
-
 
 
                         var poly = new google.maps.Polyline({
@@ -573,7 +652,7 @@ function getAirPortCode(city){
 
                         poly.setMap($scope.map);
 
-                        for(var i = 0 ; i < path.length ; i++){
+                        for (var i = 0; i < path.length; i++) {
 
 
                             var marker = new google.maps.Marker({
@@ -587,7 +666,7 @@ function getAirPortCode(city){
                         }
 
 
-                   //     poly.setMap($scope.map);
+                        //     poly.setMap($scope.map);
 
 
                     }
@@ -604,7 +683,6 @@ function getAirPortCode(city){
 
 
         });
-
 
 
     }

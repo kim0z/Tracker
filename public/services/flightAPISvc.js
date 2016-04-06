@@ -5,9 +5,9 @@ trackerApp.service('flightAPIService', ['$http', function ($http) {
 
         return $http.post('/getNearestAirports', dataObj);
 
-        //// the result return in JSONP format
+        //// the result return in JSON format (Server converted the response from XML to JSON)
         //answer looks like:
-        // callback({"processingDurationMillis":5,"authorisedAPI":true,"success":true,"airline":null,"errorMessage":null,"airports":[{"code":"TLV","name":"Ben Gurion","city":"Tel-aviv","country":"Israel","timezone":"Asia/Jerusalem","lat":32.011389,"lng":34.886667,"terminal":null,"gate":null}]})
+        //{"airportResponse":{"$":{"authorisedAPI":"true","processingDurationMillis":"119","success":"true"},"airports":[{"airports":[{"$":{"city":"Tel-aviv","country":"Israel","lat":"32.011389","lng":"34.886667","name":"Ben Gurion","timezone":"Asia/Jerusalem"},"code":["TLV"]}]}]}}
     };
 
 }]);
