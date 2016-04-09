@@ -15,7 +15,7 @@
 
         <tr>
             <td>
-                <form name="tripDefinitionForm" style="overflow:scroll;   height: 600px; ">
+                <form name="tripDefinitionForm" style="overflow:scroll; height: 600px; ">
                     <table class="fixed" border="0" style="text-align: center;">
                         <col width="150px"/>
                         <col width="200px"/>
@@ -24,7 +24,7 @@
 
                             <td><label class="label1">Trip name:</label></td>
                             <td><input type="text" name="inputTripName" ng-model="tripName" class="form-control"
-                                       ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
+                                       ng-pattern="example.word" ng-blur="onBlur($event)">
                             </td>
                         </tr>
 
@@ -35,7 +35,7 @@
                             </td>
                             <td>
                                 <input type="text" name="inputTripDesc" class="form-control" ng-model="tripDescription"
-                                       ng-pattern="example.word" required ng-trim="false" ng-blur="onBlur($event)">
+                                       ng-pattern="example.word" ng-blur="onBlur($event)">
 
                             </td>
                         </tr>
@@ -48,7 +48,7 @@
                             <td>
                                 <datepicker date-format="MMMM d, y" datepicker-append-to-body=true>
                                     <input name="inputStartDate" ng-model="dateStart" class="form-control" type="text"
-                                           ng-blur="onBlur($event)"/>
+                                           />
                                 </datepicker>
                             </td>
                         </tr>
@@ -80,7 +80,7 @@
                                 <input type="text" name="inputDest{{$index + 1}}" ng-model="dest.city"
                                        ng-blur="onBlur(dest)">
                                  -->
-                                <input type="text" name="inputDest{{$index + 1}}" id="Autocomplete" class="form-control" ng-autocomplete ng-model="dest.city" ng-blur="onBlur(dest)" />
+                                <input type="text" name="inputDest{{$index + 1}}" id="Autocomplete" class="form-control" ng-autocomplete ng-model="dest.city" />
 
 
                             </td>

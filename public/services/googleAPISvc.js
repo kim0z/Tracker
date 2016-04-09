@@ -5,6 +5,7 @@ trackerApp.service('googleMapsAPIService', ['$http', function ($http) {
         return $http.post('/getGeoCode', cityObj);
     };
 
+
     this.getGeoCodeForArray = function (citiesObj) {
         var citiesGeo = [];
 
