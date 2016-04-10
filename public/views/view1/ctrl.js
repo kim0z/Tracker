@@ -138,22 +138,32 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
             var promises = [];
             for (let i = 0; i < $scope.destinations.length; i++) {
 
-                jsonTripTableCity['city' + i] = $scope.destinations[i].city;
+
 
                 var promise = LoadGeoCodeForCity({city: $scope.destinations[i].city});
+
                 promise.then(function (res) {
+
                     jsonTripTableCity['cityGoogleInf' + i] = res.data;
-                    tableArray.push(jsonTripTableCity);
+
+                    jsonTripTableCity['city' + i] = $scope.destinations[i].city;
+                    jsonTripTableCity['days' + i] = $scope.destinations[i].days;
+                    jsonTripTableCity['general' + i] = {flight: '', hotel: '', car: '', action1: '', action2: ''};
+
+
+                    tableArray[i] = jsonTripTableCity;
                     jsonTripTableCity = {};
+
                 }, function (err) {
                     console.error('one promise failed', err);
                 });
 
                 promises.push(promise);
 
-                jsonTripTableCity['days' + i] = $scope.destinations[i].days;
-                jsonTripTableCity['general' + i] = {flight: '', hotel: '', car: '', action1: '', action2: ''};
+
             }
+
+
 
             $q.all(promises).then(function (results) {
                 afterTripJsonIsReadyToSaved(results);
@@ -324,14 +334,14 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
             var table = [];
 
             var dayNumber = 0;
-            for (var i = 0; i < $scope.destinations.length; i++) {
-                for (var j = 0; j < $scope.destinations[i].days; j++) {
+            for (var i = 0; i < result['data'][0]['table_plan'].length; i++) {
+                for (var j = 0; j < result['data'][0]['table_plan'][0]['days'+i]; j++) {
                     dayNumber++;
                     var day = {
                         //  date: $scope.dateStart,
-                        date: result[0]['star_date'],
+                        date: result['data'][0]['start_date'],
                         day: dayNumber,
-                        city: $scope.destinations[i].city,
+                        city: result['data'][0]['table_plan'][0]['city'+i],
                         flight: {flight: false, airport: [], price: 0},
                         car: '',
                         action1: '',
