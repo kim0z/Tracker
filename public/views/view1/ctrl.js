@@ -19,9 +19,6 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
     //get trip data to the page
     $scope.trip_id = messages.getTripID();
 
-
-    //$scope.map;
-
     //Map configuration
     $scope.map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 34.397, lng: 40.644},
@@ -79,7 +76,11 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                 //################# Table ############################
 
                 //help function
-                addFlightsToTable();
+               // addFlightsToTable();
+
+
+                //Create Table
+                createTable();
 
 
             }
@@ -195,14 +196,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                 });
 
             //Create Table
-            Promise.resolve(createTable()).then(function (result) {
-
-                $scope.table = result;
-
-                //check for flights
-
-                addFlightsToTable();
-            });
+            createTable();
 
             //Draw path on Map :: first get trip again to be updated with new saved data
             dataTripId = {trip_id: $scope.trip_id};
@@ -335,13 +329,13 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
 
             var dayNumber = 0;
             for (var i = 0; i < result['data'][0]['table_plan'].length; i++) {
-                for (var j = 0; j < result['data'][0]['table_plan'][0]['days'+i]; j++) {
+                for (var j = 0; j < result['data'][0]['table_plan'][i]['days'+i]; j++) {
                     dayNumber++;
                     var day = {
                         //  date: $scope.dateStart,
                         date: result['data'][0]['start_date'],
                         day: dayNumber,
-                        city: result['data'][0]['table_plan'][0]['city'+i],
+                        city: result['data'][0]['table_plan'][i]['city'+i],
                         flight: {flight: false, airport: [], price: 0},
                         car: '',
                         action1: '',
@@ -354,7 +348,11 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                     day = '';
                 }
             }
+            //return table;
+            $scope.table = table;
         });
+
+
         /*
         var deferred = $q.defer();
         var table = [];
