@@ -195,14 +195,16 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                     console.log("failure message: " + JSON.stringify({data: data}));
                 });
 
-            //Create Table
-            createTable();
+
 
             //Draw path on Map :: first get trip again to be updated with new saved data
             dataTripId = {trip_id: $scope.trip_id};
             dataBaseService.getTripById(dataTripId).then(function (results) {
                 $scope.tripById = results.data;
                 drawOnMap($scope.trip_id);
+
+                //Create Table
+                createTable();
             });
         }
     }
@@ -340,7 +342,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                         car: '',
                         action1: '',
                         action2: '',
-                        cityGoogleInf:  ''
+                        cityGoogleInf: result['data'][0]['table_plan'][i]['cityGoogleInf'+i]
                     };
 
                     table.push(day);
