@@ -661,7 +661,7 @@ app.post('/getNearestAirports', function (request, response){
 //The url we want is: 'www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new'
     var options = {
         host: 'airport.api.aero',
-        path: '/airport/nearest/'+request.body.lat+'/'+request.body.lng+'?maxAirports=1&user_key=f1aeb34aba3d0613f7cbb81cfd4b9d09',
+        path: '/airport/nearest/'+request.body.lat+'/'+request.body.lng+'?maxAirports='+request.body.maxAirports+'&user_key=f1aeb34aba3d0613f7cbb81cfd4b9d09',
         headers: {'accept': 'application/xml'}
     };
 
