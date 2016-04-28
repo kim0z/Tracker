@@ -737,8 +737,8 @@ app.post('/getFlights', function (request, response) {
     url = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=AIzaSyBgSxdli3zXpI3dPtFR9H0fbVZIcSZOvyo"
 
     // fire request
-    /*
-     request({
+
+     /*request({
      url: url,
      method: "POST",
      json: requestData
@@ -746,7 +746,7 @@ app.post('/getFlights', function (request, response) {
      }, function (error, res, body) {
      if (!error && res.statusCode === 200) {
      console.log(body);
-     //response.send(body);
+     response.send(body);
      }
      else {
 
@@ -755,8 +755,8 @@ app.post('/getFlights', function (request, response) {
      console.log("response.statusText: " + response.statusText);
 
      }
-     })
-     */
+     })*/
+
 
     response.send(tmp);
 });
