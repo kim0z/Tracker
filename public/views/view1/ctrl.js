@@ -70,7 +70,10 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
 
                 //help function
                 // if(results.data[0].table_plan.length != null) //when the trip just created, nothing to draw
-                drawOnMap($scope.trip_id);
+
+                //call draw when cities > 1
+                if($scope.destinations.length > 1)
+                    drawOnMap($scope.trip_id);
 
                 //################# Table ############################
 
@@ -78,14 +81,6 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                 //Create Table
 
                 createTable();
-
-
-
-
-
-
-
-                //help function
 
             }
         });
@@ -195,7 +190,10 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
             dataTripId = {trip_id: $scope.trip_id};
             dataBaseService.getTripById(dataTripId).then(function (results) {
                 $scope.tripById = results.data;
-                drawOnMap($scope.trip_id);
+
+                //call draw when cities > 1
+                if($scope.destinations.length > 1)
+                    drawOnMap($scope.trip_id);
 
                 //Create Table
                 createTable();
@@ -347,7 +345,8 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
             //return table;
             $scope.table = table;
 
-            addFlightsToTable();
+            if(dayNumber > 1)
+                addFlightsToTable();
 
 
         });
@@ -498,22 +497,10 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
                             marker.setMap($scope.map);
                         }
 
-
-                        //     poly.setMap($scope.map);
-
-
                     }
 
-                    // $scope.polylines = polyline;
                 }
-
                 console.log('outside loop');
-          /*  }, function (result) {
-                //not called
-            });
-
-            console.log('outside');*/
-
 
         });
 
