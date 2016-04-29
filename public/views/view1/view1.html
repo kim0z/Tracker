@@ -164,10 +164,13 @@
                             </button>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="mydp" style="width: 200px">
                                 <div ng-repeat="tickets in flights.flight.tickets track by $index">
-                                    <li ng-repeat="ticket in tickets.data.trips.tripOption track by $index">{{ticket.saleTotal}}<a href="#"></a>
-                                    </li>
                                     <li class="divider"></li>
-                                    <li><a href="#">Separated link</a>
+                                    <li><a href="#">{{tickets.config.data.origin}} ->
+                                        {{tickets.config.data.destination}}</a>
+                                    </li>
+
+                                    <li ng-repeat="ticket in tickets.data.trips.tripOption track by $index">
+                                        {{ticket.saleTotal}}<a href="#"></a>
                                     </li>
                                 </div>
                             </ul>

@@ -737,7 +737,7 @@ app.post('/getFlights', function (request, response) {
     url = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=AIzaSyBgSxdli3zXpI3dPtFR9H0fbVZIcSZOvyo"
 
     // fire request
-
+/*
      request({
      url: url,
      method: "POST",
@@ -756,9 +756,9 @@ app.post('/getFlights', function (request, response) {
 
      }
      })
+*/
 
-
-    //response.send(tmp);
+    response.send(tmp);
 });
 
 
