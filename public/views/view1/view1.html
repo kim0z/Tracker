@@ -48,7 +48,7 @@
                             <td>
                                 <datepicker date-format="MMMM d, y" datepicker-append-to-body=true>
                                     <input name="inputStartDate" ng-model="dateStart" class="form-control" type="text"
-                                           />
+                                    />
                                 </datepicker>
                             </td>
                         </tr>
@@ -60,8 +60,9 @@
                             </td>
                             <td>
                                 <datepicker date-format="MMMM d, y">
-                                        <!--    style="position: absolute; width: 100px; height: 150px;"> -->
-                                    <input name="inputEndDate" ng-model="dateEnd" type="text" class="form-control" ng-blur="onBlur($event)"/>
+                                    <!--    style="position: absolute; width: 100px; height: 150px;"> -->
+                                    <input name="inputEndDate" ng-model="dateEnd" type="text" class="form-control"
+                                           ng-blur="onBlur($event)"/>
                                 </datepicker>
                             </td>
                         </tr>
@@ -80,7 +81,8 @@
                                 <input type="text" name="inputDest{{$index + 1}}" ng-model="dest.city"
                                        ng-blur="onBlur(dest)">
                                  -->
-                                <input type="text" name="inputDest{{$index + 1}}" id="Autocomplete" class="form-control" ng-autocomplete ng-model="dest.city" />
+                                <input type="text" name="inputDest{{$index + 1}}" id="Autocomplete" class="form-control"
+                                       ng-autocomplete ng-model="dest.city"/>
 
 
                             </td>
@@ -88,7 +90,8 @@
                                 <label class="label1">Days:</label>
                             </td>
                             <td style="width: 50px">
-                                <input style="width: 45px" type="text" name="inputDays{{$index + 1}}" class="form-control" ng-model="dest.days"
+                                <input style="width: 45px" type="text" name="inputDays{{$index + 1}}"
+                                       class="form-control" ng-model="dest.days"
                                        ng-blur="onBlur(dest)">
                             </td>
                         </tr>
@@ -129,8 +132,9 @@
 
         <tr>
 
-<!-- I think no need for usersTable, I am using $scope.items instead -->
-            <table ng-table="usersTable" class="table table-striped" style="text-align: center; overflow:scroll; height:200px; width: 1000px" border="0">
+            <!-- I think no need for usersTable, I am using $scope.items instead -->
+            <table ng-table="usersTable" class="table table-striped"
+                   style="text-align: center; overflow:scroll; height:200px; width: 1000px" border="0">
                 <tr>
                     <td>Date</td>
                     <td ng-repeat="item in table track by $index">{{item.date}}</td>
@@ -148,28 +152,30 @@
 
                 <tr>
                     <td>Flight</td>
-                    <td ng-repeat="item in flightsByPrice track by $index">
+                    <td ng-repeat="flights in table track by $index">
                         <!-- Split button -->
 
-                        <div ng-if="item != false " class="btn-group dropdown">
+                        <div ng-if="flights.flight.flight != false " class="btn-group dropdown">
                             <button type="button" class="btn btn-info" style="width: 200px">Select Flight</button>
-                            <button type="button" class="btn btn-info dropdown-toggle" id="mydp" data-toggle="dropdown" aria-haspopup="true" >
+                            <button type="button" class="btn btn-info dropdown-toggle" id="mydp" data-toggle="dropdown"
+                                    aria-haspopup="true">
                                 <span class="caret"></span>
                                 <span class="sr-only">Split button!</span>
                             </button>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="mydp" style="width: 200px">
-                                <li ng-repeat="item in flightsByPrice[$index]"><a href="#">{{item.saleTotal}}</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a>
-                                </li>
+                                <div ng-repeat="tickets in flights.flight.tickets track by $index">
+                                    <li ng-repeat="ticket in tickets.data.trips.tripOption track by $index">{{ticket.saleTotal}}<a href="#"></a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">Separated link</a>
+                                    </li>
+                                </div>
                             </ul>
                         </div>
 
-                        <label ng-if="item == false" >
+                        <label ng-if="item == false">
                             Flight not required!
                         </label>
-
 
 
                     </td>
@@ -205,7 +211,7 @@
                     <td ng-repeat="item in table">
                         <!-- Split button -->
                         <div class="btn-group" dropdown>
-                            <button type="button" style="width: 200px" class="btn btn-info"> Get Car </button>
+                            <button type="button" style="width: 200px" class="btn btn-info"> Get Car</button>
                             <button type="button" class="btn btn-info dropdown-toggle">
                                 <span class="caret"></span>
                                 <span class="sr-only">Split button!</span>
@@ -232,7 +238,8 @@
 
                         <div class="btn-group dropdown">
                             <button type="button" class="btn btn-info" style="width: 200px">Select Action</button>
-                            <button type="button" class="btn btn-info dropdown-toggle" id="actions" data-toggle="dropdown" aria-haspopup="true" >
+                            <button type="button" class="btn btn-info dropdown-toggle" id="actions"
+                                    data-toggle="dropdown" aria-haspopup="true">
                                 <span class="caret"></span>
                                 <span class="sr-only">Split button!</span>
                             </button>
@@ -250,7 +257,8 @@
                 <tr>
                     <td>Expense</td>
                     <td align="center" ng-repeat="item in table">
-                        <input class="form-control" style="width: 230px; height: 60px" type="text" name="input" ng-model="action.text"
+                        <input class="form-control" style="width: 230px; height: 60px" type="text" name="input"
+                               ng-model="action.text"
                                ng-pattern="example.word" required ng-trim="false">
                     </td>
                 </tr>

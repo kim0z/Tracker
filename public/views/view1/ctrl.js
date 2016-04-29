@@ -360,7 +360,13 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
 
         //algorithmsService.buildFlights($scope.table));
         algorithmsService.buildFlights($scope.table).then(function(){
-            console.log('all done done!',$scope.table);
+            console.log('all flights done and ready to be presented into UI!',$scope.table);
+
+
+
+
+
+
         });
 
 

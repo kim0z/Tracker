@@ -738,7 +738,7 @@ app.post('/getFlights', function (request, response) {
 
     // fire request
 
-     /*request({
+     request({
      url: url,
      method: "POST",
      json: requestData
@@ -755,10 +755,10 @@ app.post('/getFlights', function (request, response) {
      console.log("response.statusText: " + response.statusText);
 
      }
-     })*/
+     })
 
 
-    response.send(tmp);
+    //response.send(tmp);
 });
 
 
