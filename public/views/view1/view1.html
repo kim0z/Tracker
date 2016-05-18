@@ -16,7 +16,7 @@
         <tr>
             <td>
                 <form name="tripDefinitionForm" style="overflow:scroll; height: 600px; ">
-                    <table class="fixed" border="0" style="text-align: center;">
+                    <table  border="0" style="text-align: center;">
                         <col width="150px"/>
                         <col width="200px"/>
                         <tr>
@@ -46,7 +46,7 @@
                                 <label class="label1">Start date:</label>
                             </td>
                             <td>
-                                <datepicker date-format="MMMM d, y" datepicker-append-to-body=true>
+                                <datepicker date-format="MMMM d, y" datepicker-append-to-body=true >
                                     <input name="inputStartDate" ng-model="dateStart" class="form-control" type="text"
                                     />
                                 </datepicker>
@@ -109,23 +109,6 @@
             <td>
 
                 <div id="map"></div>
-                <!--
-
-                <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" doRebuildAll="true">
-
-                    <ui-gmap-polyline ng-repeat="p in polylines track by $index" path="p.path" stroke="p.stroke" visible='p.visible'
-                                      geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"
-                                      icons='p.icons'></ui-gmap-polyline>
-
-                    <ui-gmap-circle ng-repeat="c in circles track by $index" center="c.center" stroke="c.stroke"
-                                    fill="c.fill"
-                                    radius="c.radius"
-                                    visible="c.visible" geodesic="c.geodesic" editable="c.editable"
-                                    draggable="c.draggable"
-                                    clickable="c.clickable" control="c.control"></ui-gmap-circle>
-                </ui-gmap-google-map>
-
--->
             </td>
 
         </tr>

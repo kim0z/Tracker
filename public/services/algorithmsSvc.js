@@ -54,12 +54,12 @@ trackerApp.service('algorithmsService', ['$http', '$q', 'flightAPIService', 'goo
                     //get origin airport code by using SITA service, with the city lat, lng
                     //dataObj.maxAirports+' airport for lat: '+dataObj.lat+'lng:'+dataObj.lng
                     var origin = {
-                        maxAirports: 3,
+                        maxAirports: 5,
                         lat: table[dayIndex]['cityGoogleInf'][0].latitude,
                         lng: table[dayIndex]['cityGoogleInf'][0].longitude
                     };
                     var dist = {
-                        maxAirports: 3,
+                        maxAirports: 5,
                         lat: table[dayIndex + 1]['cityGoogleInf'][0].latitude,
                         lng: table[dayIndex + 1]['cityGoogleInf'][0].longitude
                     };
@@ -150,8 +150,8 @@ trackerApp.service('algorithmsService', ['$http', '$q', 'flightAPIService', 'goo
                 var flight = {
                     origin: originAirports[i]['code'][0],
                     destination: distAirports[j]['code'][0],
-                    //date: flightDate.substring(0,10),
-                    date: '2016-05-18',
+                    date: flightDate.substring(0,10),
+                   // date: '2016-05-18',
                     solutions: 10
                 };
                 console.log(flight);
