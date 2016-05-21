@@ -54,6 +54,11 @@ var trackerApp = angular.module('myApp', [
                 url: "/login",
                 templateUrl: "views/login/login.html",
                 controller: 'login'
+            })
+            .state('offlinemap', {
+                url: "/offlinemap",
+                templateUrl: "views/offlinemap/offlinemap.html",
+                controller: 'offlinemapCtrl'
             });
     })
     .config([

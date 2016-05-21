@@ -16,6 +16,12 @@ trackerApp.controller('view3Ctrl', function ($scope, $http,$window, googleMapsAP
     // Main Controller
 
 
+    //Open actual map for the trip (the map after the trip was executed), this functionality should be available when the trip end date < current date
+    $scope.showActualMap = function(trip_id){
+        console.log('Client:: Click Shoe actual map - trip :: id:: '+ trip_id);
+        messages.saveTripID(trip_id); //save trip id into message
+        window.open ('#/offlinemap', '_self', false);
+    }
 
     //Edit the current trip, get the trip id and send to planning page
     $scope.editTrip = function(trip_id){

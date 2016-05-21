@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<head>
+    <!--
+    <link rel="stylesheet" href="assets/css/style_realtime.css">
+    -->
+
+    <style type="text/css">
+        #map {
+            height: 800px;
+            width: 1300px;
+            box-shadow: 3px 3px 10px gray;
+        }
+    </style>
+</head>
+<body>
+
+<table class="table table-striped" style="position: fixed">
+    <col width="500px"/>
+    <col width="1300"/>
+    <col width="300px"/>
+
+    <tr>
+
+
+        <td>
+            <P style="text-decoration:underline;">Find travellers around the world, learn, join and share ..
+            <P>
+
+            <div id="map"></div>
+
+        </td>
+
+        <td style="height: 200px">
+            <P style="text-decoration:underline;">Real-Time Tips from travellers
+
+            <P>
+
+                <div class="list-group" ng-repeat="tip in tips">
+                    <a href="#" class="list-group-item active">
+                        <h4 class="list-group-item-heading">{{tip.message}}</h4>
+            <p class="list-group-item-text">{{tip.email}}</p>
+            <p class="list-group-item-text">{{tip.timestamp}}</p>
+            </a>
+
+            </div>
+
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+
+    </tr>
+
+</table>
