@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <!--[if lt IE 7]>
 <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -8,6 +10,31 @@
 <!--[if gt IE 8]><!-->
 <html class="html" lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
 <head>
+
+    <style>
+        .user {
+            display: inline-block;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+        }
+
+        .one {
+            background-image: url('http://graph.facebook.com/102211533498839/picture');
+        }
+
+        .two {
+            background-image: url('http://placehold.it/150x150');
+        }
+
+        .three {
+            background-image: url('http://placehold.it/350x750');
+        }
+
+    </style>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>My AngularJS App</title>
@@ -41,6 +68,8 @@
             <md-button ng-controller="login1" type="button" class="btn btn-danger btn-large" data-ng-show="logged" data-ng-disabled="!facebookReady" data-ng-click="logout()">Logout</md-button>
 
 
+            <div class="user one">
+            </div>
 
         </h3>
     </div>
@@ -89,6 +118,11 @@
 <!-- ngAria-->
 <script src='bower_components/angular-aria/angular-aria.js'></script>
 <!-- end of - used for the list in my trips -->
+
+
+<!-- AWS SDK -->
+<script src='bower_components/aws-sdk/dist/aws-sdk.min.js'></script>
+
 
 <!-- socket.io -->
  <script src="https://cdn.socket.io/socket.io-1.4.3.js"></script>

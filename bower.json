@@ -23,6 +23,7 @@
     "socket.io": "~1.4.4",
     "angular-facebook": "~0.2.3",
     "satellizer": "~0.13.4",
-    "angular-local-storage": "~0.2.3"
+    "angular-local-storage": "~0.2.3",
+    "aws-sdk": "aws-sdk-js#~2.3.14"
   }
 }

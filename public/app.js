@@ -218,6 +218,7 @@ trackerApp.controller('login1',
                         //should add, check is storage supported by browser
                         localStorageService.set('user', $scope.user.name);
                         localStorageService.set('email', $scope.user.email);
+                        localStorageService.set('userID', $scope.user.id);
 
                         if (!results.data.rows[0].exists) {
 

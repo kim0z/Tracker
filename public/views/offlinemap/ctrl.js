@@ -1,6 +1,36 @@
-trackerApp.controller('offlinemapCtrl', function ($scope, $firebaseObject, $http, $document, dataBaseService, messages) {
+trackerApp.controller('offlinemapCtrl', function ($scope, $firebaseObject, $http, $document, dataBaseService, messages, localStorageService) {
 
-        $scope.user = messages.getUser();
+//AWS Config
+
+
+
+
+        AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
+
+        // Configure your region
+        AWS.config.region = 'us-west-2';
+
+
+        var bucket = new AWS.S3({params: {Bucket: 'tracker.photos'}});
+        bucket.listObjects(function (err, data) {
+            if (err) {
+                document.getElementById('status').innerHTML =
+                    'Could not load objects from S3';
+            } else {
+                document.getElementById('status').innerHTML =
+                    'Loaded ' + data.Contents.length + ' items from S3';
+                for (var i = 0; i < data.Contents.length; i++) {
+                    document.getElementById('objects').innerHTML +=
+                        '<li>' + data.Contents[i].Key + '</li>';
+                }
+            }
+        });
+
+
+
+
+        $scope.user = messages.getUser(); //replace with local service like next line
+        $scope.email = localStorageService.get('email');
         $scope.travelersList = [];
         $scope.data = []; // Travellers from PG DB
         $scope.tips = []; // Tips from Firebase, based on GPS point
@@ -144,7 +174,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $firebaseObject, $http
                     var childData = childSnapshot.val();
 
                     if (!childData.hasOwnProperty('active')) { //if Object include active then it means it's not a GPS point with message
-                       if(childData.email = "aladdin_dejvjmt_tracker@tfbnw.net"){
+                       if(childData.email = $scope.email){
                            console.log(childData);
                            users_hash[childData.email].push(childData);
                        }
@@ -221,7 +251,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $firebaseObject, $http
 
                 if (!childData.hasOwnProperty('active')) { //if Object include active then it means it's not a GPS point with message
                     // console.log(childData);
-                    if(childData.email == "aladdin_dejvjmt_tracker@tfbnw.net") { // show tips only from 1 user
+                    if(childData.email == $scope.email) { // show tips only from 1 user
                         if (childData.message != "") { //if message is empty then no need to add and show
                             $scope.tips.unshift(childData);
                             $scope.$apply(); //when we use non angular like JQuery then I need to use this function to update view after pushing data to array scope
