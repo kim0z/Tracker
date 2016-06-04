@@ -1,4 +1,4 @@
-trackerApp.controller('offlinemapCtrl', function ($scope, $firebaseObject, $http, $document, dataBaseService, messages, localStorageService) {
+trackerApp.controller('offlinemapCtrl', function ($scope, $timeout,  $firebaseObject, $http, $document, dataBaseService, messages, localStorageService) {
 
 //AWS Config
 
@@ -10,6 +10,9 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $firebaseObject, $http
         // Configure your region
         AWS.config.region = 'us-west-2';
 
+        // below AWS S3 code used to get photos and show in offline page
+        var S3URL = 'https://s3-us-west-2.amazonaws.com/tracker.photos/';
+        $scope.photos = [];
 
         var bucket = new AWS.S3({params: {Bucket: 'tracker.photos'}});
         bucket.listObjects(function (err, data) {
@@ -20,11 +23,30 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $firebaseObject, $http
                 document.getElementById('status').innerHTML =
                     'Loaded ' + data.Contents.length + ' items from S3';
                 for (var i = 0; i < data.Contents.length; i++) {
-                    document.getElementById('objects').innerHTML +=
-                        '<li>' + data.Contents[i].Key + '</li>';
+                  $scope.photos.push(S3URL + data.Contents[i].Key);
                 }
             }
         });
+
+    //upload file to AWS S3
+       // var bucket = new AWS.S3({params: {Bucket: 'myBucket'}}); should I use a new bucket variable?
+
+        var fileChooser = document.getElementById('file-chooser');
+        var button = document.getElementById('upload-button');
+        var results = document.getElementById('results');
+        button.addEventListener('click', function() {
+            var file = fileChooser.files[0];
+            if (file) {
+                results.innerHTML = '';
+
+                var params = {Key: file.name, ContentType: file.type, Body: file};
+                bucket.upload(params, function (err, data) {
+                    results.innerHTML = err ? 'ERROR!' : 'UPLOADED.';
+                });
+            } else {
+                results.innerHTML = 'Nothing to upload.';
+            }
+        }, false);
 
 
 
