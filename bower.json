@@ -25,5 +25,8 @@
     "satellizer": "~0.13.4",
     "angular-local-storage": "~0.2.3",
     "aws-sdk": "aws-sdk-js#~2.3.14"
+  },
+  "resolutions": {
+    "angular": "1.5.6"
   }
 }
