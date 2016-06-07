@@ -1,20 +1,28 @@
-trackerApp.controller('offlinemapCtrl', function ($scope, $timeout,  $firebaseObject, $http, $document, dataBaseService, messages, localStorageService) {
+trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObject, $http, $document, dataBaseService, messages, localStorageService) {
 
+        $scope.user = messages.getUser(); //replace with local service like next line
+        $scope.email = localStorageService.get('email');
+        $scope.tripID = messages.getTripID();
+        $scope.travelersList = [];
+        $scope.data = []; // Travellers from PG DB
+        $scope.tips = []; // Tips from Firebase, based on GPS point
+
+        if ($scope.email == '' || $scope.tripID == '')
+            alert('no email or trip id')
 //AWS Config
-
-
-
-
         AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
 
         // Configure your region
         AWS.config.region = 'us-west-2';
 
         // below AWS S3 code used to get photos and show in offline page
-        var S3URL = 'https://s3-us-west-2.amazonaws.com/tracker.photos/';
+        var S3URL = 'https://s3-us-west-2.amazonaws.com/';
         $scope.photos = [];
 
+        alert('tracker.photos/' + $scope.email + '/' + $scope.tripID);
+
         var bucket = new AWS.S3({params: {Bucket: 'tracker.photos'}});
+
         bucket.listObjects(function (err, data) {
             if (err) {
                 document.getElementById('status').innerHTML =
@@ -23,18 +31,31 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout,  $firebaseOb
                 document.getElementById('status').innerHTML =
                     'Loaded ' + data.Contents.length + ' items from S3';
                 for (var i = 0; i < data.Contents.length; i++) {
-                  $scope.photos.push(S3URL + data.Contents[i].Key);
+
+                    var path = data.Contents[i].Key;
+                    var lastIndex = path.lastIndexOf("/");
+
+                    path = path.substring(0, lastIndex);
+
+
+                    if(path == 'aladdin_dejvjmt_tracker@tfbnw.net/224') {
+
+
+                        console.log(S3URL + data.Contents[i].Key);
+                        $scope.photos.push(S3URL + '/' + 'tracker.photos/' + data.Contents[i].Key);
+                        //aladdin_dejvjmt_tracker@tfbnw.net/224
+                    }
                 }
             }
         });
 
-    //upload file to AWS S3
-       // var bucket = new AWS.S3({params: {Bucket: 'myBucket'}}); should I use a new bucket variable?
+        //upload file to AWS S3
+        // var bucket = new AWS.S3({params: {Bucket: 'myBucket'}}); should I use a new bucket variable?
 
         var fileChooser = document.getElementById('file-chooser');
         var button = document.getElementById('upload-button');
         var results = document.getElementById('results');
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             var file = fileChooser.files[0];
             if (file) {
                 results.innerHTML = '';
@@ -49,13 +70,6 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout,  $firebaseOb
         }, false);
 
 
-
-
-        $scope.user = messages.getUser(); //replace with local service like next line
-        $scope.email = localStorageService.get('email');
-        $scope.travelersList = [];
-        $scope.data = []; // Travellers from PG DB
-        $scope.tips = []; // Tips from Firebase, based on GPS point
         var users_hash = {};
         var polys = []; // will hold poly for each user
 
@@ -156,16 +170,11 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout,  $firebaseOb
         });
 
 
-
-    //
-    //   1. no need to load all users
-    //   2. no need for hash table
-    //   3. no need to view all users in the html
-    //   4. all what is need it just to load the GPS points for the user
-
-
-
-
+        //
+        //   1. no need to load all users
+        //   2. no need for hash table
+        //   3. no need to view all users in the html
+        //   4. all what is need it just to load the GPS points for the user
 
 
         //get users names to push it into the list of active travelers
@@ -196,10 +205,10 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout,  $firebaseOb
                     var childData = childSnapshot.val();
 
                     if (!childData.hasOwnProperty('active')) { //if Object include active then it means it's not a GPS point with message
-                       if(childData.email = $scope.email){
-                           console.log(childData);
-                           users_hash[childData.email].push(childData);
-                       }
+                        if (childData.email = $scope.email) {
+                            console.log(childData);
+                            users_hash[childData.email].push(childData);
+                        }
 
                     }
                 });
@@ -273,7 +282,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout,  $firebaseOb
 
                 if (!childData.hasOwnProperty('active')) { //if Object include active then it means it's not a GPS point with message
                     // console.log(childData);
-                    if(childData.email == $scope.email) { // show tips only from 1 user
+                    if (childData.email == $scope.email) { // show tips only from 1 user
                         if (childData.message != "") { //if message is empty then no need to add and show
                             $scope.tips.unshift(childData);
                             $scope.$apply(); //when we use non angular like JQuery then I need to use this function to update view after pushing data to array scope

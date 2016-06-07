@@ -53,7 +53,41 @@ trackerApp.controller('view3Ctrl', function ($scope, $http,$window, googleMapsAP
             //$scope.message = data; //handle data back from server - not needed meanwhile
             console.log('Client:: View3:: Fun:: openTripPlanPage :: new empty trip record created with id:: '+results.data);
 
+
             messages.saveTripID(results.data);
+
+            //create bucket in AWS S3 with email + trip id
+            //AWS Config
+
+            AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
+
+            // Configure your region
+            AWS.config.region = 'us-west-2';
+
+            // below AWS S3 code used to get photos and show in offline page
+            var S3URL = 'https://s3-us-west-2.amazonaws.com/';
+
+            var bucket = new AWS.S3({params: {Bucket: 'tracker.photos'}});
+
+            bucket.createBucket(function() {
+                var params = {Key: 'myKey2', Body: 'Hello!'};
+                bucket.upload(params, function(err, data) {
+                    if (err) {
+                        console.log("Error uploading data: ", err);
+                    } else {
+                        console.log("Successfully uploaded data to myBucket/myKey");
+                    }
+                });
+            });
+
+
+
+
+
+
+
+
+
             window.open ('#/view1', '_self', false)
         })
     };
