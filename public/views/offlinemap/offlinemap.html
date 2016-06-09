@@ -143,6 +143,18 @@
         </td>
 
         <td style="height: 200px">
+
+            <ul>
+
+                    <p> Message: <input type="text" ng-model="message.text" style="width: 200px"/> </p>
+                    <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/> </p>
+                    <p> lng:<input type="text" ng-model="message.lng" style="width: 200px"/> </p>
+                    <p> time: <input type="datetime" ng-model="message.time" style="width: 200px"/> </p>
+
+
+                <button ng-click="addMessage()">add</button>
+            </ul>
+
             <P style="text-decoration:underline;">Real-Time Tips from travellers
             <P>
                 <div class="list-group" ng-repeat="tip in tips">
