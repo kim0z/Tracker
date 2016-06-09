@@ -1,5 +1,12 @@
 trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObject, $http, $document, dataBaseService, messages, localStorageService) {
 
+
+//NOTES:
+//**** Should I move all AWS S3 to server? it is risky to be in the client?
+//****
+//****
+//****
+//****
         $scope.user = messages.getUser(); //replace with local service like next line
         $scope.email = localStorageService.get('email');
         $scope.tripID = messages.getTripID();
@@ -21,7 +28,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
         alert('tracker.photos/' + $scope.email + '/' + $scope.tripID);
 
-        var bucket = new AWS.S3({params: {Bucket: 'tracker.photos'}});
+        var bucket = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID}});
 
         bucket.listObjects(function (err, data) {
             if (err) {
@@ -32,42 +39,59 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                     'Loaded ' + data.Contents.length + ' items from S3';
                 for (var i = 0; i < data.Contents.length; i++) {
 
-                    var path = data.Contents[i].Key;
-                    var lastIndex = path.lastIndexOf("/");
-
-                    path = path.substring(0, lastIndex);
-
-
-                    if(path == 'aladdin_dejvjmt_tracker@tfbnw.net/224') {
-
-
                         console.log(S3URL + data.Contents[i].Key);
                         $scope.photos.push(S3URL + '/' + 'tracker.photos/' + data.Contents[i].Key);
                         //aladdin_dejvjmt_tracker@tfbnw.net/224
-                    }
+
                 }
             }
         });
 
         //upload file to AWS S3
-        // var bucket = new AWS.S3({params: {Bucket: 'myBucket'}}); should I use a new bucket variable?
+        var bucket_upload = new AWS.S3({params: {Bucket:'tracker.photos'}});// should I use a new bucket variable?
 
         var fileChooser = document.getElementById('file-chooser');
         var button = document.getElementById('upload-button');
         var results = document.getElementById('results');
         button.addEventListener('click', function () {
             var file = fileChooser.files[0];
-            if (file) {
+
+            //if it's a KML file then override the exists one, save it in the same name
+            var file_extenstion = file.name.split('.').pop();
+            if(file_extenstion == 'kml' || file_extenstion == 'KML'){
+               
+                    if (file) {
                 results.innerHTML = '';
 
-                var params = {Key: file.name, ContentType: file.type, Body: file};
-                bucket.upload(params, function (err, data) {
+                var params = {Key: $scope.email + '/' + $scope.tripID  +'/' + 'map_kml.kml', ContentType: file.type, Body: file};
+                bucket_upload.upload(params, function (err, data) {
                     results.innerHTML = err ? 'ERROR!' : 'UPLOADED.';
                 });
             } else {
                 results.innerHTML = 'Nothing to upload.';
             }
+
+            }if(file_extenstion == "gif" || file_extenstion == "png" || file_extenstion == "bmp" || file_extenstion == "jpeg" || file_extenstion == "jpg"){
+
+        if (file ) {
+                results.innerHTML = '';
+
+                var params = {Key: $scope.email + '/' + $scope.tripID  +'/' + file.name, ContentType: file.type, Body: file};
+                bucket_upload.upload(params, function (err, data) {
+                    results.innerHTML = err ? 'ERROR!' : 'UPLOADED.';
+                });
+            } else {
+                results.innerHTML = 'Nothing to upload.';
+            }
+
+
+
+
+            }
+
         }, false);
+
+           
 
 
         var users_hash = {};
@@ -90,12 +114,20 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
             mapTypeId: google.maps.MapTypeId.TERRAIN
         });
 
+         var ctaLayer = new google.maps.KmlLayer({
+              url: 'https://s3-us-west-2.amazonaws.com/tracker.photos/'+$scope.email + '/' + $scope.tripID  +'/map_kml.kml',
+              map: $scope.map
+         });
+
 
         /// Map configuration END
 
 
         // socket to update client directly for new GPS / tips
 
+
+
+/*
         var socket = io.connect('http://localhost:8080');
         socket.on('GpsPoint', function (data) {
             console.log(data);
@@ -131,35 +163,6 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                 var currentPath = polys[data.email].getPath();
                 currentPath.push(new google.maps.LatLng(JSON.parse(data.latitude), JSON.parse(data.longitude)));
 
-
-                //add the GPS point to trqckPath to draw the line in map
-                //  trackCoordinates.push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
-
-
-                /*
-                 // Define a symbol using SVG path notation, with an opacity of 1.
-                 //dashed line
-                 var lineSymbol = {
-                 path: 'M 0,-1 0,1',
-                 strokeOpacity: 1,
-                 scale: 4
-                 };
-
-                 var trackPath = new google.maps.Polyline({
-                 path: trackCoordinates,
-                 geodesic: true,
-                 strokeColor: '#FF0000',
-                 strokeOpacity: 0,
-                 strokeWeight: 2,
-                 icons: [{
-                 icon: lineSymbol,
-                 offset: '0',
-                 repeat: '20px'
-                 }]
-                 });
-                 */
-
-
                 console.log(trackCoordinates);
                 //each new gps point means that the user is Active
                 var userStatus = document.getElementById(data.email);
@@ -168,7 +171,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                 //  trackPath.setMap($scope.map);
             }
         });
-
+*/
 
         //
         //   1. no need to load all users
@@ -176,7 +179,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         //   3. no need to view all users in the html
         //   4. all what is need it just to load the GPS points for the user
 
-
+/*
         //get users names to push it into the list of active travelers
         dataBaseService.getUsersList().then(function (results) {
             loadUsers = function () {
@@ -212,9 +215,11 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
                     }
                 });
-
+*/
                 //build path for each user
                 //loop hashtable
+
+/*                
                 var color_index = -1;
                 for (key_name in users_hash) {
                     console.log(key_name); // the key_name = email, the HashTable mapped email -> Points from FireBase
@@ -267,9 +272,11 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
             });
 
-
         })
 
+        */
+
+/*
         //load tips from 1 user (messages from Firebase)
         // Attach an asynchronous callback to read the data at our posts reference
         ref.once("value", function (snapshot) {
@@ -291,7 +298,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                 }
             });
         });
-
+*/
 
     })
 
