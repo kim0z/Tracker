@@ -157,11 +157,11 @@
 
             <P style="text-decoration:underline;">Real-Time Tips from travellers
             <P>
-                <div class="list-group" ng-repeat="tip in tips">
+                <div class="list-group" ng-repeat="message in messages">
                     <a href="#" class="list-group-item active">
-                        <h4 class="list-group-item-heading">{{tip.message}}</h4>
-            <p class="list-group-item-text">{{tip.email}}</p>
-            <p class="list-group-item-text">{{tip.timestamp}}</p>
+                        <h4 class="list-group-item-heading">{{message.message}}</h4>
+            <p class="list-group-item-text">{{email}}</p>
+            <p class="list-group-item-text">{{message.timestamp}}</p>
             </a>
             </div>
         </td>

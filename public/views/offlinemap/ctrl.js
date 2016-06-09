@@ -12,7 +12,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         $scope.tripID = messages.getTripID();
         $scope.travelersList = [];
         $scope.data = []; // Travellers from PG DB
-        $scope.tips = []; // Tips from Firebase, based on GPS point
+        $scope.messages = []; // Tips from Firebase, based on GPS point
 
 
         var email_no_shtrodel = $scope.email.replace('@', 'u0040');
@@ -155,6 +155,31 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         }
 
 
+
+
+    //load messages
+
+        var firebase_ref_read = new Firebase("https://luminous-torch-9364.firebaseio.com/" + email_no_shtrodel_dot + '/' + $scope.tripID +'/history');
+
+        firebase_ref_read.on("value", function(snapshot) {
+                snapshot.forEach(function (childSnapshot) {
+                    // key will be "fred" the first time and "barney" the second time
+                    var key = childSnapshot.key();
+                    // childData will be the actual contents of the child
+                    var childData = childSnapshot.val();
+                    $scope.messages.unshift(childData);
+                });
+
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+
+
+
+
+
+
+    //*******************************************************************************************************
         //Help functions
         //this function used for get the unicode (testing)
         function toUnicode(theString) {
