@@ -16,6 +16,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         var markers_messages = [];
     $scope.editMode = false;
     $scope.editButtonText = 'Start Edit Mode';
+        var showMessageOnMap_clicked = false;
 
         var email_no_shtrodel = $scope.email.replace('@', 'u0040');
         var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
@@ -152,52 +153,63 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
             usersRef.push(message_json);
         }
 
-        $scope.showMessageOnMap = function (message) {
+        $scope.showMessageOnMap = function ($event, message) {
 
-            var myLatlng = {lat: message.latitude, lng: message.longitude};
+            //#646c73
 
-            $scope.map.setCenter(myLatlng);
-            //smoothZoom($scope.map, 7, $scope.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
+            if (showMessageOnMap_clicked == false){
+                showMessageOnMap_clicked = true;
+                var myLatlng = {lat: message.latitude, lng: message.longitude};
+
+                $scope.map.setCenter(myLatlng);
+                //smoothZoom($scope.map, 7, $scope.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
 
 
-            if (markers_messages.length > 0) { //remove the enabled marker
-                markers_messages[0].setMap(null);
-                markers_messages.splice(0, 1); // remove the marker from array
+                if (markers_messages.length > 0) { //remove the enabled marker
+                    markers_messages[0].setMap(null);
+                    markers_messages.splice(0, 1); // remove the marker from array
+                }
+
+
+                var marker_message = new google.maps.Marker({
+                    position: myLatlng,
+                    map: $scope.map,
+                    title: message.text
+                });
+                markers_messages.push(marker_message);
+
+                var infowindow_message = new google.maps.InfoWindow({
+                    content: message.text
+                });
+
+                infowindow_message.open($scope.map, marker_message);
+
+                var zoom_time = 3000;
+                $scope.countdown=100;
+                setTimeout(function () {smoothZoom($scope.map, 12, $scope.map.getZoom())}, 1000); // call smoothZoom, parameters map, final zoomLevel
+
+
+                // angular.element(document.getElementById('messages')).append("<timer interval="+zoom_time+"  countdown= "+countdown +">"+{{countdown}}+"</timer>");
+
+
+            }else{
+                showMessageOnMap_clicked = false;
+                //if clicked again, the marker should deleted and back the zoom to normal
+                $scope.map.setZoom(5);
             }
 
 
-            var marker_message = new google.maps.Marker({
-                position: myLatlng,
-                map: $scope.map,
-                title: message.text
-            });
-            markers_messages.push(marker_message);
 
-            var infowindow_message = new google.maps.InfoWindow({
-                content: message.text
-            });
-
-            infowindow_message.open($scope.map, marker_message);
-
-            var zoom_time = 3000;
-             $scope.countdown=100;
-            smoothZoom($scope.map, 12, $scope.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
-
-
-           // angular.element(document.getElementById('messages')).append("<timer interval="+zoom_time+"  countdown= "+countdown +">"+{{countdown}}+"</timer>");
-
-
-            setTimeout(function () {
-                $scope.map.setZoom(5)
-            }, 3000);
 
         }
 
 
     $scope.editModeSwitch = function(){
         $scope.editMode = !$scope.editMode;
-        $scope.editButtonText = 'Back to View mode';
-      //  $scope.$apply();
+        if($scope.editMode == true)
+            $scope.editButtonText = 'Back to View mode';
+        else
+            $scope.editButtonText = 'Start Edit Mode';
     }
 
         //load messages
@@ -205,7 +217,9 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         var firebase_ref_read = new Firebase("https://luminous-torch-9364.firebaseio.com/" + email_no_shtrodel_dot + '/' + $scope.tripID + '/history');
 
         firebase_ref_read.on("value", function (snapshot) {
+            $scope.messages = [];
             snapshot.forEach(function (childSnapshot) {
+
                 // key will be "fred" the first time and "barney" the second time
                 var key = childSnapshot.key();
                 // childData will be the actual contents of the child
