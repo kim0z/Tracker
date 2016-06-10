@@ -16,7 +16,8 @@ var trackerApp = angular.module('myApp', [
         'satellizer',
         'facebook',
         'LocalStorageModule',
-        'firebase'
+        'firebase',
+        'timer'
     ])
     .config(function ($stateProvider, $urlRouterProvider) {
         //

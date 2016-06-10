@@ -13,7 +13,9 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         $scope.travelersList = [];
         $scope.data = []; // Travellers from PG DB
         $scope.messages = []; // Tips from Firebase, based on GPS point
-
+        var markers_messages = [];
+    $scope.editMode = false;
+    $scope.editButtonText = 'Start Edit Mode';
 
         var email_no_shtrodel = $scope.email.replace('@', 'u0040');
         var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
@@ -134,11 +136,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         });
 
         $scope.addMessage = function () {
-
-
-            // add a new note
-
-
+            // add a new note to firebase
             var message_json = {};
 
             var usersRef = firebase_ref.child('history');
@@ -154,32 +152,74 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
             usersRef.push(message_json);
         }
 
+        $scope.showMessageOnMap = function (message) {
+
+            var myLatlng = {lat: message.latitude, lng: message.longitude};
+
+            $scope.map.setCenter(myLatlng);
+            //smoothZoom($scope.map, 7, $scope.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
 
 
+            if (markers_messages.length > 0) { //remove the enabled marker
+                markers_messages[0].setMap(null);
+                markers_messages.splice(0, 1); // remove the marker from array
+            }
 
-    //load messages
 
-        var firebase_ref_read = new Firebase("https://luminous-torch-9364.firebaseio.com/" + email_no_shtrodel_dot + '/' + $scope.tripID +'/history');
+            var marker_message = new google.maps.Marker({
+                position: myLatlng,
+                map: $scope.map,
+                title: message.text
+            });
+            markers_messages.push(marker_message);
 
-        firebase_ref_read.on("value", function(snapshot) {
-                snapshot.forEach(function (childSnapshot) {
-                    // key will be "fred" the first time and "barney" the second time
-                    var key = childSnapshot.key();
-                    // childData will be the actual contents of the child
-                    var childData = childSnapshot.val();
-                    $scope.messages.unshift(childData);
-                });
+            var infowindow_message = new google.maps.InfoWindow({
+                content: message.text
+            });
+
+            infowindow_message.open($scope.map, marker_message);
+
+            var zoom_time = 3000;
+             $scope.countdown=100;
+            smoothZoom($scope.map, 12, $scope.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
+
+
+           // angular.element(document.getElementById('messages')).append("<timer interval="+zoom_time+"  countdown= "+countdown +">"+{{countdown}}+"</timer>");
+
+
+            setTimeout(function () {
+                $scope.map.setZoom(5)
+            }, 3000);
+
+        }
+
+
+    $scope.editModeSwitch = function(){
+        $scope.editMode = !$scope.editMode;
+        $scope.editButtonText = 'Back to View mode';
+      //  $scope.$apply();
+    }
+
+        //load messages
+
+        var firebase_ref_read = new Firebase("https://luminous-torch-9364.firebaseio.com/" + email_no_shtrodel_dot + '/' + $scope.tripID + '/history');
+
+        firebase_ref_read.on("value", function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                // key will be "fred" the first time and "barney" the second time
+                var key = childSnapshot.key();
+                // childData will be the actual contents of the child
+                var childData = childSnapshot.val();
+                $scope.messages.unshift(childData['message']);
+            });
+            $scope.$apply();
 
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
         });
 
 
-
-
-
-
-    //*******************************************************************************************************
+        //*******************************************************************************************************
         //Help functions
         //this function used for get the unicode (testing)
         function toUnicode(theString) {
@@ -193,6 +233,22 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                 unicodeString += theUnicode;
             }
             return unicodeString;
+        }
+
+        // the smooth zoom function
+        function smoothZoom(map, max, cnt) {
+            if (cnt >= max) {
+                return;
+            }
+            else {
+                z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
+                    google.maps.event.removeListener(z);
+                    smoothZoom(map, max, cnt + 1);
+                });
+                setTimeout(function () {
+                    map.setZoom(cnt)
+                }, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
+            }
         }
 
 
