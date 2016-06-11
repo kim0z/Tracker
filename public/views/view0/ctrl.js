@@ -6,7 +6,7 @@ trackerApp.controller('view0Ctrl',function($scope, $http, googleMapsAPIService, 
     console.log($scope.helloUser);
 
     $scope.$watch('helloUser', function() {
-        alert($scope.helloUser+' + '+ $scope.logged);
+       // alert($scope.helloUser+' + '+ $scope.logged);
 
     });
 

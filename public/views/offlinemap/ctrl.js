@@ -153,7 +153,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
             usersRef.push(message_json);
         }
 
-        $scope.showMessageOnMap = function ($event, message) {
+        $scope.showMessageOnMap = function (message) {
 
             //#646c73
 
@@ -185,11 +185,25 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                 infowindow_message.open($scope.map, marker_message);
 
                 var zoom_time = 3000;
-                $scope.countdown=100;
+                $scope.countdown = 100;
                 setTimeout(function () {smoothZoom($scope.map, 12, $scope.map.getZoom())}, 1000); // call smoothZoom, parameters map, final zoomLevel
 
 
                 // angular.element(document.getElementById('messages')).append("<timer interval="+zoom_time+"  countdown= "+countdown +">"+{{countdown}}+"</timer>");
+
+
+
+                var panorama = new google.maps.StreetViewPanorama(
+                    document.getElementById('pano'), {
+                        position: {lat: 42.345573, lng: -71.098326},
+                        pov: {
+                            heading: 34,
+                            pitch: 10
+                        }
+                    });
+                $scope.map.setStreetView(panorama);
+
+
 
 
             }else{
