@@ -7,12 +7,13 @@
     <style type="text/css">
         #map {
             height: 500px;
-            width: 800px;
+            width: 900px;
             box-shadow: 3px 3px 10px gray;
         }
+
         #pano {
             height: 500px;
-            width: 800px;
+            width: 900px;
             box-shadow: 3px 3px 10px gray;
         }
 
@@ -130,6 +131,150 @@
             }
         }
 
+
+
+        /* ///////////$$$$$$
+        */
+
+        h1 {
+            text-align: center;
+            font-family: Montserrat, sans-serif;
+            color: #333;
+            margin-top:150px;
+        }
+
+        .accordion {
+            width: 100%;
+            max-width: 1080px;
+            height: 250px;
+            overflow: hidden;
+            margin: 50px auto;
+        }
+
+        .accordion ul {
+            width: 100%;
+            display: table;
+            table-layout: fixed;
+            margin: 0;
+            padding: 0;
+        }
+
+        .accordion ul li {
+            display: table-cell;
+            vertical-align: bottom;
+            position: relative;
+            width: 16.666%;
+            height: 250px;
+            background-repeat: no-repeat;
+            background-position: center center;
+            transition: all 500ms ease;
+        }
+
+        .accordion ul li div {
+            display: block;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .accordion ul li div a {
+            display: block;
+            height: 250px;
+            width: 100%;
+            position: relative;
+            z-index: 3;
+            vertical-align: bottom;
+            padding: 15px 20px;
+            box-sizing: border-box;
+            color: #fff;
+            text-decoration: none;
+            font-family: Open Sans, sans-serif;
+            transition: all 200ms ease;
+        }
+
+        .accordion ul li div a * {
+            opacity: 0;
+            margin: 0;
+            width: 100%;
+            text-overflow: ellipsis;
+            position: relative;
+            z-index: 5;
+            white-space: nowrap;
+            overflow: hidden;
+            -webkit-transform: translateX(-20px);
+            transform: translateX(-20px);
+            -webkit-transition: all 400ms ease;
+            transition: all 400ms ease;
+        }
+
+        .accordion ul li div a h2 {
+            font-family: Montserrat, sans-serif;
+            text-overflow: clip;
+            font-size: 24px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+            top: 160px;
+        }
+
+        .accordion ul li div a p {
+            top: 160px;
+            font-size: 13.5px;
+        }
+
+        .accordion ul li:nth-child(1) { background-image: url("https://unsplash.it/650/250?image=680"); }
+
+        .accordion ul li:nth-child(2) { background-image: url("https://unsplash.it/650/250?image=668"); }
+
+        .accordion ul li:nth-child(3) { background-image: url("https://unsplash.it/650/250?image=659"); }
+
+        .accordion ul li:nth-child(4) { background-image: url("https://unsplash.it/650/250?image=655"); }
+
+        .accordion ul li:nth-child(5) { background-image: url("https://unsplash.it/650/250?image=657"); }
+
+        .accordion ul li:nth-child(6) { background-image: url("https://unsplash.it/650/250?image=661"); }
+
+        .accordion ul:hover li { width: 8%; }
+
+        .accordion ul:hover li:hover { width: 60%; }
+
+        .accordion ul:hover li:hover a { background: rgba(0, 0, 0, 0.4); }
+
+        .accordion ul:hover li:hover a * {
+            opacity: 1;
+            -webkit-transform: translateX(0);
+            transform: translateX(0);
+        }
+        @media screen and (max-width: 600px) {
+
+            body { margin: 0; }
+
+            .accordion { height: auto; }
+
+            .accordion ul li,
+            .accordion ul li:hover,
+            .accordion ul:hover li,
+            .accordion ul:hover li:hover {
+                position: relative;
+                display: table;
+                table-layout: fixed;
+                width: 100%;
+                -webkit-transition: none;
+                transition: none;
+            }
+        }
+
+        .about {
+            text-align: center;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .about a {
+            color: blue;
+            text-decoration: none;
+        }
+
+        .about a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -138,20 +283,20 @@
 
 
     <tr>
-        <td>
+        <td style="width: 30%">
 
             <div id="map"></div>
 
         </td>
 
-        <td>
+        <td style="width: 100%">
             <div id="pano"></div>
         </td>
 
         <td style="height: 500px">
             <button class="btn btn-info" ng-click="editModeSwitch()">{{editButtonText}}</button>
 
-            <ul id="add_messages" ng-show = "editMode">
+            <ul id="add_messages" ng-show="editMode">
 
                 <p> Message: <input type="text" ng-model="message.text" style="width: 200px"/></p>
                 <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/></p>
@@ -164,11 +309,11 @@
 
             <P style="text-decoration:underline;">Real-Time Tips from travellers
             <P>
-            <div class="pre-scrollable" style="height: 800px">
+                <div class="pre-scrollable" style="height: 800px">
 
-                <div id="messages" class="list-group" ng-repeat="message in messages">
-                    <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
-                        <h4 class="list-group-item-heading">{{message.text}}</h4>
+                    <div id="messages" class="list-group" ng-repeat="message in messages">
+                        <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
+                            <h4 class="list-group-item-heading">{{message.text}}</h4>
             <p class="list-group-item-text">{{email}}</p>
             <p> {{message.latitude}}</p>
             <p> {{message.longitude}}</p>
@@ -179,7 +324,7 @@
             </a>
             </div>
 
-        </div>
+            </div>
 
         </td>
     </tr>
@@ -187,7 +332,7 @@
 
     <tr>
         <td>
-            <div id="status"></div>
+           <div id="status"></div>
             <il id="objects"></il>
             <ul id="rig">
                 <li ng-repeat="photo in photos track by $index">
@@ -198,15 +343,58 @@
                     </a>
                 </li>
             </ul>
+
+<!--
+            <div class="accordion">
+                <ul>
+                    <li >
+                        <div> <a href="#">
+                            <h2>Title 1</h2>
+                            <p>Description 1</p>
+                        </a> </div>
+                    </li>
+                    </ul>
+            </div>
+            -->
         </td>
 
-        <td id="upload_photo" ng-show = "editMode">
+        <td id="upload_photo" ng-show="editMode">
             <input type="file" id="file-chooser" style="height: 40px; width: 240px"/>
             <p></p>
             <button id="upload-button">Upload to S3</button>
             <div id="results"></div>
 
         </td>
+    </tr>
+
+
+
+    <tr>
+
+        <td>
+
+
+<!-- Table -->
+
+            <ul id="add_day" ng-show="editMode">
+
+                <p> Trip Name: <input type="text" ng-model="trip.name" style="width: 200px"/></p>
+                <p> Trip Description: <input type="text" ng-model="trip.description" style="width: 200px"/></p>
+                <p> Trip start D:<input type="text" ng-model="trip.start_date" style="width: 200px"/></p>
+                <p> Trip end D: <input type="datetime" ng-model="trip.end_date" style="width: 200px"/></p>
+
+
+                <button ng-click="addDay()">add</button>
+            </ul>
+
+
+
+
+        </td>
+
+
+
+
     </tr>
 
 </table>

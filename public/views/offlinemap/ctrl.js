@@ -195,7 +195,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
                 var panorama = new google.maps.StreetViewPanorama(
                     document.getElementById('pano'), {
-                        position: {lat: 42.345573, lng: -71.098326},
+                        position: myLatlng,
                         pov: {
                             heading: 34,
                             pitch: 10
