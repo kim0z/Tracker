@@ -55,33 +55,6 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                         || photo_extenstion == "GIF" || photo_extenstion == "PNG" || photo_extenstion == "BMP" || photo_extenstion == "GPEG" || photo_extenstion == "JPG") {
 
                         $scope.photos.push(S3URL + 'tracker.photos/' + data.Contents[i].Key);
-
-
-document.getElementById("karim").onclick = function() {
-    EXIF.getData(this, function() {
-        var make = EXIF.getTag(this, "Make"),
-            model = EXIF.getTag(this, "Model");
-               GPS_lat = EXIF.getTag(this, "GPSLatitude");
-            GPS_lng = EXIF.getTag(this, "GPSLongitude");
-
-       // alert("I was taken by a " + make + " " + model);
-       // alert("GPSLongitude " + GPS);
-
-
-        var toDecimal = function (number) {
-       return number[0].numerator + number[1].numerator /
-           (60 * number[1].denominator) + number[2].numerator / (3600 * number[2].denominator);
-   };
-
-   console.log("lat: " + toDecimal(GPS_lat) + "  lng: " + toDecimal(GPS_lng)  );
-  // alert("toDecimal " + toDecimal(GPS[1])  );
-
-
-
-    });
-}
-
-
                     }
                     $scope.$apply();
                 }
@@ -239,12 +212,45 @@ document.getElementById("karim").onclick = function() {
                 //if clicked again, the marker should deleted and back the zoom to normal
                 $scope.map.setZoom(5);
             }
-
-
-
-
         }
 
+
+    $scope.showPhotoOnMap = function (index) {
+
+        console.log(index);
+
+
+        var elementID = "img_"+index;
+
+        document.getElementById(elementID).onclick = function() {
+            EXIF.getData(this, function() {
+                var make = EXIF.getTag(this, "Make"),
+                    model = EXIF.getTag(this, "Model");
+                GPS_lat = EXIF.getTag(this, "GPSLatitude");
+                GPS_lng = EXIF.getTag(this, "GPSLongitude");
+
+                // alert("I was taken by a " + make + " " + model);
+                // alert("GPSLongitude " + GPS);
+
+
+                var toDecimal = function (number) {
+                    return number[0].numerator + number[1].numerator /
+                        (60 * number[1].denominator) + number[2].numerator / (3600 * number[2].denominator);
+                };
+
+                console.log("lat: " + toDecimal(GPS_lat) + "  lng: " + toDecimal(GPS_lng)  );
+                // alert("toDecimal " + toDecimal(GPS[1])  );
+
+
+
+            });
+        }
+
+
+
+
+
+    }
 
     $scope.editModeSwitch = function(){
         $scope.editMode = !$scope.editMode;
