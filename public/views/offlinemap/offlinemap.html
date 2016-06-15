@@ -329,26 +329,19 @@
         </td>
     </tr>
 
-
     <tr>
         <td>
            <div id="status"></div>
             <il id="objects"></il>
             <ul id="rig">
-                <li ng-repeat="photo in photos track by $index"  ng-click="showPhotoOnMap($index)" >
-                    <a class="rig-cell" href="#" >
-                        <img id="img_{{$index}}" class="rig-img" src="{{photo}}" style="width: 250px; height: 200px" >
+                <li ng-repeat="photo in photos track by $index">
+                    <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)">
+                        <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px" >
                         <span class="rig-overlay"></span>
                         <span class="rig-text">show on map</span>
                     </a>
                 </li>
             </ul>
-
-
-            //object.addEventListener("click", myScript);
-
-            <img id="karim" class="rig-img" src="https://s3-us-west-2.amazonaws.com/tracker.photos/aladdin_dejvjmt_tracker@tfbnw.net/224/IMG_2471.JPG" style="width: 250px; height: 200px">
-
 
 
 <!--

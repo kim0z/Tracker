@@ -15,8 +15,8 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         $scope.data = []; // Travellers from PG DB
         $scope.messages = []; // Tips from Firebase, based on GPS point
         var markers_messages = [];
-    $scope.editMode = false;
-    $scope.editButtonText = 'Start Edit Mode';
+        $scope.editMode = false;
+        $scope.editButtonText = 'Start Edit Mode';
         var showMessageOnMap_clicked = false;
 
         var email_no_shtrodel = $scope.email.replace('@', 'u0040');
@@ -105,7 +105,9 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                 } else {
                     results.innerHTML = 'Nothing to upload.';
                 }
-            }else{alert('file not supported')}
+            } else {
+                alert('file not supported')
+            }
         }, false);
 
 
@@ -158,7 +160,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
             //#646c73
 
-            if (showMessageOnMap_clicked == false){
+            if (showMessageOnMap_clicked == false) {
                 showMessageOnMap_clicked = true;
                 var myLatlng = {lat: message.latitude, lng: message.longitude};
 
@@ -185,13 +187,15 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
                 infowindow_message.open($scope.map, marker_message);
 
+
                 var zoom_time = 3000;
                 $scope.countdown = 100;
-                setTimeout(function () {smoothZoom($scope.map, 12, $scope.map.getZoom())}, 1000); // call smoothZoom, parameters map, final zoomLevel
+                setTimeout(function () {
+                    smoothZoom($scope.map, 12, $scope.map.getZoom())
+                }, 1000); // call smoothZoom, parameters map, final zoomLevel
 
 
                 // angular.element(document.getElementById('messages')).append("<timer interval="+zoom_time+"  countdown= "+countdown +">"+{{countdown}}+"</timer>");
-
 
 
                 var panorama = new google.maps.StreetViewPanorama(
@@ -205,9 +209,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                 $scope.map.setStreetView(panorama);
 
 
-
-
-            }else{
+            } else {
                 showMessageOnMap_clicked = false;
                 //if clicked again, the marker should deleted and back the zoom to normal
                 $scope.map.setZoom(5);
@@ -215,87 +217,61 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         }
 
 
+        $scope.showPhotoOnMap = function (index) {
 
+            //console.log(index.currentTarget.childNodes[1]);
+            var img = index.currentTarget.childNodes[1];  //the second element is IMG, should add validation
 
-
-           document.getElementById("karim").onclick = function() {
-            EXIF.getData(this, function() {
-                var make = EXIF.getTag(this, "Make"),
-                    model = EXIF.getTag(this, "Model");
-                GPS_lat = EXIF.getTag(this, "GPSLatitude");
-                GPS_lng = EXIF.getTag(this, "GPSLongitude");
+            EXIF.getData(img, function () {
+                var make = EXIF.getTag(img, "Make"),
+                    model = EXIF.getTag(img, "Model");
+                GPS_lat = EXIF.getTag(img, "GPSLatitude");
+                GPS_lng = EXIF.getTag(img, "GPSLongitude");
 
                 // alert("I was taken by a " + make + " " + model);
                 // alert("GPSLongitude " + GPS);
-
 
                 var toDecimal = function (number) {
                     return number[0].numerator + number[1].numerator /
                         (60 * number[1].denominator) + number[2].numerator / (3600 * number[2].denominator);
                 };
 
-                console.log("lat: " + toDecimal(GPS_lat) + "  lng: " + toDecimal(GPS_lng)  );
+                console.log("lat: " + toDecimal(GPS_lat) + "  lng: " + toDecimal(GPS_lng));
                 // alert("toDecimal " + toDecimal(GPS[1])  );
+
+                var photo_lat_lng = {lat: toDecimal(GPS_lat), lng: toDecimal(GPS_lng)};
+
+
+
+                var panorama = new google.maps.StreetViewPanorama(
+                    document.getElementById('pano'), {
+                        position: photo_lat_lng,
+                        pov: {
+                            heading: 34,
+                            pitch: 10
+                        }
+                    });
+                $scope.map.setStreetView(panorama);
+
+
 
 
 
             });
-}
-
-
-
-
-    $scope.showPhotoOnMap = function (index) {
 
 
 
 
 
-
-
-
-        console.log(index);
-
-
-        var elementID = "img_"+index;
-
-        document.getElementById("img_20").onclick = function() {
-            EXIF.getData(this, function() {
-                var make = EXIF.getTag(this, "Make"),
-                    model = EXIF.getTag(this, "Model");
-                GPS_lat = EXIF.getTag(this, "GPSLatitude");
-                GPS_lng = EXIF.getTag(this, "GPSLongitude");
-
-                // alert("I was taken by a " + make + " " + model);
-                // alert("GPSLongitude " + GPS);
-
-
-                var toDecimal = function (number) {
-                    return number[0].numerator + number[1].numerator /
-                        (60 * number[1].denominator) + number[2].numerator / (3600 * number[2].denominator);
-                };
-
-                console.log("lat: " + toDecimal(GPS_lat) + "  lng: " + toDecimal(GPS_lng)  );
-                // alert("toDecimal " + toDecimal(GPS[1])  );
-
-
-
-            });
         }
 
-
-
-
-
-    }
-
-    $scope.editModeSwitch = function(){
-        $scope.editMode = !$scope.editMode;
-        if($scope.editMode == true)
-            $scope.editButtonText = 'Back to View mode';
-        else
-            $scope.editButtonText = 'Start Edit Mode';
-    }
+        $scope.editModeSwitch = function () {
+            $scope.editMode = !$scope.editMode;
+            if ($scope.editMode == true)
+                $scope.editButtonText = 'Back to View mode';
+            else
+                $scope.editButtonText = 'Start Edit Mode';
+        }
 
         //load messages
 
