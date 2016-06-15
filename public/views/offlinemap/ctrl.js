@@ -105,7 +105,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                 } else {
                     results.innerHTML = 'Nothing to upload.';
                 }
-            }
+            }else{alert('file not supported')}
         }, false);
 
 
@@ -215,14 +215,51 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         }
 
 
+
+
+
+           document.getElementById("karim").onclick = function() {
+            EXIF.getData(this, function() {
+                var make = EXIF.getTag(this, "Make"),
+                    model = EXIF.getTag(this, "Model");
+                GPS_lat = EXIF.getTag(this, "GPSLatitude");
+                GPS_lng = EXIF.getTag(this, "GPSLongitude");
+
+                // alert("I was taken by a " + make + " " + model);
+                // alert("GPSLongitude " + GPS);
+
+
+                var toDecimal = function (number) {
+                    return number[0].numerator + number[1].numerator /
+                        (60 * number[1].denominator) + number[2].numerator / (3600 * number[2].denominator);
+                };
+
+                console.log("lat: " + toDecimal(GPS_lat) + "  lng: " + toDecimal(GPS_lng)  );
+                // alert("toDecimal " + toDecimal(GPS[1])  );
+
+
+
+            });
+}
+
+
+
+
     $scope.showPhotoOnMap = function (index) {
+
+
+
+
+
+
+
 
         console.log(index);
 
 
         var elementID = "img_"+index;
 
-        document.getElementById(elementID).onclick = function() {
+        document.getElementById("img_20").onclick = function() {
             EXIF.getData(this, function() {
                 var make = EXIF.getTag(this, "Make"),
                     model = EXIF.getTag(this, "Model");

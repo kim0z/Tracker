@@ -522,6 +522,9 @@ app.post('/getGeoCode', function (request, response) {
 
 ////////////////////////////////////////////////// DropBox part ///////////////////////////
 
+
+/*
+
 // Server-side applications use both the API key and secret.
 var client = new Dropbox.Client({
     key: config.dropbox.key,
@@ -538,6 +541,7 @@ client.getAccountInfo(function (error, accountInfo) {
     } else console.log("Hello from DropBox, " + accountInfo.name + "!");
 });
 
+*/
 
 /*
  client.writeFile("hello_world.txt", "Hello, world!\n", function(error, stat) {
