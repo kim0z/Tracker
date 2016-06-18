@@ -312,7 +312,11 @@
                 <div class="pre-scrollable" style="height: 800px">
 
                     <div id="messages" class="list-group" ng-repeat="message in messages">
-                        <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
+                       <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
+
+
+
+
                             <h4 class="list-group-item-heading">{{message.text}}</h4>
             <p class="list-group-item-text">{{email}}</p>
             <p> {{message.latitude}}</p>
@@ -361,10 +365,23 @@
         </td>
 
         <td id="upload_photo" ng-show="editMode">
+            <p>Upload photo or KML (googlemaps export file)</p>
             <input type="file" id="file-chooser" style="height: 40px; width: 240px"/>
             <p></p>
             <button id="upload-button">Upload to S3</button>
             <div id="results"></div>
+
+        </td>
+
+        <td>
+            <ul id="add_GPS_toPhoto" ng-show="editMode">
+                <p> Image path: <input type="text" ng-model="image.path" style="width: 200px"/></p>
+                <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/></p>
+                <p> lng:<input type="text" ng-model="message.lng" style="width: 200px"/></p>
+
+                <button id="addGPStoPhoto" ng-click="saveGPStoThisPhoto()">add</button>
+                <div id="results_photo_gps"></div>
+            </ul>
 
         </td>
     </tr>

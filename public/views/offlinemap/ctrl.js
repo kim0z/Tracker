@@ -29,7 +29,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
         if ($scope.email == '' || $scope.tripID == '')
             alert('no email or trip id')
-//AWS Config
+        //AWS Config
         AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
 
         // Configure your region
@@ -158,61 +158,22 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
         $scope.showMessageOnMap = function (message) {
 
-            //#646c73
+            if ($scope.editMode == false) {
+                //#646c73
 
-            if (showMessageOnMap_clicked == false) {
-                showMessageOnMap_clicked = true;
-                var myLatlng = {lat: message.latitude, lng: message.longitude};
-
-                $scope.map.setCenter(myLatlng);
-                //smoothZoom($scope.map, 7, $scope.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
+                if (showMessageOnMap_clicked == false) {
+                    showMessageOnMap_clicked = true;
+                    var Latlng_message = {lat: message.latitude, lng: message.longitude};
 
 
-                if (markers_messages.length > 0) { //remove the enabled marker
-                    markers_messages[0].setMap(null);
-                    markers_messages.splice(0, 1); // remove the marker from array
+                    //Help function - show item on map
+                    showItemOnMap(Latlng_message, message);
+
+                } else {
+                    showMessageOnMap_clicked = false;
+                    //if clicked again, the marker should deleted and back the zoom to normal
+                    $scope.map.setZoom(5);
                 }
-
-
-                var marker_message = new google.maps.Marker({
-                    position: myLatlng,
-                    map: $scope.map,
-                    title: message.text
-                });
-                markers_messages.push(marker_message);
-
-                var infowindow_message = new google.maps.InfoWindow({
-                    content: message.text
-                });
-
-                infowindow_message.open($scope.map, marker_message);
-
-
-                var zoom_time = 3000;
-                $scope.countdown = 100;
-                setTimeout(function () {
-                    smoothZoom($scope.map, 12, $scope.map.getZoom())
-                }, 1000); // call smoothZoom, parameters map, final zoomLevel
-
-
-                // angular.element(document.getElementById('messages')).append("<timer interval="+zoom_time+"  countdown= "+countdown +">"+{{countdown}}+"</timer>");
-
-
-                var panorama = new google.maps.StreetViewPanorama(
-                    document.getElementById('pano'), {
-                        position: myLatlng,
-                        pov: {
-                            heading: 34,
-                            pitch: 10
-                        }
-                    });
-                $scope.map.setStreetView(panorama);
-
-
-            } else {
-                showMessageOnMap_clicked = false;
-                //if clicked again, the marker should deleted and back the zoom to normal
-                $scope.map.setZoom(5);
             }
         }
 
@@ -222,48 +183,138 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
             //console.log(index.currentTarget.childNodes[1]);
             var img = index.currentTarget.childNodes[1];  //the second element is IMG, should add validation
 
-            EXIF.getData(img, function () {
-                var make = EXIF.getTag(img, "Make"),
-                    model = EXIF.getTag(img, "Model");
-                GPS_lat = EXIF.getTag(img, "GPSLatitude");
-                GPS_lng = EXIF.getTag(img, "GPSLongitude");
 
-                // alert("I was taken by a " + make + " " + model);
-                // alert("GPSLongitude " + GPS);
+            if ($scope.editMode == true) {
+                //if Edit mode enabled then ask the user to set the GPS lat lng for the photos
 
-                var toDecimal = function (number) {
-                    return number[0].numerator + number[1].numerator /
-                        (60 * number[1].denominator) + number[2].numerator / (3600 * number[2].denominator);
-                };
 
-                console.log("lat: " + toDecimal(GPS_lat) + "  lng: " + toDecimal(GPS_lng));
-                // alert("toDecimal " + toDecimal(GPS[1])  );
+                addGPStoPhoto(img);
 
-                var photo_lat_lng = {lat: toDecimal(GPS_lat), lng: toDecimal(GPS_lng)};
+
+            }else if($scope.editMode == false){
 
 
 
-                var panorama = new google.maps.StreetViewPanorama(
-                    document.getElementById('pano'), {
-                        position: photo_lat_lng,
-                        pov: {
-                            heading: 34,
-                            pitch: 10
+                if (img) {
+                    EXIF.getData(img, function () {
+                        var make = EXIF.getTag(img, "Make"),
+                            model = EXIF.getTag(img, "Model");
+                        GPS_lat = EXIF.getTag(img, "GPSLatitude");
+                        GPS_lng = EXIF.getTag(img, "GPSLongitude");
+
+                        // alert("I was taken by a " + make + " " + model);
+                        // alert("GPSLongitude " + GPS);
+
+                        var toDecimal = function (number) {
+                            return number[0].numerator + number[1].numerator /
+                                (60 * number[1].denominator) + number[2].numerator / (3600 * number[2].denominator);
+                        };
+
+                        if (GPS_lat && GPS_lng) {
+
+                            //console.log("lat: " + toDecimal(GPS_lat) + "  lng: " + toDecimal(GPS_lng));
+                            // alert("toDecimal " + toDecimal(GPS[1])  );
+
+                            var photo_lat_lng = {lat: toDecimal(GPS_lat), lng: toDecimal(GPS_lng)};
+
+                            //Help function - show item on map
+                            showItemOnMap(photo_lat_lng, null);
+
+                        } else {
+                                console.log('not GPS point with photo ' + img)
                         }
                     });
-                $scope.map.setStreetView(panorama);
-
-
-
-
-
-            });
-
-
-
-
-
+                }
+            }
         }
+
+        var showItemOnMap = function (Latlng, message) {
+
+            //var myLatlng = {lat: message.latitude, lng: message.longitude};
+            console.log('showItemOnMap function :: ' + 'lat:' + Latlng.lat + '     lng: ' + Latlng.lng);
+
+            if ($scope.editMode == false) {
+                if (Latlng) {
+
+                    $scope.map.setCenter(Latlng);
+                    //smoothZoom($scope.map, 7, $scope.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
+
+                    var marker_message = new google.maps.Marker({
+                        position: Latlng,
+                        map: $scope.map,
+                        title: 'null'
+                    });
+                    markers_messages.push(marker_message);
+
+                    var infowindow_message = new google.maps.InfoWindow({
+                        content: 'null'
+                    });
+
+                    infowindow_message.open($scope.map, marker_message);
+
+                    var zoom_time = 3000;
+                    $scope.countdown = 100;
+                    setTimeout(function () {
+                        smoothZoom($scope.map, 12, $scope.map.getZoom())
+                    }, 1000); // call smoothZoom, parameters map, final zoomLevel
+
+
+                    // angular.element(document.getElementById('messages')).append("<timer interval="+zoom_time+"  countdown= "+countdown +">"+{{countdown}}+"</timer>");
+
+
+                    var panorama = new google.maps.StreetViewPanorama(
+                        document.getElementById('pano'), {
+                            position: Latlng,
+                            pov: {
+                                heading: 34,
+                                pitch: 10
+                            }
+                        });
+                    $scope.map.setStreetView(panorama);
+                }
+            }
+        }
+
+
+    var addGPStoPhoto = function (img) {
+    //get gps point from map and then
+
+        //$scope.message
+        $scope.image = {
+            path: img.currentSrc
+        }
+
+
+    }
+
+    $scope.saveGPStoThisPhoto = function () {
+        //create a file and save it in AWS S3 with the same name of the photo with new extension name
+
+        //create file
+
+        var bucket_create_photo_gps = new AWS.S3({params: {Bucket: 'tracker.photos'}});
+
+        var gps_point = {lat: $scope.message.lat, lng: $scope.message.lng};
+        var button = document.getElementById('addGPStoPhoto');
+        var results = document.getElementById('results_photo_gps');
+       // button.addEventListener('click', function() {
+        //    results.innerHTML = '';
+
+        var filename = $scope.image.path.replace(/^.*[\\\/]/, '');
+        var file_noExtenstion = filename.replace(/\.[^/.]+$/, "");
+
+        console.log(file_noExtenstion);
+
+            var params = {Key: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt', Body: JSON.stringify(gps_point) };
+            bucket_create_photo_gps.upload(params, function (err, data) {
+                results.innerHTML = err ? 'ERROR!' : 'SAVED.';
+            });
+       // }, false);
+
+
+
+
+    }
 
         $scope.editModeSwitch = function () {
             $scope.editMode = !$scope.editMode;
@@ -274,7 +325,6 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         }
 
         //load messages
-
         var firebase_ref_read = new Firebase("https://luminous-torch-9364.firebaseio.com/" + email_no_shtrodel_dot + '/' + $scope.tripID + '/history');
 
         firebase_ref_read.on("value", function (snapshot) {
