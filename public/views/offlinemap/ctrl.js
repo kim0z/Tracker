@@ -178,10 +178,10 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         }
 
 
-        $scope.showPhotoOnMap = function (index) {
+        $scope.showPhotoOnMap = function (image) {
 
-            //console.log(index.currentTarget.childNodes[1]);
-            var img = index.currentTarget.childNodes[1];  //the second element is IMG, should add validation
+            //console.log(image.currentTarget.childNodes[1]);
+            var img = image.currentTarget.childNodes[1];  //the second element is IMG, should add validation
 
 
             if ($scope.editMode == true) {
@@ -195,7 +195,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
 
 
-                if (img) {
+                if (img) { 
                     EXIF.getData(img, function () {
                         var make = EXIF.getTag(img, "Make"),
                             model = EXIF.getTag(img, "Model");
@@ -221,7 +221,50 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                             showItemOnMap(photo_lat_lng, null);
 
                         } else {
-                                console.log('not GPS point with photo ' + img)
+                                console.log('No GPS point embed to photo ' + img);
+                                console.log('Check if image have GPS point that was added by user and saved to AWS S3 with the photo');
+                                var file_path = img.currentSrc;
+
+                                var filename = file_path.replace(/^.*[\\\/]/, '');
+                                var file_noExtenstion = filename.replace(/\.[^/.]+$/, "");
+
+
+                                var bucket_getGPS_forPhoto = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt'}});
+
+                                bucket.listObjects(function (err, data) {
+                                if (err) {
+                                            document.getElementById('status').innerHTML =
+                                            'Could not load objects from S3';
+                                } else {
+                                             document.getElementById('status').innerHTML =
+                                             'Loaded ' + data.Contents.length + ' items from S3';
+                                for (var i = 0; i < data.Contents.length; i++) {
+                               // var photo_extenstion = data.Contents[i].Key.split('.').pop();
+
+                                 //    if (photo_extenstion == "gif" || photo_extenstion == "png" || photo_extenstion == "bmp" || photo_extenstion == "jpeg" || photo_extenstion == "jpg"
+                                  //       || photo_extenstion == "GIF" || photo_extenstion == "PNG" || photo_extenstion == "BMP" || photo_extenstion == "GPEG" || photo_extenstion == "JPG") {
+//
+                                 //        $scope.photos.push(S3URL + 'tracker.photos/' + data.Contents[i].Key);
+                                // }
+                                //    $scope.$apply();
+                                 }
+                     }
+                    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         }
                     });
                 }
