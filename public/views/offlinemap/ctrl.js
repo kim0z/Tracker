@@ -229,8 +229,15 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                                 var file_noExtenstion = filename.replace(/\.[^/.]+$/, "");
 
 
-                                var bucket_getGPS_forPhoto = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt'}});
+                               // var bucket_getGPS_forPhoto = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt'}});
 
+
+                            var file_gps = S3URL + 'tracker.photos/' + $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt';
+                            console.log(file_gps);
+
+                            console.log(readTextFile(file_gps));
+
+                            /*
                                 bucket.listObjects(function (err, data) {
                                 if (err) {
                                             document.getElementById('status').innerHTML =
@@ -254,7 +261,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
 
 
-
+*/
 
 
 
@@ -389,6 +396,31 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
         //*******************************************************************************************************
         //Help functions
+
+        var readTextFile = function (file)
+        {
+            var file_content = '';
+            var rawFile = new XMLHttpRequest();
+            rawFile.open("GET", file, true);
+            rawFile.onreadystatechange = function ()
+            {
+                if(rawFile.readyState === 4)
+                {
+                    if(rawFile.status === 200 || rawFile.status == 0)
+                    {
+                        var allText = rawFile.responseText;
+                        file_content = allText;
+                        return allText;
+                    }
+                }
+            }
+            rawFile.send(file_content);
+        }
+
+
+
+
+
         //this function used for get the unicode (testing)
         function toUnicode(theString) {
             var unicodeString = '';

@@ -24,8 +24,8 @@
       <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/views/offlinemap/ctrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.683871">
-              <caret line="307" column="93" selection-start-line="307" selection-start-column="93" selection-end-line="307" selection-end-column="93" />
+            <state vertical-scroll-proportion="3.5432558">
+              <caret line="411" column="47" selection-start-line="411" selection-start-column="47" selection-end-line="411" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -156,8 +156,8 @@
     <detection-done>true</detection-done>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="1440" />
-    <option name="height" value="900" />
+    <option name="width" value="1920" />
+    <option name="height" value="1200" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -469,7 +469,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <frame x="0" y="0" width="1920" height="1200" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10852713" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -866,8 +866,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/views/offlinemap/ctrl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.683871">
-          <caret line="307" column="93" selection-start-line="307" selection-start-column="93" selection-end-line="307" selection-end-column="93" />
+        <state vertical-scroll-proportion="3.5432558">
+          <caret line="411" column="47" selection-start-line="411" selection-start-column="47" selection-end-line="411" selection-end-column="47" />
           <folding />
         </state>
       </provider>
