@@ -232,52 +232,22 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                                // var bucket_getGPS_forPhoto = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt'}});
 
 
-                            var file_gps = S3URL + 'tracker.photos/' + $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt';
-                            console.log(file_gps);
+                            var fileGpsUrl = S3URL + 'tracker.photos/' + $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt';
+                            console.log(fileGpsUrl);
 
-                            console.log(readTextFile(file_gps));
+                            // get GPS point of the selected photo from AWS S3
+                            $http({
+                                method: 'GET',
+                                url: fileGpsUrl
+                            }).then(function successCb(response) {
+                                console.dir(response);
 
-                            function getInput (options, callback) {
-                                allUserData.push (options);
-                                callback (generalLastName, options);
-                            }
-
-
-
-
-                            /*
-                                bucket.listObjects(function (err, data) {
-                                if (err) {
-                                            document.getElementById('status').innerHTML =
-                                            'Could not load objects from S3';
-                                } else {
-                                             document.getElementById('status').innerHTML =
-                                             'Loaded ' + data.Contents.length + ' items from S3';
-                                for (var i = 0; i < data.Contents.length; i++) {
-                               // var photo_extenstion = data.Contents[i].Key.split('.').pop();
-
-                                 //    if (photo_extenstion == "gif" || photo_extenstion == "png" || photo_extenstion == "bmp" || photo_extenstion == "jpeg" || photo_extenstion == "jpg"
-                                  //       || photo_extenstion == "GIF" || photo_extenstion == "PNG" || photo_extenstion == "BMP" || photo_extenstion == "GPEG" || photo_extenstion == "JPG") {
-//
-                                 //        $scope.photos.push(S3URL + 'tracker.photos/' + data.Contents[i].Key);
-                                // }
-                                //    $scope.$apply();
-                                 }
-                     }
-                    });
+                                showItemOnMap({lat: response.data.lat, lng: response.data.lng}, null);
 
 
-
-
-*/
-
-
-
-
-
-
-
-
+                            }, function errorCb(response) {
+                                console.log(response);
+                            });
 
 
                         }
@@ -292,7 +262,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
             console.log('showItemOnMap function :: ' + 'lat:' + Latlng.lat + '     lng: ' + Latlng.lng);
 
             if ($scope.editMode == false) {
-                if (Latlng) {
+                if (Latlng.lat && Latlng.lng ) {
 
                     $scope.map.setCenter(Latlng);
                     //smoothZoom($scope.map, 7, $scope.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
@@ -404,7 +374,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
         //*******************************************************************************************************
         //Help functions
-
+        //Read text file from AWS S3
         var readTextFile = function (file)
         {
             var file_content = '';
@@ -418,7 +388,6 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                     {
                         var allText = rawFile.responseText;
                         file_content = allText;
-                        return allText;
                     }
                 }
             }
