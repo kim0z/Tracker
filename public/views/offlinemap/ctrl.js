@@ -237,6 +237,14 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
                             console.log(readTextFile(file_gps));
 
+                            function getInput (options, callback) {
+                                allUserData.push (options);
+                                callback (generalLastName, options);
+                            }
+
+
+
+
                             /*
                                 bucket.listObjects(function (err, data) {
                                 if (err) {
