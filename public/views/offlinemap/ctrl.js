@@ -246,7 +246,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
 
                             }, function errorCb(response) {
-                                console.log(response);
+                                console.log('No GPS point in AWS S3 for this photo');
                             });
 
 
@@ -375,6 +375,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         //*******************************************************************************************************
         //Help functions
         //Read text file from AWS S3
+    //no need for the below fun I used $http req
         var readTextFile = function (file)
         {
             var file_content = '';

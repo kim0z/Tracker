@@ -22,6 +22,7 @@
     </md-toolbar>
 -->
 
+
     <md-content layout="vertical" flex>
         <!-- LEFT SIDEBAR -->
         <md-sidenav class="md-sidenav-left" md-component-id="left">
@@ -74,7 +75,7 @@
                                     <img class="round-face" src="http://placekitten.com/g/48/48"/>
                                 </div>
                                 <md-card-content>
-                                    <img src="../../assets/images/karim.jpg"/>
+                                    <img src="{{coverPhoto(chunk.id)}}"/>
                                     <h2>{{ chunk.title }}</h2>
 
                                     <p>{{ chunk.description }}</p>
