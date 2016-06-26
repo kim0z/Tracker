@@ -1,7 +1,9 @@
 trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages, localStorageService) {
 
 
-    $scope.coverPhoto = function (trip_id) {
+    $scope.getCoverPhoto = function (trip_id) {
+
+        console.log('karim');
         //AWS Config
         AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
         // Configure your region
