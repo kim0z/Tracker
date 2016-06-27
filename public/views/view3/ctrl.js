@@ -1,7 +1,14 @@
 trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages, localStorageService) {
 
 
-    $scope.getCoverPhoto = function (trip_id) {
+    $scope.toggleChunkExpand = function(chunk) {
+        chunk.expanded = !chunk.expanded;
+        if (chunk.expanded) {
+            getCoverPhoto(chunk);
+        }
+    }
+
+    function getCoverPhoto(chunk) {
 
         console.log('karim');
         //AWS Config
@@ -13,23 +20,26 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsA
         var bucket = new AWS.S3({
             params: {
                 Bucket: 'tracker.photos',
-                Marker: localStorageService.get('email') + '/' + trip_id
+                Marker: localStorageService.get('email') + '/' + chunk.id
                 //Delimiter: '/',
-                //Prefix: localStorageService.get('email') + '/' + trip_id
+                //Prefix: localStorageService.get('email') + '/' + chunk.id
             }
         });
         bucket.listObjects(function (err, data) {
+            var i;
             if (err) {
                 console.dir(err);
             } else {
-                for (var i = 0; i < data.Contents.length; i++) {
+                for (i = 0; i < data.Contents.length; i++) {
 
                     var substring = "cover";
                     // console.log(S3URL + 'tracker.photos/' + data.Contents[i].Key)
                     if (data.Contents[i].Key.indexOf(substring) > -1) {
-                        return S3URL + 'tracker.photos/' + data.Contents[i].Key;
+                        break;
+                       // return S3URL + 'tracker.photos/' + data.Contents[i].Key;
                     }
                 }
+                chunk.coverPhotoUrl = i < data.Contents.length ? S3URL + 'tracker.photos/' + data.Contents[i].Key : '';
             }
         });
     }

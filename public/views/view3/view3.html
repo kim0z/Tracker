@@ -53,7 +53,7 @@
                 <div id="content">
                     <div ng-repeat="chunk in ::chunks">
                         <p ng-if="chunk.divider">{{chunk.title}}</p>
-                        <md-card ng-if="!chunk.expanded && !chunk.divider" ng-click="chunk.expanded = !chunk.expanded"
+                        <md-card ng-if="!chunk.expanded && !chunk.divider" ng-click="toggleChunkExpand(chunk)"
                                  ng-mouseover="hover = true" ng-mouseout="hover = false">
                             <md-item layout="row">
                                 <div>
@@ -69,13 +69,14 @@
                                 </div>
                             </md-item>
                         </md-card>
-                        <md-card ng-if="chunk.expanded && !chunk.divider" ng-click="chunk.expanded = !chunk.expanded">
+                        <md-card ng-if="chunk.expanded && !chunk.divider" ng-click="toggleChunkExpand(chunk)">
                             <div layout="column">
                                 <div>
                                     <img class="round-face" src="http://placekitten.com/g/48/48"/>
                                 </div>
                                 <md-card-content>
-                                    <img src="{{::getCoverPhoto(chunk.id)}}"/>
+                                    <img ng-src="{{chunk.coverPhotoUrl}}"/>
+                                    <!-- <img src="{{::getCoverPhoto(chunk.id)}}"/> -->
                                     <h2>{{ chunk.title }}</h2>
 
                                     <p>{{ chunk.description }}</p>
