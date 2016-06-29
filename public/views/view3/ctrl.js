@@ -20,11 +20,13 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsA
         var bucket = new AWS.S3({
             params: {
                 Bucket: 'tracker.photos',
-                Marker: localStorageService.get('email') + '/' + chunk.id
-                //Delimiter: '/',
-                //Prefix: localStorageService.get('email') + '/' + chunk.id
+                //Marker: localStorageService.get('email') + '/' + chunk.id
+                Delimiter: '/',
+                Prefix: localStorageService.get('email') + '/' + chunk.id + '/'
             }
         });
+
+        
         bucket.listObjects(function (err, data) {
             var i;
             if (err) {
@@ -42,6 +44,7 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsA
                 chunk.coverPhotoUrl = i < data.Contents.length ? S3URL + 'tracker.photos/' + data.Contents[i].Key : '';
             }
         });
+        
     }
 
     //Open actual map for the trip (the map after the trip was executed), this functionality should be available when the trip end date < current date

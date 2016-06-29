@@ -39,8 +39,17 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         var S3URL = 'https://s3-us-west-2.amazonaws.com/';
         $scope.photos = [];
 
-        var bucket = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID}});
+        //var bucket = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID}});
 
+  var bucket = new AWS.S3({
+            params: {
+                Bucket: 'tracker.photos',
+                //Marker: localStorageService.get('email') + '/' + chunk.id
+                Delimiter: '/',
+                Prefix: $scope.email + '/' + $scope.tripID + '/'
+            }
+        });
+  
         bucket.listObjects(function (err, data) {
             if (err) {
                 document.getElementById('status').innerHTML =
