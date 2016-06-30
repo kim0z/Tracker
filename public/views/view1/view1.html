@@ -15,7 +15,7 @@
 
         <tr>
             <td>
-                <form name="tripDefinitionForm" style="overflow:scroll; height: 600px; width: 400px">
+                <form name="tripDefinitionForm"  height: 90%; width: 90%">
                     <table  border="0" style="text-align: center;">
                         <col width="150px"/>
                         <col width="200px"/>
@@ -38,6 +38,19 @@
                                        ng-pattern="example.word" ng-blur="onBlur($event)">
 
                             </td>
+                        </tr>
+
+                        <tr>
+
+                                <td style="width: 150px">
+                                <label class="label1">Continents</label>
+                                </td>
+
+
+                                <td>
+                                    <select class="form-control" ng-model="selectedContinents" ng-options="x for x in continents">
+                                </select>
+                        </td>
                         </tr>
 
 

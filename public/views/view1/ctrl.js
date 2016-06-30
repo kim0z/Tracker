@@ -15,6 +15,7 @@ trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleM
 
     var city_Lat_Lng = []; // here will be saved each city and Lat, Lng point to be used later when ask airport
 
+$scope.continents = ["Africa", "Europe", "Asia", "North America", "South America", "Antarctica", "Australia"];
 
     //get trip data to the page
     $scope.trip_id = messages.getTripID();
