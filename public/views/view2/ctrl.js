@@ -8,7 +8,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
         var polys = []; // will hold poly for each user
 
         // Get a database reference to our posts
-        var ref = new Firebase("https://luminous-torch-9364.firebaseio.com/");
+        var ref = new Firebase("https://luminous-torch-9364.firebaseio.com/mobile/users");
 
         //$scope.init = function () {
         var trackCoordinates = []; // for new GPS points
@@ -106,8 +106,112 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
         });
 
 
+
+
+    //read active users Firebase -> mobile -> users
+    ref.once("value", function (snapshot) {
+        loadUsers = function () {
+            var id = 0;
+            snapshot.forEach(function (childSnapshot) {
+                // key will be "fred" the first time and "barney" the second time
+                var key = childSnapshot.key();
+
+                var email_with_shtrodel = key.replace('u0040', '@');
+                var email_with_shtrodel_dot = email_with_shtrodel.replace('u002E', '.');
+
+                console.log(email_with_shtrodel_dot);
+
+                $scope.data.push({
+                    id: id + 1,
+                    name: email_with_shtrodel_dot,
+                    email: email_with_shtrodel_dot
+                });
+
+
+
+
+
+                //path for each user
+                var childPath = childSnapshot.child('path');
+                console.log(childPath.key());
+                var path = [];
+                childPath.forEach(function (childCoords){
+
+                    console.log(childCoords.key());
+
+                    var coords = childCoords.val();
+
+                    path.push({
+                        lat: JSON.parse(coords['coords'].latitude),
+                        lng: JSON.parse(coords['coords'].longitude)
+                    });
+
+
+
+
+                    //users_hash[email_with_shtrodel_dot] = path;
+
+            })
+
+
+                console.log(path);
+
+                //dashed line
+                var lineSymbol = {
+                    path: 'M 0,-1 0,1',
+                    strokeOpacity: 1,
+                    scale: 4
+                };
+
+                //  var trackPath_users
+                polys[email_with_shtrodel_dot]  = new google.maps.Polyline({
+                    path: path,
+                    geodesic: true,
+                    strokeColor: '#0000FF',
+                    strokeOpacity: 0,
+                    strokeWeight: 2,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '0',
+                        repeat: '20px'
+                    }]
+                });
+
+                polys[email_with_shtrodel_dot].setMap($scope.map);
+
+
+            });
+
+        }
+        loadUsers();
+        $scope.$apply();
+
+
+        //path for each user
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //get users names to push it into the list of active travelers
         dataBaseService.getUsersList().then(function (results) {
+          /*
             loadUsers = function () {
                 for (var i = 0; i < results.data.rows.length; i++) {
                     $scope.data.push({
@@ -120,11 +224,13 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                     users_hash[results.data.rows[i].email] = []; // add users to hash table( it will be used to add all GPS points to the right user)
                 }
             }
-            loadUsers(); //load users to the list in the right side
 
+            */
+         //   loadUsers(); //load users to the list in the right side
+
+
+            /*
             //get all GPS points from FireBase and push to the right user in the hashtable
-
-
             ref.once("value", function (snapshot) {
                 // The callback function will get called twice, once for "fred" and once for "barney"
                 snapshot.forEach(function (childSnapshot) {
@@ -193,7 +299,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
 
             });
-
+*/
 
         })
 
