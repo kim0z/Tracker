@@ -1,4 +1,4 @@
-trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $document, dataBaseService, messages) {
+trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $document, dataBaseService, messages, $timeout) {
 
         $scope.user = messages.getUser();
         $scope.travelersList = [];
@@ -16,11 +16,12 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
         $scope.map;
         $scope.lastGPSpoint = "";
 
+
         //Map configuration
         $scope.map = new google.maps.Map(document.getElementById('map'), {
             //center: {lat: 34.397, lng: 40.644},
             center: {lat: 0, lng: 0},
-            zoom: 5,
+            zoom: 3,
             mapTypeId: google.maps.MapTypeId.TERRAIN
         });
 
@@ -32,7 +33,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
         var socket = io.connect('http://localhost:8080');
         socket.on('GpsPoint', function (data) {
-            console.log(data);
+            //console.log(data);
             console.log('GPS new point: ' + data);
 
 
@@ -63,209 +64,92 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
                 // get polyline from map (reminder: each polyline name by email)
                 var currentPath = polys[data.email].getPath();
-                currentPath.push(new google.maps.LatLng(JSON.parse(data.latitude),JSON.parse(data.longitude)));
-
+                currentPath.push(new google.maps.LatLng(JSON.parse(data.latitude), JSON.parse(data.longitude)));
 
 
                 //add the GPS point to trqckPath to draw the line in map
-              //  trackCoordinates.push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
+                //  trackCoordinates.push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
 
 
                 /*
-                // Define a symbol using SVG path notation, with an opacity of 1.
-                //dashed line
-                var lineSymbol = {
-                    path: 'M 0,-1 0,1',
-                    strokeOpacity: 1,
-                    scale: 4
-                };
+                 // Define a symbol using SVG path notation, with an opacity of 1.
+                 //dashed line
+                 var lineSymbol = {
+                 path: 'M 0,-1 0,1',
+                 strokeOpacity: 1,
+                 scale: 4
+                 };
 
-                var trackPath = new google.maps.Polyline({
-                    path: trackCoordinates,
-                    geodesic: true,
-                    strokeColor: '#FF0000',
-                    strokeOpacity: 0,
-                    strokeWeight: 2,
-                    icons: [{
-                        icon: lineSymbol,
-                        offset: '0',
-                        repeat: '20px'
-                    }]
-                });
-*/
+                 var trackPath = new google.maps.Polyline({
+                 path: trackCoordinates,
+                 geodesic: true,
+                 strokeColor: '#FF0000',
+                 strokeOpacity: 0,
+                 strokeWeight: 2,
+                 icons: [{
+                 icon: lineSymbol,
+                 offset: '0',
+                 repeat: '20px'
+                 }]
+                 });
+                 */
 
 
-
-                console.log(trackCoordinates);
+                //console.log(trackCoordinates);
                 //each new gps point means that the user is Active
                 var userStatus = document.getElementById(data.email);
                 userStatus.style.background = "url('../../assets/images/online.png') left center/30px 30px no-repeat";
                 //update map
-              //  trackPath.setMap($scope.map);
+                //  trackPath.setMap($scope.map);
             }
         });
 
 
-
-
-    //read active users Firebase -> mobile -> users
-    ref.once("value", function (snapshot) {
-        loadUsers = function () {
-            var id = 0;
-            snapshot.forEach(function (childSnapshot) {
-                // key will be "fred" the first time and "barney" the second time
-                var key = childSnapshot.key();
-
-                var email_with_shtrodel = key.replace('u0040', '@');
-                var email_with_shtrodel_dot = email_with_shtrodel.replace('u002E', '.');
-
-                console.log(email_with_shtrodel_dot);
-
-                $scope.data.push({
-                    id: id + 1,
-                    name: email_with_shtrodel_dot,
-                    email: email_with_shtrodel_dot
-                });
-
-
-
-
-
-                //path for each user
-                var childPath = childSnapshot.child('path');
-                console.log(childPath.key());
-                var path = [];
-                childPath.forEach(function (childCoords){
-
-                    console.log(childCoords.key());
-
-                    var coords = childCoords.val();
-
-                    path.push({
-                        lat: JSON.parse(coords['coords'].latitude),
-                        lng: JSON.parse(coords['coords'].longitude)
-                    });
-
-
-
-
-                    //users_hash[email_with_shtrodel_dot] = path;
-
-            })
-
-
-                console.log(path);
-
-                //dashed line
-                var lineSymbol = {
-                    path: 'M 0,-1 0,1',
-                    strokeOpacity: 1,
-                    scale: 4
-                };
-
-                //  var trackPath_users
-                polys[email_with_shtrodel_dot]  = new google.maps.Polyline({
-                    path: path,
-                    geodesic: true,
-                    strokeColor: '#0000FF',
-                    strokeOpacity: 0,
-                    strokeWeight: 2,
-                    icons: [{
-                        icon: lineSymbol,
-                        offset: '0',
-                        repeat: '20px'
-                    }]
-                });
-
-                polys[email_with_shtrodel_dot].setMap($scope.map);
-
-
-            });
-
-        }
-        loadUsers();
-        $scope.$apply();
-
-
-        //path for each user
-
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //get users names to push it into the list of active travelers
-        dataBaseService.getUsersList().then(function (results) {
-          /*
+        //read active users Firebase -> mobile -> users
+        //Read already saved paths
+        //then add listeners to new real time GPS points
+        ref.once("value", function (snapshot) {
             loadUsers = function () {
-                for (var i = 0; i < results.data.rows.length; i++) {
-                    $scope.data.push({
-                        id: i + 1,
-                        name: results.data.rows[i].name,
-                        email: results.data.rows[i].email
-                    });
-                    $scope.id++;
-
-                    users_hash[results.data.rows[i].email] = []; // add users to hash table( it will be used to add all GPS points to the right user)
-                }
-            }
-
-            */
-         //   loadUsers(); //load users to the list in the right side
-
-
-            /*
-            //get all GPS points from FireBase and push to the right user in the hashtable
-            ref.once("value", function (snapshot) {
-                // The callback function will get called twice, once for "fred" and once for "barney"
+                var id = 0;
                 snapshot.forEach(function (childSnapshot) {
                     // key will be "fred" the first time and "barney" the second time
                     var key = childSnapshot.key();
-                    // childData will be the actual contents of the child
-                    var childData = childSnapshot.val();
 
-                    if (!childData.hasOwnProperty('active')) { //if Object include active then it means it's not a GPS point with message
-                        console.log(childData);
-                         users_hash[childData.email].push(childData);
-                    }
-                });
+                    var email_with_shtrodel = key.replace('u0040', '@');
+                    var email_with_shtrodel_dot = email_with_shtrodel.replace('u002E', '.');
 
-                //build path for each user
-                //loop hashtable
-                var color_index = -1;
-                for (key_name in users_hash) {
-                    console.log(key_name); // the key_name = email, the HashTable mapped email -> Points from FireBase
+                    // console.log(email_with_shtrodel_dot);
+
+                    $scope.data.push({
+                        id: id + 1,
+                        name: email_with_shtrodel_dot,
+                        email: email_with_shtrodel_dot
+                    });
 
 
-                    var path = []; // new path for each user in hashtable
-                    var colors = ['#0000FF', '#D2691E', '#FF0000', '#DAA520']
+                    //path for each user
+                    var childPath = childSnapshot.child('path');
+                    //console.log(childPath.key());
+                    var path = [];
+                    childPath.forEach(function (childCoords) {
 
-                    if(colors.length > color_index) // point index for next color only when the index is less than the length (else we will stuck with the same color :) )
-                        color_index++;
+                        //console.log(childCoords.key());
+                        //console.log(childCoords.key());
 
-
-                    for (var i = 0; i < users_hash[key_name].length; i++) {
+                        var coords = childCoords.val();
 
                         path.push({
-                            lat: JSON.parse(users_hash[key_name][i].latitude),
-                            lng: JSON.parse(users_hash[key_name][i].longitude)
+                            lat: JSON.parse(coords['coords'].latitude),
+                            lng: JSON.parse(coords['coords'].longitude)
                         });
-                    }
+
+
+                        //users_hash[email_with_shtrodel_dot] = path;
+
+                    })
+
+
+                    //console.log(path);
 
                     //dashed line
                     var lineSymbol = {
@@ -274,13 +158,11 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                         scale: 4
                     };
 
-
-
-                  //  var trackPath_users
-                    polys[key_name]  = new google.maps.Polyline({
+                    //  var trackPath_users
+                    polys[email_with_shtrodel_dot] = new google.maps.Polyline({
                         path: path,
                         geodesic: true,
-                        strokeColor: colors[color_index],
+                        strokeColor: getRandomColor(),
                         strokeOpacity: 0,
                         strokeWeight: 2,
                         icons: [{
@@ -290,16 +172,179 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                         }]
                     });
 
-                    polys[key_name].setMap($scope.map);
-
-                }
-
-                // var childData.email
-                //    .push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
+                    polys[email_with_shtrodel_dot].setMap($scope.map);
 
 
-            });
-*/
+                });
+
+            }
+            loadUsers();
+            $scope.$apply();
+
+        });
+
+
+        //keep listening for new path updates, first let's add listeners for all users **
+        //What if new user just added
+        ref.on("value", function (snapshot) {
+
+            $timeout(function () {
+
+                console.log(polys);
+                snapshot.forEach(function (childSnapshot) {
+                    // childSnapshot == mobile/users/email
+
+                    //console.log(childSnapshot.val
+
+                    var data = childSnapshot.val();
+
+                    //  console.log(data.email);
+
+
+                    childSnapshot.forEach(function (path) {
+                        if (path.key() == 'path') {
+
+
+                            var pathRef = path.ref();
+
+                            pathRef.on('child_added', function (childSnapshot, prevChildKey) {
+
+                                //childSnapshot == new point added
+
+                                //get parent of path to know the email, and then add the new point to the exists path
+                                var parent = pathRef.parent();
+
+                                parent.on('value', function (parentSnapshot) {
+
+                                    var parentData = parentSnapshot.val();
+                                    //console.log(parentData.email);
+
+                                 //   polys[parentData.email.toString].path.push(childSnapshot.val());
+
+                                    // get existing path
+                                    var path = polys[parentData.email].getPath();
+
+                                    // add new point
+                                    path.push(new google.maps.LatLng(childSnapshot.val().coords.latitude, childSnapshot.val().coords.longitude));
+                                    // update the polyline with the updated path
+                                    //polys[parentData.email].setPath(path);
+
+
+                                })
+                            })
+                        }
+                    })
+                })
+
+
+            }, 4000);
+
+
+        })
+
+
+        /*
+         var refTemp = new Firebase("https://luminous-torch-9364.firebaseio.com/mobile/users/aladdin_dejvjmt_trackeru0040tfbnwu002Enet/path");
+         refTemp.on('child_added', function(childSnapshot, prevChildKey) {
+         // code to handle new child.
+
+         console.log('something was added')
+         });
+
+         */
+
+
+        //get users names to push it into the list of active travelers
+        dataBaseService.getUsersList().then(function (results) {
+            /*
+             loadUsers = function () {
+             for (var i = 0; i < results.data.rows.length; i++) {
+             $scope.data.push({
+             id: i + 1,
+             name: results.data.rows[i].name,
+             email: results.data.rows[i].email
+             });
+             $scope.id++;
+
+             users_hash[results.data.rows[i].email] = []; // add users to hash table( it will be used to add all GPS points to the right user)
+             }
+             }
+
+             */
+            //   loadUsers(); //load users to the list in the right side
+
+
+            /*
+             //get all GPS points from FireBase and push to the right user in the hashtable
+             ref.once("value", function (snapshot) {
+             // The callback function will get called twice, once for "fred" and once for "barney"
+             snapshot.forEach(function (childSnapshot) {
+             // key will be "fred" the first time and "barney" the second time
+             var key = childSnapshot.key();
+             // childData will be the actual contents of the child
+             var childData = childSnapshot.val();
+
+             if (!childData.hasOwnProperty('active')) { //if Object include active then it means it's not a GPS point with message
+             console.log(childData);
+             users_hash[childData.email].push(childData);
+             }
+             });
+
+             //build path for each user
+             //loop hashtable
+             var color_index = -1;
+             for (key_name in users_hash) {
+             console.log(key_name); // the key_name = email, the HashTable mapped email -> Points from FireBase
+
+
+             var path = []; // new path for each user in hashtable
+             var colors = ['#0000FF', '#D2691E', '#FF0000', '#DAA520']
+
+             if(colors.length > color_index) // point index for next color only when the index is less than the length (else we will stuck with the same color :) )
+             color_index++;
+
+
+             for (var i = 0; i < users_hash[key_name].length; i++) {
+
+             path.push({
+             lat: JSON.parse(users_hash[key_name][i].latitude),
+             lng: JSON.parse(users_hash[key_name][i].longitude)
+             });
+             }
+
+             //dashed line
+             var lineSymbol = {
+             path: 'M 0,-1 0,1',
+             strokeOpacity: 1,
+             scale: 4
+             };
+
+
+
+             //  var trackPath_users
+             polys[key_name]  = new google.maps.Polyline({
+             path: path,
+             geodesic: true,
+             strokeColor: colors[color_index],
+             strokeOpacity: 0,
+             strokeWeight: 2,
+             icons: [{
+             icon: lineSymbol,
+             offset: '0',
+             repeat: '20px'
+             }]
+             });
+
+             polys[key_name].setMap($scope.map);
+
+             }
+
+             // var childData.email
+             //    .push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
+
+
+             });
+             */
 
         })
 
@@ -324,7 +369,34 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
         });
 
 
+        //help function
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        $scope.zoomIntoPath = function ($event) {
+            //console.log($event.currentTarget.id);
+
+            zoomToObject(polys[$event.currentTarget.id]);
+        }
+
+        function zoomToObject(obj) {
+            var bounds = new google.maps.LatLngBounds();
+            var points = obj.getPath().getArray();
+            for (var n = 0; n < points.length; n++) {
+                bounds.extend(points[n]);
+            }
+            $scope.map.fitBounds(bounds);
+        }
+
     })
+
+    //zoom into path
 
 
     .directive('infiniteScroll', function () {
@@ -343,6 +415,10 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
             }
         }
     })
+
+
+
+
 
 
 
