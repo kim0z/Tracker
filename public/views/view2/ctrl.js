@@ -108,7 +108,8 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
         //read active users Firebase -> mobile -> users
         //Read already saved paths
         //then add listeners to new real time GPS points
-        ref.once("value", function (snapshot) {
+
+        var firstPathLoad_firebase = ref.once("value", function (snapshot) {
             loadUsers = function () {
                 var id = 0;
                 snapshot.forEach(function (childSnapshot) {
@@ -131,6 +132,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                     var childPath = childSnapshot.child('path');
                     //console.log(childPath.key());
                     var path = [];
+
                     childPath.forEach(function (childCoords) {
 
                         //console.log(childCoords.key());
@@ -142,12 +144,8 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                             lat: JSON.parse(coords['coords'].latitude),
                             lng: JSON.parse(coords['coords'].longitude)
                         });
-
-
                         //users_hash[email_with_shtrodel_dot] = path;
-
                     })
-
 
                     //console.log(path);
 
@@ -183,63 +181,59 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
         });
 
+        $timeout(function () {
+            ref.off('value', firstPathLoad_firebase);
+            console.log('timeout');
+        }, 5000);
+
 
         //keep listening for new path updates, first let's add listeners for all users **
         //What if new user just added
-        ref.on("value", function (snapshot) {
-
+        ref.on("value", function (users) {
             $timeout(function () {
-
-                console.log(polys);
-                snapshot.forEach(function (childSnapshot) {
+                users.forEach(function (childSnapshot) {
                     // childSnapshot == mobile/users/email
 
-                    //console.log(childSnapshot.val
-
                     var data = childSnapshot.val();
-
-                    //  console.log(data.email);
-
 
                     childSnapshot.forEach(function (path) {
                         if (path.key() == 'path') {
 
-
+                            //create reference for each path
                             var pathRef = path.ref();
 
-                            pathRef.on('child_added', function (childSnapshot, prevChildKey) {
+                            pathRef.limitToLast(1).on('child_added', function (childSnapshot, prevChildKey) {
 
                                 //childSnapshot == new point added
 
                                 //get parent of path to know the email, and then add the new point to the exists path
                                 var parent = pathRef.parent();
+                                var email = parent.key();
+                                console.dir(email);
 
-                                parent.on('value', function (parentSnapshot) {
+                                var email_with_shtrodel = email.replace('u0040', '@');
+                                var email_with_shtrodel_dot = email_with_shtrodel.replace('u002E', '.');
 
-                                    var parentData = parentSnapshot.val();
-                                    //console.log(parentData.email);
+                                console.log(childSnapshot.val().coords.latitude + '  ' + childSnapshot.val().coords.longitude);
 
-                                 //   polys[parentData.email.toString].path.push(childSnapshot.val());
+                                // get existing path
+                                var path = polys[email_with_shtrodel_dot].getPath();
 
-                                    // get existing path
-                                    var path = polys[parentData.email].getPath();
+                                // add new point
+                                path.push(new google.maps.LatLng(childSnapshot.val().coords.latitude, childSnapshot.val().coords.longitude));
+                                // update the polyline with the updated path
+                                //polys[parentData.email].setPath(path);
 
-                                    // add new point
-                                    path.push(new google.maps.LatLng(childSnapshot.val().coords.latitude, childSnapshot.val().coords.longitude));
-                                    // update the polyline with the updated path
-                                    //polys[parentData.email].setPath(path);
+                                polys[email_with_shtrodel_dot].setPath(path);
 
+                                $scope.$apply();
 
-                                })
                             })
+
                         }
                     })
                 })
-
-
             }, 4000);
-
-
         })
 
 
