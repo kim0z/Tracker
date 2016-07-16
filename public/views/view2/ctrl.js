@@ -143,24 +143,20 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
                     polys[email_with_shtrodel_dot].setMap($scope.map);
 
-
+/*
                     //***************
                     //handle messages
                     //***************
                     //path for each user
                     var childPath_messages = childSnapshot.child('messages');
-                    var message = '';
+                    var allMessageOfUser = [];
 
                     childPath_messages.forEach(function (childCoords) {
-
-
-
-                        message = childCoords.val();;
-                        console.dir(childCoords.val());
+                        allMessageOfUser.push(childCoords.val());
                     })
-
-                    messages[email_with_shtrodel_dot] = email_with_shtrodel_dot
-
+                    //all messages saved in below hashtable, key = email
+                    $scope.messages[email_with_shtrodel_dot] = allMessageOfUser;
+*/
                 });
 
             }
@@ -237,8 +233,10 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                                // $scope.messages[email_with_shtrodel_dot] = {};
                                // $scope.messages[email_with_shtrodel_dot].push(childSnapshot.val());
 
-                                console.dir(childSnapshot.val());
+                                console.dir('new message added : ' +childSnapshot.val());
+                                $scope.messages.push(childSnapshot.val());
 
+                                $scope.$apply();
                             })
                         }
                     })
