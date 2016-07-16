@@ -6,6 +6,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
         $scope.tips = []; // Tips from Firebase, based on GPS point
         var users_hash = {};
         var polys = []; // will hold poly for each user
+        $scope.messages = [];
 
         // Get a database reference to our posts
         var ref = new Firebase("https://luminous-torch-9364.firebaseio.com/mobile/users");
@@ -66,35 +67,6 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                 var currentPath = polys[data.email].getPath();
                 currentPath.push(new google.maps.LatLng(JSON.parse(data.latitude), JSON.parse(data.longitude)));
 
-
-                //add the GPS point to trqckPath to draw the line in map
-                //  trackCoordinates.push({lat: JSON.parse(data.latitude), lng: JSON.parse(data.longitude)});
-
-
-                /*
-                 // Define a symbol using SVG path notation, with an opacity of 1.
-                 //dashed line
-                 var lineSymbol = {
-                 path: 'M 0,-1 0,1',
-                 strokeOpacity: 1,
-                 scale: 4
-                 };
-
-                 var trackPath = new google.maps.Polyline({
-                 path: trackCoordinates,
-                 geodesic: true,
-                 strokeColor: '#FF0000',
-                 strokeOpacity: 0,
-                 strokeWeight: 2,
-                 icons: [{
-                 icon: lineSymbol,
-                 offset: '0',
-                 repeat: '20px'
-                 }]
-                 });
-                 */
-
-
                 //console.log(trackCoordinates);
                 //each new gps point means that the user is Active
                 var userStatus = document.getElementById(data.email);
@@ -107,7 +79,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
         //read active users Firebase -> mobile -> users
         //Read already saved paths
-        //then add listeners to new real time GPS points
+        //read already saved messages
 
         var firstPathLoad_firebase = ref.once("value", function (snapshot) {
             loadUsers = function () {
@@ -127,10 +99,11 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                         email: email_with_shtrodel_dot
                     });
 
-
+                    //**************
+                    //handle paths
+                    //*************
                     //path for each user
                     var childPath = childSnapshot.child('path');
-                    //console.log(childPath.key());
                     var path = [];
 
                     childPath.forEach(function (childCoords) {
@@ -147,8 +120,6 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                         //users_hash[email_with_shtrodel_dot] = path;
                     })
 
-                    //console.log(path);
-
                     //dashed line
                     var lineSymbol = {
                         path: 'M 0,-1 0,1',
@@ -156,7 +127,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                         scale: 4
                     };
 
-                    //  var trackPath_users
+                    //Hash table for all users path
                     polys[email_with_shtrodel_dot] = new google.maps.Polyline({
                         path: path,
                         geodesic: true,
@@ -173,6 +144,23 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                     polys[email_with_shtrodel_dot].setMap($scope.map);
 
 
+                    //***************
+                    //handle messages
+                    //***************
+                    //path for each user
+                    var childPath_messages = childSnapshot.child('messages');
+                    var message = '';
+
+                    childPath_messages.forEach(function (childCoords) {
+
+
+
+                        message = childCoords.val();;
+                        console.dir(childCoords.val());
+                    })
+
+                    messages[email_with_shtrodel_dot] = email_with_shtrodel_dot
+
                 });
 
             }
@@ -181,13 +169,15 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
         });
 
+    //not sure this wait needed, test it and then remove it, remove in case the above function works once
         $timeout(function () {
             ref.off('value', firstPathLoad_firebase);
             console.log('timeout');
         }, 5000);
 
 
-        //keep listening for new path updates, first let's add listeners for all users **
+        //keep listening for new path updates, first let's add listeners for all users under "path"
+        //keep listening for new messages updates, first let's add listeners for all users under "messages"
         //What if new user just added
         ref.on("value", function (users) {
             $timeout(function () {
@@ -227,9 +217,29 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                                 polys[email_with_shtrodel_dot].setPath(path);
 
                                 $scope.$apply();
+                            })
+                        }
+                        if (path.key() == 'messages') {
+
+                            //create reference for each message
+                            var messageRef = path.ref();
+
+                            messageRef.limitToLast(1).on('child_added', function (childSnapshot, prevChildKey) {
+
+                                //get parent of path to know the email, and then add the new point to the exists path
+                                var parent = messageRef.parent();
+                                var email = parent.key();
+                                console.dir(email);
+
+                                var email_with_shtrodel = email.replace('u0040', '@');
+                                var email_with_shtrodel_dot = email_with_shtrodel.replace('u002E', '.');
+
+                               // $scope.messages[email_with_shtrodel_dot] = {};
+                               // $scope.messages[email_with_shtrodel_dot].push(childSnapshot.val());
+
+                                console.dir(childSnapshot.val());
 
                             })
-
                         }
                     })
                 })
@@ -249,7 +259,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
 
         //get users names to push it into the list of active travelers
-        dataBaseService.getUsersList().then(function (results) {
+    //    dataBaseService.getUsersList().then(function (results) {
             /*
              loadUsers = function () {
              for (var i = 0; i < results.data.rows.length; i++) {
@@ -340,7 +350,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
              });
              */
 
-        })
+     //   })
 
         //load tips (messages from Firebase)
         // Attach an asynchronous callback to read the data at our posts reference
