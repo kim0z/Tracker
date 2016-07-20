@@ -165,6 +165,8 @@ trackerApp.controller('login1',
         Facebook.getLoginStatus(function (response) {
             if (response.status == 'connected') {
                 userIsConnected = true;
+                //save Facebook auth into browser DB
+                localStorageService.set('facebookAuth', response);
                 //alert(userIsConnected);
             }else{
                 userIsConnected = false;
@@ -190,7 +192,7 @@ trackerApp.controller('login1',
                     $scope.me();
                 }
 
-            });
+            }, {scope: 'publish_actions,user_photos'});
         };
 
         /**

@@ -1,4 +1,4 @@
-trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObject, $firebaseArray, $http, $document, dataBaseService, messages, localStorageService) {
+trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObject, $firebaseArray, $http, $document, dataBaseService, messages, localStorageService, Facebook) {
 
 
 //NOTES:
@@ -39,9 +39,49 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         var S3URL = 'https://s3-us-west-2.amazonaws.com/';
         $scope.photos = [];
 
+
+        Facebook.getLoginStatus(function (response) {
+            if (response.status == 'connected') {
+                console.log('user is connected')
+            }
+        });
+
+        //var facebookToken = localStorageService.get('facebookAuth').authResponse.accessToken;
+
+
+        /* make the API call */
+        Facebook.api(
+            "/102211533498839/albums",
+            function (response) {
+                if (response && !response.error) {
+                    /* handle the result */
+                    // console.log(response);
+                    for (var i = 0; i < response.data.length; i++) {
+                        if (response.data[i].name == 'Iceland') {
+                           // console.log(response.data[i]);
+
+                            Facebook.api(
+                                "/253880658331925/photos",
+                                function (album) {
+                                    if (album && !album.error) {
+                                 console.log(album);
+                                    }
+                                }
+                            );
+
+
+                            break;
+                        }
+                    }
+
+                }
+            }
+        );
+
+
         //var bucket = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID}});
 
-  var bucket = new AWS.S3({
+        var bucket = new AWS.S3({
             params: {
                 Bucket: 'tracker.photos',
                 //Marker: localStorageService.get('email') + '/' + chunk.id
@@ -49,7 +89,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                 Prefix: $scope.email + '/' + $scope.tripID + '/'
             }
         });
-  
+
         bucket.listObjects(function (err, data) {
             if (err) {
                 document.getElementById('status').innerHTML =
@@ -200,11 +240,10 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                 addGPStoPhoto(img);
 
 
-            }else if($scope.editMode == false){
+            } else if ($scope.editMode == false) {
 
 
-
-                if (img) { 
+                if (img) {
                     EXIF.getData(img, function () {
                         var make = EXIF.getTag(img, "Make"),
                             model = EXIF.getTag(img, "Model");
@@ -230,18 +269,18 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                             showItemOnMap(photo_lat_lng, null);
 
                         } else {
-                                console.log('No GPS point embed to photo ' + img);
-                                console.log('Check if image have GPS point that was added by user and saved to AWS S3 with the photo');
-                                var file_path = img.currentSrc;
+                            console.log('No GPS point embed to photo ' + img);
+                            console.log('Check if image have GPS point that was added by user and saved to AWS S3 with the photo');
+                            var file_path = img.currentSrc;
 
-                                var filename = file_path.replace(/^.*[\\\/]/, '');
-                                var file_noExtenstion = filename.replace(/\.[^/.]+$/, "");
-
-
-                               // var bucket_getGPS_forPhoto = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt'}});
+                            var filename = file_path.replace(/^.*[\\\/]/, '');
+                            var file_noExtenstion = filename.replace(/\.[^/.]+$/, "");
 
 
-                            var fileGpsUrl = S3URL + 'tracker.photos/' + $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt';
+                            // var bucket_getGPS_forPhoto = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt'}});
+
+
+                            var fileGpsUrl = S3URL + 'tracker.photos/' + $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt';
                             console.log(fileGpsUrl);
 
                             // get GPS point of the selected photo from AWS S3
@@ -271,7 +310,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
             console.log('showItemOnMap function :: ' + 'lat:' + Latlng.lat + '     lng: ' + Latlng.lng);
 
             if ($scope.editMode == false) {
-                if (Latlng.lat && Latlng.lng ) {
+                if (Latlng.lat && Latlng.lng) {
 
                     $scope.map.setCenter(Latlng);
                     //smoothZoom($scope.map, 7, $scope.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
@@ -313,45 +352,46 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         }
 
 
-    var addGPStoPhoto = function (img) {
-    //get gps point from map and then
+        var addGPStoPhoto = function (img) {
+            //get gps point from map and then
 
-        //$scope.message
-        $scope.image = {
-            path: img.currentSrc
+            //$scope.message
+            $scope.image = {
+                path: img.currentSrc
+            }
+
+
         }
 
+        $scope.saveGPStoThisPhoto = function () {
+            //create a file and save it in AWS S3 with the same name of the photo with new extension name
 
-    }
+            //create file
 
-    $scope.saveGPStoThisPhoto = function () {
-        //create a file and save it in AWS S3 with the same name of the photo with new extension name
+            var bucket_create_photo_gps = new AWS.S3({params: {Bucket: 'tracker.photos'}});
 
-        //create file
+            var gps_point = {lat: $scope.message.lat, lng: $scope.message.lng};
+            var button = document.getElementById('addGPStoPhoto');
+            var results = document.getElementById('results_photo_gps');
+            // button.addEventListener('click', function() {
+            //    results.innerHTML = '';
 
-        var bucket_create_photo_gps = new AWS.S3({params: {Bucket: 'tracker.photos'}});
+            var filename = $scope.image.path.replace(/^.*[\\\/]/, '');
+            var file_noExtenstion = filename.replace(/\.[^/.]+$/, "");
 
-        var gps_point = {lat: $scope.message.lat, lng: $scope.message.lng};
-        var button = document.getElementById('addGPStoPhoto');
-        var results = document.getElementById('results_photo_gps');
-       // button.addEventListener('click', function() {
-        //    results.innerHTML = '';
+            console.log(file_noExtenstion);
 
-        var filename = $scope.image.path.replace(/^.*[\\\/]/, '');
-        var file_noExtenstion = filename.replace(/\.[^/.]+$/, "");
-
-        console.log(file_noExtenstion);
-
-            var params = {Key: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt', Body: JSON.stringify(gps_point) };
+            var params = {
+                Key: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt',
+                Body: JSON.stringify(gps_point)
+            };
             bucket_create_photo_gps.upload(params, function (err, data) {
                 results.innerHTML = err ? 'ERROR!' : 'SAVED.';
             });
-       // }, false);
+            // }, false);
 
 
-
-
-    }
+        }
 
         $scope.editModeSwitch = function () {
             $scope.editMode = !$scope.editMode;
@@ -384,18 +424,14 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         //*******************************************************************************************************
         //Help functions
         //Read text file from AWS S3
-    //no need for the below fun I used $http req
-        var readTextFile = function (file)
-        {
+        //no need for the below fun I used $http req
+        var readTextFile = function (file) {
             var file_content = '';
             var rawFile = new XMLHttpRequest();
             rawFile.open("GET", file, true);
-            rawFile.onreadystatechange = function ()
-            {
-                if(rawFile.readyState === 4)
-                {
-                    if(rawFile.status === 200 || rawFile.status == 0)
-                    {
+            rawFile.onreadystatechange = function () {
+                if (rawFile.readyState === 4) {
+                    if (rawFile.status === 200 || rawFile.status == 0) {
                         var allText = rawFile.responseText;
                         file_content = allText;
                     }
@@ -403,9 +439,6 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
             }
             rawFile.send(file_content);
         }
-
-
-
 
 
         //this function used for get the unicode (testing)
