@@ -373,6 +373,32 @@
 
         </td>
 
+        <!-- Facebook albums -->
+        <td>
+            <div name="facebookSync">
+                <label ng-repeat="album in facebookAlbums track by $index">{{album.albumName}}{{album.albumID}}
+                    <input type="checkbox" ng-model="facebookAlbums[$index].checkbox">
+                </label><br/>
+                <button ng-click="syncAlbums()">Sync</button>
+            </div>
+        </td>
+        <td>
+            <ul id="facebookPhotos">
+                <li ng-repeat="photo in facebookPhotos track by $index">
+                <!--    <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)"> -->
+                        <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px" >
+                        <span class="rig-overlay"></span>
+                        <span class="rig-text">show on map</span>
+                    </a>
+                </li>
+            </ul>
+        </td>
+
+        <!-- end facebook albums -->
+
+
+
+
         <td>
             <ul id="add_GPS_toPhoto" ng-show="editMode">
                 <p> Image path: <input type="text" ng-model="image.path" style="width: 200px"/></p>

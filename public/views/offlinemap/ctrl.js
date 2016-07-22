@@ -19,6 +19,11 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         $scope.editButtonText = 'Start Edit Mode';
         var showMessageOnMap_clicked = false;
 
+
+        $scope.facebookAlbums = {};
+        $scope.facebookPhotos = [];
+
+
         var email_no_shtrodel = $scope.email.replace('@', 'u0040');
         var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
 
@@ -57,27 +62,43 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                     /* handle the result */
                     // console.log(response);
                     for (var i = 0; i < response.data.length; i++) {
-                        if (response.data[i].name == 'Iceland') {
-                           // console.log(response.data[i]);
-
-                            Facebook.api(
-                                "/253880658331925/photos",
-                                function (album) {
-                                    if (album && !album.error) {
-                                 console.log(album);
-                                    }
-                                }
-                            );
-
-
-                            break;
-                        }
+                        $scope.facebookAlbums[i] = {
+                            checkbox: false,
+                            albumID: response.data[i].id,
+                            albumName: response.data[i].name
+                        };
                     }
-
                 }
             }
         );
 
+        $scope.syncAlbums = function () {
+            console.log($scope.facebookAlbums);
+            var albumLen = Object.keys($scope.facebookAlbums).length;
+            for (var i = 0; i < albumLen; i++) {
+                if ($scope.facebookAlbums[i].checkbox) {
+                    Facebook.api(
+                        "/" + $scope.facebookAlbums[i].albumID + "/photos",
+                        function (album) {
+                            if (album && !album.error) {
+                                console.log('photos');
+                                for (var photoIndex = 0; photoIndex < album.data.length; photoIndex++) {
+                                    Facebook.api(
+                                        "/" + album.data[photoIndex].id + "/picture",
+                                        function (photo) {
+                                            if (photo && !photo.error) {
+                                                /* handle the result */
+                                                console.log(photo.data.url);
+                                                $scope.facebookPhotos.push(photo.data.url);
+                                            }
+                                        });
+                                }
+                            }
+                        });
+                }
+            }
+
+        }
 
         //var bucket = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID}});
 
