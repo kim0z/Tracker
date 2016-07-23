@@ -1,66 +1,83 @@
 trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages, localStorageService) {
 
 
-    $scope.toggleChunkExpand = function(chunk) {
+    $scope.toggleChunkExpand = function (chunk) {
         chunk.expanded = !chunk.expanded;
         if (chunk.expanded) {
             getCoverPhoto(chunk);
         }
     }
 
+
+    /*    function getCoverPhoto(chunk) {
+     //get cover photo named profile in AWS S3 under the user folder - BLOCKED, instead using config from Firebase (Facebook album cover)
+     //AWS Config
+     AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
+     // Configure your region
+     AWS.config.region = 'us-west-2';
+     // below AWS S3 code used to get photos and show in offline page
+     var S3URL = 'https://s3-us-west-2.amazonaws.com/';
+     var bucket = new AWS.S3({
+     params: {
+     Bucket: 'tracker.photos',
+     //Marker: localStorageService.get('email') + '/' + chunk.id
+     Delimiter: '/',
+     Prefix: localStorageService.get('email') + '/' + chunk.id + '/'
+     }
+     });
+
+
+     bucket.listObjects(function (err, data) {
+     var i;
+     if (err) {
+     console.dir(err);
+     } else {
+     for (i = 0; i < data.Contents.length; i++) {
+
+     var substring = "cover";
+     // console.log(S3URL + 'tracker.photos/' + data.Contents[i].Key)
+     if (data.Contents[i].Key.indexOf(substring) > -1) {
+     break;
+     // return S3URL + 'tracker.photos/' + data.Contents[i].Key;
+     }
+     }
+     chunk.coverPhotoUrl = i < data.Contents.length ? S3URL + 'tracker.photos/' + data.Contents[i].Key : '';
+     }
+     });
+
+     }*/
+
     function getCoverPhoto(chunk) {
 
-        console.log('karim');
-        //AWS Config
-        AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
-        // Configure your region
-        AWS.config.region = 'us-west-2';
-        // below AWS S3 code used to get photos and show in offline page
-        var S3URL = 'https://s3-us-west-2.amazonaws.com/';
-        var bucket = new AWS.S3({
-            params: {
-                Bucket: 'tracker.photos',
-                //Marker: localStorageService.get('email') + '/' + chunk.id
-                Delimiter: '/',
-                Prefix: localStorageService.get('email') + '/' + chunk.id + '/'
-            }
+        //this funxtion should be loaded when the page is loaded, not when click on Trip
+        var firebase_config = new Firebase("https://trackerconfig.firebaseio.com/web/tripslist/coverphoto/trip/" + chunk.id);
+
+        // Attach an asynchronous callback to read the data at our posts reference
+        firebase_config.on("value", function (snapshot) {
+            console.log(snapshot.val());
+            chunk.coverPhotoUrl = snapshot.val();
+            $scope.$apply();
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
         });
 
-        
-        bucket.listObjects(function (err, data) {
-            var i;
-            if (err) {
-                console.dir(err);
-            } else {
-                for (i = 0; i < data.Contents.length; i++) {
 
-                    var substring = "cover";
-                    // console.log(S3URL + 'tracker.photos/' + data.Contents[i].Key)
-                    if (data.Contents[i].Key.indexOf(substring) > -1) {
-                        break;
-                       // return S3URL + 'tracker.photos/' + data.Contents[i].Key;
-                    }
-                }
-                chunk.coverPhotoUrl = i < data.Contents.length ? S3URL + 'tracker.photos/' + data.Contents[i].Key : '';
-            }
-        });
-        
     }
 
     //Open actual map for the trip (the map after the trip was executed), this functionality should be available when the trip end date < current date
-    $scope.showActualMap = function(trip_id) {
+    $scope.showActualMap = function (trip_id) {
         console.log('Client:: Click Shoe actual map - trip :: id:: ' + trip_id);
         messages.saveTripID(trip_id); //save trip id into message
         window.open('#/offlinemap', '_self', false);
     }
     /*
- should be deleted added by wrong
+     should be deleted added by wrong
      $scope.chunk = function (trip_id) {
-        console.log('Client:: Click Shoe actual map - trip :: id:: ' + trip_id);
-        messages.saveTripID(trip_id); //save trip id into message
-        window.open('#/offlinemap', '_self', false);
-    }
-    */
+     console.log('Client:: Click Shoe actual map - trip :: id:: ' + trip_id);
+     messages.saveTripID(trip_id); //save trip id into message
+     window.open('#/offlinemap', '_self', false);
+     }
+     */
 
     //Edit the current trip, get the trip id and send to planning page
     $scope.editTrip = function (trip_id) {

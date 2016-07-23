@@ -334,6 +334,7 @@
     </tr>
 
     <tr>
+        <!-- Load photos from AWS S3 - disabled, instead sync with Facebook photos
         <td>
            <div id="status"></div>
             <il id="objects"></il>
@@ -346,23 +347,24 @@
                     </a>
                 </li>
             </ul>
-
-
-<!--
-
-
-            <div class="accordion">
-                <ul>
-                    <li >
-                        <div> <a href="#">
-                            <h2>Title 1</h2>
-                            <p>Description 1</p>
-                        </a> </div>
-                    </li>
-                    </ul>
-            </div>
-            -->
         </td>
+        -->
+
+        <!-- Load Facebook photos -->
+     <td>
+        <div id="status"></div>
+         <il id="objects"></il>
+         <ul id="rig">
+             <li ng-repeat="photo in facebookPhotos track by $index">
+                 <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)">
+                     <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px" >
+                     <span class="rig-overlay"></span>
+                     <span class="rig-text">show on map</span>
+                 </a>
+             </li>
+         </ul>
+     </td>
+
 
         <td id="upload_photo" ng-show="editMode">
             <p>Upload photo or KML (googlemaps export file)</p>
@@ -387,7 +389,7 @@
                 <li ng-repeat="photo in facebookPhotos track by $index">
                 <!--    <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)"> -->
                         <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px" >
-                        <span class="rig-overlay"></span>
+
                         <span class="rig-text">show on map</span>
                     </a>
                 </li>

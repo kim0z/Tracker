@@ -19,9 +19,53 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         $scope.editButtonText = 'Start Edit Mode';
         var showMessageOnMap_clicked = false;
 
+        $scope.facebookAlbums = {}; //when page loaded, a Facebook API trigered to get user albums incase new album was added
+                                    //to show it in edit mode to allow users select the new albums
 
-        $scope.facebookAlbums = {};
-        $scope.facebookPhotos = [];
+        $scope.facebookAlbumsFriebase = {}; //sync albums from Firebase config to know what photos to load
+        $scope.facebookPhotos = []; //the same photos array used when load the page and when sync the new albums
+
+        // read albums from Firebase config and then load photos
+        var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/offline/photos/facebook/trip/" + $scope.tripID);
+
+        firebase_config_get_albums.on("value", function (snapshot) {
+            //  var i = 0;
+            snapshot.forEach(function (childsnapshot) {
+                $scope.facebookAlbumsFriebase[childsnapshot.key()] = {
+                    checkbox: childsnapshot.val()['checkbox'],
+                    albumID: childsnapshot.val()['albumID'],
+                    albumName: childsnapshot.val()['albumName']
+                };
+            })
+
+            //load photos from all selected albums
+            $scope.facebookPhotos = [];
+            var albumLen = Object.keys($scope.facebookAlbumsFriebase).length;
+            for (var i = 0; i < albumLen; i++) {
+                if ($scope.facebookAlbumsFriebase[i].checkbox) {
+                    Facebook.api(
+                        "/" + $scope.facebookAlbumsFriebase[i].albumID + "/photos",
+                        function (album) {
+                            if (album && !album.error) {
+                                console.log('photos');
+                                for (var photoIndex = 0; photoIndex < album.data.length; photoIndex++) {
+                                    Facebook.api(
+                                        "/" + album.data[photoIndex].id + "/picture",
+                                        function (photo) {
+                                            if (photo && !photo.error) {
+                                                /* handle the result */
+                                                console.log(photo.data.url);
+                                                $scope.facebookPhotos.push(photo.data.url);
+                                            }
+                                        });
+                                }
+                            }
+                        });
+                }
+            }
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
 
 
         var email_no_shtrodel = $scope.email.replace('@', 'u0040');
@@ -73,10 +117,34 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         );
 
         $scope.syncAlbums = function () {
+            //save in Firebase config
+            var firebase_config_albums = new Firebase("https://trackerconfig.firebaseio.com/web/offline/photos/facebook/trip/" + $scope.tripID);
+            firebase_config_albums.set($scope.facebookAlbums);
+
+            $scope.facebookPhotos = [];
+            var coverSelected = false;
             console.log($scope.facebookAlbums);
             var albumLen = Object.keys($scope.facebookAlbums).length;
             for (var i = 0; i < albumLen; i++) {
                 if ($scope.facebookAlbums[i].checkbox) {
+
+                    if (!coverSelected) {
+                        //get album cover photo and save in Firebase config to allow the trip cove be updated
+                        //save cover photo only from the first album
+                        Facebook.api(
+                            "/" + $scope.facebookAlbums[i].albumID + "/picture",
+                            function (cover) {
+                                if (cover && !cover.error) {
+                                    console.log("https://trackerconfig.firebaseio.com/web/tripslist/coverphoto/trip/" + $scope.tripID);
+                                    //save Facebook album cover in Firebase
+                                    var firebase_config_coverPhoto = new Firebase("https://trackerconfig.firebaseio.com/web/tripslist/coverphoto/trip/" + $scope.tripID);
+                                    firebase_config_coverPhoto.set(cover.data.url);
+                                }
+                            });
+                        coverSelected = true;
+                    }
+
+                    //load photos from all selected albums
                     Facebook.api(
                         "/" + $scope.facebookAlbums[i].albumID + "/photos",
                         function (album) {
@@ -87,9 +155,9 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                                         "/" + album.data[photoIndex].id + "/picture",
                                         function (photo) {
                                             if (photo && !photo.error) {
-                                                /* handle the result */
                                                 console.log(photo.data.url);
                                                 $scope.facebookPhotos.push(photo.data.url);
+                                                console.log($scope.facebookAlbums);
                                             }
                                         });
                                 }
@@ -97,7 +165,6 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                         });
                 }
             }
-
         }
 
         //var bucket = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID}});
