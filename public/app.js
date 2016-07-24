@@ -219,6 +219,7 @@ trackerApp.controller('login1',
                         //save to session storage
                         //should add, check what kind of storage
                         //should add, check is storage supported by browser
+                        localStorageService.set('userFacebookAuth', $scope.user);
                         localStorageService.set('user', $scope.user.name);
                         localStorageService.set('email', $scope.user.email);
                         localStorageService.set('userID', $scope.user.id);

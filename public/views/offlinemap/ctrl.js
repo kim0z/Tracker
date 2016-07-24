@@ -19,6 +19,9 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         $scope.editButtonText = 'Start Edit Mode';
         var showMessageOnMap_clicked = false;
 
+        var facebookAuth = localStorageService.get('userFacebookAuth');
+        console.log(facebookAuth);
+
         $scope.facebookAlbums = {}; //when page loaded, a Facebook API trigered to get user albums incase new album was added
                                     //to show it in edit mode to allow users select the new albums
 
@@ -100,7 +103,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
         /* make the API call */
         Facebook.api(
-            "/102211533498839/albums",
+            "/"+facebookAuth.id+"/albums",
             function (response) {
                 if (response && !response.error) {
                     /* handle the result */
@@ -113,7 +116,9 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                         };
                     }
                 }
+                $scope.$apply();
             }
+
         );
 
         $scope.syncAlbums = function () {
