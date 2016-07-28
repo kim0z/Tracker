@@ -6,17 +6,100 @@
 
     <style type="text/css">
         #map {
+            /*
             height: 800px;
             width: 1300px;
             box-shadow: 3px 3px 10px gray;
+            */
+               /* make Google map -> background*/
+            height: 100%; 
+            width: 100%; 
+            box-shadow: 3px 3px 10px gray;
+            position:absolute; 
+            top: 0; 
+            left: 0; 
+            z-index: 0; /* Set z-index to 0 as it will be on a layer below the contact form */ 
+
         }
+
+        #users { 
+  
+            z-index: 1; /* The z-index should be higher than Google Maps */
+            width: 300px;
+            margin: 60px auto 0;
+            padding: 10px;
+            background: transparent;
+            height: auto;
+            opacity: .99; /* Set the opacity for a slightly transparent Google Form */ 
+            color: white;
+
+            position: absolute; /*or fixed*/
+            left: 0px;
+        }
+
+        #messages { 
+
+            z-index: 1; /* The z-index should be higher than Google Maps */
+            width: 300px;
+            margin: 60px auto 0;
+            padding: 10px;
+            background: transparent;
+            height: auto;
+            opacity: .99; /* Set the opacity for a slightly transparent Google Form */ 
+            color: white;
+
+            position: absolute; /*or fixed*/
+            right: 0px;
+        }
+
+
     </style>
 </head>
 <body>
 
-<table class="table table-striped" style="position: fixed">
+    <ul>
+        <li ng-repeat="item in data" style="margin: 30px">
+
+
+            <div id="users" class="list-group" >
+                <button type="button" class="list-group-item" id={{item.email}}
+                        style="padding-left: 25px; background: url('../../assets/images/offline.png') left center/20px 20px no-repeat" ng-click="zoomIntoPath($event)">
+                    {{item.name}}
+                </button>
+    
+            </div>
+
+            </li>
+    </ul>
+
+
+
+       
+
+            <div id="map"></div>
+
+    
+
+    <ul>
+        <li ng-repeat="userMessages in messages" style="margin: 60px">
+
+                <div id="messages" class="list-group" >
+                <a href="#" class="list-group-item active">
+                    <h4 class="list-group-item-heading">{{userMessages.message.risk}}</h4>
+                    <p class="list-group-item-text">{{userMessages.message.email}}</p>
+                   <!-- <p class="list-group-item-text">{{userMessages}}</p> -->
+                 </a>
+                 </div>
+        </li>
+    </ul>
+        
+
+
+
+
+<!-- <table class="table table-striped" style="position: fixed">
     <col width="500px"/>
-    <col width="1300"/>
+    <col width="100%"/>
     <col width="300px"/>
 
     <tr>
@@ -24,7 +107,7 @@
             <P style="text-decoration:underline;">Travellers list
             <P>
 
-            <div class="list-group" ng-repeat="item in data">
+            <div id="contactform" class="list-group" ng-repeat="item in data">
                 <button type="button" class="list-group-item" id={{item.email}}
                         style="padding-left: 25px; background: url('../../assets/images/offline.png') left center/20px 20px no-repeat" ng-click="zoomIntoPath($event)">
                     {{item.name}}
@@ -50,7 +133,7 @@
                 <a href="#" class="list-group-item active">
                     <h4 class="list-group-item-heading">{{userMessages.message.risk}}</h4>
                     <p class="list-group-item-text">{{userMessages.message.email}}</p>
-                   <!-- <p class="list-group-item-text">{{userMessages}}</p> -->
+                   <p class="list-group-item-text">{{userMessages}}</p> 
             </a>
 
             </div>
@@ -61,5 +144,5 @@
         <td></td>
 
     </tr>
-
 </table>
+ -->
