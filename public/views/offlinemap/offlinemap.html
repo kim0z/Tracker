@@ -6,35 +6,36 @@
 
     <style type="text/css">
         #map {
-        	/*
+            /*
             height: 500px;
             width: 900px;
             */
             box-shadow: 3px 3px 10px gray;
 
             /* make Google map -> background*/
-            height: 100%; 
- 			width: 100%; 
-  			position:absolute; 
-  			top: 0; 
-  			left: 0; 
-  			z-index: 0; /* Set z-index to 0 as it will be on a layer below the contact form * 
-        }
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            /* Set z-index to 0 as it will be on a layer below the contact form *
+                   }
 
-        #pano {
-            height: 500px;
-            width: 900px;
-            box-shadow: 3px 3px 10px gray;
-        }
+                   #pano {
+                       height: 500px;
+                       width: 900px;
+                       box-shadow: 3px 3px 10px gray;
+                   }
 
-        .container {
-            width: 700px;
-            max-width: 90%;
-        }
+                   .container {
+                       width: 700px;
+                       max-width: 90%;
+                   }
 
-        #rig {
-            max-width: 900px;
-            margin: 0 auto; /*center aligned*/
+                   #rig {
+                       max-width: 900px;
+                       margin: 0 auto; /*center aligned*/
             padding: 0;
             font-size: 0; /* Remember to change it back to normal font size if have captions */
             list-style: none;
@@ -141,8 +142,6 @@
             }
         }
 
-
-
         /* ///////////$$$$$$
         */
 
@@ -150,7 +149,7 @@
             text-align: center;
             font-family: Montserrat, sans-serif;
             color: #333;
-            margin-top:150px;
+            margin-top: 150px;
         }
 
         .accordion {
@@ -230,34 +229,57 @@
             font-size: 13.5px;
         }
 
-        .accordion ul li:nth-child(1) { background-image: url("https://unsplash.it/650/250?image=680"); }
+        .accordion ul li:nth-child(1) {
+            background-image: url("https://unsplash.it/650/250?image=680");
+        }
 
-        .accordion ul li:nth-child(2) { background-image: url("https://unsplash.it/650/250?image=668"); }
+        .accordion ul li:nth-child(2) {
+            background-image: url("https://unsplash.it/650/250?image=668");
+        }
 
-        .accordion ul li:nth-child(3) { background-image: url("https://unsplash.it/650/250?image=659"); }
+        .accordion ul li:nth-child(3) {
+            background-image: url("https://unsplash.it/650/250?image=659");
+        }
 
-        .accordion ul li:nth-child(4) { background-image: url("https://unsplash.it/650/250?image=655"); }
+        .accordion ul li:nth-child(4) {
+            background-image: url("https://unsplash.it/650/250?image=655");
+        }
 
-        .accordion ul li:nth-child(5) { background-image: url("https://unsplash.it/650/250?image=657"); }
+        .accordion ul li:nth-child(5) {
+            background-image: url("https://unsplash.it/650/250?image=657");
+        }
 
-        .accordion ul li:nth-child(6) { background-image: url("https://unsplash.it/650/250?image=661"); }
+        .accordion ul li:nth-child(6) {
+            background-image: url("https://unsplash.it/650/250?image=661");
+        }
 
-        .accordion ul:hover li { width: 8%; }
+        .accordion ul:hover li {
+            width: 8%;
+        }
 
-        .accordion ul:hover li:hover { width: 60%; }
+        .accordion ul:hover li:hover {
+            width: 60%;
+        }
 
-        .accordion ul:hover li:hover a { background: rgba(0, 0, 0, 0.4); }
+        .accordion ul:hover li:hover a {
+            background: rgba(0, 0, 0, 0.4);
+        }
 
         .accordion ul:hover li:hover a * {
             opacity: 1;
             -webkit-transform: translateX(0);
             transform: translateX(0);
         }
+
         @media screen and (max-width: 600px) {
 
-            body { margin: 0; }
+            body {
+                margin: 0;
+            }
 
-            .accordion { height: auto; }
+            .accordion {
+                height: auto;
+            }
 
             .accordion ul li,
             .accordion ul li:hover,
@@ -284,7 +306,9 @@
             text-decoration: none;
         }
 
-        .about a:hover { text-decoration: underline; }
+        .about a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -322,19 +346,12 @@
                 <div class="pre-scrollable" style="height: 800px">
 
                     <div id="messages" class="list-group" ng-repeat="message in messages">
-                       <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
-
-
-
-
+                        <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
                             <h4 class="list-group-item-heading">{{message.text}}</h4>
             <p class="list-group-item-text">{{email}}</p>
             <p> {{message.latitude}}</p>
             <p> {{message.longitude}}</p>
-
             <p class="list-group-item-text">{{message.timestamp}}</p>
-
-
             </a>
             </div>
 
@@ -361,19 +378,19 @@
         -->
 
         <!-- Load Facebook photos -->
-     <td>
-        <div id="status"></div>
-         <il id="objects"></il>
-         <ul id="rig">
-             <li ng-repeat="photo in facebookPhotos track by $index">
-                 <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)">
-                     <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px" >
-                     <span class="rig-overlay"></span>
-                     <span class="rig-text">show on map</span>
-                 </a>
-             </li>
-         </ul>
-     </td>
+        <td>
+            <div id="status"></div>
+            <il id="objects"></il>
+            <ul id="rig">
+                <li ng-repeat="photo in facebookPhotos track by $index">
+                    <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)">
+                        <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px">
+                        <span class="rig-overlay"></span>
+                        <span class="rig-text">show on map</span>
+                    </a>
+                </li>
+            </ul>
+        </td>
 
 
         <td id="upload_photo" ng-show="editMode">
@@ -394,21 +411,21 @@
                 <button ng-click="syncAlbums()">Sync</button>
             </div>
         </td>
+
+        <!--
         <td>
             <ul id="facebookPhotos">
                 <li ng-repeat="photo in facebookPhotos track by $index">
-                <!--    <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)"> -->
-                        <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px" >
+                  
+                    <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px">
 
-                        <span class="rig-text">show on map</span>
+                    <span class="rig-text">show on map</span>
                     </a>
                 </li>
             </ul>
         </td>
-
+-->
         <!-- end facebook albums -->
-
-
 
 
         <td>
@@ -425,13 +442,12 @@
     </tr>
 
 
-
     <tr>
 
         <td>
 
 
-<!-- Table -->
+            <!-- Table -->
 
             <ul id="add_day" ng-show="editMode">
 
@@ -445,11 +461,7 @@
             </ul>
 
 
-
-
         </td>
-
-
 
 
     </tr>
