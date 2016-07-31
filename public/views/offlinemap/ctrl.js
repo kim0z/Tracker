@@ -7,7 +7,65 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 //****
 //****
 //****
+//temp WEDFVSDVSDVDSFDSFVDFVDF
+        $scope.myData = [
+            {
+                "firstName": "Cox",
+                "lastName": "Carney",
+                "company": "Enormo",
+                "employed": true
+            },
+            {
+                "firstName": "Lorraine",
+                "lastName": "Wise",
+                "company": "Comveyer",
+                "employed": false
+            },
+            {
+                "firstName": "Nancy",
+                "lastName": "Waters",
+                "company": "Fuelton",
+                "employed": false
+            },
+            {
+                "firstName": "Nancy",
+                "lastName": "Waters",
+                "company": "Fuelton",
+                "employed": false
+            },
+            {
+                "firstName": "Nancy",
+                "lastName": "Waters",
+                "company": "Fuelton",
+                "employed": false
+            },
+            {
+                "firstName": "Nancy",
+                "lastName": "Waters",
+                "company": "Fuelton",
+                "employed": false
+            },
+            {
+                "firstName": "Nancy",
+                "lastName": "Waters",
+                "company": "Fuelton",
+                "employed": false
+            },
+            {
+                "firstName": "Nancy",
+                "lastName": "Waters",
+                "company": "Fuelton",
+                "employed": false
+            },
+            {
+                "firstName": "Nancy",
+                "lastName": "Waters",
+                "company": "Fuelton",
+                "employed": false
+            }
+        ];
 
+    //DEL above
         $scope.user = messages.getUser(); //replace with local service like next line
         $scope.email = localStorageService.get('email');
         $scope.tripID = messages.getTripID();
@@ -20,7 +78,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         var showMessageOnMap_clicked = false;
 
         $scope.photosSlider = true;
-        $scope.tableSlider = false;
+        $scope.tableSlider = true;
 
         var facebookAuth = localStorageService.get('userFacebookAuth');
         console.log(facebookAuth);

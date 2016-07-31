@@ -63,82 +63,76 @@
         }
 
         .animate-hide {
-            -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
-            -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
-            -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
-            transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
-            line-height:20px;
-            opacity:1;
-            padding:10px;
-            border:1px solid black;
-            background:white;
+            -webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+            -moz-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+            -o-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+            transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+            line-height: 20px;
+            opacity: 1;
+            padding: 10px;
+            border: 1px solid black;
+            background: white;
             position: absolute;
             left: 0;
         }
 
         .animate-hide.ng-hide {
             left: -100%;
-            opacity:0;
-            padding:0 10px;
+            opacity: 0;
+            padding: 0 10px;
         }
 
-/*
-side button
-*/
-        #hp-ctn-howItWorks-photos
-        {
+        /*
+        side button
+        */
+        #hp-ctn-howItWorks-photos {
             bottom: 0;
-            position:fixed;
+            position: fixed;
             left: 0px;
-            padding:0px;
-            margin:0px;
-            width:55px;
-            height:160px;
-            background:#FF931E;
-            z-index:15;
+            padding: 0px;
+            margin: 0px;
+            width: 55px;
+            height: 180px;
+            background: #FF931E;
+            z-index: 15;
             border-radius: 3px 0px 0px 3px;
         }
 
-        #hp-ctn-howItWorks-photos img
-        {
+        #hp-ctn-howItWorks-photos img {
             margin: 15px 0px 45px 13px;
         }
 
-        #hp-ctn-howItWorks-photos p
-        {
+        #hp-ctn-howItWorks-photos p {
             color: #fff;
-            -moz-transform:rotate(-90deg);
-            -ms-transform:rotate(-90deg);
-            -o-transform:rotate(-90deg);
-            -webkit-transform:rotate(-90deg);
+            -moz-transform: rotate(-90deg);
+            -ms-transform: rotate(-90deg);
+            -o-transform: rotate(-90deg);
+            -webkit-transform: rotate(-90deg);
         }
 
-        #hp-ctn-howItWorks-table
-        {
-            bottom: 150px;
-            position:fixed;
+        #hp-ctn-howItWorks-table {
+            bottom: 155px;
+            position: fixed;
             left: 0px;
-            padding:0px;
-            margin:0px;
-            width:55px;
-            height:160px;
+            padding: 0px;
+            margin: 0px;
+            width: 55px;
+            height: 180px;
             background: #7599ff;
-            z-index:15;
+            z-index: 15;
             border-radius: 3px 0px 0px 3px;
         }
 
-        #hp-ctn-howItWorks-table img
-        {
+        #hp-ctn-howItWorks-table img {
             margin: 15px 0px 40px 13px;
         }
 
-        #hp-ctn-howItWorks-table p
-        {
+        #hp-ctn-howItWorks-table p {
             color: #fff;
-            -moz-transform:rotate(-90deg);
-            -ms-transform:rotate(-90deg);
-            -o-transform:rotate(-90deg);
-            -webkit-transform:rotate(-90deg);
+            -moz-transform: rotate(-90deg);
+            -ms-transform: rotate(-90deg);
+            -o-transform: rotate(-90deg);
+            -webkit-transform: rotate(-90deg);
         }
     </style>
 </head>
@@ -163,8 +157,8 @@ side button
 
 
 <div class="pre-scrollable" style="height: 800px">
-    <div id="messages" style="margin: 100px" class="list-group" ng-repeat="message in messages">
-        <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
+    <div id="messages" class="list-group" ng-repeat="message in messages">
+        <a href="#" style="margin-top: 230px" class="list-group-item active" ng-click="showMessageOnMap(message)">
             <h4 class="list-group-item-heading">{{message.text}}</h4>
             <p class="list-group-item-text">{{email}}</p>
             <p> {{message.latitude}}</p>
@@ -195,45 +189,36 @@ side button
 <div id="status"></div>
 
 
-
 <!-- side button photos-->
-
-<div id="hp-ctn-howItWorks-table">
-    <img src="../../assets/images/table_icon2.svg" width="40" height="40" />
-    <p style="font-size:20px" ><b>Table</b></p>
+<div id="hp-ctn-howItWorks-table" ng-click="tableSlider = !tableSlider">
+    <img src="../../assets/images/table_icon2.svg" width="40" height="40"/>
+    <p style="font-size:20px"><b>Table</b></p>
 </div>
 
 
-<div id="hp-ctn-howItWorks-photos">
-    <img src="../../assets/images/photos_icon.png" width="40" height="40" />
-    <p style="font-size:20px" ><b>Photos</b></p>
+<div id="hp-ctn-howItWorks-photos" ng-click="photosSlider = !photosSlider">
+    <img src="../../assets/images/photos_icon.png" width="40" height="40"/>
+    <p style="font-size:20px"><b>Photos</b></p>
 </div>
-
-
-
 
 
 <!-- new photo slider -->
-
-<div  style="z-index: 1" ng-click="photosSlider=true" >LEFT</div>
-<div  ng-click="photosSlider=false">RIGHT</div>
-
-
-    <div class="footer" class='animate-hide'  ng-hide="photosSlider">
-        <div class='slider' >
-            <input checked='' name='thumbnail' type='radio' />
-            <input name='thumbnail' type='radio' ng-repeat="photo in facebookPhotos track by $index" ng-style="{'background': 'url('+photo+')'}"/>
-            <div class='images' style="background: url(https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-xfl1/t31.0-8/s720x720/13738130_253880684998589_991509330233210863_o.jpg);"></div>
-        </div>
+<div style="margin-left: 55px" class="footer" class='animate-hide' ng-hide="photosSlider">
+    <div class='slider'>
+        <input checked='' name='thumbnail' type='radio'/>
+        <input name='thumbnail' type='radio' ng-repeat="photo in facebookPhotos track by $index"
+               ng-style="{'background': 'url('+photo+')'}"/>
+        <div class='images'
+             style="background: url(https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-xfl1/t31.0-8/s720x720/13738130_253880684998589_991509330233210863_o.jpg);"></div>
     </div>
-
+</div>
 {{photosSlider}}
 </div>
 
 
-
-
-
+<div style="margin-left: 55px" class="footer" class='animate-hide' ng-hide="tableSlider">
+    <div id="grid1" ui-grid="{ data: myData }" class="grid"></div>
+</div>
 
 <!--
 <div id="photos" class="footer">
