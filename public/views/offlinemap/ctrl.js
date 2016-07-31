@@ -19,6 +19,9 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         $scope.editButtonText = 'Start Edit Mode';
         var showMessageOnMap_clicked = false;
 
+        $scope.photosSlider = true;
+        $scope.tableSlider = false;
+
         var facebookAuth = localStorageService.get('userFacebookAuth');
         console.log(facebookAuth);
 

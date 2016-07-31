@@ -3,15 +3,11 @@
     <!--
     <link rel="stylesheet" href="assets/css/style_realtime.css">
     -->
+    <link rel="stylesheet" type="text/css" href="../../assets/css/photoslider.css">
 
     <style type="text/css">
         #map {
-            /*
-            height: 500px;
-            width: 900px;
-            */
             box-shadow: 3px 3px 10px gray;
-
             /* make Google map -> background*/
             height: 100%;
             width: 100%;
@@ -19,451 +15,292 @@
             top: 0;
             left: 0;
             z-index: 0;
-            /* Set z-index to 0 as it will be on a layer below the contact form *
-                   }
-
-                   #pano {
-                       height: 500px;
-                       width: 900px;
-                       box-shadow: 3px 3px 10px gray;
-                   }
-
-                   .container {
-                       width: 700px;
-                       max-width: 90%;
-                   }
-
-                   #rig {
-                       max-width: 900px;
-                       margin: 0 auto; /*center aligned*/
             padding: 0;
             font-size: 0; /* Remember to change it back to normal font size if have captions */
             list-style: none;
             background-color: #000;
         }
 
-        #rig li {
-            display: inline-block;
-            *display: inline; /*for IE6 - IE7*/
-            width: 25%;
-            vertical-align: middle;
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* The wrapper for each item */
-        .rig-cell {
-            /*margin:12px;
-            box-shadow:0 0 6px rgba(0,0,0,0.3);*/
-            display: block;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* If have the image layer */
-        .rig-img {
-            width: 200px;
-            height: 200px;
-            display: block;
-            width: 100%;
+        #messages {
+            z-index: 1; /* The z-index should be higher than Google Maps */
+            width: 300px;
+            /*margin: 60px auto 0;*/
+            padding: 10px;
+            background: transparent;
             height: auto;
-            border: none;
-            transform: scale(1);
-            transition: all 1s;
-        }
-
-        #rig li:hover .rig-img {
-            transform: scale(1.05);
-        }
-
-        /* If have the overlay layer */
-        .rig-overlay {
-            position: absolute;
-            display: block;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            margin: auto;
-            background: #3DC0F1 url(img/link.png) no-repeat center 20%;
-            background-size: 50px 50px;
-            opacity: 0;
-            filter: alpha(opacity=0); /*For IE6 - IE8*/
-            transition: all 0.6s;
-        }
-
-        #rig li:hover .rig-overlay {
-            opacity: 0.8;
-        }
-
-        /* If have captions */
-        .rig-text {
-            display: block;
-            padding: 0 30px;
-            box-sizing: border-box;
-            position: absolute;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            text-transform: capitalize;
-            font-size: 18px;
-            font-weight: bold;
-            font-family: 'Oswald', sans-serif;
-            font-weight: normal !important;
-            top: 40%;
+            opacity: .99; /* Set the opacity for a slightly transparent Google Form */
             color: white;
-            opacity: 0;
-            filter: alpha(opacity=0); /*For older IE*/
-            transform: translateY(-20px);
-            transition: all .3s;
+
+            position: absolute; /*or fixed*/
+            right: 0px;
         }
 
-        #rig li:hover .rig-text {
-            transform: translateY(0px);
-            opacity: 0.9;
+        #photos {
+            z-index: 1; /* The z-index should be higher than Google Maps */
+            width: 900px;
+            /*margin: 60px auto 0;*/
+            padding: 10px;
+            background: transparent;
+            height: auto;
+            opacity: .99; /* Set the opacity for a slightly transparent Google Form */
+            color: white;
+
+            position: absolute; /*or fixed*/
+            right: 50%;
         }
 
-        @media (max-width: 9000px) {
-            #rig li {
-                width: 25%;
-            }
+        .center {
+            margin: auto;
+            width: 50%;
+            border: 3px solid green;
+            padding: 10px;
         }
 
-        @media (max-width: 700px) {
-            #rig li {
-                width: 33.33%;
-            }
-        }
-
-        @media (max-width: 550px) {
-            #rig li {
-                width: 50%;
-            }
-        }
-
-        /* ///////////$$$$$$
-        */
-
-        h1 {
-            text-align: center;
-            font-family: Montserrat, sans-serif;
-            color: #333;
-            margin-top: 150px;
-        }
-
-        .accordion {
-            width: 100%;
-            max-width: 1080px;
-            height: 250px;
-            overflow: hidden;
-            margin: 50px auto;
-        }
-
-        .accordion ul {
-            width: 100%;
-            display: table;
-            table-layout: fixed;
-            margin: 0;
-            padding: 0;
-        }
-
-        .accordion ul li {
-            display: table-cell;
-            vertical-align: bottom;
-            position: relative;
-            width: 16.666%;
-            height: 250px;
-            background-repeat: no-repeat;
-            background-position: center center;
-            transition: all 500ms ease;
-        }
-
-        .accordion ul li div {
-            display: block;
-            overflow: hidden;
+        .footer {
+            position: fixed;
+            bottom: 0;
             width: 100%;
         }
 
-        .accordion ul li div a {
-            display: block;
-            height: 250px;
-            width: 100%;
-            position: relative;
-            z-index: 3;
-            vertical-align: bottom;
-            padding: 15px 20px;
-            box-sizing: border-box;
+        .animate-hide {
+            -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+            -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+            -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+            transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+            line-height:20px;
+            opacity:1;
+            padding:10px;
+            border:1px solid black;
+            background:white;
+            position: absolute;
+            left: 0;
+        }
+
+        .animate-hide.ng-hide {
+            left: -100%;
+            opacity:0;
+            padding:0 10px;
+        }
+
+/*
+side button
+*/
+        #hp-ctn-howItWorks-photos
+        {
+            bottom: 0;
+            position:fixed;
+            left: 0px;
+            padding:0px;
+            margin:0px;
+            width:55px;
+            height:160px;
+            background:#FF931E;
+            z-index:15;
+            border-radius: 3px 0px 0px 3px;
+        }
+
+        #hp-ctn-howItWorks-photos img
+        {
+            margin: 15px 0px 45px 13px;
+        }
+
+        #hp-ctn-howItWorks-photos p
+        {
             color: #fff;
-            text-decoration: none;
-            font-family: Open Sans, sans-serif;
-            transition: all 200ms ease;
+            -moz-transform:rotate(-90deg);
+            -ms-transform:rotate(-90deg);
+            -o-transform:rotate(-90deg);
+            -webkit-transform:rotate(-90deg);
         }
 
-        .accordion ul li div a * {
-            opacity: 0;
-            margin: 0;
-            width: 100%;
-            text-overflow: ellipsis;
-            position: relative;
-            z-index: 5;
-            white-space: nowrap;
-            overflow: hidden;
-            -webkit-transform: translateX(-20px);
-            transform: translateX(-20px);
-            -webkit-transition: all 400ms ease;
-            transition: all 400ms ease;
+        #hp-ctn-howItWorks-table
+        {
+            bottom: 150px;
+            position:fixed;
+            left: 0px;
+            padding:0px;
+            margin:0px;
+            width:55px;
+            height:160px;
+            background: #7599ff;
+            z-index:15;
+            border-radius: 3px 0px 0px 3px;
         }
 
-        .accordion ul li div a h2 {
-            font-family: Montserrat, sans-serif;
-            text-overflow: clip;
-            font-size: 24px;
-            text-transform: uppercase;
-            margin-bottom: 2px;
-            top: 160px;
+        #hp-ctn-howItWorks-table img
+        {
+            margin: 15px 0px 40px 13px;
         }
 
-        .accordion ul li div a p {
-            top: 160px;
-            font-size: 13.5px;
-        }
-
-        .accordion ul li:nth-child(1) {
-            background-image: url("https://unsplash.it/650/250?image=680");
-        }
-
-        .accordion ul li:nth-child(2) {
-            background-image: url("https://unsplash.it/650/250?image=668");
-        }
-
-        .accordion ul li:nth-child(3) {
-            background-image: url("https://unsplash.it/650/250?image=659");
-        }
-
-        .accordion ul li:nth-child(4) {
-            background-image: url("https://unsplash.it/650/250?image=655");
-        }
-
-        .accordion ul li:nth-child(5) {
-            background-image: url("https://unsplash.it/650/250?image=657");
-        }
-
-        .accordion ul li:nth-child(6) {
-            background-image: url("https://unsplash.it/650/250?image=661");
-        }
-
-        .accordion ul:hover li {
-            width: 8%;
-        }
-
-        .accordion ul:hover li:hover {
-            width: 60%;
-        }
-
-        .accordion ul:hover li:hover a {
-            background: rgba(0, 0, 0, 0.4);
-        }
-
-        .accordion ul:hover li:hover a * {
-            opacity: 1;
-            -webkit-transform: translateX(0);
-            transform: translateX(0);
-        }
-
-        @media screen and (max-width: 600px) {
-
-            body {
-                margin: 0;
-            }
-
-            .accordion {
-                height: auto;
-            }
-
-            .accordion ul li,
-            .accordion ul li:hover,
-            .accordion ul:hover li,
-            .accordion ul:hover li:hover {
-                position: relative;
-                display: table;
-                table-layout: fixed;
-                width: 100%;
-                -webkit-transition: none;
-                transition: none;
-            }
-        }
-
-        .about {
-            text-align: center;
-            font-family: 'Open Sans', sans-serif;
-            font-size: 12px;
-            color: #666;
-        }
-
-        .about a {
-            color: blue;
-            text-decoration: none;
-        }
-
-        .about a:hover {
-            text-decoration: underline;
+        #hp-ctn-howItWorks-table p
+        {
+            color: #fff;
+            -moz-transform:rotate(-90deg);
+            -ms-transform:rotate(-90deg);
+            -o-transform:rotate(-90deg);
+            -webkit-transform:rotate(-90deg);
         }
     </style>
 </head>
 <body>
 
-<table class="table table-striped" style="position: relative">
+
+<div id="map"></div>
 
 
-    <tr>
-        <td style="width: 30%">
-
-            <div id="map"></div>
-
-        </td>
-
-        <td style="width: 100%">
-            <div id="pano"></div>
-        </td>
-
-        <td style="height: 500px">
-            <button class="btn btn-info" ng-click="editModeSwitch()">{{editButtonText}}</button>
-
-            <ul id="add_messages" ng-show="editMode">
-
-                <p> Message: <input type="text" ng-model="message.text" style="width: 200px"/></p>
-                <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/></p>
-                <p> lng:<input type="text" ng-model="message.lng" style="width: 200px"/></p>
-                <p> time: <input type="datetime" ng-model="message.time" style="width: 200px"/></p>
+<div id="pano"></div>
 
 
-                <button ng-click="addMessage()">add</button>
-            </ul>
+<button class="btn btn-info" ng-click="editModeSwitch()">{{editButtonText}}</button>
 
-            <P style="text-decoration:underline;">Real-Time Tips from travellers
-            <P>
-                <div class="pre-scrollable" style="height: 800px">
+<ul id="add_messages" ng-show="editMode">
+    <p> Message: <input type="text" ng-model="message.text" style="width: 200px"/></p>
+    <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/></p>
+    <p> lng:<input type="text" ng-model="message.lng" style="width: 200px"/></p>
+    <p> time: <input type="datetime" ng-model="message.time" style="width: 200px"/></p>
+    <button ng-click="addMessage()">add</button>
+</ul>
 
-                    <div id="messages" class="list-group" ng-repeat="message in messages">
-                        <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
-                            <h4 class="list-group-item-heading">{{message.text}}</h4>
+
+<div class="pre-scrollable" style="height: 800px">
+    <div id="messages" style="margin: 100px" class="list-group" ng-repeat="message in messages">
+        <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
+            <h4 class="list-group-item-heading">{{message.text}}</h4>
             <p class="list-group-item-text">{{email}}</p>
             <p> {{message.latitude}}</p>
             <p> {{message.longitude}}</p>
             <p class="list-group-item-text">{{message.timestamp}}</p>
+        </a>
+    </div>
+</div>
+
+
+<!-- Load photos from AWS S3 - disabled, instead sync with Facebook photos
+<td>
+   <div id="status"></div>
+    <il id="objects"></il>
+    <ul id="rig">
+        <li ng-repeat="photo in photos track by $index">
+            <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)">
+                <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px" >
+                <span class="rig-overlay"></span>
+                <span class="rig-text">show on map</span>
             </a>
-            </div>
-
-            </div>
-
-        </td>
-    </tr>
-
-    <tr>
-        <!-- Load photos from AWS S3 - disabled, instead sync with Facebook photos
-        <td>
-           <div id="status"></div>
-            <il id="objects"></il>
-            <ul id="rig">
-                <li ng-repeat="photo in photos track by $index">
-                    <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)">
-                        <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px" >
-                        <span class="rig-overlay"></span>
-                        <span class="rig-text">show on map</span>
-                    </a>
-                </li>
-            </ul>
-        </td>
-        -->
-
-        <!-- Load Facebook photos -->
-        <td>
-            <div id="status"></div>
-            <il id="objects"></il>
-            <ul id="rig">
-                <li ng-repeat="photo in facebookPhotos track by $index">
-                    <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)">
-                        <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px">
-                        <span class="rig-overlay"></span>
-                        <span class="rig-text">show on map</span>
-                    </a>
-                </li>
-            </ul>
-        </td>
-
-
-        <td id="upload_photo" ng-show="editMode">
-            <p>Upload photo or KML (googlemaps export file)</p>
-            <input type="file" id="file-chooser" style="height: 40px; width: 240px"/>
-            <p></p>
-            <button id="upload-button">Upload to S3</button>
-            <div id="results"></div>
-
-        </td>
-
-        <!-- Facebook albums -->
-        <td>
-            <div name="facebookSync">
-                <label ng-repeat="album in facebookAlbums track by $index">{{album.albumName}}{{album.albumID}}
-                    <input type="checkbox" ng-model="facebookAlbums[$index].checkbox">
-                </label><br/>
-                <button ng-click="syncAlbums()">Sync</button>
-            </div>
-        </td>
-
-        <!--
-        <td>
-            <ul id="facebookPhotos">
-                <li ng-repeat="photo in facebookPhotos track by $index">
-                  
-                    <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px">
-
-                    <span class="rig-text">show on map</span>
-                    </a>
-                </li>
-            </ul>
-        </td>
+        </li>
+    </ul>
+</td>
 -->
-        <!-- end facebook albums -->
+
+<!-- id status used for AWS S3 status -->
+<div id="status"></div>
 
 
-        <td>
-            <ul id="add_GPS_toPhoto" ng-show="editMode">
-                <p> Image path: <input type="text" ng-model="image.path" style="width: 200px"/></p>
-                <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/></p>
-                <p> lng:<input type="text" ng-model="message.lng" style="width: 200px"/></p>
 
-                <button id="addGPStoPhoto" ng-click="saveGPStoThisPhoto()">add</button>
-                <div id="results_photo_gps"></div>
-            </ul>
+<!-- side button photos-->
 
-        </td>
-    </tr>
+<div id="hp-ctn-howItWorks-table">
+    <img src="../../assets/images/table_icon2.svg" width="40" height="40" />
+    <p style="font-size:20px" ><b>Table</b></p>
+</div>
 
 
-    <tr>
-
-        <td>
-
-
-            <!-- Table -->
-
-            <ul id="add_day" ng-show="editMode">
-
-                <p> Trip Name: <input type="text" ng-model="trip.name" style="width: 200px"/></p>
-                <p> Trip Description: <input type="text" ng-model="trip.description" style="width: 200px"/></p>
-                <p> Trip start D:<input type="text" ng-model="trip.start_date" style="width: 200px"/></p>
-                <p> Trip end D: <input type="datetime" ng-model="trip.end_date" style="width: 200px"/></p>
+<div id="hp-ctn-howItWorks-photos">
+    <img src="../../assets/images/photos_icon.png" width="40" height="40" />
+    <p style="font-size:20px" ><b>Photos</b></p>
+</div>
 
 
-                <button ng-click="addDay()">add</button>
-            </ul>
 
 
-        </td>
+
+<!-- new photo slider -->
+
+<div  style="z-index: 1" ng-click="photosSlider=true" >LEFT</div>
+<div  ng-click="photosSlider=false">RIGHT</div>
 
 
-    </tr>
+    <div class="footer" class='animate-hide'  ng-hide="photosSlider">
+        <div class='slider' >
+            <input checked='' name='thumbnail' type='radio' />
+            <input name='thumbnail' type='radio' ng-repeat="photo in facebookPhotos track by $index" ng-style="{'background': 'url('+photo+')'}"/>
+            <div class='images' style="background: url(https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-xfl1/t31.0-8/s720x720/13738130_253880684998589_991509330233210863_o.jpg);"></div>
+        </div>
+    </div>
 
-</table>
+{{photosSlider}}
+</div>
+
+
+
+
+
+
+<!--
+<div id="photos" class="footer">
+    <il id="objects"></il>
+    <ul id="rig">
+        <li ng-repeat="photo in facebookPhotos track by $index">
+            <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)">
+                <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px">
+                <span class="rig-overlay"></span>
+                <span class="rig-text">show on map</span>
+            </a>
+        </li>
+    </ul>
+</div>
+-->
+
+<div id="upload_photo" ng-show="editMode">
+    <p>Upload photo or KML (googlemaps export file)</p>
+    <input type="file" id="file-chooser" style="height: 40px; width: 240px"/>
+    <p></p>
+    <button id="upload-button">Upload to S3</button>
+    <div id="results"></div>
+
+</div>
+
+<!-- Facebook albums -->
+
+<div name="facebookSync">
+    <label ng-repeat="album in facebookAlbums track by $index">{{album.albumName}}{{album.albumID}}
+        <input type="checkbox" ng-model="facebookAlbums[$index].checkbox">
+    </label><br/>
+    <button ng-click="syncAlbums()">Sync</button>
+</div>
+
+
+<!--
+<td>
+    <ul id="facebookPhotos">
+        <li ng-repeat="photo in facebookPhotos track by $index">
+
+            <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px">
+
+            <span class="rig-text">show on map</span>
+            </a>
+        </li>
+    </ul>
+</td>
+-->
+<!-- end facebook albums -->
+
+
+<ul id="add_GPS_toPhoto" ng-show="editMode">
+    <p> Image path: <input type="text" ng-model="image.path" style="width: 200px"/></p>
+    <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/></p>
+    <p> lng:<input type="text" ng-model="message.lng" style="width: 200px"/></p>
+    <button id="addGPStoPhoto" ng-click="saveGPStoThisPhoto()">add</button>
+    <div id="results_photo_gps"></div>
+</ul>
+
+
+<ul id="add_day" ng-show="editMode">
+    <p> Trip Name: <input type="text" ng-model="trip.name" style="width: 200px"/></p>
+    <p> Trip Description: <input type="text" ng-model="trip.description" style="width: 200px"/></p>
+    <p> Trip start D:<input type="text" ng-model="trip.start_date" style="width: 200px"/></p>
+    <p> Trip end D: <input type="datetime" ng-model="trip.end_date" style="width: 200px"/></p>
+    <button ng-click="addDay()">add</button>
+</ul>
+
+
+</body>
