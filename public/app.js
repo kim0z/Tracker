@@ -168,7 +168,16 @@ trackerApp.controller('login1',
                 userIsConnected = true;
                 //save Facebook auth into browser DB
                 localStorageService.set('facebookAuth', response);
-                //alert(userIsConnected);
+
+
+                var facebookId = response.authResponse.userID;
+                console.log(facebookId);
+                var loginPic = document.getElementById('loginPic');
+                loginPic.style.background = "url(http://graph.facebook.com/"+facebookId+"/picture)";
+
+
+
+
             }else{
                 userIsConnected = false;
             }

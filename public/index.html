@@ -21,11 +21,11 @@
             background-position: center center;
             background-size: cover;
         }
-
+/*
         .one {
             background-image: url('http://graph.facebook.com/102211533498839/picture');
         }
-
+*/
         .two {
             background-image: url('http://placehold.it/150x150');
         }
@@ -68,7 +68,7 @@
             <md-button ng-controller="login1" type="button" class="btn btn-danger btn-large" data-ng-show="logged" data-ng-disabled="!facebookReady" data-ng-click="logout()">Logout</md-button>
 
 
-            <div class="user one">
+            <div id="loginPic" class="user">
             </div>
 
         </h3>
