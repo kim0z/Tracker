@@ -66,6 +66,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         ];
 
     //DEL above
+
         $scope.user = messages.getUser(); //replace with local service like next line
         $scope.email = localStorageService.get('email');
         $scope.tripID = messages.getTripID();
@@ -74,7 +75,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         $scope.messages = []; // Tips from Firebase, based on GPS point
         var markers_messages = [];
         $scope.editMode = false;
-        $scope.editButtonText = 'Start Edit Mode';
+        $scope.editButtonText = 'Edit Mode';
         var showMessageOnMap_clicked = false;
 
         $scope.photosSlider = true;
@@ -88,6 +89,33 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
         $scope.facebookAlbumsFriebase = {}; //sync albums from Firebase config to know what photos to load
         $scope.facebookPhotos = []; //the same photos array used when load the page and when sync the new albums
+
+
+    //Photo slider
+        $scope.prod = {imagePaths: []};
+        $scope.prod.imagePaths = [];
+
+/*
+    $scope.prod.imagePaths = [
+        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg' },
+        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg' },
+        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg' },
+        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg' },
+        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg' },
+        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg' },
+        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg' },
+        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg' },
+        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg' },
+        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg' },
+        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg' },
+        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg'}
+    ];
+
+
+*/
+
+
+
 
         // read albums from Firebase config and then load photos
         var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/offline/photos/facebook/trip/" + $scope.tripID);
@@ -120,9 +148,13 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                                                 /* handle the result */
                                                 console.log(photo.data.url);
                                                 $scope.facebookPhotos.push(photo.data.url);
+
+                                                $scope.prod.imagePaths.push( { custom: photo.data.url, thumbnail: photo.data.url } );
+
                                             }
                                         });
                                 }
+                               // $scope.$apply();
                             }
                         });
                 }
@@ -450,8 +482,6 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                             }, function errorCb(response) {
                                 console.log('No GPS point in AWS S3 for this photo');
                             });
-
-
                         }
                     });
                 }
@@ -550,9 +580,9 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         $scope.editModeSwitch = function () {
             $scope.editMode = !$scope.editMode;
             if ($scope.editMode == true)
-                $scope.editButtonText = 'Back to View mode';
+                $scope.editButtonText = 'View Mode';
             else
-                $scope.editButtonText = 'Start Edit Mode';
+                $scope.editButtonText = 'Edit Mode';
         }
 
         //load messages

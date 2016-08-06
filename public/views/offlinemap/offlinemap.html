@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <head>
+
+
     <!--
     <link rel="stylesheet" href="assets/css/style_realtime.css">
     -->
@@ -22,16 +24,14 @@
         }
 
         #messages {
-            z-index: 1; /* The z-index should be higher than Google Maps */
             width: 300px;
             /*margin: 60px auto 0;*/
-            padding: 10px;
+            padding: 5px;
             background: transparent;
             height: auto;
             opacity: .99; /* Set the opacity for a slightly transparent Google Form */
             color: white;
-
-            position: absolute; /*or fixed*/
+            position: initial; /*or fixed*/
             right: 0px;
         }
 
@@ -60,6 +60,7 @@
             position: fixed;
             bottom: 0;
             width: 100%;
+            z-index: 1;
         }
 
         .animate-hide {
@@ -123,6 +124,19 @@
             border-radius: 3px 0px 0px 3px;
         }
 
+        #edit {
+            bottom: 0px;
+            position: fixed;
+            right: 0px;
+            padding: 0px;
+            margin: 0px;
+            width: 55px;
+            height: 180px;
+            background: #7599ff;
+            z-index: 15;
+            border-radius: 3px 0px 0px 3px;
+        }
+
         #hp-ctn-howItWorks-table img {
             margin: 15px 0px 40px 13px;
         }
@@ -134,6 +148,27 @@
             -o-transform: rotate(-90deg);
             -webkit-transform: rotate(-90deg);
         }
+
+        .text-rotate {
+            color: #fff;
+            -moz-transform: rotate(-90deg);
+            -ms-transform: rotate(-90deg);
+            -o-transform: rotate(-90deg);
+            -webkit-transform: rotate(-90deg);
+        }
+
+        /* Photo slider */
+        #carousel img {
+            display: block;
+            opacity: .5;
+            cursor: pointer;
+        }
+
+        #carousel .flex-active-slide img {
+            opacity: 1;
+            cursor: default;
+        }
+
     </style>
 </head>
 <body>
@@ -144,10 +179,13 @@
 
 <div id="pano"></div>
 
+<div id="edit"  ng-click="editModeSwitch()">
+    <img src="../../assets/images/edit.gif" width="40" height="40"/>
+    <p style="width: 100px; height: 60px; font-size: 20px" class = "text-rotate"><b>{{editButtonText}}</b></p>
+</div>
 
-<button class="btn btn-info" ng-click="editModeSwitch()">{{editButtonText}}</button>
 
-<ul id="add_messages" ng-show="editMode">
+<ul id="add_messages" ng-show="editMode" style="z-index: 16;">
     <p> Message: <input type="text" ng-model="message.text" style="width: 200px"/></p>
     <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/></p>
     <p> lng:<input type="text" ng-model="message.lng" style="width: 200px"/></p>
@@ -156,9 +194,9 @@
 </ul>
 
 
-<div class="pre-scrollable" style="height: 800px">
-    <div id="messages" class="list-group" ng-repeat="message in messages">
-        <a href="#" style="margin-top: 230px" class="list-group-item active" ng-click="showMessageOnMap(message)">
+<div class="pre-scrollable" style="max-height: 100%; width: 320px; float: right">
+    <div id="messages" class="list-group" ng-repeat="message in messages" >
+        <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
             <h4 class="list-group-item-heading">{{message.text}}</h4>
             <p class="list-group-item-text">{{email}}</p>
             <p> {{message.latitude}}</p>
@@ -192,17 +230,18 @@
 <!-- side button photos-->
 <div id="hp-ctn-howItWorks-table" ng-click="tableSlider = !tableSlider">
     <img src="../../assets/images/table_icon2.svg" width="40" height="40"/>
-    <p style="font-size:20px"><b>Table</b></p>
+    <p class = "text-rotate" style="font-size:20px"><b>Table</b></p>
 </div>
 
 
 <div id="hp-ctn-howItWorks-photos" ng-click="photosSlider = !photosSlider">
     <img src="../../assets/images/photos_icon.png" width="40" height="40"/>
-    <p style="font-size:20px"><b>Photos</b></p>
+    <p class = "text-rotate" style="font-size:20px"><b>Photos</b></p>
 </div>
 
 
 <!-- new photo slider -->
+<!--
 <div style="margin-left: 55px" class="footer" class='animate-hide' ng-hide="photosSlider">
     <div class='slider'>
         <input checked='' name='thumbnail' type='radio'/>
@@ -214,6 +253,49 @@
 </div>
 {{photosSlider}}
 </div>
+-->
+
+
+
+<div id="container" class="footer" class='animate-hide' ng-hide="photosSlider">
+
+    <div class="col-sm-12">
+
+        <flex-slider slider-id="slider" flex-slide="image in prod.imagePaths track by $index" animation="fade" animation-loop="false" sync="#carousel" slideshow="false" control-nav="false" init-delay="100">
+
+            <li>
+                <img ng-src="{{image.custom}}" style="width: 600px; height: 600px">
+            </li>
+
+        </flex-slider>
+    </div>
+    <div class="col-sm-12">
+
+        <flex-slider slider-id="carousel" flex-slide="image in prod.imagePaths track by $index" animation="slide" animation-loop="false" item-width="210" item-margin="5" as-nav-for="#slider" slideshow="false" control-nav="false">
+            <li>
+                <img ng-src="{{image.thumbnail}}" style="width: 100px; height: 100px">
+            </li>
+        </flex-slider>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <div style="margin-left: 55px" class="footer" class='animate-hide' ng-hide="tableSlider">

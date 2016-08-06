@@ -18,7 +18,8 @@ var trackerApp = angular.module('myApp', [
         'facebook',
         'LocalStorageModule',
         'firebase',
-        'timer'
+        'timer',
+        'angular-flexslider'
     ])
     .config(function ($stateProvider, $urlRouterProvider) {
         //

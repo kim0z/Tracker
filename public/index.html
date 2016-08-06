@@ -55,18 +55,17 @@
 
 <body>
 
-<md-toolbar scroll-shrink layout="row" ng-contoller="mainIndex">
+<md-toolbar scroll-shrink layout="row" ng-contoller="mainIndex" >
     <div class="md-toolbar-tools" ng-controller="mainIndexCtrl">
         <h3>
             <md-button ng-click="menuClick('Home')">Home</md-button>
             <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
-            <md-button ng-click="menuClick('Plan Trip')">Plan Trip</md-button>
+         <!--   <md-button ng-click="menuClick('Plan Trip')">Plan Trip</md-button> -->
             <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
          <!--   <md-button ng-click="menuClick('Login')">Login</md-button> -->
 
-            <md-button ng-controller="login1" type="button" class="btn btn-primary btn-large" data-ng-show="!logged" data-ng-disabled="!facebookReady" data-ng-click="IntentLogin()">Login with Facebook</md-button>
-            <md-button ng-controller="login1" type="button" class="btn btn-danger btn-large" data-ng-show="logged" data-ng-disabled="!facebookReady" data-ng-click="logout()">Logout</md-button>
-
+                <md-button ng-controller="login1" type="button" class="btn btn-primary btn-large" data-ng-show="!logged" data-ng-disabled="!facebookReady" data-ng-click="IntentLogin()">Login with Facebook</md-button>
+                <md-button ng-controller="login1" type="button" class="btn btn-danger btn-large" data-ng-show="logged" data-ng-disabled="!facebookReady" data-ng-click="logout()">Logout</md-button>
 
             <div id="loginPic" class="user">
             </div>
@@ -86,6 +85,16 @@
 <!-- In production use:
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
 -->
+
+<!-- jQuery -->
+<script src='bower_components/jquery/dist/jquery.min.js'></script>
+<script src='bower_components/jquery/dist/jquery.js'></script>
+
+
+
+
+
+
 
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
@@ -126,13 +135,20 @@
 <!-- end of - used for the list in my trips -->
 
 
-<!-- jQuery -->
-<script src='bower_components/jquery/dist/jquery.min.js'></script>
-<script src='bower_components/jquery/dist/jquery.js'></script>
+
+
+
 
 <!-- bootstrap CSS-->
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+
 
 <!-- city search auto complete -->
 <script src='bower_components/ngAutocomplete/src/ngAutocomplete.js'></script>
@@ -180,11 +196,17 @@
 <script src="bower_components/angular-ui-grid/ui-grid.min.js"></script>
 
 
+
+<!-- Photo slider - this project is not maintained any more should be replaced-->
+<link rel="stylesheet" type="text/css" href="bower_components/flexslider/flexslider.css">
+<script src="bower_components/flexslider/jquery.flexslider-min.js"></script>
+<script src="bower_components/flexslider/jquery.flexslider.js"></script>
+<script src="bower_components/angular-flexslider/angular-flexslider.js"></script>
+
+
+
 <!-- this angular facebook login module should be replaced with bower install (bower didn't work for me, check again) -->
 <script data-require"angular.js@1.1.5" data-semver="1.1.5" src="http://rawgithub.com/Ciul/angular-facebook/master/lib/angular-facebook.js"></script>
-
-
-
 
 
 
