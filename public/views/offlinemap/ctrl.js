@@ -94,6 +94,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
     //Photo slider
         $scope.prod = {imagePaths: []};
         $scope.prod.imagePaths = [];
+        $scope.facebookImagesReady = false;
 
 /*
     $scope.prod.imagePaths = [
@@ -148,13 +149,15 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                                                 /* handle the result */
                                                 console.log(photo.data.url);
                                                 $scope.facebookPhotos.push(photo.data.url);
-
                                                 $scope.prod.imagePaths.push( { custom: photo.data.url, thumbnail: photo.data.url } );
-
                                             }
                                         });
+                                        if( photoIndex == album.data.length - 1){
+                                            $scope.facebookImagesReady = true;
+                                        }
                                 }
-                               // $scope.$apply();
+
+                                
                             }
                         });
                 }

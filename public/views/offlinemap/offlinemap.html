@@ -181,11 +181,11 @@
 
 <div id="edit"  ng-click="editModeSwitch()">
     <img src="../../assets/images/edit.gif" width="40" height="40"/>
-    <p style="width: 100px; height: 60px; font-size: 20px" class = "text-rotate"><b>{{editButtonText}}</b></p>
+    <p style="width: 100px; height: 60px; font-size: 20px" class = "text-rotate">{{editButtonText}}</p>
 </div>
 
 
-<ul id="add_messages" ng-show="editMode" style="z-index: 16;">
+<ul id="add_messages" ng-show="editMode" style="z-index: 16; position: relative ">
     <p> Message: <input type="text" ng-model="message.text" style="width: 200px"/></p>
     <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/></p>
     <p> lng:<input type="text" ng-model="message.lng" style="width: 200px"/></p>
@@ -230,13 +230,13 @@
 <!-- side button photos-->
 <div id="hp-ctn-howItWorks-table" ng-click="tableSlider = !tableSlider">
     <img src="../../assets/images/table_icon2.svg" width="40" height="40"/>
-    <p class = "text-rotate" style="font-size:20px"><b>Table</b></p>
+    <p class = "text-rotate" style="font-size:20px">Table</p>
 </div>
 
 
 <div id="hp-ctn-howItWorks-photos" ng-click="photosSlider = !photosSlider">
     <img src="../../assets/images/photos_icon.png" width="40" height="40"/>
-    <p class = "text-rotate" style="font-size:20px"><b>Photos</b></p>
+    <p class = "text-rotate" style="font-size:20px">Photos</p>
 </div>
 
 
@@ -257,7 +257,7 @@
 
 
 
-<div id="container" class="footer" class='animate-hide' ng-hide="photosSlider">
+<div id="container" ng-if="facebookImagesReady" class="footer" class='animate-hide' ng-hide="photosSlider">
 
     <div class="col-sm-12">
 

@@ -20,6 +20,7 @@
             background-repeat: no-repeat;
             background-position: center center;
             background-size: cover;
+            layout-align: center;
         }
 /*
         .one {
@@ -43,7 +44,7 @@
     <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
     <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
     <link rel="stylesheet" href="bower_components/angularjs-datepicker/dist/angular-datepicker.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+   <!-- <link rel="stylesheet" href="assets/css/style.css"> -->
 
 
     <link rel="stylesheet" href="/bower_components/angular-material/angular-material.css">
@@ -66,9 +67,10 @@
 
                 <md-button ng-controller="login1" type="button" class="btn btn-primary btn-large" data-ng-show="!logged" data-ng-disabled="!facebookReady" data-ng-click="IntentLogin()">Login with Facebook</md-button>
                 <md-button ng-controller="login1" type="button" class="btn btn-danger btn-large" data-ng-show="logged" data-ng-disabled="!facebookReady" data-ng-click="logout()">Logout</md-button>
-
-            <div id="loginPic" class="user">
-            </div>
+                <md-button class="md-fab md-mini" aria-label="Favorite">
+                    <div id="loginPic" class="user">
+                    </div>
+                </md-button>
 
         </h3>
     </div>
