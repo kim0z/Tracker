@@ -92,9 +92,13 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
 
     //Photo slider
-        $scope.prod = {imagePaths: []};
+        $scope.prod = {};
         $scope.prod.imagePaths = [];
         $scope.facebookImagesReady = false;
+
+
+    $scope.value = undefined;
+    $scope.items = [];
 
 /*
     $scope.prod.imagePaths = [
@@ -150,10 +154,15 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                                                 console.log(photo.data.url);
                                                 $scope.facebookPhotos.push(photo.data.url);
                                                 $scope.prod.imagePaths.push( { custom: photo.data.url, thumbnail: photo.data.url } );
+
+                                                  $scope.items.push({id:i, name:'item'+i, img: photo.data.url});
+
                                             }
                                         });
                                         if( photoIndex == album.data.length - 1){
                                             $scope.facebookImagesReady = true;
+                                            console.log('ready');
+                                            $scope.$apply();
                                         }
                                 }
 

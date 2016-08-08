@@ -256,33 +256,49 @@
 -->
 
 
-
+<!--
 <div id="container" ng-if="facebookImagesReady" class="footer" class='animate-hide' ng-hide="photosSlider">
-
     <div class="col-sm-12">
-
-        <flex-slider slider-id="slider" flex-slide="image in prod.imagePaths track by $index" animation="fade" animation-loop="false" sync="#carousel" slideshow="false" control-nav="false" init-delay="100">
-
+         <flex-slider slider-id="slider" flex-slide="image in prod.imagePaths" animation="fade" animation-loop="false" sync="#carousel" slideshow="false" control-nav="false" init-delay="100">
             <li>
                 <img ng-src="{{image.custom}}" style="width: 600px; height: 600px">
             </li>
-
         </flex-slider>
     </div>
     <div class="col-sm-12">
 
-        <flex-slider slider-id="carousel" flex-slide="image in prod.imagePaths track by $index" animation="slide" animation-loop="false" item-width="210" item-margin="5" as-nav-for="#slider" slideshow="false" control-nav="false">
+         <flex-slider slider-id="carousel" flex-slide="image in prod.imagePaths track by $index" animation="slide" animation-loop="false" item-width="210" item-margin="5" as-nav-for="#slider" slideshow="false" control-nav="false">
             <li>
                 <img ng-src="{{image.thumbnail}}" style="width: 100px; height: 100px">
             </li>
-        </flex-slider>
+        </flex-slider> 
     </div>
-
-
 </div>
+-->
 
 
+<div class="footer" class='animate-hide' ng-hide="photosSlider" ng-if="facebookImagesReady">
+    <flex-slider slide="item in items track by $index" animation="slide" item-width="600">
+	  	<li>
+            <img ng-src="{{item.img}}"/>
+                  {{item.name}}
+	    </li>
+	  </flex-slider>
 
+	  <flex-slider slide="item in items track by $index" animation="slide" item-width="210">
+	  	<li>
+            <img ng-src="{{item.img}}"/>
+                  {{item.name}}
+	    </li>
+	  </flex-slider>
+
+	<!--  
+    <a href="javascript:;" data-ng-click="update()">Update List</a>
+    <ul>
+        <li data-ng-repeat="item in items track by $index">{{item.name}}</li>
+    </ul>
+    -->
+</div>
 
 
 
