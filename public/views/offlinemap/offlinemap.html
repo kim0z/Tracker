@@ -59,7 +59,7 @@
         .footer {
             position: fixed;
             bottom: 0;
-            width: 100%;
+            width: 91%;
             z-index: 1;
         }
 
@@ -169,6 +169,21 @@
             cursor: default;
         }
 
+        .roundborder {
+            border-radius: 25px;
+            border: 2px solid #73AD21;
+            padding: 20px;
+            width: 400px;
+            height: 250px;
+        }
+
+        .roundborderlong {
+            border-radius: 25px;
+            border: 2px solid #73AD21;
+            padding: 20px;
+            width: 400px;
+            height: 400px;
+        }
     </style>
 </head>
 <body>
@@ -179,23 +194,14 @@
 
 <div id="pano"></div>
 
-<div id="edit"  ng-click="editModeSwitch()">
+<div id="edit" ng-click="editModeSwitch()">
     <img src="../../assets/images/edit.gif" width="40" height="40"/>
-    <p style="width: 100px; height: 60px; font-size: 20px" class = "text-rotate">{{editButtonText}}</p>
+    <p style="width: 100px; height: 60px; font-size: 20px" class="text-rotate">{{editButtonText}}</p>
 </div>
 
 
-<ul id="add_messages" ng-show="editMode" style="z-index: 16; position: relative ">
-    <p> Message: <input type="text" ng-model="message.text" style="width: 200px"/></p>
-    <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/></p>
-    <p> lng:<input type="text" ng-model="message.lng" style="width: 200px"/></p>
-    <p> time: <input type="datetime" ng-model="message.time" style="width: 200px"/></p>
-    <button ng-click="addMessage()">add</button>
-</ul>
-
-
-<div  style="max-height: 50%; width: 320px; float: right;">
-    <div id="messages" class="list-group" ng-repeat="message in messages" >
+<div style="max-height: 50%; width: 320px; float: right;">
+    <div id="messages" class="list-group" ng-repeat="message in messages">
         <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
             <h4 class="list-group-item-heading">{{message.text}}</h4>
             <p class="list-group-item-text">{{email}}</p>
@@ -230,13 +236,13 @@
 <!-- side button photos-->
 <div id="hp-ctn-howItWorks-table" ng-click="tableSlider = !tableSlider">
     <img src="../../assets/images/table_icon2.svg" width="40" height="40"/>
-    <p class = "text-rotate" style="font-size:20px">Table</p>
+    <p class="text-rotate" style="font-size:20px">Table</p>
 </div>
 
 
 <div id="hp-ctn-howItWorks-photos" ng-click="photosSlider = !photosSlider">
     <img src="../../assets/images/photos_icon.png" width="40" height="40"/>
-    <p class = "text-rotate" style="font-size:20px">Photos</p>
+    <p class="text-rotate" style="font-size:20px">Photos</p>
 </div>
 
 
@@ -277,22 +283,23 @@
 -->
 
 
-<div class="footer" class='animate-hide' ng-hide="photosSlider" ng-if="facebookImagesReady">
-    <flex-slider slide="item in items track by $index" animation="slide" item-width="600">
-	  	<li>
+<div class="footer" class='animate-hide' style="height: 300px; margin-left: 59px; margin-right: 59px"
+     ng-hide="photosSlider" ng-if="facebookImagesReady">
+    <flex-slider slide="item in items track by $index" animation="slide" item-width="200" item-height="200">
+        <li>
             <img ng-src="{{item.img}}"/>
-                  {{item.name}}
-	    </li>
-	  </flex-slider>
+            {{item.name}}
+        </li>
+    </flex-slider>
 
-	  <flex-slider slide="item in items track by $index" animation="slide" item-width="210">
-	  	<li>
-            <img ng-src="{{item.img}}"/>
-                  {{item.name}}
-	    </li>
-	  </flex-slider>
+    <!--	  <flex-slider slide="item in items track by $index1" animation="slide" item-width="110">
+              <li>
+                <img ng-src="{{item.img}}"/>
+                      {{item.name}}
+            </li>
+          </flex-slider>-->
 
-	<!--  
+    <!--
     <a href="javascript:;" data-ng-click="update()">Update List</a>
     <ul>
         <li data-ng-repeat="item in items track by $index">{{item.name}}</li>
@@ -301,21 +308,71 @@
 </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div style="margin-left: 55px" class="footer" class='animate-hide' ng-hide="tableSlider">
-    <div id="grid1" ui-grid="{ data: myData }" class="grid"></div>
+
+
+    <table style="width:100%" class="table table-bordered">
+         
+        <tr>
+            <th> Activity / Day</th>
+               
+            <td ng-hide="editMode" ng-repeat="day in table">{{Utils.keys(day)[0]}}</td>
+            <td ng-show="editMode" ng-repeat="day in table">
+                <input value="{{Utils.keys(day)[0]}}">
+            </td>
+             
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].date}}</td>
+            <td ng-show="editMode" ng-repeat="day in table">
+                <input value="{{day[Utils.keys(day)[0]].date}}">
+            </td>
+        </tr>
+        <tr>
+            <th>Flight</th>
+            <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].flight}}</td>
+            <td ng-show="editMode" ng-repeat="day in table">
+                <input value="{{day[Utils.keys(day)[0]].flight}}">
+            </td>
+        </tr>
+        <tr>
+            <th>Hotel</th>
+            <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].hotel}}</td>
+            <td ng-show="editMode" ng-repeat="day in table">
+                <input value="{{day[Utils.keys(day)[0]].hotel}}">
+            </td>
+        </tr>
+        <tr>
+            <th>Car</th>
+            <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].car}}</td>
+            <td ng-show="editMode" ng-repeat="day in table">
+                <input value="{{day[Utils.keys(day)[0]].car}}">
+            </td>
+        </tr>
+        <tr>
+            <th>Action1</th>
+            <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].action1}}</td>
+            <td ng-show="editMode" ng-repeat="day in table">
+                <input value="{{day[Utils.keys(day)[0]].action1}}">
+            </td>
+        </tr>
+        <tr>
+            <th>Action2</th>
+            <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].action2}}</td>
+            <td ng-show="editMode" ng-repeat="day in table">
+                <input value="{{day[Utils.keys(day)[0]].action2}}">
+            </td>
+        </tr>
+        <tr>
+            <th>Expense</th>
+            <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].expense}}</td>
+            <td ng-show="editMode" ng-repeat="day in table">
+                <input value="{{day[Utils.keys(day)[0]].expense}}">
+            </td>
+        </tr>
+    </table>
+
 </div>
 
 <!--
@@ -333,14 +390,6 @@
 </div>
 -->
 
-<div id="upload_photo" ng-show="editMode">
-    <p>Upload photo or KML (googlemaps export file)</p>
-    <input type="file" id="file-chooser" style="height: 40px; width: 240px"/>
-    <p></p>
-    <button id="upload-button">Upload to S3</button>
-    <div id="results"></div>
-
-</div>
 
 <!-- Facebook albums -->
 
@@ -368,22 +417,60 @@
 <!-- end facebook albums -->
 
 
-<ul id="add_GPS_toPhoto" ng-show="editMode">
-    <p> Image path: <input type="text" ng-model="image.path" style="width: 200px"/></p>
-    <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/></p>
-    <p> lng:<input type="text" ng-model="message.lng" style="width: 200px"/></p>
-    <button id="addGPStoPhoto" ng-click="saveGPStoThisPhoto()">add</button>
-    <div id="results_photo_gps"></div>
-</ul>
+<!-- ######################################################################### -->
+<!-- Edit Mode -->
+<!-- ######################################################################### -->
+<div>
+    <div id="upload_photo" ng-show="editMode" style="z-index: 16; position: relative" class="roundborder">
+        <p>Upload photo or KML (googlemaps export file)</p>
+        <input type="file" id="file-chooser" style="height: 40px; width: 240px"/>
+        <p></p>
+        <button id="upload-button">Upload to S3</button>
+        <div id="results"></div>
+
+    </div>
+
+    <div id="add_messages" ng-show="editMode" style="z-index: 16; position: relative" class="roundborder">
+        <p>Add message</p>
+        <ul>
+            <p> Message: <input type="text" ng-model="message.text" style="width: 200px"/></p>
+            <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/></p>
+            <p> lng:<input type="text" ng-model="message.lng" style="width: 200px"/></p>
+            <p> time: <input type="datetime" ng-model="message.time" style="width: 200px"/></p>
+            <button ng-click="addMessage()">add</button>
+        </ul>
+    </div>
+
+    <div id="add_GPS_toPhoto" ng-show="editMode" style="z-index: 16; position: relative" class="roundborder">
+        <p>Add GPS to photo</p>
+        <ul>
+            <p> Image path: <input type="text" ng-model="image.path" style="width: 200px"/></p>
+            <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/></p>
+            <p> lng:<input type="text" ng-model="message.lng" style="width: 200px"/></p>
+            <button id="addGPStoPhoto" ng-click="saveGPStoThisPhoto()">add</button>
+            <div id="results_photo_gps"></div>
+        </ul>
+    </div>
 
 
-<ul id="add_day" ng-show="editMode">
-    <p> Trip Name: <input type="text" ng-model="trip.name" style="width: 200px"/></p>
-    <p> Trip Description: <input type="text" ng-model="trip.description" style="width: 200px"/></p>
-    <p> Trip start D:<input type="text" ng-model="trip.start_date" style="width: 200px"/></p>
-    <p> Trip end D: <input type="datetime" ng-model="trip.end_date" style="width: 200px"/></p>
-    <button ng-click="addDay()">add</button>
-</ul>
+    <div ng-show="editMode" style="z-index: 16; position: relative;" class="roundborderlong">
+        <p>Add Day</p>
+        <ul id="add_day">
+            <p> Day Number: <input type="text" ng-model="day.dayNumber" style="width: 200px"/></p>
+            <p> Date: <input type="text" ng-model="day.date" style="width: 200px"/></p>
+            <p> Flight:<input type="text" ng-model="day.flight" style="width: 200px"/></p>
+            <p> Hotel: <input type="datetime" ng-model="day.hotel" style="width: 200px"/></p>
+            <p> Car: <input type="datetime" ng-model="day.car" style="width: 200px"/></p>
+            <p> Action1: <input type="datetime" ng-model="day.action1" style="width: 200px"/></p>
+            <p> Action2: <input type="datetime" ng-model="day.action2" style="width: 200px"/></p>
+            <p> Expense: <input type="datetime" ng-model="day.expense" style="width: 200px"/></p>
+            <button ng-click="addDay()">add</button>
+        </ul>
+
+    </div>
+
+</div>
+
 
 
 </body>

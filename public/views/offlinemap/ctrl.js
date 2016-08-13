@@ -1,4 +1,4 @@
-trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObject, $firebaseArray, $http, $document, dataBaseService, messages, localStorageService, Facebook) {
+trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $document, dataBaseService, messages, localStorageService, Facebook) {
 
 
 //NOTES:
@@ -7,65 +7,18 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 //****
 //****
 //****
-//temp WEDFVSDVSDVDSFDSFVDFVDF
-        $scope.myData = [
-            {
-                "firstName": "Cox",
-                "lastName": "Carney",
-                "company": "Enormo",
-                "employed": true
-            },
-            {
-                "firstName": "Lorraine",
-                "lastName": "Wise",
-                "company": "Comveyer",
-                "employed": false
-            },
-            {
-                "firstName": "Nancy",
-                "lastName": "Waters",
-                "company": "Fuelton",
-                "employed": false
-            },
-            {
-                "firstName": "Nancy",
-                "lastName": "Waters",
-                "company": "Fuelton",
-                "employed": false
-            },
-            {
-                "firstName": "Nancy",
-                "lastName": "Waters",
-                "company": "Fuelton",
-                "employed": false
-            },
-            {
-                "firstName": "Nancy",
-                "lastName": "Waters",
-                "company": "Fuelton",
-                "employed": false
-            },
-            {
-                "firstName": "Nancy",
-                "lastName": "Waters",
-                "company": "Fuelton",
-                "employed": false
-            },
-            {
-                "firstName": "Nancy",
-                "lastName": "Waters",
-                "company": "Fuelton",
-                "employed": false
-            },
-            {
-                "firstName": "Nancy",
-                "lastName": "Waters",
-                "company": "Fuelton",
-                "employed": false
-            }
+        $scope.columns = [
+            {title: 'Name', field: 'name', visible: true, filter: {'name': 'text'}},
+            {title: 'Age', field: 'age', visible: true},
+            {title: 'country', field: 'add', visible: true, subfield: 'coun'}
         ];
 
-    //DEL above
+
+        $rootScope.Utils = {
+            keys : Object.keys
+        }
+
+
 
         $scope.user = messages.getUser(); //replace with local service like next line
         $scope.email = localStorageService.get('email');
@@ -84,42 +37,42 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
         var facebookAuth = localStorageService.get('userFacebookAuth');
         console.log(facebookAuth);
 
-        $scope.facebookAlbums = {}; //when page loaded, a Facebook API trigered to get user albums incase new album was added
+        $scope.facebookAlbums = {}; //when page loaded, a Facebook API triggered to get user albums in case new album was added
                                     //to show it in edit mode to allow users select the new albums
 
         $scope.facebookAlbumsFriebase = {}; //sync albums from Firebase config to know what photos to load
         $scope.facebookPhotos = []; //the same photos array used when load the page and when sync the new albums
 
+        //Table
+        $scope.table = [];
 
-    //Photo slider
+        //Photo slider
         $scope.prod = {};
         $scope.prod.imagePaths = [];
         $scope.facebookImagesReady = false;
 
 
-    $scope.value = undefined;
-    $scope.items = [];
+        $scope.value = undefined;
+        $scope.items = [];
 
-/*
-    $scope.prod.imagePaths = [
-        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg' },
-        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg' },
-        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg' },
-        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg' },
-        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg' },
-        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg' },
-        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg' },
-        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg' },
-        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg' },
-        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg' },
-        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg' },
-        { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg'}
-    ];
-
-
-*/
+        /*
+         $scope.prod.imagePaths = [
+         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg' },
+         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg' },
+         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg' },
+         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg' },
+         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg' },
+         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg' },
+         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg' },
+         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg' },
+         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg' },
+         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg' },
+         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg' },
+         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg'}
+         ];
 
 
+         */
 
 
         // read albums from Firebase config and then load photos
@@ -153,20 +106,19 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                                                 /* handle the result */
                                                 console.log(photo.data.url);
                                                 $scope.facebookPhotos.push(photo.data.url);
-                                                $scope.prod.imagePaths.push( { custom: photo.data.url, thumbnail: photo.data.url } );
-
-                                                  $scope.items.push({id:i, name:'item'+i, img: photo.data.url});
-
+                                                $scope.prod.imagePaths.push({
+                                                    custom: photo.data.url,
+                                                    thumbnail: photo.data.url
+                                                });
+                                                $scope.items.push({id: i, name: 'item' + i, img: photo.data.url});
                                             }
                                         });
-                                        if( photoIndex == album.data.length - 1){
-                                            $scope.facebookImagesReady = true;
-                                            console.log('ready');
-                                            $scope.$apply();
-                                        }
+                                    if (photoIndex == album.data.length - 1) {
+                                        $scope.facebookImagesReady = true;
+                                        console.log('ready');
+                                        $scope.$apply();
+                                    }
                                 }
-
-                                
                             }
                         });
                 }
@@ -208,7 +160,7 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
         /* make the API call */
         Facebook.api(
-            "/"+facebookAuth.id+"/albums",
+            "/" + facebookAuth.id + "/albums",
             function (response) {
                 if (response && !response.error) {
                     /* handle the result */
@@ -223,7 +175,6 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                 }
                 $scope.$apply();
             }
-
         );
 
         $scope.syncAlbums = function () {
@@ -386,32 +337,13 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
             map: $scope.map
         });
 
-        $scope.addMessage = function () {
-            // add a new note to firebase
-            var message_json = {};
-
-            var usersRef = firebase_ref.child('history');
-
-            message_json = {
-                "message": {
-                    "text": $scope.message.text,
-                    "latitude": $scope.message.lat,
-                    "longitude": $scope.message.lng,
-                    "timestamp": $scope.message.time
-                }
-            }
-            usersRef.push(message_json);
-        }
 
         $scope.showMessageOnMap = function (message) {
-
             if ($scope.editMode == false) {
                 //#646c73
-
                 if (showMessageOnMap_clicked == false) {
                     showMessageOnMap_clicked = true;
                     var Latlng_message = {lat: message.latitude, lng: message.longitude};
-
 
                     //Help function - show item on map
                     showItemOnMap(Latlng_message, message);
@@ -426,21 +358,12 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
 
 
         $scope.showPhotoOnMap = function (image) {
-
             //console.log(image.currentTarget.childNodes[1]);
             var img = image.currentTarget.childNodes[1];  //the second element is IMG, should add validation
-
-
             if ($scope.editMode == true) {
                 //if Edit mode enabled then ask the user to set the GPS lat lng for the photos
-
-
                 addGPStoPhoto(img);
-
-
             } else if ($scope.editMode == false) {
-
-
                 if (img) {
                     EXIF.getData(img, function () {
                         var make = EXIF.getTag(img, "Make"),
@@ -597,10 +520,10 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
                 $scope.editButtonText = 'Edit Mode';
         }
 
-        //load messages
-        var firebase_ref_read = new Firebase("https://luminous-torch-9364.firebaseio.com/" + email_no_shtrodel_dot + '/' + $scope.tripID + '/history');
+        //load Tips from Firebase
+        var firebase_ref_readTips = new Firebase("https://luminous-torch-9364.firebaseio.com/" + email_no_shtrodel_dot + '/' + $scope.tripID + '/history/tips');
 
-        firebase_ref_read.on("value", function (snapshot) {
+        firebase_ref_readTips.on("value", function (snapshot) {
             $scope.messages = [];
             snapshot.forEach(function (childSnapshot) {
 
@@ -613,8 +536,66 @@ trackerApp.controller('offlinemapCtrl', function ($scope, $timeout, $firebaseObj
             $scope.$apply();
 
         }, function (errorObject) {
-            console.log("The read failed: " + errorObject.code);
+            console.log("Read Tips from Firebase failed: " + errorObject.code);
         });
+
+
+        //load Table from Firebase
+        var firebase_ref_readTable = new Firebase("https://luminous-torch-9364.firebaseio.com/" + email_no_shtrodel_dot + '/' + $scope.tripID + '/history/table');
+
+        firebase_ref_readTable.on("value", function (snapshot) {
+            $scope.table = []; //reset table
+            snapshot.forEach(function (childSnapshot) {
+                // key will be "fred" the first time and "barney" the second time
+                var key = childSnapshot.key();
+                // childData will be the actual contents of the child
+                var childData = childSnapshot.val();
+
+                var day = {};
+                day[key] = childData;
+                $scope.table.push(day);
+            });
+            //$scope.$apply();
+
+        }, function (errorObject) {
+            console.log("Read Table from Firebase failed: " + errorObject.code);
+        });
+
+
+        // ###################################################################
+        // Edit Mode - Start
+        // ##################################################################
+
+        $scope.addDay = function () {
+            console.log('Offline page:: add day');
+            console.log($scope.day);
+
+            var firebase_table = new Firebase("https://luminous-torch-9364.firebaseio.com/" + email_no_shtrodel_dot + "/" + $scope.tripID + "/history/table/" + $scope.day.dayNumber);
+            firebase_table.set($scope.day);
+        }
+
+        $scope.addMessage = function () {
+            // add a new note to firebase
+            var message_json = {};
+
+            var firebase_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/" + email_no_shtrodel_dot + '/' + $scope.tripID + '/history/tips');
+
+            //var usersRef = firebase_ref.child('history');
+
+            message_json = {
+                "message": {
+                    "text": $scope.message.text,
+                    "latitude": $scope.message.lat,
+                    "longitude": $scope.message.lng,
+                    "timestamp": $scope.message.time
+                }
+            }
+            firebase_tips.push(message_json);
+        }
+
+        // ###################################################################
+        // Edit Mode - End
+        // ##################################################################
 
 
         //*******************************************************************************************************
