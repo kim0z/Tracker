@@ -21,31 +21,32 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/views/offlinemap/ctrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.83741933">
+            <state vertical-scroll-proportion="37.666668">
               <caret line="118" column="52" selection-start-line="118" selection-start-column="47" selection-end-line="118" selection-end-column="52" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="offlinemap.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="offlinemap.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/views/offlinemap/offlinemap.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.5849056">
-              <caret line="422" column="4" selection-start-line="422" selection-start-column="4" selection-end-line="422" selection-end-column="4" />
+            <state vertical-scroll-proportion="-4.87984">
+              <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="4" />
               <folding>
                 <element signature="n#style#0;n#p#0;n#div#2;n#body#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#3;n#body#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#i#0;n#body#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#p#0;n#div#5;n#body#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#p#0;n#div#6;n#body#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#7;n#body#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#8;n#body#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#table#0;n#div#8;n#body#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#10;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#0;n#div#0;n#div#10;n#body#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#span#0;n#div#0;n#div#10;n#body#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#1;n#div#10;n#body#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#input#0;n#p#0;n#ul#0;n#div#1;n#div#10;n#body#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#input#0;n#p#1;n#ul#0;n#div#1;n#div#10;n#body#0;n#!!top" expanded="true" />
@@ -65,6 +66,16 @@
                 <element signature="n#style#0;n#input#0;n#p#6;n#ul#0;n#div#3;n#div#10;n#body#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#input#0;n#p#7;n#ul#0;n#div#3;n#div#10;n#body#0;n#!!top" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="view3.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/views/view3/view3.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-4.576923">
+              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="108" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -221,7 +232,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="bower_components" />
+              <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -239,67 +250,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="bower_components" />
+              <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="bootstrap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tracker" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tracker" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bower_components" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bootstrap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dist" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tracker" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tracker" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bower_components" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bootstrap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dist" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
+              <option name="myItemId" value="view3" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -457,7 +412,7 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2015504" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2015504" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27108434" sideWeight="0.5024665" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11686747" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -511,20 +466,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public/views/offlinemap/offlinemap.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="381" column="41" selection-start-line="381" selection-start-column="28" selection-end-line="381" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/views/view3/ctrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/views/view3/view3.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -769,14 +710,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/views/view3/view3.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.6530029">
-          <caret line="140" column="24" selection-start-line="140" selection-start-column="24" selection-end-line="140" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/assets/css/photoslider.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-14.0188675">
@@ -854,28 +787,61 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/assets/css/style_tripList.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/bower_components/material-design-icons/action/svg/production/ic_accessibility_24px.svg">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bower.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7886598">
-          <caret line="36" column="8" selection-start-line="35" selection-start-column="7" selection-end-line="35" selection-end-column="8" />
+        <state vertical-scroll-proportion="0.36448598">
+          <caret line="18" column="8" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/views/offlinemap/ctrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="37.666668">
+          <caret line="118" column="52" selection-start-line="118" selection-start-column="47" selection-end-line="118" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/views/view3/view3.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.576923">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="108" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/views/offlinemap/offlinemap.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.5849056">
-          <caret line="422" column="4" selection-start-line="422" selection-start-column="4" selection-end-line="422" selection-end-column="4" />
+        <state vertical-scroll-proportion="-4.87984">
+          <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="4" />
           <folding>
             <element signature="n#style#0;n#p#0;n#div#2;n#body#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#3;n#body#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#i#0;n#body#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#p#0;n#div#5;n#body#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#p#0;n#div#6;n#body#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#7;n#body#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#8;n#body#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#table#0;n#div#8;n#body#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#10;n#body#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#div#0;n#div#10;n#body#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#span#0;n#div#0;n#div#10;n#body#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#1;n#div#10;n#body#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#input#0;n#p#0;n#ul#0;n#div#1;n#div#10;n#body#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#input#0;n#p#1;n#ul#0;n#div#1;n#div#10;n#body#0;n#!!top" expanded="true" />
@@ -895,14 +861,6 @@
             <element signature="n#style#0;n#input#0;n#p#6;n#ul#0;n#div#3;n#div#10;n#body#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#input#0;n#p#7;n#ul#0;n#div#3;n#div#10;n#body#0;n#!!top" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/views/offlinemap/ctrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.83741933">
-          <caret line="118" column="52" selection-start-line="118" selection-start-column="47" selection-end-line="118" selection-end-column="52" />
-          <folding />
         </state>
       </provider>
     </entry>
