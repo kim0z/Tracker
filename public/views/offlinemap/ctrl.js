@@ -18,6 +18,14 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             keys : Object.keys
         }
 
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+
 
 
         $scope.user = messages.getUser(); //replace with local service like next line

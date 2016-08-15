@@ -112,19 +112,6 @@
             -webkit-transform: rotate(-90deg);
         }
 
-        #hp-ctn-howItWorks-table {
-            bottom: 155px;
-            position: fixed;
-            left: 0px;
-            padding: 0px;
-            margin: 0px;
-            width: 55px;
-            height: 180px;
-            background: #7599ff;
-            z-index: 15;
-            border-radius: 3px 0px 0px 3px;
-        }
-
         #edit {
             bottom: 0px;
             position: fixed;
@@ -138,11 +125,47 @@
             border-radius: 3px 0px 0px 3px;
         }
 
+        #hp-ctn-howItWorks-table {
+            bottom: 155px;
+            position: fixed;
+            left: 0px;
+            padding: 0px;
+            margin: 0px;
+            width: 55px;
+            height: 180px;
+            background: #7599ff;
+            z-index: 15;
+            border-radius: 3px 0px 0px 3px;
+        }
         #hp-ctn-howItWorks-table img {
             margin: 15px 0px 40px 13px;
         }
 
         #hp-ctn-howItWorks-table p {
+            color: #fff;
+            -moz-transform: rotate(-90deg);
+            -ms-transform: rotate(-90deg);
+            -o-transform: rotate(-90deg);
+            -webkit-transform: rotate(-90deg);
+        }
+
+   		#hp-ctn-howItWorks-information {
+            top: 65px;
+            position: fixed;
+            left: 0px;
+            padding: 0px;
+            margin: 0px;
+            width: 55px;
+            height: 180px;
+            background: #7599ff;
+            z-index: 15;
+            border-radius: 3px 0px 0px 3px;
+        }
+        #hp-ctn-howItWorks-information img {
+            margin: 15px 0px 40px 13px;
+        }
+
+        #hp-ctn-howItWorks-information p {
             color: #fff;
             -moz-transform: rotate(-90deg);
             -ms-transform: rotate(-90deg);
@@ -206,19 +229,91 @@
             cursor: inherit;
             display: block;
         }
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s
+}
+
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
     </style>
 </head>
 <body>
+
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="#">About</a>
+  <a href="#">Services</a>
+  <a href="#">Clients</a>
+  <a href="#">Contact</a>
+</div>
+
+
+
+
+<div id="main">
+
+
+<script>
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+}
+</script>
+
+
+
+
+
+
 
     <div id="map"></div>
 
     <div id="pano"></div>
 
-    <div id="edit" ng-click="editModeSwitch()">
-        <img src="../../assets/images/edit.gif" width="40" height="40"/>
-        <p style="width: 100px; height: 60px; font-size: 20px" class="text-rotate">{{editButtonText}}</p>
-    </div>
-
+    
     <div style="max-height: 50%; width: 320px; float: right;">
         <div id="messages" class="list-group" ng-repeat="message in messages">
             <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
@@ -230,8 +325,6 @@
             </a>
         </div>
     </div>
-
-    <i style="z-index: 16; position: relative" class="material-icons">face</i>
 
 
 <!-- Load photos from AWS S3 - disabled, instead sync with Facebook photos
@@ -254,13 +347,22 @@
     <div id="status"></div>
 
 <!-- side button photos-->
+	<div id="edit" ng-click="editModeSwitch()">
+        <img src="../../assets/images/edit.gif" width="40" height="40" style="margin-left:8px"/>
+        <p style="width: 100px; height: 60px; font-size: 20px; margin-top:20px" class="text-rotate">{{editButtonText}}</p>
+    </div>
+	<div id="hp-ctn-howItWorks-information" ng-click="tableSlider = !tableSlider">
+        <img src="../../assets/images/information.png" width="40" height="40" style="margin-left:8px"; />
+        <p class="text-rotate" style="font-size:20px">Info</p>
+    </div>
+
     <div id="hp-ctn-howItWorks-table" ng-click="tableSlider = !tableSlider">
-        <img src="../../assets/images/table_icon2.svg" width="40" height="40"/>
+        <img src="../../assets/images/table_icon2.svg" width="40" height="40" style="margin-left:8px"/>
         <p class="text-rotate" style="font-size:20px">Table</p>
     </div>
 
     <div id="hp-ctn-howItWorks-photos" ng-click="photosSlider = !photosSlider">
-        <img src="../../assets/images/photos_icon.png" width="40" height="40"/>
+        <img src="../../assets/images/photos_icon.png" width="40" height="40" style="margin-left:8px"/>
         <p class="text-rotate" style="font-size:20px">Photos</p>
     </div>
 
@@ -410,7 +512,7 @@
 
 <!-- Facebook albums -->
 
-    <div name="facebookSync">
+    <div name="facebookSync" class="footer">
         <label ng-repeat="album in facebookAlbums track by $index">{{album.albumName}}{{album.albumID}}
         <input type="checkbox" ng-model="facebookAlbums[$index].checkbox">
         </label><br/>
@@ -438,6 +540,14 @@
 <!-- Edit Mode -->
 <!-- ######################################################################### -->
 
+
+	<!-- Facebook albums -->
+    <div id="facebookSync" ng-show="editMode" class="footer" >
+        <label ng-repeat="album in facebookAlbums track by $index">{{album.albumName}}{{album.albumID}}
+        <input type="checkbox" ng-model="facebookAlbums[$index].checkbox">
+        </label><br/>
+        <button ng-click="syncAlbums()">Sync</button>
+    </div>
     <div>
         <div id="upload_photo" ng-show="editMode" style="z-index: 16; position: relative" class="roundborder">
             <p>Upload photo or KML (googlemaps export file)</p>
@@ -486,5 +596,6 @@
                 <button type="button" class="btn btn-success" ng-click="addDay()">add</button>
             </ul>
         </div>
+    </div>
     </div>
 </body>
