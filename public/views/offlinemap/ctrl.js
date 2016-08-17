@@ -18,13 +18,13 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             keys : Object.keys
         }
 
-function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
-}
+    $scope.openNav = function () {
+        document.getElementById("mySidenav").style.width = "420px";
+    }
 
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-}
+    $scope.closeNav = function () {
+        document.getElementById("mySidenav").style.width = "0";
+    }
 
 
 
@@ -62,6 +62,8 @@ function closeNav() {
 
         $scope.value = undefined;
         $scope.items = [];
+
+        $scope.example1model = []; $scope.example1data = [ {id: 1, label: "David"}, {id: 2, label: "Jhon"}, {id: 3, label: "Danny"}];
 
         /*
          $scope.prod.imagePaths = [
@@ -517,15 +519,19 @@ function closeNav() {
             });
             // }, false);
 
-
         }
 
         $scope.editModeSwitch = function () {
             $scope.editMode = !$scope.editMode;
-            if ($scope.editMode == true)
+            if ($scope.editMode == true) {
                 $scope.editButtonText = 'View Mode';
+                $scope.openNav();
+            }
             else
+            {
                 $scope.editButtonText = 'Edit Mode';
+                $scope.closeNav();
+            }
         }
 
         //load Tips from Firebase

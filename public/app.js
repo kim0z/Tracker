@@ -19,7 +19,8 @@ var trackerApp = angular.module('myApp', [
         'LocalStorageModule',
         'firebase',
         'timer',
-        'angular-flexslider'
+        'angular-flexslider',
+        'angularjs-dropdown-multiselect'
     ])
     .config(function ($stateProvider, $urlRouterProvider) {
         //
@@ -108,6 +109,12 @@ var trackerApp = angular.module('myApp', [
     .config(function (localStorageServiceProvider) {
         localStorageServiceProvider
             .setStorageType('sessionStorage');
+    })
+
+    .constant('_', window._)
+    // use in views, ng-repeat="x in _.range(3)"
+    .run(function ($rootScope) {
+        $rootScope._ = window._;
     });
 
 trackerApp.controller('mainIndexCtrl', function ($scope) {
