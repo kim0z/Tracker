@@ -59,11 +59,42 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         $scope.prod.imagePaths = [];
         $scope.facebookImagesReady = false;
 
-
+/* don't now what the below for, disable until error
         $scope.value = undefined;
         $scope.items = [];
+*/
+        $scope.selectedFacebookAlbum = [];
+        $scope.facebookAlbumsList = []; //Facebook albums from Firebase
 
-        $scope.example1model = []; $scope.example1data = [ {id: 1, label: "David"}, {id: 2, label: "Jhon"}, {id: 3, label: "Danny"}];
+        // MultiSelect Drop down select - Event - Facebook albums
+        $scope.selectAlbumEvents = {
+            onItemSelect: function(property) {
+                console.log('select > ' +property);
+                console.log(property);
+                //update albums array that will be saved in Firebase
+                $scope.facebookAlbums[property.id].checkbox = true;
+                console.log($scope.facebookAlbums);
+            },
+
+            onItemDeselect: function(property) {
+                console.log('deselect : ' +property);
+                $scope.facebookAlbums[property.id].checkbox = false;
+                console.log($scope.facebookAlbums);
+            },
+            onSelectAll: function(property) {
+                console.log('select all : ' +property);
+                $scope.facebookAlbums[property.id].checkbox = true;
+                console.log($scope.facebookAlbums);
+            },
+            onDeselectAll: function(property) {
+                console.log('deselect all : ' +property);
+                $scope.facebookAlbums[property.id].checkbox = false;
+                console.log($scope.facebookAlbums);
+            }
+
+        }
+
+
 
         /*
          $scope.prod.imagePaths = [
@@ -85,7 +116,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
          */
 
 
-        // read albums from Firebase config and then load photos
+        //read albums from Firebase config and then load photos
         var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/offline/photos/facebook/trip/" + $scope.tripID);
 
         firebase_config_get_albums.on("value", function (snapshot) {
@@ -96,6 +127,21 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     albumID: childsnapshot.val()['albumID'],
                     albumName: childsnapshot.val()['albumName']
                 };
+
+                //add the albums list from Firebase to the list in edit mode
+                $scope.facebookAlbumsList[childsnapshot.key()] = {
+                    id: childsnapshot.key(),
+                    label: childsnapshot.val()['albumName'],
+                    albumID: childsnapshot.val()['albumID']
+                };
+
+                //check if album saved in Firebase is enabled, checked = true
+                //if Yes then add the id to the selected list of the List in edit mode
+                //the list will be checked according to the enabled albums
+                if(childsnapshot.val()['checkbox'] == true){
+                    $scope.selectedFacebookAlbum[childsnapshot.key()] = {id: childsnapshot.key()};
+                }
+
             })
 
             //load photos from all selected albums
@@ -168,7 +214,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         //var facebookToken = localStorageService.get('facebookAuth').authResponse.accessToken;
 
 
-        /* make the API call */
+
+        //get all facebook user albums
         Facebook.api(
             "/" + facebookAuth.id + "/albums",
             function (response) {
@@ -181,12 +228,14 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                             albumID: response.data[i].id,
                             albumName: response.data[i].name
                         };
+                        //$scope.facebookAlbumsList[i] = ({albumID: response.data[i].id, albumName: response.data[i].name, checkbox: false});
                     }
                 }
                 $scope.$apply();
             }
         );
 
+        //Sync Facebook albums
         $scope.syncAlbums = function () {
             //save in Firebase config
             var firebase_config_albums = new Firebase("https://trackerconfig.firebaseio.com/web/offline/photos/facebook/trip/" + $scope.tripID);

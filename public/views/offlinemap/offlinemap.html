@@ -526,7 +526,7 @@
             <label ng-repeat="album in facebookAlbums track by $index">{{album.albumName}}{{album.albumID}}
                 <input type="checkbox" ng-model="facebookAlbums[$index].checkbox">
             </label><br/>
-            <div ng-dropdown-multiselect="" options="example1data" selected-model="example1model"></div>
+            <div ng-dropdown-multiselect="" options="facebookAlbumsList" selected-model="selectedFacebookAlbum" events="selectAlbumEvents"></div>
 
             <button ng-click="syncAlbums()">Sync</button>
         </div>
