@@ -61,6 +61,14 @@ app.use(bodyParser.json()); 									// parse application/json
 app.use(bodyParser.json({type: 'application/vnd.api+json'})); // parse application/vnd.api+json as json
 app.use(methodOverride());
 
+
+//CROSS SITE SCRIPT
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 // routes 
 require('./app/routes.js')(app);
 
@@ -288,7 +296,7 @@ app.post('/updateTrip', function (request, response) {
 });
 
 //Postgres read trips table
-app.post('/getTrips', function (request, response) {
+app.post('/getTrips', function (request, response, next) {
 
     // add validation to the email is valid - add function to do the validation
     //else return nothing
