@@ -29,7 +29,14 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
 
         $scope.user = messages.getUser(); //replace with local service like next line
-        $scope.email = localStorageService.get('email');
+
+        //Bug
+        //get the mail from storage is not the best way, because after refresh it is deleted, I should change way how to get mail - bug opened in Driver
+        //$scope.email = localStorageService.get('email');
+
+
+
+
         $scope.tripID = messages.getTripID();
         $scope.travelersList = [];
         $scope.data = []; // Travellers from PG DB
@@ -44,6 +51,14 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
         var facebookAuth = localStorageService.get('userFacebookAuth');
         console.log(facebookAuth);
+
+        //it will fix the bug above
+        $scope.email = facebookAuth.email;
+
+
+        var email_no_shtrodel = $scope.email.replace('@', 'u0040');
+        var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
+
 
         $scope.facebookAlbums = {}; //when page loaded, a Facebook API triggered to get user albums in case new album was added
                                     //to show it in edit mode to allow users select the new albums
@@ -66,58 +81,13 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         $scope.selectedFacebookAlbum = [];
         $scope.facebookAlbumsList = []; //Facebook albums from Firebase
 
-        // MultiSelect Drop down select - Event - Facebook albums
-        $scope.selectAlbumEvents = {
-            onItemSelect: function(property) {
-                console.log('select > ' +property);
-                console.log(property);
-                //update albums array that will be saved in Firebase
-                $scope.facebookAlbums[property.id].checkbox = true;
-                console.log($scope.facebookAlbums);
-            },
-
-            onItemDeselect: function(property) {
-                console.log('deselect : ' +property);
-                $scope.facebookAlbums[property.id].checkbox = false;
-                console.log($scope.facebookAlbums);
-            },
-            onSelectAll: function(property) {
-                console.log('select all : ' +property);
-                $scope.facebookAlbums[property.id].checkbox = true;
-                console.log($scope.facebookAlbums);
-            },
-            onDeselectAll: function(property) {
-                console.log('deselect all : ' +property);
-                $scope.facebookAlbums[property.id].checkbox = false;
-                console.log($scope.facebookAlbums);
-            }
-
-        }
-
-
-
-        /*
-         $scope.prod.imagePaths = [
-         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg' },
-         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg' },
-         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg' },
-         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg' },
-         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg' },
-         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg' },
-         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg' },
-         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg' },
-         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_cheesecake_brownie.jpg' },
-         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_lemon.jpg' },
-         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_donut.jpg' },
-         { custom: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg', thumbnail: 'http://flexslider.woothemes.com/images/kitchen_adventurer_caramel.jpg'}
-         ];
-
-
-         */
-
 
         //read albums from Firebase config and then load photos
-        var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/offline/photos/facebook/trip/" + $scope.tripID);
+        //read albums from Firebase for:
+        // 1. update edit mode list witht the enabled albums (not to update the list witht the albums list, only if it enabled, reason: could be that the list in facebook more updated)
+        // 2. show the photos in Gallery of the enabled photos
+
+        var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/"+email_no_shtrodel_dot+"/offline/photos/facebook/trip/" + $scope.tripID);
 
         firebase_config_get_albums.on("value", function (snapshot) {
             //  var i = 0;
@@ -141,7 +111,6 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 if(childsnapshot.val()['checkbox'] == true){
                     $scope.selectedFacebookAlbum[childsnapshot.key()] = {id: childsnapshot.key()};
                 }
-
             })
 
             //load photos from all selected albums
@@ -184,8 +153,80 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         });
 
 
-        var email_no_shtrodel = $scope.email.replace('@', 'u0040');
-        var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
+    //get all facebook user albums
+     //read albums from Facebook for:
+        // 1. update edit mode list witht he enabled albums
+        
+        Facebook.api(
+            "/" + facebookAuth.id + "/albums",
+            function (response) {
+                if (response && !response.error) {
+                    /* handle the result */
+                    // console.log(response);
+                    for (var i = 0; i < response.data.length; i++) {
+                        $scope.facebookAlbums[i] = {
+                            checkbox: false,
+                            albumID: response.data[i].id,
+                            albumName: response.data[i].name
+                        };
+                        //$scope.facebookAlbumsList[i] = ({albumID: response.data[i].id, albumName: response.data[i].name, checkbox: false});
+                    }
+                }
+                $scope.$apply();
+            }
+        );
+
+        // MultiSelect Drop down select - Event - Facebook albums
+        $scope.selectAlbumEvents = {
+            onItemSelect: function(property) {
+                console.log('select > ' +property);
+                console.log(property);
+                //update albums array that will be saved in Firebase
+                 $scope.facebookAlbums[property.id] = {
+                    checkbox: true,
+                    albumID: property[property.id].albumID,
+                    albumName: response[property.id].albumName
+                }
+                console.log($scope.facebookAlbums);
+            },
+
+            onItemDeselect: function(property) {
+                console.log('deselect : ' +property);
+                $scope.facebookAlbums[property.id] = {
+                    checkbox: false,
+                    albumID: property[property.id].albumID,
+                    albumName: response[property.id].albumName
+                }
+                console.log($scope.facebookAlbums);
+            },
+            onSelectAll: function(property) {
+                console.log('select all : ' +property);
+                  //create a new array from scratch with checkbox = true
+                for(var index = 0 ; index < property.length ; index++){
+                    $scope.facebookAlbums[index] = {
+                        checkbox: true,
+                        albumID: property[index].albumID,
+                        albumName: response[index].albumName
+                    }
+                }
+                console.log($scope.facebookAlbums);
+            },
+            onDeselectAll: function(property) {
+                console.log('deselect all : ' +property);
+                //create a new array from scratch with checkbox = false
+                for(var index = 0 ; index < property.length ; index++){
+                    $scope.facebookAlbums[index] = {
+                        checkbox: false,
+                        albumID: property[index].albumID,
+                        albumName: response[index].albumName
+                    }
+                }
+                console.log($scope.facebookAlbums);
+            }
+        }
+
+
+
 
 
         // Get a Firebase database reference to our posts
@@ -215,30 +256,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
 
 
-        //get all facebook user albums
-        Facebook.api(
-            "/" + facebookAuth.id + "/albums",
-            function (response) {
-                if (response && !response.error) {
-                    /* handle the result */
-                    // console.log(response);
-                    for (var i = 0; i < response.data.length; i++) {
-                        $scope.facebookAlbums[i] = {
-                            checkbox: false,
-                            albumID: response.data[i].id,
-                            albumName: response.data[i].name
-                        };
-                        //$scope.facebookAlbumsList[i] = ({albumID: response.data[i].id, albumName: response.data[i].name, checkbox: false});
-                    }
-                }
-                $scope.$apply();
-            }
-        );
-
         //Sync Facebook albums
         $scope.syncAlbums = function () {
             //save in Firebase config
-            var firebase_config_albums = new Firebase("https://trackerconfig.firebaseio.com/web/offline/photos/facebook/trip/" + $scope.tripID);
+            var firebase_config_albums = new Firebase("https://trackerconfig.firebaseio.com/web/"+email_no_shtrodel_dot+"/offline/photos/facebook/trip/" + $scope.tripID);
             firebase_config_albums.set($scope.facebookAlbums);
 
             $scope.facebookPhotos = [];
@@ -255,9 +276,9 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                             "/" + $scope.facebookAlbums[i].albumID + "/picture",
                             function (cover) {
                                 if (cover && !cover.error) {
-                                    console.log("https://trackerconfig.firebaseio.com/web/tripslist/coverphoto/trip/" + $scope.tripID);
+                                    console.log("https://trackerconfig.firebaseio.com/web/"+email_no_shtrodel_dot+"/tripslist/coverphoto/trip/" + $scope.tripID);
                                     //save Facebook album cover in Firebase
-                                    var firebase_config_coverPhoto = new Firebase("https://trackerconfig.firebaseio.com/web/tripslist/coverphoto/trip/" + $scope.tripID);
+                                    var firebase_config_coverPhoto = new Firebase("https://trackerconfig.firebaseio.com/web/"+email_no_shtrodel_dot+"/tripslist/coverphoto/trip/" + $scope.tripID);
                                     firebase_config_coverPhoto.set(cover.data.url);
                                 }
                             });
