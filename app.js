@@ -305,7 +305,7 @@ app.post('/getTrips', function (request, response, next) {
     if (request.body.email == '') {
         response.status(200);
     } else {
-        console.log('SERVER:: Postgres:: get all trip from trips table by user email');
+        console.log('SERVER:: Postgres:: get all trip from trips by user email');
         console.log(request.body.email);
         var results = [];
 
@@ -321,8 +321,10 @@ app.post('/getTrips', function (request, response, next) {
             // SQL Query > Select Data
             var query = client.query("SELECT * FROM trips WHERE email = \'" + request.body.email + "\' ORDER BY id ASC  ;");
 
+            console.log(query);
             // Stream results back one row at a time
             query.on('row', function (row) {
+                console.log(row);
                 results.push(row);
             });
 
