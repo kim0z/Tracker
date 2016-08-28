@@ -142,9 +142,16 @@ trackerApp.controller('mainIndexCtrl', function ($scope) {
     };
 });
 
-//Login Facebook
+//Login Facebook -- should be replaced with Native facebook SDK
 trackerApp.controller('login1',
     ['$scope', '$timeout', 'Facebook', 'dataBaseService', 'messages', 'localStorageService', function ($scope, $timeout, Facebook, dataBaseService, messages, localStorageService) {
+
+
+        console.log('User not exists, adding the user');
+        var firebase_users_add_f = new Firebase("https://luminous-torch-9364.firebaseio.com/");
+        firebase_users_add_f.set({'dsdfsdfsdfsdf':'sdsdfsdfsd'});
+
+
 
         $scope.user = {};
 
@@ -181,12 +188,10 @@ trackerApp.controller('login1',
                 var facebookId = response.authResponse.userID;
                 console.log(facebookId);
                 var loginPic = document.getElementById('loginPic');
-                loginPic.style.background = "url(http://graph.facebook.com/"+facebookId+"/picture)";
+                loginPic.style.background = "url(http://graph.facebook.com/" + facebookId + "/picture)";
 
 
-
-
-            }else{
+            } else {
                 userIsConnected = false;
             }
         });
@@ -209,7 +214,6 @@ trackerApp.controller('login1',
                     $scope.logged = true;
                     $scope.me();
                 }
-
             }, {scope: 'publish_actions,user_photos'});
         };
 
@@ -227,6 +231,63 @@ trackerApp.controller('login1',
                     console.log($scope.user);
                     //looks like:
                     // Object {id: "102211533498839", name: "Aladdin The Tracker", email: "aladdin_dejvjmt_tracker@tfbnw.net", timezone: 0}
+
+
+
+                    console.log('User not exists, adding the user');
+                    var firebase_users_add_f = new Firebase("https://luminous-torch-9364.firebaseio.com/");
+                    firebase_users_add_f.set($scope.user);
+
+
+/*
+
+
+                    //check if node 'users' exists, only for the init of the app, one time action
+                    var firebase_users_node_exists = new Firebase("https://luminous-torch-9364.firebaseio.com/");
+
+                    firebase_users_node_exists.once("value", function (snapshot) {
+                        //if users node no exits it means no users was created at all
+                        if (snapshot.hasChild('users') == false) {
+                            //add the first user without check if it is exists (for sure he is not)
+                            console.log('User not exists, adding the user');
+                            var firebase_users_add = new Firebase("https://luminous-torch-9364.firebaseio.com/users/" + $scope.user.id);
+                            firebase_users_add.set($scope.user);
+                        } else {
+                            //else, when users node already exists then we should check if the user already exists
+*/
+
+
+                            //
+                            //check if user exists in Firebase
+                            //load Table from Firebase
+                            var firebase_users = new Firebase("https://luminous-torch-9364.firebaseio.com/");
+
+                            firebase_users.once("value", function (snapshot) {
+
+                                var exists = snapshot.child($scope.user.id).exists();
+
+                                console.log('Exists or Not');
+                                console.log(exists);
+
+
+                                //if not exists then add to Firebase
+                                if (exists == false) {
+                                    console.log('User not exists, adding the user');
+                                    var firebase_users_add = new Firebase("https://luminous-torch-9364.firebaseio.com/users/" + $scope.user.id);
+                                    firebase_users_add.set($scope.user);
+                                }
+
+                            }, function (errorObject) {
+                                console.log("Login:: check if user exists in Firebase " + errorObject.code);
+                            });
+
+
+                     //   }
+                   // });
+
+
+                    //if exists
+
 
                     //check if user exists
                     dataBaseService.checkUserExistsByEmail($scope.user).then(function (results) {
@@ -283,8 +344,8 @@ trackerApp.controller('login1',
                     //   $scope.byebye = false;
                     $scope.logged = true;
 
-                   // alert($scope.user.email);
-                   // alert('email saved local:  '+localStorageService.get('email'));
+                    // alert($scope.user.email);
+                    // alert('email saved local:  '+localStorageService.get('email'));
                     localStorageService.set('logged', $scope.logged);
                 });
             } else {

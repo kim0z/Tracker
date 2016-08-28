@@ -67,11 +67,6 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsA
             console.log("The read failed: " + errorObject.code);
         });
 
-
-
-
-
-
     }
     //Open actual map for the trip (the map after the trip was executed), this functionality should be available when the trip end date < current date
     $scope.showActualMap = function(trip_id) {

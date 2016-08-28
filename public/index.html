@@ -77,6 +77,29 @@
 </md-toolbar>
 
 
+
+
+
+
+<!-- Auth0 -->
+<script src="https://cdn.auth0.com/js/lock/10.0/lock.min.js"></script>
+<script type="text/javascript">
+    var lock = new Auth0Lock('QqJgTRPIWyFTKdpkMD8ATmeSwvw6oBCA', 'exploreauth.auth0.com', {
+        auth: {
+            redirectUrl: 'http://localhost:9090/callback',
+            responseType: 'code',
+            params: {
+                scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
+            }
+        }
+    });
+</script>
+<button onclick="lock.show();">Login</button>
+
+
+
+
+
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
     your browser</a> to improve your experience.</p>
@@ -215,8 +238,6 @@
 
 <!-- this angular facebook login module should be replaced with bower install (bower didn't work for me, check again) -->
 <script data-require"angular.js@1.1.5" data-semver="1.1.5" src="http://rawgithub.com/Ciul/angular-facebook/master/lib/angular-facebook.js"></script>
-
-
 
 
 <script src="services/googleAPISvc.js"></script>

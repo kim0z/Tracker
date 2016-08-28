@@ -52,6 +52,28 @@ var FirebaseRef = new Firebase("https://luminous-torch-9364.firebaseio.com/"); /
 
 // configuration ===============================================================
 
+
+//******************************* Auth0 passport *******************************************
+var passport = require('passport');
+
+// This is the file we created in step 2.
+// This will configure Passport to use Auth0
+var strategy = require('./config/setup-passport');
+
+// Session and cookies middlewares to keep user logged in
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+
+
+app.use(cookieParser());
+// See express session docs for information on the options: https://github.com/expressjs/session
+app.use(session({ secret: 'FMRd-u048h9_t95D-hJjTtO5K7uZFmmJ5ruHCP6TrUnaxiSVsKhFSE57jkH68EMc', resave: false,  saveUninitialized: false }));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+//******************************* Auth0 ended **********************************************
+
 //mongoose.connect(database.url); 	// connect to mongoDB database on modulus.io
 
 app.use(express.static(__dirname + '/public')); 				// set static path
@@ -107,6 +129,30 @@ var sockets = [];
 //# Rest Calls                                       #
 //####################################################
 //REST calls for Postgres DB
+
+
+
+//Auth0
+// Auth0 callback handler
+app.get('/callback',
+    passport.authenticate('auth0', { failureRedirect: '/url-if-something-fails' }),
+    function(req, res) {
+        if (!req.user) {
+            throw new Error('user null');
+        }
+        res.redirect("/user");
+    });
+
+app.get('/user', function (req, res) {
+    res.render('user', {
+        user: req.user
+    });
+});
+
+
+
+
+
 
 
 //////////// User Auth DB  ///////////////////////
