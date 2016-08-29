@@ -1,6 +1,8 @@
 trackerApp.controller('view1Ctrl', function ($scope, $http, $q, $filter, googleMapsAPIService, dataBaseService, algorithmsService, flightAPIService, messages, NgTableParams, localStorageService) {
     "use strict";
 
+
+    $scope.profile = localStorageService.get('profile');
     /*
      $scope.result1 = 'initial value';
      $scope.options1 = null;
@@ -117,7 +119,7 @@ $scope.continents = ["Africa", "Europe", "Asia", "North America", "South America
 
         //save all the general information about the trip
         jsonTripGeneralInfo = {
-            email: localStorageService.get('email'),
+            email: $scope.profile.email,
             trip_id: messages.getTripID(), //internal use for updating
             trip_name: $scope.tripName,
             trip_description: $scope.tripDescription,

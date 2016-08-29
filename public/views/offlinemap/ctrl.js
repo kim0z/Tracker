@@ -1,12 +1,18 @@
 trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $document, dataBaseService, messages, localStorageService, Facebook) {
 
 
+
+    $scope.profile = localStorageService.get('profile');
+
+    var facebookIdNotClean = $scope.profile.user_id; //"facebook|"
+    var facebookId = facebookIdNotClean.replace( /^\D+/g, '');
 //NOTES:
 //**** Should I move all AWS S3 to server? it is risky to be in the client?
 //****
 //****
 //****
 //****
+
         $scope.columns = [
             {title: 'Name', field: 'name', visible: true, filter: {'name': 'text'}},
             {title: 'Age', field: 'age', visible: true},
@@ -36,6 +42,9 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
 
 
+        var email_no_shtrodel = $scope.profile.email.replace('@', 'u0040');
+        var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
+
 
         $scope.tripID = messages.getTripID();
         $scope.travelersList = [];
@@ -49,16 +58,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         $scope.photosSlider = true;
         $scope.tableSlider = true;
 
-        var facebookAuth = localStorageService.get('userFacebookAuth');
-        console.log(facebookAuth);
-
-        //it will fix the bug above
-        $scope.email = facebookAuth.email;
-
-
-        var email_no_shtrodel = $scope.email.replace('@', 'u0040');
-        var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
-
+    
 
         $scope.facebookAlbums = {}; //when page loaded, a Facebook API triggered to get user albums in case new album was added
                                     //to show it in edit mode to allow users select the new albums
@@ -158,7 +158,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         // 1. update edit mode list witht he enabled albums
         
         Facebook.api(
-            "/" + facebookAuth.id + "/albums",
+            "/" + facebookId + "/albums",
             function (response) {
                 if (response && !response.error) {
                     /* handle the result */
@@ -230,7 +230,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         var firebase_ref = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + email_no_shtrodel_dot + '/' + $scope.tripID);
 
 
-        if ($scope.email == '' || $scope.tripID == '')
+        if ($scope.profile.email == '' || $scope.tripID == '')
             alert('no email or trip id')
         //AWS Config
         AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
@@ -312,7 +312,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 Bucket: 'tracker.photos',
                 //Marker: localStorageService.get('email') + '/' + chunk.id
                 Delimiter: '/',
-                Prefix: $scope.email + '/' + $scope.tripID + '/'
+                Prefix: $scope.profile.email + '/' + $scope.tripID + '/'
             }
         });
 
@@ -353,7 +353,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     results.innerHTML = '';
 
                     var params = {
-                        Key: $scope.email + '/' + $scope.tripID + '/' + 'map_kml.kml',
+                        Key: $scope.profile.email + '/' + $scope.tripID + '/' + 'map_kml.kml',
                         ContentType: file.type,
                         Body: file
                     };
@@ -370,7 +370,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 if (file) {
                     results.innerHTML = '';
                     var params = {
-                        Key: $scope.email + '/' + $scope.tripID + '/' + file.name,
+                        Key: $scope.profile.email + '/' + $scope.tripID + '/' + file.name,
                         ContentType: file.type,
                         Body: file
                     };
@@ -410,7 +410,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         });
 
         var ctaLayer = new google.maps.KmlLayer({
-            url: 'https://s3-us-west-2.amazonaws.com/tracker.photos/' + $scope.email + '/' + $scope.tripID + '/map_kml.kml',
+            url: 'https://s3-us-west-2.amazonaws.com/tracker.photos/' + $scope.profile.email + '/' + $scope.tripID + '/map_kml.kml',
             map: $scope.map
         });
 
@@ -478,7 +478,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                             // var bucket_getGPS_forPhoto = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt'}});
 
 
-                            var fileGpsUrl = S3URL + 'tracker.photos/' + $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt';
+                            var fileGpsUrl = S3URL + 'tracker.photos/' + $scope.profile.email + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt';
                             console.log(fileGpsUrl);
 
                             // get GPS point of the selected photo from AWS S3
@@ -578,7 +578,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             console.log(file_noExtenstion);
 
             var params = {
-                Key: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt',
+                Key: $scope.profile.email + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt',
                 Body: JSON.stringify(gps_point)
             };
             bucket_create_photo_gps.upload(params, function (err, data) {

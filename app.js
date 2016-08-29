@@ -54,6 +54,7 @@ var FirebaseRef = new Firebase("https://luminous-torch-9364.firebaseio.com/"); /
 
 
 //******************************* Auth0 passport *******************************************
+//******************************************************************************************
 var passport = require('passport');
 
 // This is the file we created in step 2.
@@ -133,26 +134,24 @@ var sockets = [];
 
 
 //Auth0
-// Auth0 callback handler
+//Auth0 callback handler
 app.get('/callback',
     passport.authenticate('auth0', { failureRedirect: '/url-if-something-fails' }),
     function(req, res) {
+        console.log('inside callback auth0');
         if (!req.user) {
             throw new Error('user null');
         }
-        res.redirect("/user");
+        res.redirect("/view0");
     });
 
+/*
 app.get('/user', function (req, res) {
     res.render('user', {
         user: req.user
     });
 });
-
-
-
-
-
+*/
 
 
 //////////// User Auth DB  ///////////////////////

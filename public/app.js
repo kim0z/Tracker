@@ -39,32 +39,47 @@ var trackerApp = angular.module('myApp', [
             .state('view1', {
                 url: "/view1",
                 templateUrl: "views/view1/view1.html",
-                controller: 'view1Ctrl'
+                controller: 'view1Ctrl',
+                data: {
+                	requiresLogin: true
+                }
             })
             .state('view2', {
                 url: "/view2",
                 templateUrl: "views/view2/view2.html",
-                controller: 'view2Ctrl'
+                controller: 'view2Ctrl',
+                 data: {
+                	requiresLogin: true
+                }
             })
             .state('view3', {
                 url: "/view3",
                 templateUrl: "views/view3/view3.html",
-                controller: 'view3Ctrl'
+                controller: 'view3Ctrl',
+                 data: {
+                	requiresLogin: true
+                }
             })
             .state('viewError', {
                 url: "/viewError",
                 templateUrl: "views/viewError/404.html",
-                controller: 'viewErrorCtrl'
+                controller: 'viewErrorCtrl',
+                 data: {
+                	requiresLogin: true
+                }
             })
             .state('login', {
                 url: "/login",
                 templateUrl: "views/login/login.html",
-                controller: 'login'
+                controller: 'Login'
             })
             .state('offlinemap', {
                 url: "/offlinemap",
                 templateUrl: "views/offlinemap/offlinemap.html",
-                controller: 'offlinemapCtrl'
+                controller: 'offlinemapCtrl',
+                 data: {
+                	requiresLogin: true
+                }
             });
     })
     .config(function(authProvider) {
@@ -75,7 +90,9 @@ var trackerApp = angular.module('myApp', [
         authProvider.init({
             domain: 'exploreauth.auth0.com',
             clientID: 'QqJgTRPIWyFTKdpkMD8ATmeSwvw6oBCA',
-            loginUrl: '/login'
+            //loginUrl: '/login',
+            loginState: 'login',
+            callbackURL: location.herf
         });
     })
 
@@ -127,16 +144,45 @@ var trackerApp = angular.module('myApp', [
 
     .constant('_', window._)
     // use in views, ng-repeat="x in _.range(3)"
-    .run(function ($rootScope, auth) {
+    .run(function ($rootScope, auth, jwtHelper, localStorageService) {
         $rootScope._ = window._;
         auth.hookEvents();
+
+
+	       // This events gets triggered on refresh or URL change
+	  $rootScope.$on('$locationChangeStart', function() {
+	    var token = localStorageService.get('token');
+	    if (token) {
+	      if (!jwtHelper.isTokenExpired(token)) {
+	        if (!auth.isAuthenticated) {
+	          auth.authenticate(localStorageService.get('profile'), token).then(function (profile) {
+
+	                    console.log("Logged in via refresh token and got profile");
+
+	                    console.log(profile);
+
+	                    // Successful login, now redirect to secured content.
+
+	                }, function (err) { });;
+	        }
+	      } else {
+	        // Either show Login page or use the refresh token to get a new idToken
+	      }
+	    }
+	});
+
+
+ 
+
+
+
     });
 
 
 
 
 
-trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService) {
+trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService, auth, $state) {
     $scope.menuClick = function (buttonText) {
         switch (buttonText) {
             case 'Home':
@@ -159,6 +205,18 @@ trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService) {
         }
 
     };
+
+
+
+    $scope.auth = auth;
+
+    $scope.logout = function() {
+    	auth.signout();
+    	localStorageService.remove('profile');
+        localStorageService.remove('token');
+
+    	$state.go('login');
+    }
 
     //Auth0
 
@@ -201,22 +259,9 @@ trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService) {
 
 
 // LoginCtrl.js
-trackerApp.controller('LoginCtrl', function($scope, auth) {
-    $scope.signin = function() {
-        auth.signin({
-            authParams: {
-                scope: 'openid name email' // Specify the scopes you want to retrieve
-            }
-        }, function(profile, idToken, accessToken, state, refreshToken) {
-            console.log(profile, idToken, accessToken, state, refreshToken);
-            $location.path('/user-info')
-        }, function(err) {
-            console.log("Error :(", err);
-        });
-    }
 
-});
 
+/*
 // UserInfo.js
 trackerApp.controller('UserInfoCtrl', function(auth) {
     // Using a promise
@@ -226,7 +271,7 @@ trackerApp.controller('UserInfoCtrl', function(auth) {
     // Or using the object
     $scope.profile = auth.profile;
 });
-
+*/
 
 
 //Login Facebook -- should be replaced with Native facebook SDK

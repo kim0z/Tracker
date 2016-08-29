@@ -1,11 +1,8 @@
 trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages, localStorageService) {
 
 
-    var facebookAuth = localStorageService.get('userFacebookAuth');
-    $scope.email = facebookAuth.email;
 
-
-
+    $scope.profile = localStorageService.get('profile');
 
     $scope.toggleChunkExpand = function(chunk) {
         chunk.expanded = !chunk.expanded;
@@ -145,7 +142,7 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsA
     };
 
 
-    dataBaseService.getTrips({email: $scope.email}).then(function (results) {
+    dataBaseService.getTrips({email: $scope.profile.email}).then(function (results) {
         $scope.trips = results.data;
         console.log('Client:: View3:: Fun run when load page :: list of trips: ' + $scope.trips.length);
 
