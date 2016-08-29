@@ -56,56 +56,7 @@
 
 <body>
 
-<md-toolbar scroll-shrink layout="row" ng-contoller="mainIndex" >
-    <div class="md-toolbar-tools" ng-controller="mainIndexCtrl">
-        <h3>
-            <md-button ng-click="menuClick('Home')">Home</md-button>
-            <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
-         <!--   <md-button ng-click="menuClick('Plan Trip')">Plan Trip</md-button> -->
-            <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
-         <!--   <md-button ng-click="menuClick('Login')">Login</md-button> -->
 
-                <md-button ng-controller="login1" type="button" class="btn btn-primary btn-large" data-ng-show="!logged" data-ng-disabled="!facebookReady" data-ng-click="IntentLogin()">Login with Facebook</md-button>
-                <md-button ng-controller="login1" type="button" class="btn btn-danger btn-large" data-ng-show="logged" data-ng-disabled="!facebookReady" data-ng-click="logout()">Logout</md-button>
-                <md-button class="md-fab md-mini" aria-label="Favorite">
-                    <div id="loginPic" class="user">
-                    </div>
-                </md-button>
-
-        </h3>
-    </div>
-</md-toolbar>
-
-
-
-
-
-
-<!-- Auth0 -->
-<script src="https://cdn.auth0.com/js/lock/10.0/lock.min.js"></script>
-<script type="text/javascript">
-    var lock = new Auth0Lock('QqJgTRPIWyFTKdpkMD8ATmeSwvw6oBCA', 'exploreauth.auth0.com', {
-        auth: {
-            redirectUrl: 'http://localhost:9090/callback',
-            responseType: 'code',
-            params: {
-                scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
-            }
-        }
-    });
-</script>
-<button onclick="lock.show();">Login</button>
-
-
-
-
-
-<!--[if lt IE 7]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-    your browser</a> to improve your experience.</p>
-<![endif]-->
-
-<div ui-view></div>
 
 <!-- In production use:
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
@@ -114,11 +65,6 @@
 <!-- jQuery -->
 <script src='bower_components/jquery/dist/jquery.min.js'></script>
 <script src='bower_components/jquery/dist/jquery.js'></script>
-
-
-
-
-
 
 
 <script src="bower_components/angular/angular.js"></script>
@@ -161,17 +107,19 @@
 
 
 
-
-
-
 <!-- bootstrap CSS-->
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
 
+<!-- Auth0 Angular Lock -->
+<script src="//cdn.auth0.com/js/lock-8.2.min.js"></script>
+<script src="bower_components/auth0.js/build/auth0.min.js"></script>
+<script src="bower_components/auth0-angular/build/auth0-angular.min.js"></script>
 
 
-
+<!-- Angular jwt -->
+<script src="bower_components/angular-jwt/dist/angular-jwt.min.js"></script>
 
 
 
@@ -253,6 +201,70 @@
 <script src="views/view3/ctrlLeft.js"></script>
 <script src="views/login/login.js"></script>
 <script src="views/offlinemap/ctrl.js"></script>
+
+
+
+
+
+
+
+
+<md-toolbar scroll-shrink layout="row" ng-contoller="mainIndex" >
+    <div class="md-toolbar-tools" ng-controller="mainIndexCtrl">
+        <h3>
+            <md-button ng-click="menuClick('Home')">Home</md-button>
+            <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
+            <!--   <md-button ng-click="menuClick('Plan Trip')">Plan Trip</md-button> -->
+            <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
+            <!--   <md-button ng-click="menuClick('Login')">Login</md-button> -->
+
+            <md-button ng-controller="login1" type="button" class="btn btn-primary btn-large" data-ng-show="!logged" data-ng-disabled="!facebookReady" data-ng-click="IntentLogin()">Login with Facebook</md-button>
+            <md-button ng-controller="login1" type="button" class="btn btn-danger btn-large" data-ng-show="logged" data-ng-disabled="!facebookReady" data-ng-click="logout()">Logout</md-button>
+            <md-button class="md-fab md-mini" aria-label="Favorite">
+                <div id="loginPic" class="user">
+                </div>
+            </md-button>
+
+        </h3>
+    </div>
+</md-toolbar>
+
+
+
+
+
+
+<!-- Auth0 -->
+<div ng-controller="mainIndexCtrl">
+    <<button onclick="lock.show();">Login Original</button>
+</div>
+
+<div ng-controller="LoginCtrl">
+    <button ng-click="signin();">Login</button>
+
+</div>
+<div ng-controller="UserInfoCtrl">
+    <!-- userInfo.html -->
+    <span>{{profile.name}} {{profile.email}}</span>
+
+
+</div>
+
+
+
+
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div ui-view></div>
+
+
+
+
+
+
 
 
 </body>

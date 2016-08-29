@@ -2,8 +2,10 @@
 
 // Declare app level module which depends on views, and components
 var trackerApp = angular.module('myApp', [
+        'auth0',
         'nemLogging',
         'ui.router',
+        'angular-jwt',
         'uiGmapgoogle-maps',
         'ngAutocomplete',
         'ui.grid',
@@ -65,6 +67,18 @@ var trackerApp = angular.module('myApp', [
                 controller: 'offlinemapCtrl'
             });
     })
+    .config(function(authProvider) {
+
+        // routing configuration and other stuff
+        // ...
+
+        authProvider.init({
+            domain: 'exploreauth.auth0.com',
+            clientID: 'QqJgTRPIWyFTKdpkMD8ATmeSwvw6oBCA',
+            loginUrl: '/login'
+        });
+    })
+
     .config([
         'FacebookProvider',
         function (FacebookProvider) {
@@ -113,11 +127,16 @@ var trackerApp = angular.module('myApp', [
 
     .constant('_', window._)
     // use in views, ng-repeat="x in _.range(3)"
-    .run(function ($rootScope) {
+    .run(function ($rootScope, auth) {
         $rootScope._ = window._;
+        auth.hookEvents();
     });
 
-trackerApp.controller('mainIndexCtrl', function ($scope) {
+
+
+
+
+trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService) {
     $scope.menuClick = function (buttonText) {
         switch (buttonText) {
             case 'Home':
@@ -140,7 +159,75 @@ trackerApp.controller('mainIndexCtrl', function ($scope) {
         }
 
     };
+
+    //Auth0
+
+
+/*    var lock = new Auth0Lock(clientId, domain, {
+        auth: {
+            redirectUrl: 'http://localhost:9090/callback',
+            responseType: 'code',
+            params: {
+                scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
+            }
+        }
+    });
+
+
+
+
+
+    lock.on("authenticated", function(authResult) {
+        lock.getProfile(authResult.idToken, function(error, profile) {
+            if (error) {
+                // Handle error
+                return;
+            }
+
+            localStorageService.setItem("idToken", authResult.idToken);
+            localStorageService.setItem("profile", JSON.stringify(profile));
+
+            // Update DOM
+        });
+    });*/
+
+
+
+
+
+
 });
+
+
+
+// LoginCtrl.js
+trackerApp.controller('LoginCtrl', function($scope, auth) {
+    $scope.signin = function() {
+        auth.signin({
+            authParams: {
+                scope: 'openid name email' // Specify the scopes you want to retrieve
+            }
+        }, function(profile, idToken, accessToken, state, refreshToken) {
+            console.log(profile, idToken, accessToken, state, refreshToken);
+            $location.path('/user-info')
+        }, function(err) {
+            console.log("Error :(", err);
+        });
+    }
+
+});
+
+// UserInfo.js
+trackerApp.controller('UserInfoCtrl', function(auth) {
+    // Using a promise
+    auth.profilePromise.then(function(profile) {
+        $scope.profile = profile;
+    });
+    // Or using the object
+    $scope.profile = auth.profile;
+});
+
+
 
 //Login Facebook -- should be replaced with Native facebook SDK
 trackerApp.controller('login1',
