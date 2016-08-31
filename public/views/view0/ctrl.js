@@ -3,8 +3,13 @@ trackerApp.controller('view0Ctrl',function($scope, $http, googleMapsAPIService, 
 
     $scope.profile = localStorageService.get('profile');
 
-    $scope.helloUser = $scope.profile.name;
-    $scope.logged = $scope.profile.email;
+    if($scope.profile){
+        $scope.helloUser = $scope.profile.name;
+        //$scope.logged = $scope.profile.email; // not sure needed when using auth0
+    }else{
+        $scope.helloUser = 'Guest';
+        //$scope.logged = $scope.profile.email; // not sure needed when using auth0
+    }
 
 
     $scope.$watch('helloUser', function() {

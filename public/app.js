@@ -27,7 +27,7 @@ var trackerApp = angular.module('myApp', [
     .config(function ($stateProvider, $urlRouterProvider) {
         //
         // For any unmatched url, redirect to /state1
-        $urlRouterProvider.otherwise("/");
+        $urlRouterProvider.otherwise("/view0");
         //
         // Now set up the states
         $stateProvider
@@ -183,6 +183,17 @@ var trackerApp = angular.module('myApp', [
 
 
 trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService, auth, $state) {
+
+    if(localStorageService.get('profile')){
+        $scope.authButton = 'Logout';
+        $scope.expressionAuth = 'md-raised md-warn md-button md-default-theme';
+    }else{
+        $scope.authButton = 'Login';
+        $scope.expressionAuth = 'md-raised md-primary md-button md-default-theme';
+    }
+    
+    $scope.auth = auth;
+
     $scope.menuClick = function (buttonText) {
         switch (buttonText) {
             case 'Home':
@@ -206,17 +217,37 @@ trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService, au
 
     };
 
-
-
-    $scope.auth = auth;
-
     $scope.logout = function() {
     	auth.signout();
     	localStorageService.remove('profile');
         localStorageService.remove('token');
-
-    	$state.go('login');
+    	$state.go('view0');
     }
+
+
+    $scope.authUser = function () {
+
+        var profile = localStorageService.get('profile');
+
+        if(profile && $scope.authButton == 'Logout'){ //if true then user logged in, and his profile saved in local storage
+        //if user clicked the button while user logged in it means he need to logout
+            $scope.authButton = 'Login';
+            $scope.expressionAuth = 'md-primary';
+            $scope.logout();
+            $state.go('view0');
+            $state.reload();
+        }if(!profile && $scope.authButton == 'Login'){
+            $scope.authButton = 'Logout';
+            $scope.expressionAuth = 'md-warn';
+            $state.go('login'); //the login will redirect to view0 when done
+        }
+    }       
+
+
+
+
+
+   // $location.path( '/new-page.html' );
 
     //Auth0
 

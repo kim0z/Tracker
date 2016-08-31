@@ -208,55 +208,35 @@
 
 
 
-
-<md-toolbar scroll-shrink layout="row" ng-contoller="mainIndex" >
-    <div class="md-toolbar-tools" ng-controller="mainIndexCtrl">
-        <h3>
-            <md-button ng-click="menuClick('Home')">Home</md-button>
-            <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
+<div layout="column" layout-fill>
+<md-toolbar>
+    <div class="md-toolbar-tools" ng-controller="mainIndexCtrl" scroll-shrink layout="row">
+     
+         <h3>
+             <md-button ng-click="menuClick('Home')">Home</md-button>
+             <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
             <!--   <md-button ng-click="menuClick('Plan Trip')">Plan Trip</md-button> -->
-            <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
+             <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
             <!--   <md-button ng-click="menuClick('Login')">Login</md-button> -->
 
+<!-- Old Facebook Login buttons -->
+    <!--
             <md-button ng-controller="login1" type="button" class="btn btn-primary btn-large" data-ng-show="!logged" data-ng-disabled="!facebookReady" data-ng-click="IntentLogin()">Login with Facebook</md-button>
             <md-button ng-controller="login1" type="button" class="btn btn-danger btn-large" data-ng-show="logged" data-ng-disabled="!facebookReady" data-ng-click="logout()">Logout</md-button>
-            <md-button class="md-fab md-mini" aria-label="Favorite">
-                <div id="loginPic" class="user">
-                </div>
-            </md-button>
 
-
-
-             <md-button ng-click="logout()">KARIMOUT</md-button>
-
-
-
-        </h3>
+                  <md-button class="md-fab md-mini" aria-label="Favorite">
+                 <div id="loginPic" class="user">
+                 </div>
+             </md-button>
+-->
+<span flex></span>
+               <md-button  ng-click="authUser()" ng-class="expressionAuth">{{{authButton}}</md-button>
+             
+            </h3>
+       
     </div>
 </md-toolbar>
 
-
-
-
-
-
-<!-- Auth0 -->
-<div ng-controller="mainIndexCtrl">
-    <<button onclick="lock.show();">Login Original</button>
-</div>
-
-<!--
-<div ng-controller="LoginCtrl">
-    <button ng-click="signin();">Login</button>
-
-</div>
--->
-
-<!--
-<div ng-controller="UserInfoCtrl">
-    <span>{{profile.name}} {{profile.email}}</span>
-</div>
--->
 
 
 
@@ -267,7 +247,7 @@
 
 <div ui-view></div>
 
-
+</div>
 
 
 
