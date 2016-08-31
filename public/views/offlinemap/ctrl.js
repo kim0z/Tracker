@@ -4,6 +4,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
     $scope.profile = localStorageService.get('profile');
 
+    if(!$scope.profile){
+        console.log('offline:: auth :: no data about the user, profile is emppty');
+    }
+
     var facebookIdNotClean = $scope.profile.user_id; //"facebook|"
     var facebookId = facebookIdNotClean.replace( /^\D+/g, '');
 //NOTES:

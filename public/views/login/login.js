@@ -1,7 +1,7 @@
 /**
  * Created by karim on 23/01/2016.
  */
-trackerApp.controller('Login', function($scope, $location, auth, localStorageService) {
+trackerApp.controller('Login', function($scope, $location, $state,  auth, localStorageService) {
 //  $scope.signin = function() {
         auth.signin({
             //popup: true,
@@ -12,7 +12,7 @@ trackerApp.controller('Login', function($scope, $location, auth, localStorageSer
             console.log(profile, idToken, accessToken, state, refreshToken);
              localStorageService.set('profile', profile);
              localStorageService.set('token', idToken);
-            $location.path('/user-info')
+             $state.go('view0');
         }, function(err) {
             console.log("Error :(", err);
         });

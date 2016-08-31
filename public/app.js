@@ -232,14 +232,18 @@ trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService, au
         if(profile && $scope.authButton == 'Logout'){ //if true then user logged in, and his profile saved in local storage
         //if user clicked the button while user logged in it means he need to logout
             $scope.authButton = 'Login';
-            $scope.expressionAuth = 'md-primary';
-            $scope.logout();
-            $state.go('view0');
+            $scope.expressionAuth = 'md-raised md-primary md-button md-default-theme';
+            $scope.logout(); // should make sure this action succeeded then change the button color and text
+            //$state.go('view0');
             $state.reload();
         }if(!profile && $scope.authButton == 'Login'){
             $scope.authButton = 'Logout';
-            $scope.expressionAuth = 'md-warn';
-            $state.go('login'); //the login will redirect to view0 when done
+            $scope.expressionAuth = 'md-raised md-warn md-button md-default-theme';
+            $state.go('view0'); //the login will redirect to view0 when done
+        }else {
+            //something wrong
+            //restart login system
+
         }
     }       
 
