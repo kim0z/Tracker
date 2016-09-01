@@ -227,6 +227,15 @@ trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService, au
 
     $scope.authUser = function () {
 
+
+if (!auth.isAuthenticated){
+    console.log('not auth');
+   }else{
+        console.log('auth');
+    }
+
+
+
         var profile = localStorageService.get('profile');
 
         if(profile && $scope.authButton == 'Logout'){ //if true then user logged in, and his profile saved in local storage
