@@ -37,6 +37,13 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/updateTrip',dataObj);
     };
 
+    //active trip
+    this.activateTrip = function (dataObj) { //create empty trip record
+        console.log('Client::dataBaseService:: activate trip');
+        return $http.post('/activateTrip',dataObj);
+    };
+
+
     //createTable
     this.createTable = function (dataTripId) { //create empty trip record
         console.log('Client::dataBaseService:: Create table for trip id::'+dataTripId);

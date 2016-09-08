@@ -50,6 +50,21 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsA
 
     }*/
 
+
+
+
+    $scope.activateTrip = function (chunk){
+        var tripId = {trip_id: chunk.id};
+        dataBaseService.activateTrip(tripId).then(function (results) {
+            //$scope.message = data; //handle data back from server - not needed meanwhile
+            console.log('Client:: Trips View :: activate Trip :: ' + tripId);
+            //$window.location.reload();
+            //$route.reload();
+        })
+    }
+
+
+
     function getCoverPhoto(chunk) {
 
         //this funxtion should be loaded when the page is loaded, not when click on

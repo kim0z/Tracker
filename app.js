@@ -255,7 +255,7 @@ app.post('/insertTrip', function (request, response) {
             return console.error('error fetching client from pool', err);
         }
         client.query("INSERT INTO trips(trip_name, start_date, end_date, continent, cities, trip_description) values($1, $2, $3, $4, $5, $6)",
-            [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent, cities, tripGeneral.trip_description], function (err, result) {
+            [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent, cities, tripGeneral.trip_description, false], function (err, result) {
                 //call `done()` to release the client back to the pool
                 done();
 
@@ -325,6 +325,56 @@ app.post('/updateTrip', function (request, response) {
         }
         client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3) , continent = ($4), table_plan = ($5), trip_description = ($6), email = ($7) WHERE id = ($8)",
             [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent, table_plan, tripGeneral.trip_description,tripGeneral.email ,tripGeneral.trip_id]
+            , function (err, result) {
+                //call `done()` to release the client back to the pool
+                done();
+
+                if (err) {
+                    return console.error('error running query', err);
+                }
+                console.log(result);
+                //output: 1
+            });
+    });
+    response.status(200).end();
+
+});
+
+//Postgres :: update active trip
+app.post('/activateTrip', function (request, response) {
+
+    //var id = request.body.trip_id;
+    // console.log('kariiiim'+id);
+    console.log('SERVER:: Postgres:: update Trip if Active ' + request.body);
+
+    var jsonTrip = request.body; // true or false
+
+    //make sure all trips are not activated before active the trip (because only 1 trip should be activated at one time)
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("UPDATE trips SET active = ($1)",
+            [false]
+            , function (err, result) {
+                //call `done()` to release the client back to the pool
+                done();
+
+                if (err) {
+                    return console.error('error running query', err);
+                }
+                console.log(result);
+                //output: 1
+            });
+    });
+
+    //update the Trip to be active
+        pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("UPDATE trips SET active = ($1) WHERE id = ($2)",
+            [true, request.body.trip_id]
             , function (err, result) {
                 //call `done()` to release the client back to the pool
                 done();

@@ -6,6 +6,31 @@
     <link rel="stylesheet" href="/bower_components/angular-material/angular-material.css">
     <link rel="stylesheet" href="/assets/css/style_tripList.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
+
+    <style>
+    .checkboxdemoBasicUsage div.flex-xs {
+  min-height: 40px; }
+
+.checkboxdemoBasicUsage .checkboxDemo1 div {
+  clear: both; }
+
+.checkboxdemoBasicUsage p {
+  padding-left: 8px; }
+
+.checkboxdemoBasicUsage fieldset.standard {
+  border-style: solid;
+  border-width: 1px; }
+
+.checkboxdemoBasicUsage legend {
+  color: #3F51B5; }
+
+.checkboxdemoBasicUsage legend code {
+  color: #3F51B5;
+  font-weight: normal; }
+
+.checkboxdemoBasicUsage .ipsum {
+  color: saddlebrown; }
+  </style>
 </head>
 <body layout="vertical" md-theme="blue" layout-fill>
 
@@ -101,6 +126,13 @@
                                                 ng-click="edit_mode = !edit_mode; deleteTrip(chunk.id);$event.stopPropagation();">
                                             Delete
                                         </md-button>
+
+                                        <md-button ng-click="activateTrip(chunk)">
+                                            Active
+                                        </md-button>
+
+
+
                                         <div ng-if="show_quotes" ng-repeat="quote in ::chunk.content.quotes">
                                             <md-whiteframe class="md-whiteframe-z1">
                                                 <blockquote>{{ quote }}</blockquote>
@@ -108,6 +140,76 @@
                                         </div>
                                     </div>
                                 </md-card-content>
+
+
+
+<div style="z-index: 100">
+    <fieldset class="standard">
+      <legend>Options:</legend>
+      <div layout-wrap layout-gt-sm="row" >
+        <div flex-gt-sm="50">
+          <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+            Checkbox 1: {{ data.cb1 }}
+          </md-checkbox>
+        </div>
+        <div flex-gt-sm="50">
+          <div>
+            <md-checkbox
+              ng-model="data.cb2"
+              aria-label="Checkbox 2"
+              ng-true-value="'yup'"
+              ng-false-value="'nope'"
+              class="md-warn md-align-top-left" flex>
+            Checkbox 2 (md-warn)  <br/>
+            <span class="ipsum">
+              Duis placerat lectus et justo mollis, nec sodales orci congue. Vestibulum semper non urna ac suscipit.
+              Vestibulum tempor, ligula id laoreet hendrerit, massa augue iaculis magna,
+              sit amet dapibus tortor ligula non nibh.
+            </span>
+            <br/>
+            {{ data.cb2 }}
+          </md-checkbox>
+          </div>
+        </div>
+        <div flex-gt-sm="50">
+          <md-checkbox ng-disabled="true" aria-label="Disabled checkbox" ng-model="data.cb3">
+            Checkbox: Disabled
+          </md-checkbox>
+        </div>
+        <div flex-gt-sm="50">
+          <md-checkbox ng-disabled="true" aria-label="Disabled checked checkbox" ng-model="data.cb4" ng-init="data.cb4=true">
+            Checkbox: Disabled, Checked
+          </md-checkbox>
+        </div>
+        <div flex-gt-sm="50">
+          <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary">
+            Checkbox (md-primary): No Ink
+          </md-checkbox>
+        </div>
+        <div flex-gt-sm="50">
+          <md-checkbox md-indeterminate
+              aria-label="Checkbox Indeterminate" class="md-primary">
+            Checkbox: Indeterminate
+          </md-checkbox>
+        </div>
+        <div flex-gt-sm="50">
+          <md-checkbox md-indeterminate aria-label="Checkbox Disabled Indeterminate"
+              ng-disabled="true" class="md-primary">
+            Checkbox: Disabled, Indeterminate
+          </md-checkbox>
+        </div>
+      </div>
+    </fieldset>
+
+  </div>
+
+
+
+
+
+
+
+
                             </div>
                         </md-card>
                     </div>
