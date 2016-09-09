@@ -79,7 +79,8 @@
                     <div ng-repeat="chunk in ::chunks">
                         <p ng-if="chunk.divider">{{chunk.title}}</p>
                         <md-card ng-if="!chunk.expanded && !chunk.divider" ng-click="toggleChunkExpand(chunk)"
-                                 ng-mouseover="hover = true" ng-mouseout="hover = false">
+                                 ng-mouseover="hover = true" ng-mouseout="hover = false"
+                                 ng-style="chunk.active === true ? { color:'green' } : { 'color': 'black' }">
                             <md-item layout="row">
                                 <div>
                                     <img class="round-face" src="http://placekitten.com/g/48/48"/>

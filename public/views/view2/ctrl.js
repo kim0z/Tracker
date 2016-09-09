@@ -1,4 +1,7 @@
-trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $document, dataBaseService, messages, $timeout) {
+trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $document, dataBaseService, messages, $timeout, localStorageService) {
+
+
+
 
         $scope.user = messages.getUser();
         $scope.travelersList = [];
@@ -153,20 +156,20 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
                     polys[key].setMap($scope.map);
 
-/*
-                    //***************
-                    //handle messages
-                    //***************
-                    //path for each user
-                    var childPath_messages = childSnapshot.child('messages');
-                    var allMessageOfUser = [];
+                    /*
+                     //***************
+                     //handle messages
+                     //***************
+                     //path for each user
+                     var childPath_messages = childSnapshot.child('messages');
+                     var allMessageOfUser = [];
 
-                    childPath_messages.forEach(function (childCoords) {
-                        allMessageOfUser.push(childCoords.val());
-                    })
-                    //all messages saved in below hashtable, key = email
-                    $scope.messages[email_with_shtrodel_dot] = allMessageOfUser;
-*/
+                     childPath_messages.forEach(function (childCoords) {
+                     allMessageOfUser.push(childCoords.val());
+                     })
+                     //all messages saved in below hashtable, key = email
+                     $scope.messages[email_with_shtrodel_dot] = allMessageOfUser;
+                     */
                 });
 
             }
@@ -175,7 +178,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
         });
 
-    //not sure this wait needed, test it and then remove it, remove in case the above function works once
+        //not sure this wait needed, test it and then remove it, remove in case the above function works once
         $timeout(function () {
             ref.off('value', firstPathLoad_firebase);
             console.log('timeout');
@@ -245,10 +248,10 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                                 var email_with_shtrodel = email.replace('u0040', '@');
                                 var email_with_shtrodel_dot = email_with_shtrodel.replace('u002E', '.');
 
-                               // $scope.messages[email_with_shtrodel_dot] = {};
-                               // $scope.messages[email_with_shtrodel_dot].push(childSnapshot.val());
+                                // $scope.messages[email_with_shtrodel_dot] = {};
+                                // $scope.messages[email_with_shtrodel_dot].push(childSnapshot.val());
 
-                                console.dir('new message added : ' +childSnapshot.val());
+                                console.dir('new message added : ' + childSnapshot.val());
                                 $scope.messages.push(childSnapshot.val());
 
                                 $scope.$apply();

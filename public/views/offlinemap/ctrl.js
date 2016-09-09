@@ -606,17 +606,15 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         }
 
         //load Tips from Firebase
-        var firebase_ref_readTips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + email_no_shtrodel_dot + '/' + $scope.tripID + '/history/tips');
+        var firebase_ref_readTips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + facebookId + '/' + $scope.tripID + '/messages');
 
         firebase_ref_readTips.on("value", function (snapshot) {
             $scope.messages = [];
             snapshot.forEach(function (childSnapshot) {
-
-                // key will be "fred" the first time and "barney" the second time
-                var key = childSnapshot.key();
-                // childData will be the actual contents of the child
-                var childData = childSnapshot.val();
-                $scope.messages.unshift(childData['message']);
+                //var key = childSnapshot.key();
+                var childData = childSnapshot.val(); // childData = location and message and time
+                //$scope.messages.unshift(childData['message']);
+                $scope.messages.unshift(childData);
             });
             $scope.$apply();
 
@@ -626,7 +624,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
 
         //load Table from Firebase
-        var firebase_ref_readTable = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + email_no_shtrodel_dot + '/' + $scope.tripID + '/history/table');
+        var firebase_ref_readTable = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + facebookId + '/' + $scope.tripID + '/table');
 
         firebase_ref_readTable.on("value", function (snapshot) {
             $scope.table = []; //reset table
@@ -655,7 +653,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             console.log('Offline page:: add day');
             console.log($scope.day);
 
-            var firebase_table = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + email_no_shtrodel_dot + "/" + $scope.tripID + "/history/table/" + $scope.day.dayNumber);
+            var firebase_table = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + facebookId + "/" + $scope.tripID + "/table/" + $scope.day.dayNumber);
             firebase_table.set($scope.day);
         }
 
@@ -663,10 +661,12 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             // add a new note to firebase
             var message_json = {};
 
-            var firebase_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + email_no_shtrodel_dot + '/' + $scope.tripID + '/history/tips');
+            var firebase_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + facebookId + '/' + $scope.tripID + '/tips');
 
             //var usersRef = firebase_ref.child('history');
 
+
+            // should change it to be similar to how the mobile device add push the message
             message_json = {
                 "message": {
                     "text": $scope.message.text,

@@ -237,7 +237,7 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsA
         for (var i = 0; i < $scope.trips.length; i++) {
             var jsonTrip = {
                 id: $scope.trips[i].id, title: $scope.trips[i].trip_name, description: $scope.trips[i].trip_description,
-                expanded: false, content: {type: "QUOTE", quotes: ["quotedfdsgfdsgfdsfsdfsdfsdfdsfs"]}
+                expanded: false, content: {type: "QUOTE", quotes: ["quotedfdsgfdsgfdsfsdfsdfsdfdsfs"]}, active: $scope.trips[i].active
             };
 
             if (new Date($scope.trips[i].end_date) > new Date()) {
