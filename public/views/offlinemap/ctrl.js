@@ -419,15 +419,15 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         });
 
 
-        $scope.showMessageOnMap = function (message) {
+        $scope.showMessageOnMap = function (location) {
             if ($scope.editMode == false) {
                 //#646c73
                 if (showMessageOnMap_clicked == false) {
                     showMessageOnMap_clicked = true;
-                    var Latlng_message = {lat: message.latitude, lng: message.longitude};
+                    var Latlng_message = {lat: location.coords.latitude, lng: location.coords.longitude};
 
                     //Help function - show item on map
-                    showItemOnMap(Latlng_message, message);
+                    showItemOnMap(Latlng_message);
 
                 } else {
                     showMessageOnMap_clicked = false;
@@ -504,7 +504,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             }
         }
 
-        var showItemOnMap = function (Latlng, message) {
+        var showItemOnMap = function (Latlng) {
 
             //var myLatlng = {lat: message.latitude, lng: message.longitude};
             console.log('showItemOnMap function :: ' + 'lat:' + Latlng.lat + '     lng: ' + Latlng.lng);
@@ -514,6 +514,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
                     $scope.map.setCenter(Latlng);
                     //smoothZoom($scope.map, 7, $scope.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
+
+                    //new google.maps.LatLng(-34, 151)
 
                     var marker_message = new google.maps.Marker({
                         position: Latlng,
@@ -538,6 +540,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     // angular.element(document.getElementById('messages')).append("<timer interval="+zoom_time+"  countdown= "+countdown +">"+{{countdown}}+"</timer>");
 
 
+                    //disable meanwhile, I changed the view, Google street map not exists any more, I should view streen in the same main map
+                    /*
                     var panorama = new google.maps.StreetViewPanorama(
                         document.getElementById('pano'), {
                             position: Latlng,
@@ -547,6 +551,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                             }
                         });
                     $scope.map.setStreetView(panorama);
+                    */
                 }
             }
         }

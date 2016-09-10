@@ -1,8 +1,6 @@
 trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $document, dataBaseService, messages, $timeout, localStorageService) {
 
 
-
-
         $scope.user = messages.getUser();
         $scope.travelersList = [];
         $scope.data = []; // Travellers from PG DB
@@ -34,7 +32,9 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
 
         // socket to update client directly for new GPS / tips
-
+    //**********
+    //*** Not sure this is relevant anymore
+    //*****
         var socket = io.connect('http://localhost:8080');
         socket.on('GpsPoint', function (data) {
             //console.log(data);
@@ -84,24 +84,21 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
         //Read already saved paths
         //read already saved messages
 
+        // show only active trip from each user, each user can have 1 active trip at time (no one can travel to 2 places at the same time :)
+        //it's like dancing in 2 weddings
+
+
+    //*********
+    //***Updated according to the new way of user by id and active trips only shown here****
+    //********
         var firstPathLoad_firebase = ref.once("value", function (snapshot) {
             loadUsers = function () {
-                var id = 0;
-                snapshot.forEach(function (childSnapshot) {
-                    console.log(childSnapshot.val());
+                //var id = 0;
+                snapshot.forEach(function (users) { // loop users
+                    console.log(users.val());
 
-
-                    var user = childSnapshot.val();
-                    // key will be "fred" the first time and "barney" the second time
-                    var key = childSnapshot.key();
-
-
-                    // no need meanwhile, I am using user id instead of email in Firebase
-                    //var email_with_shtrodel = key.replace('u0040', '@');
-                    //var email_with_shtrodel_dot = email_with_shtrodel.replace('u002E', '.');
-
-                    // console.log(email_with_shtrodel_dot);
-
+                    var user = users.val(); //
+                    //var key = users.key();
 
                     $scope.data.push({
                         id: user.auth.userID,
@@ -109,69 +106,108 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                         email: user.auth.email
                     });
 
+                    //Loop trips of each user to find active trips
+                    //get path and messages only from active trips
+                    users.forEach(function (trip) {
+                        /*Debug
+                         console.log('NEW');
+                         console.log(trip.val());
+                         console.log(trip.key());
+                         console.log(users.key());
+                         */
 
-                    //**************
-                    //handle paths
-                    //*************
-                    //path for each user
+                        if (trip.val().active) {
+                            //**************
+                            //handle paths
+                            //*************
+                            //path for each user
+                            var path = [];
+                            var ref_read_path = new Firebase('https://luminous-torch-9364.firebaseio.com/mobile/users/' + users.key() + '/' + trip.key() + '/path');
 
-                    // instead of 211 I should add the active trip path, flag
-                    var childPath = childSnapshot.child('211/path');
-                    var path = [];
+                            //read path for user 'users.key()' trip 'trip.key()' that have active trip
+                            //once used to load all exists path (I handle new path in different  function????????????)
+                            ref_read_path.once("value", function (tripPath) {
 
-                    childPath.forEach(function (childCoords) {
+                                tripPath.forEach(function (point) {
+                                    path.push({
+                                        lat: JSON.parse(point.val()['coords'].latitude),
+                                        lng: JSON.parse(point.val()['coords'].longitude)
+                                    });
 
-                        //console.log(childCoords.key());
-                        //console.log(childCoords.key());
+                                })
+                            })
 
-                        var coords = childCoords.val();
+                            //dashed line
+                            var lineSymbol = {
+                                path: 'M 0,-1 0,1',
+                                strokeOpacity: 1,
+                                scale: 4
+                            };
 
-                        path.push({
-                            lat: JSON.parse(coords['coords'].latitude),
-                            lng: JSON.parse(coords['coords'].longitude)
-                        });
-                        //users_hash[email_with_shtrodel_dot] = path;
-                    })
+                            //Hash table for all users path
+                            polys[users.key()] = new google.maps.Polyline({
+                                path: path,
+                                geodesic: true,
+                                strokeColor: getRandomColor(),
+                                strokeOpacity: 0,
+                                strokeWeight: 2,
+                                icons: [{
+                                    icon: lineSymbol,
+                                    offset: '0',
+                                    repeat: '20px'
+                                }]
+                            });
 
-                    //dashed line
-                    var lineSymbol = {
-                        path: 'M 0,-1 0,1',
-                        strokeOpacity: 1,
-                        scale: 4
-                    };
+                            polys[users.key()].setMap($scope.map);
 
-                    //Hash table for all users path
-                    polys[key] = new google.maps.Polyline({
-                        path: path,
-                        geodesic: true,
-                        strokeColor: getRandomColor(),
-                        strokeOpacity: 0,
-                        strokeWeight: 2,
-                        icons: [{
-                            icon: lineSymbol,
-                            offset: '0',
-                            repeat: '20px'
-                        }]
+                            //***************
+                            //handle messages
+                            //***************
+
+                            var ref_read_messages = new Firebase('https://luminous-torch-9364.firebaseio.com/mobile/users/' + users.key() + '/' + trip.key() + '/messages');
+
+                            //read all messages for user 'users.key()' trip 'trip.key()' that have active trip
+                            //once used to load all exists messages (I handle new messages in different  function????????????)
+
+
+                            var firstLoad = true;
+                            ref_read_messages.once("value", function (messages) {
+                                messages.forEach(function (message) {
+                                    $scope.messages.unshift(message.val());
+                                })
+
+                            })
+
+                            ref_read_messages.limitToLast(1).on("value", function (messages) {
+                                if(firstLoad == false){ // don't add last item in the first load (it will create duplicate items)
+                                    messages.forEach(function (message) {
+                                        $scope.messages.unshift(message.val());
+                                    })
+                                    $scope.$apply();
+                                }
+                                firstLoad = false;
+                            })
+
+
+
+
+/*
+
+                            if($scope.messages.length > 0){
+                                //if the array > 0 it means the exists messages was loaded and we should add to the array only the new real time added message
+
+
+                            }else{
+                                ref_read_messages.on("value", function (messages) {
+                                    messages.forEach(function (message) {
+                                        $scope.messages.push(message.val());
+                                    })
+                                })
+                            }*/
+                        }
                     });
 
-                    polys[key].setMap($scope.map);
-
-                    /*
-                     //***************
-                     //handle messages
-                     //***************
-                     //path for each user
-                     var childPath_messages = childSnapshot.child('messages');
-                     var allMessageOfUser = [];
-
-                     childPath_messages.forEach(function (childCoords) {
-                     allMessageOfUser.push(childCoords.val());
-                     })
-                     //all messages saved in below hashtable, key = email
-                     $scope.messages[email_with_shtrodel_dot] = allMessageOfUser;
-                     */
                 });
-
             }
             loadUsers();
             $scope.$apply();
