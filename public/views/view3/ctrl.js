@@ -54,7 +54,7 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsA
 
 
     $scope.activateTrip = function (chunk){
-        var tripId = {trip_id: chunk.id};
+        var tripId = {trip_id: chunk.id, email: $scope.profile.email};
         dataBaseService.activateTrip(tripId).then(function (results) {
             //$scope.message = data; //handle data back from server - not needed meanwhile
             console.log('Client:: Trips View :: activate Trip :: ' + tripId);

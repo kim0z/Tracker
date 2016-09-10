@@ -343,8 +343,6 @@ app.post('/updateTrip', function (request, response) {
 //Postgres :: update active trip
 app.post('/activateTrip', function (request, response) {
 
-    //var id = request.body.trip_id;
-    // console.log('kariiiim'+id);
     console.log('SERVER:: Postgres:: update Trip if Active ' + request.body);
 
     var jsonTrip = request.body; // true or false
@@ -354,8 +352,8 @@ app.post('/activateTrip', function (request, response) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("UPDATE trips SET active = ($1)",
-            [false]
+        client.query("UPDATE trips SET active = ($1) WHERE email = ($2)",
+            [false, request.body.email]
             , function (err, result) {
                 //call `done()` to release the client back to the pool
                 done();
