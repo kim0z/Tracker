@@ -32,9 +32,9 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
 
         // socket to update client directly for new GPS / tips
-    //**********
-    //*** Not sure this is relevant anymore
-    //*****
+        //**********
+        //*** Not sure this is relevant anymore
+        //*****
         var socket = io.connect('http://localhost:8080');
         socket.on('GpsPoint', function (data) {
             //console.log(data);
@@ -88,9 +88,9 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
         //it's like dancing in 2 weddings
 
 
-    //*********
-    //***Updated according to the new way of user by id and active trips only shown here****
-    //********
+        //*********
+        //***Updated according to the new way of user by id and active trips only shown here****
+        //********
         var firstPathLoad_firebase = ref.once("value", function (snapshot) {
             loadUsers = function () {
                 //var id = 0;
@@ -125,9 +125,9 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                             var ref_read_path = new Firebase('https://luminous-torch-9364.firebaseio.com/mobile/users/' + users.key() + '/' + trip.key() + '/path');
 
                             //read path for user 'users.key()' trip 'trip.key()' that have active trip
-                            //once used to load all exists path (I handle new path in different  function????????????)
-                            ref_read_path.once("value", function (tripPath) {
+                            var firstLoad_paths = true;
 
+                            ref_read_path.once("value", function (tripPath) {
                                 tripPath.forEach(function (point) {
                                     path.push({
                                         lat: JSON.parse(point.val()['coords'].latitude),
@@ -137,6 +137,29 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                                 })
                             })
 
+                            ref_read_path.limitToLast(1).on("value", function (tripPath) {
+                                if (firstLoad_paths == false) {
+
+                                    // get existing path
+                                    var existsPath = polys[users.key()].getPath();
+
+                                    tripPath.forEach(function (point) {
+
+                                        // add new point
+                                        existsPath.push(new google.maps.LatLng(JSON.parse(point.val()['coords'].latitude), JSON.parse(point.val()['coords'].longitude) ));
+
+                                    });
+
+
+                                    polys[users.key()].setPath(existsPath);
+
+                                    //$scope.$apply();
+                                }
+                                firstLoad_paths = false;
+                            })
+
+
+                            // set the path for the first load, for the real time load, I added the same code into the listener of Firebase above
                             //dashed line
                             var lineSymbol = {
                                 path: 'M 0,-1 0,1',
@@ -169,8 +192,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                             //read all messages for user 'users.key()' trip 'trip.key()' that have active trip
                             //once used to load all exists messages (I handle new messages in different  function????????????)
 
-
-                            var firstLoad = true;
+                            var firstLoad_messages = true;
                             ref_read_messages.once("value", function (messages) {
                                 messages.forEach(function (message) {
                                     $scope.messages.unshift(message.val());
@@ -179,31 +201,14 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                             })
 
                             ref_read_messages.limitToLast(1).on("value", function (messages) {
-                                if(firstLoad == false){ // don't add last item in the first load (it will create duplicate items)
+                                if (firstLoad_messages == false) { // don't add last item in the first load (it will create duplicate items)
                                     messages.forEach(function (message) {
                                         $scope.messages.unshift(message.val());
                                     })
                                     $scope.$apply();
                                 }
-                                firstLoad = false;
+                                firstLoad_messages = false;
                             })
-
-
-
-
-/*
-
-                            if($scope.messages.length > 0){
-                                //if the array > 0 it means the exists messages was loaded and we should add to the array only the new real time added message
-
-
-                            }else{
-                                ref_read_messages.on("value", function (messages) {
-                                    messages.forEach(function (message) {
-                                        $scope.messages.push(message.val());
-                                    })
-                                })
-                            }*/
                         }
                     });
 

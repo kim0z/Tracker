@@ -34,7 +34,7 @@
       <file leaf-file-name="offlinemap.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/views/offlinemap/offlinemap.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="-0.65384614">
               <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
               <folding>
                 <element signature="n#style#0;n#div#2;n#div#0;n#body#0;n#!!top" expanded="true" />
@@ -43,20 +43,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/views/view2/ctrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-15.851851">
-              <caret line="187" column="50" selection-start-line="187" selection-start-column="50" selection-end-line="187" selection-end-column="50" />
+            <state vertical-scroll-proportion="0.13548388">
+              <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.28903225">
+            <state vertical-scroll-proportion="-8.296296">
               <caret line="350" column="41" selection-start-line="350" selection-start-column="41" selection-end-line="350" selection-end-column="41" />
               <folding />
             </state>
@@ -170,9 +170,9 @@
         <option value="$PROJECT_DIR$/public/views/offlinemap/offlinemap.html" />
         <option value="$PROJECT_DIR$/public/views/offlinemap/ctrl.js" />
         <option value="$PROJECT_DIR$/public/views/view2/view2.html" />
-        <option value="$PROJECT_DIR$/public/views/view2/ctrl.js" />
         <option value="$PROJECT_DIR$/public/views/view3/ctrl.js" />
         <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/public/views/view2/ctrl.js" />
       </list>
     </option>
   </component>
@@ -477,7 +477,7 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.115574345" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.115574345" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27108434" sideWeight="0.5024665" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -841,16 +841,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/views/offlinemap/offlinemap.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding>
-            <element signature="n#style#0;n#div#2;n#div#0;n#body#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/views/view2/view2.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.65384614">
@@ -858,14 +848,6 @@
           <folding>
             <element signature="n#style#0;n#div#1;n#body#0;n#!!top" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/views/view2/ctrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-15.851851">
-          <caret line="187" column="50" selection-start-line="187" selection-start-column="50" selection-end-line="187" selection-end-column="50" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -887,8 +869,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.28903225">
+        <state vertical-scroll-proportion="-8.296296">
           <caret line="350" column="41" selection-start-line="350" selection-start-column="41" selection-end-line="350" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/views/offlinemap/offlinemap.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.65384614">
+          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding>
+            <element signature="n#style#0;n#div#2;n#div#0;n#body#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/views/view2/ctrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.13548388">
+          <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
           <folding />
         </state>
       </provider>
