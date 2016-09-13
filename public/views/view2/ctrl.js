@@ -28,13 +28,14 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
         });
 
 
+/* ####################################### Old code, check what I should take from it ###############################
         /// Map configuration END
 
 
         // socket to update client directly for new GPS / tips
-        //**********
-        //*** Not sure this is relevant anymore
-        //*****
+        //!**********
+        //!*** Not sure this is relevant anymore
+        //!*****
         var socket = io.connect('http://localhost:8080');
         socket.on('GpsPoint', function (data) {
             //console.log(data);
@@ -78,9 +79,11 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                 //  trackPath.setMap($scope.map);
             }
         });
+*///####################################### Above is an old code, check what I should take from it ###############################
 
 
-        //read active users Firebase -> mobile -> users
+
+     //read active users Firebase -> mobile -> users
         //Read already saved paths
         //read already saved messages
 
@@ -90,6 +93,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
         //*********
         //***Updated according to the new way of user by id and active trips only shown here****
+        //******* Below code: Load paths and Messages from each user, then keep listining to each user when new message / GPS arrive from mobile device (Firebase)
         //********
         var firstPathLoad_firebase = ref.once("value", function (snapshot) {
             loadUsers = function () {
@@ -135,8 +139,38 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                                     });
 
                                 })
+
+                                //set the path for the first load, for the real time load, I added the same code into the listener of Firebase above
+                                //dashed line
+                                var lineSymbol = {
+                                    path: 'M 0,-1 0,1',
+                                    strokeOpacity: 1,
+                                    scale: 4
+                                };
+
+                                //Hash table for all users path
+                                polys[users.key()] = new google.maps.Polyline({
+                                    path: path,
+                                    geodesic: true,
+                                    strokeColor: getRandomColor(),
+                                    strokeOpacity: 0,
+                                    strokeWeight: 2,
+                                    icons: [{
+                                        icon: lineSymbol,
+                                        offset: '0',
+                                        repeat: '20px'
+                                    }]
+                                });
+
+                                polys[users.key()].setMap($scope.map);
+
+
                             })
 
+
+
+
+                            //Keep listening to new GPS point added by users
                             ref_read_path.limitToLast(1).on("value", function (tripPath) {
                                 if (firstLoad_paths == false) {
 
@@ -159,29 +193,6 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                             })
 
 
-                            // set the path for the first load, for the real time load, I added the same code into the listener of Firebase above
-                            //dashed line
-                            var lineSymbol = {
-                                path: 'M 0,-1 0,1',
-                                strokeOpacity: 1,
-                                scale: 4
-                            };
-
-                            //Hash table for all users path
-                            polys[users.key()] = new google.maps.Polyline({
-                                path: path,
-                                geodesic: true,
-                                strokeColor: getRandomColor(),
-                                strokeOpacity: 0,
-                                strokeWeight: 2,
-                                icons: [{
-                                    icon: lineSymbol,
-                                    offset: '0',
-                                    repeat: '20px'
-                                }]
-                            });
-
-                            polys[users.key()].setMap($scope.map);
 
                             //***************
                             //handle messages
@@ -197,8 +208,10 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                                 messages.forEach(function (message) {
                                     $scope.messages.unshift(message.val());
                                 })
-
+                                $scope.$apply();
                             })
+
+
 
                             ref_read_messages.limitToLast(1).on("value", function (messages) {
                                 if (firstLoad_messages == false) { // don't add last item in the first load (it will create duplicate items)
@@ -216,9 +229,12 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
             }
             loadUsers();
             $scope.$apply();
-
         });
 
+    //**************************************************************************************************************
+    //**************************************************************************************************************
+
+/* ####################################### Below is an old code, check what I should take from it ###############################
         //not sure this wait needed, test it and then remove it, remove in case the above function works once
         $timeout(function () {
             ref.off('value', firstPathLoad_firebase);
@@ -322,6 +338,7 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                 }
             });
         });
+*///####################################### Above is an old code, check what I should take from it ###############################
 
 
         //help function
