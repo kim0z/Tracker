@@ -149,7 +149,8 @@ var trackerApp = angular.module('myApp', [
         auth.hookEvents();
 
 
-	       // This events gets triggered on refresh or URL change
+        //the new login Auth0
+        // This events gets triggered on refresh or URL change
 	  $rootScope.$on('$locationChangeStart', function() {
 	    var token = localStorageService.get('token');
 	    if (token) {
@@ -260,65 +261,12 @@ if (!auth.isAuthenticated){
 
 
 
-   // $location.path( '/new-page.html' );
-
-    //Auth0
-
-
-/*    var lock = new Auth0Lock(clientId, domain, {
-        auth: {
-            redirectUrl: 'http://localhost:9090/callback',
-            responseType: 'code',
-            params: {
-                scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
-            }
-        }
-    });
-
-
-
-
-
-    lock.on("authenticated", function(authResult) {
-        lock.getProfile(authResult.idToken, function(error, profile) {
-            if (error) {
-                // Handle error
-                return;
-            }
-
-            localStorageService.setItem("idToken", authResult.idToken);
-            localStorageService.setItem("profile", JSON.stringify(profile));
-
-            // Update DOM
-        });
-    });*/
-
-
-
-
-
-
 });
 
 
 
-// LoginCtrl.js
-
-
-/*
-// UserInfo.js
-trackerApp.controller('UserInfoCtrl', function(auth) {
-    // Using a promise
-    auth.profilePromise.then(function(profile) {
-        $scope.profile = profile;
-    });
-    // Or using the object
-    $scope.profile = auth.profile;
-});
-*/
-
-
-//Login Facebook -- should be replaced with Native facebook SDK
+//Login Facebook -- old login, now I am using login.js with auth0
+//****************************************************************
 trackerApp.controller('login1',
     ['$scope', '$timeout', 'Facebook', 'dataBaseService', 'messages', 'localStorageService', function ($scope, $timeout, Facebook, dataBaseService, messages, localStorageService) {
 

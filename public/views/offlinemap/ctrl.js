@@ -2,6 +2,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
 
     $scope.profile = localStorageService.get('profile');
+    $scope.accessToken = localStorageService.get('token');
 
     if (!$scope.profile) {
         console.log('offline:: auth :: no data about the user, profile is emppty');
@@ -9,6 +10,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
     var facebookIdNotClean = $scope.profile.user_id; //"facebook|"
     var facebookId = facebookIdNotClean.replace(/^\D+/g, '');
+
 //NOTES:
 //**** Should I move all AWS S3 to server? it is risky to be in the client?
 //****
@@ -154,12 +156,24 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
     });
 
 
+
+        /* make the API call */
+        Facebook.api(
+            "/"+facebookId+"/permissions?access_token="+$scope.accessToken,
+            function (response) {
+                if (response && !response.error) {
+                    /* handle the result */
+                }
+            }
+        );
+    
+
     //get all facebook user albums
     //read albums from Facebook for:
     // 1. update edit mode list witht he enabled albums
 
     Facebook.api(
-        "/" + facebookId + "/albums",
+        "/" + facebookId + "/albums?access_token="+response.authResponse,
         function (response) {
             if (response && !response.error) {
                 /* handle the result */
