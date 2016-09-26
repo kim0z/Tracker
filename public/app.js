@@ -172,15 +172,7 @@ var trackerApp = angular.module('myApp', [
 	    }
 	});
 
-
- 
-
-
-
     });
-
-
-
 
 
 trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService, auth, $state) {

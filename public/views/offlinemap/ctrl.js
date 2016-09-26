@@ -2,7 +2,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
 
     $scope.profile = localStorageService.get('profile');
-    $scope.accessToken = localStorageService.get('token');
+    $scope.userAccessToken = localStorageService.get('providerToken');
 
     if (!$scope.profile) {
         console.log('offline:: auth :: no data about the user, profile is emppty');
@@ -164,7 +164,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
         /* make the API call */
         Facebook.api(
-            "/"+facebookId+"/permissions?access_token="+$scope.accessToken,
+            "/"+facebookId+"/permissions?access_token="+$scope.userAccessToken,
             function (response) {
                 if (response && !response.error) {
                     /* handle the result */
@@ -178,7 +178,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
     // 1. update edit mode list witht he enabled albums
 
     Facebook.api(
-        "/" + facebookId + "/albums?access_token="+$scope.accessToken,
+        "/" + facebookId + "/albums?access_token="+$scope.userAccessToken,
         function (response) {
             if (response && !response.error) {
                 /* handle the result */

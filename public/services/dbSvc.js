@@ -5,7 +5,6 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/insertNewEmptyTrip');
     };
 
-
     this.saveNewTrip = function (dataObj) { // in use
         console.log('Client::dataBaseService:: save new trip with data from the planning page');
         //return $http.post('/saveNewTrip', dataObj);

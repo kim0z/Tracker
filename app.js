@@ -121,23 +121,47 @@ require('./app/routes.js')(app);
 
 
 //Auth0
-var request = require("request");
+//######################
+//######################
+//######################
 
+var request = require("request");
+var auth0ApiToken = '';
 var options = { method: 'POST',
-  url: 'https://exploreauth.auth0.com/oauth/token',
-  headers: { 'content-type': 'application/json' },
-  body: 
-   { client_id: 'QqJgTRPIWyFTKdpkMD8ATmeSwvw6oBCA',
-     client_secret: 'FMRd-u048h9_t95D-hJjTtO5K7uZFmmJ5ruHCP6TrUnaxiSVsKhFSE57jkH68EMc',
-     audience: 'https://exploreauth.auth0.com/api/v2/',
-     grant_type: 'client_credentials' },
-  json: true };
+    url: 'https://exploreauth.auth0.com/oauth/token',
+    headers: { 'content-type': 'application/json' },
+    body: '{"client_id":"yt6jXOEvG4IMyCmBHK4tFQM3y0J0CLk5","client_secret":"jMH6KWIMXkRGUeJWZQMkkFT7hqtTr2amnw49TxZDDxAmzt5ALhHiP_pRTmZFiGaJ","audience":"https://exploreauth.auth0.com/api/v2/","grant_type":"client_credentials"}' };
 
 request(options, function (error, response, body) {
-  if (error) throw new Error(error);
+    if (error) throw new Error(error);
+    auth0ApiToken = body;
+    console.log(body);
+    auth0ApiToken = JSON.parse(body);
 
-  console.log(body);
 });
+
+
+app.post('/getProviderToken', function (request, res) {
+
+    var requestHttp = require("request");
+    console.log('SERVER:: Auth0::  get provider token');
+    console.log(request.body.user_id);
+
+    var options = { method: 'GET',
+        url: 'https://exploreauth.auth0.com/api/v2/users/'+request.body.user_id,
+        headers: { authorization: 'Bearer '+auth0ApiToken.access_token } };
+
+    requestHttp(options, function (error, response, body) {
+        if (error) throw new Error(error);
+
+        console.log(body);
+        res.end(body);
+
+
+    });
+});
+
+
 
 ////################# Sabre Services Config ended #############################
 // General variables
