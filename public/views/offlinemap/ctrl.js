@@ -8,8 +8,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         console.log('offline:: auth :: no data about the user, profile is emppty');
     }
 
-    var facebookIdNotClean = $scope.profile.user_id; //"facebook|"
-    var facebookId = facebookIdNotClean.replace(/^\D+/g, '');
+    //var facebookIdNotClean = $scope.profile.user_id; //"facebook|"
+    //var facebookId = facebookIdNotClean.replace(/^\D+/g, '');
+
+    var facebookId = $scope.profile.identities[0].user_id;
 
 //NOTES:
 //**** Should I move all AWS S3 to server? it is risky to be in the client?
@@ -90,7 +92,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
     // 1. update edit mode list witht the enabled albums (not to update the list witht the albums list, only if it enabled, reason: could be that the list in facebook more updated)
     // 2. show the photos in Gallery of the enabled photos
 
-    var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + email_no_shtrodel_dot + "/offline/photos/facebook/trip/" + $scope.tripID);
+    //var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + email_no_shtrodel_dot + "/offline/photos/facebook/trip/" + $scope.tripID);
+
+    var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
+    
 
     firebase_config_get_albums.on("value", function (snapshot) {
         //  var i = 0;
@@ -173,7 +178,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
     // 1. update edit mode list witht he enabled albums
 
     Facebook.api(
-        "/" + facebookId + "/albums?access_token="+response.authResponse,
+        "/" + facebookId + "/albums?access_token="+$scope.accessToken,
         function (response) {
             if (response && !response.error) {
                 /* handle the result */

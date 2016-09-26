@@ -120,6 +120,25 @@ require('./app/routes.js')(app);
  */
 
 
+//Auth0
+var request = require("request");
+
+var options = { method: 'POST',
+  url: 'https://exploreauth.auth0.com/oauth/token',
+  headers: { 'content-type': 'application/json' },
+  body: 
+   { client_id: 'QqJgTRPIWyFTKdpkMD8ATmeSwvw6oBCA',
+     client_secret: 'FMRd-u048h9_t95D-hJjTtO5K7uZFmmJ5ruHCP6TrUnaxiSVsKhFSE57jkH68EMc',
+     audience: 'https://exploreauth.auth0.com/api/v2/',
+     grant_type: 'client_credentials' },
+  json: true };
+
+request(options, function (error, response, body) {
+  if (error) throw new Error(error);
+
+  console.log(body);
+});
+
 ////################# Sabre Services Config ended #############################
 // General variables
 var tripById = '';
