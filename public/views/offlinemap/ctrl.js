@@ -81,8 +81,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
     /* don't now what the below for, disable until error
      $scope.value = undefined;
-     $scope.items = [];
      */
+    //items array used for facebook photos
+     $scope.items = [];
+
     $scope.selectedFacebookAlbum = [];
     $scope.facebookAlbumsList = []; //Facebook albums from Firebase
 
@@ -127,13 +129,13 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         for (var i = 0; i < albumLen; i++) {
             if ($scope.facebookAlbumsFriebase[i].checkbox) {
                 Facebook.api(
-                    "/" + $scope.facebookAlbumsFriebase[i].albumID + "/photos",
+                    "/" + $scope.facebookAlbumsFriebase[i].albumID + "/photos?access_token="+$scope.userAccessToken,
                     function (album) {
                         if (album && !album.error) {
                             console.log('photos');
                             for (var photoIndex = 0; photoIndex < album.data.length; photoIndex++) {
                                 Facebook.api(
-                                    "/" + album.data[photoIndex].id + "/picture",
+                                    "/" + album.data[photoIndex].id + "/picture?access_token="+$scope.userAccessToken,
                                     function (photo) {
                                         if (photo && !photo.error) {
                                             /* handle the result */
@@ -161,17 +163,17 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
     });
 
 
+/* for testing
 
-        /* make the API call */
         Facebook.api(
             "/"+facebookId+"/permissions?access_token="+$scope.userAccessToken,
             function (response) {
                 if (response && !response.error) {
-                    /* handle the result */
+
                 }
             }
         );
-    
+*/
 
     //get all facebook user albums
     //read albums from Facebook for:

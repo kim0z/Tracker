@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <head>
 
-
     <!--
     <link rel="stylesheet" href="assets/css/style_realtime.css">
     -->
@@ -10,6 +9,99 @@
 -->
 
     <style type="text/css">
+
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #ccc;
+            font-family: arial, verdana, tahoma;
+        }
+
+        /*Time to apply widths for accordian to work
+        Width of image = 640px
+        total images = 5
+        so width of hovered image = 640px
+        width of un-hovered image = 40px - you can set this to anything
+        so total container width = 640 + 40*4 = 800px;
+        default width = 800/5 = 160px;
+        */
+
+        .accordian {
+            width: 805px; height: 320px;
+            overflow: hidden;
+
+            /*Time for some styling*/
+            margin: 100px auto;
+            box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.35);
+            -webkit-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.35);
+            -moz-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.35);
+        }
+
+        /*A small hack to prevent flickering on some browsers*/
+        .accordian ul {
+            width: 2000px;
+            /*This will give ample space to the last item to move
+            instead of falling down/flickering during hovers.*/
+        }
+
+        .accordian li {
+            position: relative;
+            display: block;
+            width: 160px;
+            float: left;
+
+            border-left: 1px solid #888;
+
+            box-shadow: 0 0 25px 10px rgba(0, 0, 0, 0.5);
+            -webkit-box-shadow: 0 0 25px 10px rgba(0, 0, 0, 0.5);
+            -moz-box-shadow: 0 0 25px 10px rgba(0, 0, 0, 0.5);
+
+            /*Transitions to give animation effect*/
+            transition: all 0.5s;
+            -webkit-transition: all 0.5s;
+            -moz-transition: all 0.5s;
+            /*If you hover on the images now you should be able to
+            see the basic accordian*/
+        }
+
+        /*Reduce with of un-hovered elements*/
+        .accordian ul:hover li {width: 40px;}
+        /*Lets apply hover effects now*/
+        /*The LI hover style should override the UL hover style*/
+        .accordian ul li:hover {width: 640px;}
+
+
+        .accordian li img {
+            display: block;
+        }
+
+        /*Image title styles*/
+        .image_title {
+            background: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            left: 0; bottom: 0;
+            width: 640px;
+
+        }
+        .image_title a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 20px;
+            font-size: 16px;
+        }
+
+
+
+
+
+
+
+
+
         #map {
             box-shadow: 3px 3px 10px gray;
             /* make Google map -> background*/
@@ -395,68 +487,25 @@
     </div>
 
 
-    <!-- new photo slider -->
-    <!--
-    <div style="margin-left: 55px" class="footer" class='animate-hide' ng-hide="photosSlider">
-        <div class='slider'>
-            <input checked='' name='thumbnail' type='radio'/>
-            <input name='thumbnail' type='radio' ng-repeat="photo in facebookPhotos track by $index"
-                   ng-style="{'background': 'url('+photo+')'}"/>
-            <div class='images'
-                 style="background: url(https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-xfl1/t31.0-8/s720x720/13738130_253880684998589_991509330233210863_o.jpg);"></div>
-        </div>
-    </div>
-    {{photosSlider}}
-    </div>
-    -->
+<!-- Photos-->
 
-
-    <!--
-    <div id="container" ng-if="facebookImagesReady" class="footer" class='animate-hide' ng-hide="photosSlider">
-        <div class="col-sm-12">
-             <flex-slider slider-id="slider" flex-slide="image in prod.imagePaths" animation="fade" animation-loop="false" sync="#carousel" slideshow="false" control-nav="false" init-delay="100">
-                <li>
-                    <img ng-src="{{image.custom}}" style="width: 600px; height: 600px">
-                </li>
-            </flex-slider>
-        </div>
-        <div class="col-sm-12">
-
-             <flex-slider slider-id="carousel" flex-slide="image in prod.imagePaths track by $index" animation="slide" animation-loop="false" item-width="210" item-margin="5" as-nav-for="#slider" slideshow="false" control-nav="false">
-                <li>
-                    <img ng-src="{{image.thumbnail}}" style="width: 100px; height: 100px">
-                </li>
-            </flex-slider>
-        </div>
-    </div>
-    -->
-
-
-    <div class="footer" class='animate-hide' style="height: 300px; margin-left: 59px; margin-right: 59px"
-         ng-hide="photosSlider" ng-if="facebookImagesReady">
-        <flex-slider slide="item in items track by $index" animation="slide" item-width="200" item-height="200">
-            <li>
-                <img ng-src="{{item.img}}"/>
-                {{item.name}}
-            </li>
-        </flex-slider>
-
-        <!--	  <flex-slider slide="item in items track by $index1" animation="slide" item-width="110">
-                  <li>
-                    <img ng-src="{{item.img}}"/>
-                          {{item.name}}
-                </li>
-              </flex-slider>-->
-
-        <!--
-        <a href="javascript:;" data-ng-click="update()">Update List</a>
+    <!-- We will make a simple accordian with hover effects
+The markup will have a list with images and the titles-->
+    <div class="footer accordian" ng-hide="photosSlider">
         <ul>
-            <li data-ng-repeat="item in items track by $index">{{item.name}}</li>
+            <li ng-repeat="item in items">
+                <div class="image_title">
+                    <a href="#">KungFu Panda</a>
+                </div>
+                <a href="#">
+                    <img ng-src={{item.img}}/>
+                </a>
+            </li>
         </ul>
-        -->
     </div>
 
 
+<!-- Table -->
     <div style="margin-left: 55px" class="footer" class='animate-hide ' ng-hide="tableSlider">
         <table style="width:100%" class="table table-bordered"> 
             <tr>
