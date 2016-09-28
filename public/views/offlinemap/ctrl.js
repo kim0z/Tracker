@@ -247,7 +247,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
 
     // Get a Firebase database reference to our posts
-    var firebase_ref = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + email_no_shtrodel_dot + '/' + $scope.tripID);
+    var firebase_ref = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + facebookId + '/' + $scope.tripID);
 
 
     if ($scope.profile.email == '' || $scope.tripID == '')
@@ -275,7 +275,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
     //Sync Facebook albums
     $scope.syncAlbums = function () {
         //save in Firebase config
-        var firebase_config_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + email_no_shtrodel_dot + "/offline/photos/facebook/trip/" + $scope.tripID);
+        var firebase_config_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
         firebase_config_albums.set($scope.facebookAlbums);
 
         $scope.facebookPhotos = [];
@@ -292,9 +292,9 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                         "/" + $scope.facebookAlbums[i].albumID + "/picture",
                         function (cover) {
                             if (cover && !cover.error) {
-                                console.log("https://trackerconfig.firebaseio.com/web/" + email_no_shtrodel_dot + "/tripslist/coverphoto/trip/" + $scope.tripID);
+                                console.log("https://trackerconfig.firebaseio.com/web/" + facebookId + "/tripslist/coverphoto/trip/" + $scope.tripID);
                                 //save Facebook album cover in Firebase
-                                var firebase_config_coverPhoto = new Firebase("https://trackerconfig.firebaseio.com/web/" + email_no_shtrodel_dot + "/tripslist/coverphoto/trip/" + $scope.tripID);
+                                var firebase_config_coverPhoto = new Firebase("https://trackerconfig.firebaseio.com/web/" + facebookId + "/tripslist/coverphoto/trip/" + $scope.tripID);
                                 firebase_config_coverPhoto.set(cover.data.url);
                             }
                         });
