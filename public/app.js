@@ -5,7 +5,6 @@ var trackerApp = angular.module('myApp', [
         'auth0',
         'nemLogging',
         'ui.router',
-        'ngResource',
         'angular-jwt',
         'uiGmapgoogle-maps',
         'ngAutocomplete',
@@ -44,31 +43,31 @@ var trackerApp = angular.module('myApp', [
                 templateUrl: "views/view1/view1.html",
                 controller: 'view1Ctrl',
                 data: {
-                	requiresLogin: true
+                    requiresLogin: true
                 }
             })
             .state('view2', {
                 url: "/view2",
                 templateUrl: "views/view2/view2.html",
                 controller: 'view2Ctrl',
-                 data: {
-                	requiresLogin: true
+                data: {
+                    requiresLogin: true
                 }
             })
             .state('view3', {
                 url: "/view3",
                 templateUrl: "views/view3/view3.html",
                 controller: 'view3Ctrl',
-                 data: {
-                	requiresLogin: true
+                data: {
+                    requiresLogin: true
                 }
             })
             .state('viewError', {
                 url: "/viewError",
                 templateUrl: "views/viewError/404.html",
                 controller: 'viewErrorCtrl',
-                 data: {
-                	requiresLogin: true
+                data: {
+                    requiresLogin: true
                 }
             })
             .state('login', {
@@ -80,12 +79,12 @@ var trackerApp = angular.module('myApp', [
                 url: "/offlinemap",
                 templateUrl: "views/offlinemap/offlinemap.html",
                 controller: 'offlinemapCtrl',
-                 data: {
-                	requiresLogin: true
+                data: {
+                    requiresLogin: true
                 }
             });
     })
-    .config(function(authProvider) {
+    .config(function (authProvider) {
 
         // routing configuration and other stuff
         // ...
@@ -114,9 +113,6 @@ var trackerApp = angular.module('myApp', [
 
         }
     ])
-    .config(function($resourceProvider) {
-        $resourceProvider.defaults.stripTrailingSlashes = false;
-    })
     /*
      .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApiProviders) {
 
@@ -156,40 +152,44 @@ var trackerApp = angular.module('myApp', [
 
         //the new login Auth0
         // This events gets triggered on refresh or URL change
-	  $rootScope.$on('$locationChangeStart', function() {
-	    var token = localStorageService.get('token');
-	    if (token) {
-	      if (!jwtHelper.isTokenExpired(token)) {
-	        if (!auth.isAuthenticated) {
-	          auth.authenticate(localStorageService.get('profile'), token).then(function (profile) {
+        $rootScope.$on('$locationChangeStart', function () {
+            var token = localStorageService.get('token');
+            if (token) {
+                if (!jwtHelper.isTokenExpired(token)) {
+                    if (!auth.isAuthenticated) {
+                        auth.authenticate(localStorageService.get('profile'), token).then(function (profile) {
 
-	                    console.log("Logged in via refresh token and got profile");
+                            console.log("Logged in via refresh token and got profile");
 
-	                    console.log(profile);
+                            console.log(profile);
 
-	                    // Successful login, now redirect to secured content.
+                            // Successful login, now redirect to secured content.
 
-	                }, function (err) { });;
-	        }
-	      } else {
-	        // Either show Login page or use the refresh token to get a new idToken
-	      }
-	    }
-	});
+                        }, function (err) {
+                        });
+                        ;
+                    }
+                } else {
+                    // Either show Login page or use the refresh token to get a new idToken
+                }
+            }
+        });
 
     });
 
 
 trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService, auth, $state) {
 
-    if(localStorageService.get('profile')){
+    $scope.profile = localStorageService.get('profile');
+
+    if (localStorageService.get('profile')) {
         $scope.authButton = 'Logout';
         $scope.expressionAuth = 'md-raised md-warn md-button md-default-theme';
-    }else{
+    } else {
         $scope.authButton = 'Login';
         $scope.expressionAuth = 'md-raised md-primary md-button md-default-theme';
     }
-    
+
     $scope.auth = auth;
 
     $scope.menuClick = function (buttonText) {
@@ -215,51 +215,55 @@ trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService, au
 
     };
 
-    $scope.logout = function() {
-    	auth.signout();
-    	localStorageService.remove('profile');
+    $scope.logout = function () {
+        auth.signout();
+        localStorageService.remove('profile');
         localStorageService.remove('token');
-    	$state.go('view0');
+        $state.go('view0');
     }
 
 
     $scope.authUser = function () {
 
 
-if (!auth.isAuthenticated){
-    console.log('not auth');
-   }else{
-        console.log('auth');
-    }
-
+        if (!auth.isAuthenticated) {
+            console.log('not auth');
+        } else {
+            console.log('auth');
+        }
 
 
         var profile = localStorageService.get('profile');
 
-        if(profile && $scope.authButton == 'Logout'){ //if true then user logged in, and his profile saved in local storage
-        //if user clicked the button while user logged in it means he need to logout
+        if (profile && $scope.authButton == 'Logout') { //if true then user logged in, and his profile saved in local storage
+            //if user clicked the button while user logged in it means he need to logout
             $scope.authButton = 'Login';
             $scope.expressionAuth = 'md-raised md-primary md-button md-default-theme';
             $scope.logout(); // should make sure this action succeeded then change the button color and text
             //$state.go('view0');
             $state.reload();
-        }if(!profile && $scope.authButton == 'Login'){
+        }
+        if (!profile && $scope.authButton == 'Login') {
             $scope.authButton = 'Logout';
             $scope.expressionAuth = 'md-raised md-warn md-button md-default-theme';
-            $state.go('view0'); //the login will redirect to view0 when done
-        }else {
+            $state.go('login'); //the login will redirect to view0 when done
+            $state.reload();
+        } else {
             //something wrong
             //restart login system
+            //case 1: logged out but button is not updated
+            //case 2: logged in but button is not updated
+
+            if(profile == null){
+                //it means use is not authenticated
+                $scope.authButton = 'Login';
+            }
 
         }
-    }       
-
-
-
+    }
 
 
 });
-
 
 
 //Login Facebook -- old login, now I am using login.js with auth0
@@ -270,8 +274,7 @@ trackerApp.controller('login1',
 
         console.log('User not exists, adding the user');
         var firebase_users_add_f = new Firebase("https://luminous-torch-9364.firebaseio.com/");
-        firebase_users_add_f.set({'dsdfsdfsdfsdf':'sdsdfsdfsd'});
-
+        firebase_users_add_f.set({'dsdfsdfsdfsdf': 'sdsdfsdfsd'});
 
 
         $scope.user = {};
@@ -354,57 +357,56 @@ trackerApp.controller('login1',
                     // Object {id: "102211533498839", name: "Aladdin The Tracker", email: "aladdin_dejvjmt_tracker@tfbnw.net", timezone: 0}
 
 
-
                     console.log('User not exists, adding the user');
                     var firebase_users_add_f = new Firebase("https://luminous-torch-9364.firebaseio.com/");
                     firebase_users_add_f.set($scope.user);
 
 
-/*
+                    /*
 
 
-                    //check if node 'users' exists, only for the init of the app, one time action
-                    var firebase_users_node_exists = new Firebase("https://luminous-torch-9364.firebaseio.com/");
+                     //check if node 'users' exists, only for the init of the app, one time action
+                     var firebase_users_node_exists = new Firebase("https://luminous-torch-9364.firebaseio.com/");
 
-                    firebase_users_node_exists.once("value", function (snapshot) {
-                        //if users node no exits it means no users was created at all
-                        if (snapshot.hasChild('users') == false) {
-                            //add the first user without check if it is exists (for sure he is not)
+                     firebase_users_node_exists.once("value", function (snapshot) {
+                     //if users node no exits it means no users was created at all
+                     if (snapshot.hasChild('users') == false) {
+                     //add the first user without check if it is exists (for sure he is not)
+                     console.log('User not exists, adding the user');
+                     var firebase_users_add = new Firebase("https://luminous-torch-9364.firebaseio.com/users/" + $scope.user.id);
+                     firebase_users_add.set($scope.user);
+                     } else {
+                     //else, when users node already exists then we should check if the user already exists
+                     */
+
+
+                    //
+                    //check if user exists in Firebase
+                    //load Table from Firebase
+                    var firebase_users = new Firebase("https://luminous-torch-9364.firebaseio.com/");
+
+                    firebase_users.once("value", function (snapshot) {
+
+                        var exists = snapshot.child($scope.user.id).exists();
+
+                        console.log('Exists or Not');
+                        console.log(exists);
+
+
+                        //if not exists then add to Firebase
+                        if (exists == false) {
                             console.log('User not exists, adding the user');
                             var firebase_users_add = new Firebase("https://luminous-torch-9364.firebaseio.com/users/" + $scope.user.id);
                             firebase_users_add.set($scope.user);
-                        } else {
-                            //else, when users node already exists then we should check if the user already exists
-*/
+                        }
+
+                    }, function (errorObject) {
+                        console.log("Login:: check if user exists in Firebase " + errorObject.code);
+                    });
 
 
-                            //
-                            //check if user exists in Firebase
-                            //load Table from Firebase
-                            var firebase_users = new Firebase("https://luminous-torch-9364.firebaseio.com/");
-
-                            firebase_users.once("value", function (snapshot) {
-
-                                var exists = snapshot.child($scope.user.id).exists();
-
-                                console.log('Exists or Not');
-                                console.log(exists);
-
-
-                                //if not exists then add to Firebase
-                                if (exists == false) {
-                                    console.log('User not exists, adding the user');
-                                    var firebase_users_add = new Firebase("https://luminous-torch-9364.firebaseio.com/users/" + $scope.user.id);
-                                    firebase_users_add.set($scope.user);
-                                }
-
-                            }, function (errorObject) {
-                                console.log("Login:: check if user exists in Firebase " + errorObject.code);
-                            });
-
-
-                     //   }
-                   // });
+                    //   }
+                    // });
 
 
                     //if exists

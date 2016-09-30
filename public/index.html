@@ -140,10 +140,6 @@
 <!-- Read GPS point using exif-JS from photos  -->
 <script src='bower_components/exif-js/exif.js'></script>
 
-<!-- ngResource , used to cut the slash from the ng-src image urls -->
-<script src="bower_components/angular-resource/angular-resource.min.js"></script>
-
-
 <!-- satellizer Auth-->
 <!--
 <script src="bower_components/angular-simple-logger/satellizer/satellizer.js"></script>
@@ -206,44 +202,26 @@
 
 
 
-
-
-
-
-
 <div layout="column" layout-fill>
-<md-toolbar>
-    <div class="md-toolbar-tools" ng-controller="mainIndexCtrl" scroll-shrink layout="row">
-     
-         <h3>
-             <md-button ng-click="menuClick('Home')">Home</md-button>
-             <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
-            <!--   <md-button ng-click="menuClick('Plan Trip')">Plan Trip</md-button> -->
-             <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
-            <!--   <md-button ng-click="menuClick('Login')">Login</md-button> -->
 
-<!-- Old Facebook Login buttons -->
-    <!--
-            <md-button ng-controller="login1" type="button" class="btn btn-primary btn-large" data-ng-show="!logged" data-ng-disabled="!facebookReady" data-ng-click="IntentLogin()">Login with Facebook</md-button>
-            <md-button ng-controller="login1" type="button" class="btn btn-danger btn-large" data-ng-show="logged" data-ng-disabled="!facebookReady" data-ng-click="logout()">Logout</md-button>
+    <md-toolbar>
+        <div class="md-toolbar-tools" ng-controller="mainIndexCtrl" scroll-shrink>
 
-                  <md-button class="md-fab md-mini" aria-label="Favorite">
-                 <div id="loginPic" class="user">
-                 </div>
-             </md-button>
--->
-<span flex></span>
-               <md-button  ng-click="authUser()" ng-class="expressionAuth">{{authButton}}</md-button>
-             
-            </h3>
-       
-    </div>
-</md-toolbar>
+                <md-button ng-click="menuClick('Home')">Home</md-button>
+                <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
+                <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
+                <span flex></span>
+                <img ng-src="{{profile.picture}}"  class="md-avatar">
+                <md-button  ng-click="authUser()" ng-class="expressionAuth">{{authButton}}</md-button>
+
+        </div>
+    </md-toolbar>
 
 
 
 
-<!--[if lt IE 7]>
+
+    <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
     your browser</a> to improve your experience.</p>
 <![endif]-->
