@@ -1,16 +1,8 @@
 <!DOCTYPE html>
 <head>
 
-    <!--
-    <link rel="stylesheet" href="assets/css/style_realtime.css">
-    -->
-    <!--
-    <link rel="stylesheet" type="text/css" href="../../assets/css/photoslider.css">
--->
-
     <style type="text/css">
-
-
+        /* Photos slider*/
         * {
             margin: 0;
             padding: 0;
@@ -30,7 +22,7 @@
         */
 
         .accordian {
-            width: 805px; height: 320px;
+            width: 720px; height: 480px;
             overflow: hidden;
 
             /*Time for some styling*/
@@ -95,13 +87,7 @@
         }
 
 
-
-
-
-
-
-
-
+        /* General CSS*/
         #map {
             box-shadow: 3px 3px 10px gray;
             /* make Google map -> background*/
@@ -491,14 +477,14 @@
 
     <!-- We will make a simple accordian with hover effects
 The markup will have a list with images and the titles-->
-    <div class="footer accordian" ng-hide="photosSlider">
+    <div class="footer accordian" ng-hide="photosSlider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
         <ul>
             <li ng-repeat="item in items">
                 <div class="image_title">
                     <a href="#">KungFu Panda</a>
                 </div>
                 <a href="#">
-                    <img ng-src={{item.img}}/>
+                    <img ng-src="{{item.img}}"/>
                 </a>
             </li>
         </ul>
@@ -569,42 +555,6 @@ The markup will have a list with images and the titles-->
             </tr>
         </table>
     </div>
-
-    <!--
-    <div id="photos" class="footer">
-        <il id="objects"></il>
-        <ul id="rig">
-            <li ng-repeat="photo in facebookPhotos track by $index">
-                <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)">
-                    <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px">
-                    <span class="rig-overlay"></span>
-                    <span class="rig-text">show on map</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    -->
-
-
-    <!-- Facebook albums -->
-
-
-
-
-    <!--
-    <td>
-        <ul id="facebookPhotos">
-            <li ng-repeat="photo in facebookPhotos track by $index">
-
-                <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px">
-
-                <span class="rig-text">show on map</span>
-                </a>
-            </li>
-        </ul>
-    </td>
-    -->
-    <!-- end facebook albums -->
 
 
     <!-- ######################################################################### -->

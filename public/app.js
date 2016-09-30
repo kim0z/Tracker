@@ -5,6 +5,7 @@ var trackerApp = angular.module('myApp', [
         'auth0',
         'nemLogging',
         'ui.router',
+        'ngResource',
         'angular-jwt',
         'uiGmapgoogle-maps',
         'ngAutocomplete',
@@ -24,8 +25,10 @@ var trackerApp = angular.module('myApp', [
         'angular-flexslider',
         'angularjs-dropdown-multiselect'
     ])
-    .config(function ($stateProvider, $urlRouterProvider) {
-        //
+    .config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
+
+        $urlMatcherFactoryProvider.strictMode(false);
+
         // For any unmatched url, redirect to /state1
         $urlRouterProvider.otherwise("/view0");
         //
@@ -95,7 +98,6 @@ var trackerApp = angular.module('myApp', [
             callbackURL: location.herf
         });
     })
-
     .config([
         'FacebookProvider',
         function (FacebookProvider) {
@@ -112,6 +114,9 @@ var trackerApp = angular.module('myApp', [
 
         }
     ])
+    .config(function($resourceProvider) {
+        $resourceProvider.defaults.stripTrailingSlashes = false;
+    })
     /*
      .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApiProviders) {
 
