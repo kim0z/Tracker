@@ -182,6 +182,10 @@ trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService, au
 
     $scope.profile = localStorageService.get('profile');
 
+    $scope.$watch('profile', function() {
+        alert('hey, myVar has changed!');
+    });
+
     if (localStorageService.get('profile')) {
         $scope.authButton = 'Logout';
         $scope.expressionAuth = 'md-raised md-warn md-button md-default-theme';
@@ -216,6 +220,7 @@ trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService, au
     };
 
     $scope.logout = function () {
+        $scope.profile = null;
         auth.signout();
         localStorageService.remove('profile');
         localStorageService.remove('token');
@@ -240,14 +245,16 @@ trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService, au
             $scope.authButton = 'Login';
             $scope.expressionAuth = 'md-raised md-primary md-button md-default-theme';
             $scope.logout(); // should make sure this action succeeded then change the button color and text
-            //$state.go('view0');
-            $state.reload();
+            console.log('try to logout');
+            console.log($scope.profile);
         }
         if (!profile && $scope.authButton == 'Login') {
             $scope.authButton = 'Logout';
             $scope.expressionAuth = 'md-raised md-warn md-button md-default-theme';
             $state.go('login'); //the login will redirect to view0 when done
-            $state.reload();
+            console.log('try to login');
+            $scope.profile = localStorageService.get('profile');
+            console.log($scope.profile);
         } else {
             //something wrong
             //restart login system

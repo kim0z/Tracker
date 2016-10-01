@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <!--[if lt IE 7]>
 <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -20,13 +18,14 @@
             background-repeat: no-repeat;
             background-position: center center;
             background-size: cover;
-            
+
         }
-/*
-        .one {
-            background-image: url('http://graph.facebook.com/102211533498839/picture');
-        }
-*/
+
+        /*
+                .one {
+                    background-image: url('http://graph.facebook.com/102211533498839/picture');
+                }
+        */
         .two {
             background-image: url('http://placehold.it/150x150');
         }
@@ -44,18 +43,16 @@
     <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
     <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
     <link rel="stylesheet" href="bower_components/angularjs-datepicker/dist/angular-datepicker.min.css">
-   <!-- <link rel="stylesheet" href="assets/css/style.css"> -->
+    <!-- <link rel="stylesheet" href="assets/css/style.css"> -->
 
 
     <link rel="stylesheet" href="/bower_components/angular-material/angular-material.css">
     <link rel="stylesheet" href="/assets/css/style_tripList.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
 
-
 </head>
 
 <body>
-
 
 
 <!-- In production use:
@@ -106,7 +103,6 @@
 <!-- end of - used for the list in my trips -->
 
 
-
 <!-- bootstrap CSS-->
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -120,7 +116,6 @@
 
 <!-- Angular jwt -->
 <script src="bower_components/angular-jwt/dist/angular-jwt.min.js"></script>
-
 
 
 <!-- city search auto complete -->
@@ -157,14 +152,12 @@
 <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
 
 
-
 <!-- AWS SDK -->
 <script src='bower_components/aws-sdk/dist/aws-sdk.min.js'></script>
 
 <!-- Angular Grid-->
 <link rel="stylesheet" type="text/css" href="bower_components/angular-ui-grid/ui-grid.min.css">
 <script src="bower_components/angular-ui-grid/ui-grid.min.js"></script>
-
 
 
 <!-- Photo slider - this project is not maintained any more should be replaced-->
@@ -175,22 +168,28 @@
 
 
 <!-- Multi select -->
-<script type="text/javascript" src="bower_components/angularjs-dropdown-multiselect/dist/angularjs-dropdown-multiselect.min.js"></script>
+<script type="text/javascript"
+        src="bower_components/angularjs-dropdown-multiselect/dist/angularjs-dropdown-multiselect.min.js"></script>
 
 
 <!-- lodash -->
 <script type="text/javascript" src="bower_components/lodash/lodash.js"></script>
 
 <!-- this angular facebook login module should be replaced with bower install (bower didn't work for me, check again) -->
-<script data-require"angular.js@1.1.5" data-semver="1.1.5" src="http://rawgithub.com/Ciul/angular-facebook/master/lib/angular-facebook.js"></script>
+<script data-require
+"angular.js@1.1.5" data-semver="1.1.5"
+src="http://rawgithub.com/Ciul/angular-facebook/master/lib/angular-facebook.js"></script>
 
 
-<script src="services/googleAPISvc.js"></script>
+<
+script
+src = "services/googleAPISvc.js" ></script>
 <script src="services/dbSvc.js"></script>
 <script src="services/flightAPISvc.js"></script>
 <script src="services/messages.js"></script>
 <script src="services/algorithmsSvc.js"></script>
 <script src="services/serverSvc.js"></script>
+<script src="services/googleAPISvc.js"></script>
 <script src="views/view0/ctrl.js"></script>
 <script src="views/view1/ctrl.js"></script>
 <script src="views/view2/ctrl.js"></script>
@@ -201,38 +200,38 @@
 <script src="views/offlinemap/ctrl.js"></script>
 
 
-
 <div layout="column" layout-fill>
 
     <md-toolbar>
         <div class="md-toolbar-tools" ng-controller="mainIndexCtrl" scroll-shrink>
 
-                <md-button ng-click="menuClick('Home')">Home</md-button>
-                <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
-                <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
-                <span flex></span>
-                <img ng-src="{{profile.picture}}"  class="md-avatar">
-                <md-button  ng-click="authUser()" ng-class="expressionAuth">{{authButton}}</md-button>
+            <md-button style="font-size: 20px" >tracker</md-button>
+            <md-button ng-click="menuClick('Home')">Home</md-button>
+            <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
+            <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
+            <span flex></span>
+            <img ng-src="{{profile.picture}}" style="
+                    width: 48px;
+                    margin: 2px;
+                    border-radius: 48px;
+                    border: 1px solid #ddd;">
+            <md-button ng-click="authUser()" ng-class="expressionAuth">{{authButton}}</md-button>
+            <md-button class="md-icon-button" aria-label="More">
+                <md-icon md-svg-icon="assets/icons/ic_menu_black_48px.svg"></md-icon>
+            </md-button>
 
         </div>
     </md-toolbar>
 
 
-
-
-
     <!--[if lt IE 7]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-    your browser</a> to improve your experience.</p>
-<![endif]-->
+    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+        your browser</a> to improve your experience.</p>
+    <![endif]-->
 
-<div ui-view></div>
+    <div ui-view></div>
 
 </div>
-
-
-
-
 
 
 </body>
