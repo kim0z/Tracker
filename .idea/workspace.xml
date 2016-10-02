@@ -47,10 +47,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/views/view0/ctrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="-0.0">
               <caret line="0" column="78" selection-start-line="0" selection-start-column="58" selection-end-line="0" selection-end-column="78" />
               <folding />
             </state>
@@ -79,16 +79,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.6792452">
-              <caret line="191" column="39" selection-start-line="191" selection-start-column="39" selection-end-line="191" selection-end-column="39" />
+            <state vertical-scroll-proportion="4.101161">
+              <caret line="181" column="0" selection-start-line="181" selection-start-column="0" selection-end-line="181" selection-end-column="48" />
               <folding>
                 <element signature="n#style#0;n#md-button#0;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#img#0;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <marker date="1475327321000" expanded="true" signature="8910:9067" placeholder="..." />
-                <marker date="1475327321000" expanded="true" signature="9003:9035" placeholder="..." />
+                <marker date="1475336169000" expanded="true" signature="8857:9014" placeholder="..." />
+                <marker date="1475336169000" expanded="true" signature="8950:8982" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -107,7 +107,7 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-115.85185">
+            <state vertical-scroll-proportion="-1.8888888">
               <caret line="184" column="26" selection-start-line="184" selection-start-column="26" selection-end-line="184" selection-end-column="26" />
               <folding />
             </state>
@@ -192,8 +192,8 @@
         <option value="$PROJECT_DIR$/public/views/view0/view0.html" />
         <option value="$PROJECT_DIR$/public/app.js" />
         <option value="$PROJECT_DIR$/public/views/login/login.js" />
-        <option value="$PROJECT_DIR$/public/index.html" />
         <option value="$PROJECT_DIR$/public/views/view0/ctrl.js" />
+        <option value="$PROJECT_DIR$/public/index.html" />
       </list>
     </option>
   </component>
@@ -909,14 +909,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-115.85185">
-          <caret line="184" column="26" selection-start-line="184" selection-start-column="26" selection-end-line="184" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/views/login/login.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -937,19 +929,6 @@
             <element signature="n#style#0;n#h1#1;n#div#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#h2#0;n#div#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#video#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.6792452">
-          <caret line="191" column="39" selection-start-line="191" selection-start-column="39" selection-end-line="191" selection-end-column="39" />
-          <folding>
-            <element signature="n#style#0;n#md-button#0;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#img#0;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <marker date="1475327321000" expanded="true" signature="8910:9067" placeholder="..." />
-            <marker date="1475327321000" expanded="true" signature="9003:9035" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -987,6 +966,27 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="78" selection-start-line="0" selection-start-column="58" selection-end-line="0" selection-end-column="78" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.8888888">
+          <caret line="184" column="26" selection-start-line="184" selection-start-column="26" selection-end-line="184" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="4.101161">
+          <caret line="181" column="0" selection-start-line="181" selection-start-column="0" selection-end-line="181" selection-end-column="48" />
+          <folding>
+            <element signature="n#style#0;n#md-button#0;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#img#0;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <marker date="1475336169000" expanded="true" signature="8857:9014" placeholder="..." />
+            <marker date="1475336169000" expanded="true" signature="8950:8982" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
