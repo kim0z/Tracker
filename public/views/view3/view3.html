@@ -7,7 +7,16 @@
     <link rel="stylesheet" href="/assets/css/style_tripList.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
 
+    <link src="/bower_components/ng-dialog/css/ngdialog-theme-plain.css">
+    <link src="/bower_components/ng-dialog/css/ngDialog-custom-width.css">
+
+
+    <link rel="stylesheet" th:href="@{/css/ngDialog.css}" href="/bower_components/ng-dialog/css/ngDialog.css" > </link>
+    <link rel="stylesheet" th:href="@{/css/ngDialog-custom-width.css}" href="/bower_components/ng-dialog/css/ngDialog-custom-width.css" > </link>
+    <link rel="stylesheet" th:href="@{/css/ngDialog-theme-default.css}" href="/bower_components/ng-dialog/css/ngDialog-theme-default.css" > </link>
+    <link rel="stylesheet" th:href="@{/css/ngDialog-theme-plain.css}" href="/bower_components/ng-dialog/css/ngDialog-theme-plain.css" > </link>
     <style>
+
     .checkboxdemoBasicUsage div.flex-xs {
   min-height: 40px; }
 
@@ -257,10 +266,19 @@
 <!-- <md-button  class="md-fab md-raised" ng-click="showAddButtons = !showAddButtons;" aria-label="New document">
     <md-icon icon="bower_components/material-design-icons/content/svg/production/ic_add_24px.svg" style="width: 24px; height: 24px;"></md-icon>
 </md-button> -->
+
+<!-- this button was used for the old flow, the planning flow were I was able to add cities / maps / table etc..
 <md-button id="mainFab" class="md-fab md-raised" ng-click="openTripPlanPage($event)" aria-label="Photos">
     <md-icon md-svg-src="bower_components/material-design-icons/content/svg/production/ic_add_24px.svg"
              style="width: 24px; height: 24px;"></md-icon>
 </md-button>
+-->
+
+<md-button id="mainFab" class="md-fab md-raised" ng-click="clickToOpen()" aria-label="Photos">
+    <md-icon md-svg-src="bower_components/material-design-icons/content/svg/production/ic_add_24px.svg"
+             style="width: 24px; height: 24px;"></md-icon>
+</md-button>
+
 
 <!-- the Original button -->
 <!--

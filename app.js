@@ -342,6 +342,34 @@ app.post('/insertNewEmptyTrip', function (request, response) {
 
 });
 
+//below used to create sample trip, for the new flow
+app.post('/updateTripGeneralInfo', function (request, response) {
+
+    console.log('SERVER:: Postgres:: update trip with General info' + request.body);
+
+    var jsonTrip = request.body;
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3), trip_description = ($4), email = ($5) WHERE id = ($6)",
+            [jsonTrip.trip_name, jsonTrip.start_date, jsonTrip.end_date, jsonTrip.trip_description,jsonTrip.email ,jsonTrip.trip_id]
+            , function (err, result) {
+                //call `done()` to release the client back to the pool
+                done();
+
+                if (err) {
+                    return console.error('error running query', err);
+                }
+                console.log(result);
+                //output: 1
+            });
+    });
+    response.status(200).end();
+
+});
+
+//below used to update trip from planning page
 //Postgres :: update trip record to trips table
 app.post('/updateTrip', function (request, response) {
 

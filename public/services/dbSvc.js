@@ -30,11 +30,17 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
     };
 
 
-    //updateTrip
+    //updateTrip - used for planning page
     this.updateTrip = function (dataObj) { //create empty trip record
         console.log('Client::dataBaseService:: update trip record');
         return $http.post('/updateTrip',dataObj);
     };
+
+    //update new trip used for the the new flow of creating a test
+    this.updateTripGeneralInfo = function (dataObj) {
+        console.log('Client::dataBaseService:: update trip record, to create new general trip');
+        return $http.post('/updateTripGeneralInfo',dataObj);
+    }
 
     //active trip
     this.activateTrip = function (dataObj) { //create empty trip record

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="assets/css/reset_new_trip.css"> <!-- CSS reset -->
+    <link rel="stylesheet" href="assets/css/style_new_trip.css"> <!-- Resource style -->
+
+    <title>Simple Confirmation Popup</title>
+</head>
+<body>
+
+<div class="cd-popup" role="alert">
+    <div class="cd-popup-container">
+        <p>Plan a new trip</p>
+
+
+        <table class="table table-striped">
+
+
+            <tr>
+                <td>
+                    <form name="tripDefinitionForm" >
+                    <table  border="0" style="text-align: center;">
+                        <col width="150px"/>
+                        <col width="200px"/>
+                        <tr>
+
+
+                            <td><label class="label1">Trip name:</label></td>
+                            <td><input type="text" name="inputTripName" ng-model="tripName" class="form-control"
+                                       ng-pattern="example.word" ng-blur="onBlur($event)">
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>
+                                <label class="label1">Description:</label>
+                            </td>
+                            <td>
+                                <input type="text" name="inputTripDesc" class="form-control" ng-model="tripDescription"
+                                       ng-pattern="example.word" ng-blur="onBlur($event)">
+
+                            </td>
+                        </tr>
+
+                        <tr>
+
+                            <td style="width: 150px">
+                                <label class="label1">Continents</label>
+                            </td>
+
+
+                            <td>
+                                <select class="form-control" ng-model="selectedContinents" ng-options="x for x in continents">
+                                </select>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>
+                                <label class="label1">Start date:</label>
+                            </td>
+                            <td>
+                                <datepicker date-format="MMMM d, y" datepicker-append-to-body=true >
+                                    <input name="inputStartDate" ng-model="dateStart" class="form-control" type="text"
+                                    />
+                                </datepicker>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>
+                                <label class="label1">End date:</label>
+                            </td>
+                            <td>
+                                <datepicker date-format="MMMM d, y">
+                                    <!--    style="position: absolute; width: 100px; height: 150px;"> -->
+                                    <input name="inputEndDate" ng-model="dateEnd" type="text" class="form-control"
+                                           ng-blur="onBlur($event)"/>
+                                </datepicker>
+                            </td>
+                        </tr>
+
+                    </table>
+
+</td>
+                </tr>
+            </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <ul class="cd-buttons">
+            <li><a href="#0">Cancel</a></li>
+            <li ng-click="addTrip()"><a href="#0">Add</a></li>
+        </ul>
+        <a href="#0" class="cd-popup-close img-replace">Close</a>
+    </div> <!-- cd-popup-container -->
+</div> <!-- cd-popup -->
+
+</body>
+</html>

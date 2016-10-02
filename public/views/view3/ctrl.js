@@ -1,6 +1,15 @@
-trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages, localStorageService) {
+trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages, localStorageService, ngDialog) {
 
-
+    $scope.clickToOpen = function () {
+        //create new empty trup, in this phase the id returned as a result
+        dataBaseService.createNewTripRecord().then(function (results) {
+            //$scope.message = data; //handle data back from server - not needed meanwhile
+            console.log('Client:: View3:: Fun:: openTripPlanPage :: new empty trip record created with id:: ' + results.data);
+            messages.saveTripID(results.data);
+            ngDialog.open( {template: 'views/view3/newTrip.html', controller: 'newTripCtrl'});
+            //now all the work should move to ctrlNewTrip.js
+        })
+    };
 
     $scope.profile = localStorageService.get('profile');
 
@@ -10,7 +19,6 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsA
             getCoverPhoto(chunk);
         }
     }
-
 
 /*    function getCoverPhoto(chunk) {
         //get cover photo named profile in AWS S3 under the user folder - BLOCKED, instead using config from Firebase (Facebook album cover)
@@ -28,7 +36,6 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsA
                 Prefix: localStorageService.get('email') + '/' + chunk.id + '/'
             }
         });
-
 
         bucket.listObjects(function (err, data) {
             var i;
@@ -49,9 +56,6 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsA
         });
 
     }*/
-
-
-
 
     $scope.activateTrip = function (chunk){
         var tripId = {trip_id: chunk.id, email: $scope.profile.email};

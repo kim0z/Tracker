@@ -6,6 +6,7 @@ var trackerApp = angular.module('myApp', [
         'nemLogging',
         'ui.router',
         'angular-jwt',
+        'ngDialog',
         'uiGmapgoogle-maps',
         'ngAutocomplete',
         'ui.grid',
@@ -181,10 +182,6 @@ var trackerApp = angular.module('myApp', [
 trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService, auth, $state) {
 
     $scope.profile = localStorageService.get('profile');
-
-    $scope.$watch('profile', function() {
-        alert('hey, myVar has changed!');
-    });
 
     if (localStorageService.get('profile')) {
         $scope.authButton = 'Logout';
