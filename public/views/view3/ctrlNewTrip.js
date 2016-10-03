@@ -1,9 +1,8 @@
 /**
  * Created by karim on 02/10/2016.
  */
-trackerApp.controller('newTripCtrl', function ($scope, $http, ngDialog, $q, $filter, googleMapsAPIService, dataBaseService, algorithmsService, flightAPIService, messages, NgTableParams, localStorageService) {
+trackerApp.controller('newTripCtrl', function ($scope, $http, $state,  ngDialog, $q, $filter, googleMapsAPIService, dataBaseService, algorithmsService, flightAPIService, messages, NgTableParams, localStorageService) {
     "use strict";
-    alert('New Trip Ctrl');
 
     $scope.profile = localStorageService.get('profile');
 
@@ -39,7 +38,27 @@ trackerApp.controller('newTripCtrl', function ($scope, $http, ngDialog, $q, $fil
                 console.log("failure message: " + JSON.stringify({data: data}));
             });
 
+        $scope.closeThisDialog();
 
+    }
+
+
+    $scope.closeDialog = function () {
+        //delete the empty trip that was created when the Add dialog was opened (it used to create template)
+        //delete because the user canceled the trip he wanted to add
+
+        if ($scope.trip_id == '') {
+            console.log('error:: Client:: New Trip Dialog:: Cancel trip creation, no trip id');
+        } else {
+
+                var dataTripId = {trip_id: $scope.trip_id};
+                dataBaseService.deleteTripById(dataTripId).then(function (results) {
+
+                    console.log('Client:: New Trip Dialog:: Cancel trip creation :: Delete trip id:: ' + $scope.trip_id);
+                    $scope.closeThisDialog();
+                })
+
+        }
     }
 
 });

@@ -30,7 +30,7 @@ var trackerApp = angular.module('myApp', [
         $urlMatcherFactoryProvider.strictMode(false);
 
         // For any unmatched url, redirect to /state1
-        $urlRouterProvider.otherwise("/view0");
+        //$urlRouterProvider.otherwise("/view0");
         //
         // Now set up the states
         $stateProvider
@@ -179,7 +179,15 @@ var trackerApp = angular.module('myApp', [
     });
 
 
-trackerApp.controller('mainIndexCtrl', function ($scope, localStorageService, auth, $state) {
+trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorageService, auth, $state) {
+
+    //debug ui router changes
+    $rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
+
+        console.log(fromState);
+        console.log(toState);
+    });
+
 
     $scope.profile = localStorageService.get('profile');
 

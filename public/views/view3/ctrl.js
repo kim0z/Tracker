@@ -1,4 +1,11 @@
-trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages, localStorageService, ngDialog) {
+trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, $state,  googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages, localStorageService, ngDialog) {
+
+    $rootScope.$on('ngDialog.closed', function (e, $dialog) {
+        console.log('ngDialog closed: New trip' );
+
+        $state.reload();
+    });
+
 
     $scope.clickToOpen = function () {
         //create new empty trup, in this phase the id returned as a result
@@ -6,7 +13,7 @@ trackerApp.controller('view3Ctrl', function ($scope, $http, $window, googleMapsA
             //$scope.message = data; //handle data back from server - not needed meanwhile
             console.log('Client:: View3:: Fun:: openTripPlanPage :: new empty trip record created with id:: ' + results.data);
             messages.saveTripID(results.data);
-            ngDialog.open( {template: 'views/view3/newTrip.html', controller: 'newTripCtrl'});
+            ngDialog.open( {template: 'views/view3/newTrip.html', controller: 'newTripCtrl', scope: $scope,showClose: false,closeByDocument: false, closeByEscape: false,  width: 800, height: 800});
             //now all the work should move to ctrlNewTrip.js
         })
     };
