@@ -11,35 +11,49 @@
     <link src="/bower_components/ng-dialog/css/ngDialog-custom-width.css">
 
 
-    <link rel="stylesheet" th:href="@{/css/ngDialog.css}" href="/bower_components/ng-dialog/css/ngDialog.css" > </link>
-    <link rel="stylesheet" th:href="@{/css/ngDialog-custom-width.css}" href="/bower_components/ng-dialog/css/ngDialog-custom-width.css" > </link>
-    <link rel="stylesheet" th:href="@{/css/ngDialog-theme-default.css}" href="/bower_components/ng-dialog/css/ngDialog-theme-default.css" > </link>
-    <link rel="stylesheet" th:href="@{/css/ngDialog-theme-plain.css}" href="/bower_components/ng-dialog/css/ngDialog-theme-plain.css" > </link>
+    <link rel="stylesheet" th:href="@{/css/ngDialog.css}" href="/bower_components/ng-dialog/css/ngDialog.css">
+    </link>
+    <link rel="stylesheet" th:href="@{/css/ngDialog-custom-width.css}"
+          href="/bower_components/ng-dialog/css/ngDialog-custom-width.css">
+    </link>
+    <link rel="stylesheet" th:href="@{/css/ngDialog-theme-default.css}"
+          href="/bower_components/ng-dialog/css/ngDialog-theme-default.css">
+    </link>
+    <link rel="stylesheet" th:href="@{/css/ngDialog-theme-plain.css}"
+          href="/bower_components/ng-dialog/css/ngDialog-theme-plain.css">
+    </link>
     <style>
 
-    .checkboxdemoBasicUsage div.flex-xs {
-  min-height: 40px; }
+        .checkboxdemoBasicUsage div.flex-xs {
+            min-height: 40px;
+        }
 
-.checkboxdemoBasicUsage .checkboxDemo1 div {
-  clear: both; }
+        .checkboxdemoBasicUsage .checkboxDemo1 div {
+            clear: both;
+        }
 
-.checkboxdemoBasicUsage p {
-  padding-left: 8px; }
+        .checkboxdemoBasicUsage p {
+            padding-left: 8px;
+        }
 
-.checkboxdemoBasicUsage fieldset.standard {
-  border-style: solid;
-  border-width: 1px; }
+        .checkboxdemoBasicUsage fieldset.standard {
+            border-style: solid;
+            border-width: 1px;
+        }
 
-.checkboxdemoBasicUsage legend {
-  color: #3F51B5; }
+        .checkboxdemoBasicUsage legend {
+            color: #3F51B5;
+        }
 
-.checkboxdemoBasicUsage legend code {
-  color: #3F51B5;
-  font-weight: normal; }
+        .checkboxdemoBasicUsage legend code {
+            color: #3F51B5;
+            font-weight: normal;
+        }
 
-.checkboxdemoBasicUsage .ipsum {
-  color: saddlebrown; }
-  </style>
+        .checkboxdemoBasicUsage .ipsum {
+            color: saddlebrown;
+        }
+    </style>
 </head>
 <body layout="vertical" md-theme="blue" layout-fill>
 
@@ -55,8 +69,6 @@
         </div>
     </md-toolbar>
 -->
-
-
     <md-content layout="vertical" flex>
         <!-- LEFT SIDEBAR -->
         <md-sidenav class="md-sidenav-left" md-component-id="left">
@@ -110,7 +122,7 @@
                                     <img class="round-face" src="http://placekitten.com/g/48/48"/>
                                 </div>
                                 <md-card-content>
-                                    <img ng-src="{{chunk.coverPhotoUrl}}" />
+                                    <img ng-src="{{chunk.coverPhotoUrl}}"/>
 
                                     <h2>{{ chunk.title }}</h2>
 
@@ -132,16 +144,15 @@
                                                 ng-click="edit_mode = !edit_mode; editTrip(chunk.id);$event.stopPropagation();">
                                             Share
                                         </md-button>
-                                        <md-button
-                                                ng-click="edit_mode = !edit_mode; deleteTrip(chunk.id);$event.stopPropagation();">
-                                            Delete
-                                        </md-button>
 
                                         <md-button ng-click="activateTrip(chunk)">
                                             Active
                                         </md-button>
 
-
+                                        <md-button class="md-warn"
+                                                ng-click="edit_mode = !edit_mode; deleteTrip(chunk.id);$event.stopPropagation();">
+                                            Delete
+                                        </md-button>
 
                                         <div ng-if="show_quotes" ng-repeat="quote in ::chunk.content.quotes">
                                             <md-whiteframe class="md-whiteframe-z1">
@@ -152,72 +163,27 @@
                                 </md-card-content>
 
 
+                                <div style="z-index: 100">
+                                    <fieldset class="standard">
+                                        <legend>Options:</legend>
+                                        <div layout-wrap layout-gt-sm="row">
+                                            <div flex-gt-sm="50">
+                                                <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+                                                    Active trip
+                                                </md-checkbox>
+                                            </div>
 
-<div style="z-index: 100">
-    <fieldset class="standard">
-      <legend>Options:</legend>
-      <div layout-wrap layout-gt-sm="row" >
-        <div flex-gt-sm="50">
-          <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
-            Checkbox 1: {{ data.cb1 }}
-          </md-checkbox>
-        </div>
-        <div flex-gt-sm="50">
-          <div>
-            <md-checkbox
-              ng-model="data.cb2"
-              aria-label="Checkbox 2"
-              ng-true-value="'yup'"
-              ng-false-value="'nope'"
-              class="md-warn md-align-top-left" flex>
-            Checkbox 2 (md-warn)  <br/>
-            <span class="ipsum">
-              Duis placerat lectus et justo mollis, nec sodales orci congue. Vestibulum semper non urna ac suscipit.
-              Vestibulum tempor, ligula id laoreet hendrerit, massa augue iaculis magna,
-              sit amet dapibus tortor ligula non nibh.
-            </span>
-            <br/>
-            {{ data.cb2 }}
-          </md-checkbox>
-          </div>
-        </div>
-        <div flex-gt-sm="50">
-          <md-checkbox ng-disabled="true" aria-label="Disabled checkbox" ng-model="data.cb3">
-            Checkbox: Disabled
-          </md-checkbox>
-        </div>
-        <div flex-gt-sm="50">
-          <md-checkbox ng-disabled="true" aria-label="Disabled checked checkbox" ng-model="data.cb4" ng-init="data.cb4=true">
-            Checkbox: Disabled, Checked
-          </md-checkbox>
-        </div>
-        <div flex-gt-sm="50">
-          <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary">
-            Checkbox (md-primary): No Ink
-          </md-checkbox>
-        </div>
-        <div flex-gt-sm="50">
-          <md-checkbox md-indeterminate
-              aria-label="Checkbox Indeterminate" class="md-primary">
-            Checkbox: Indeterminate
-          </md-checkbox>
-        </div>
-        <div flex-gt-sm="50">
-          <md-checkbox md-indeterminate aria-label="Checkbox Disabled Indeterminate"
-              ng-disabled="true" class="md-primary">
-            Checkbox: Disabled, Indeterminate
-          </md-checkbox>
-        </div>
-      </div>
-    </fieldset>
+                                            <div flex-gt-sm="50">
+                                                <md-checkbox md-indeterminate
+                                                             aria-label="Checkbox Indeterminate" class="md-primary">
+                                                    Offline tracking
+                                                </md-checkbox>
+                                            </div>
 
-  </div>
+                                        </div>
+                                    </fieldset>
 
-
-
-
-
-
+                                </div>
 
 
                             </div>

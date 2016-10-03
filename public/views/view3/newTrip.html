@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<div class="cd-popup" role="alert">
+<div class="cd-popup" role="alert" >
     <div class="cd-popup-container">
         <p>Plan a new trip</p>
 
@@ -27,19 +27,6 @@
                                 <td><label class="label1">Trip name:</label></td>
                                 <td><input type="text" name="inputTripName" ng-model="tripName" class="form-control"
                                            ng-pattern="example.word" ng-blur="onBlur($event)">
-                                </td>
-                            </tr>
-
-
-                            <tr>
-                                <td>
-                                    <label style="">Description:</label>
-                                </td>
-                                <td>
-                                    <input type="text" name="inputTripDesc" class="form-control"
-                                           ng-model="tripDescription"
-                                           ng-pattern="example.word" ng-blur="onBlur($event)">
-
                                 </td>
                             </tr>
 
@@ -78,6 +65,47 @@
                                         <input name="inputEndDate" ng-model="dateEnd" type="text" class="form-control"
                                                ng-blur="onBlur($event)"/>
                                     </datepicker>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label>Description:</label>
+                                </td>
+                                <td>
+                                    <input type="text" name="inputTripDesc" class="form-control"
+                                           ng-model="tripDescription"
+                                           ng-pattern="example.word" ng-blur="onBlur($event)">
+
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <td>
+                                    <div style="z-index: 100">
+                                        <fieldset class="standard">
+                                            <legend>Options:</legend>
+                                            <div layout-wrap layout-gt-sm="row">
+                                                <div flex-gt-sm="200">
+                                                    <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+                                                        Active trip
+                                                    </md-checkbox>
+                                                </div>
+
+                                                <div flex-gt-sm="200">
+                                                    <md-checkbox md-indeterminate
+                                                                 aria-label="Checkbox Indeterminate" class="md-primary">
+                                                        Offline tracking
+                                                    </md-checkbox>
+                                                </div>
+
+                                            </div>
+                                        </fieldset>
+
+                                    </div>
+
                                 </td>
                             </tr>
                         </table>

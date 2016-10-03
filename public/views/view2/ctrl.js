@@ -167,9 +167,6 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
 
                             })
 
-
-
-
                             //Keep listening to new GPS point added by users
                             ref_read_path.limitToLast(1).on("value", function (tripPath) {
                                 if (firstLoad_paths == false) {
@@ -183,7 +180,6 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                                         existsPath.push(new google.maps.LatLng(JSON.parse(point.val()['coords'].latitude), JSON.parse(point.val()['coords'].longitude) ));
 
                                     });
-
 
                                     polys[users.key()].setPath(existsPath);
 
@@ -210,8 +206,6 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
                                 })
                                 $scope.$apply();
                             })
-
-
 
                             ref_read_messages.limitToLast(1).on("value", function (messages) {
                                 if (firstLoad_messages == false) { // don't add last item in the first load (it will create duplicate items)

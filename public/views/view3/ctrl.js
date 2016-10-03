@@ -2,10 +2,9 @@ trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, 
 
     $rootScope.$on('ngDialog.closed', function (e, $dialog) {
         console.log('ngDialog closed: New trip' );
-
+        //reload page when dialog closed to show the new added trip
         $state.reload();
     });
-
 
     $scope.clickToOpen = function () {
         //create new empty trup, in this phase the id returned as a result
