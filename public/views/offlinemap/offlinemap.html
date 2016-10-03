@@ -400,14 +400,12 @@
 
     <div style="max-height: 50%; width: 320px; float: right;">
         <div id="messages" class="list-group" ng-repeat="message in messages">
-            <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message.location)">
+            <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
 
                 <md-icon md-svg-src="assets/icons/ic_message_black_48px.svg" ng-if="message.message.tip"></md-icon>
                 <md-icon md-svg-src="assets/icons/ic_warning_black_48px.svg" ng-if="message.message.risk"></md-icon>
                 <md-icon md-svg-src="assets/icons/ic_attach_money_black_48px.svg" ng-if="message.message.price"></md-icon>
                 <md-icon md-svg-src="assets/icons/ic_face_black_48px.svg" ng-if="message.message.invite"></md-icon>
-
-
 
                 <!-- show the right data according to what is not empty, should be only 1 data avaliabale -->
                 <h4 class="list-group-item-heading" ng-if="message.message.tip" >{{message.message.tip}}</h4>
@@ -415,9 +413,8 @@
                 <h4 class="list-group-item-heading" ng-if="message.message.price" >{{message.message.price}}</h4>
                 <h4 class="list-group-item-heading" ng-if="message.message.invite" >Invitation to join me..</h4>
 
-
-                <p class="list-group-item-text">{{message.email}}</p>
                 <!--
+                <p class="list-group-item-text">{{message.email}}</p>
                 <p> {{message.location.coords.latitude}}</p>
                 <p> {{message.location.coords.longitude}}</p>
                 -->
@@ -449,7 +446,7 @@
     <!-- side button photos-->
 
     <div id="pano-button" ng-click="panoView()">
-        <img src="assets/icons/Street-View-icon.png" style="height: 50px; width: 50px"></img>
+        <img src="assets/icons/Street-View-icon.png" style="height: 50px; width: 50px">
     </div>
 
     <div id="edit" ng-click="editModeSwitch()">
