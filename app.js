@@ -68,7 +68,11 @@ var session = require('express-session');
 
 app.use(cookieParser());
 // See express session docs for information on the options: https://github.com/expressjs/session
-app.use(session({ secret: 'FMRd-u048h9_t95D-hJjTtO5K7uZFmmJ5ruHCP6TrUnaxiSVsKhFSE57jkH68EMc', resave: false,  saveUninitialized: false }));
+app.use(session({
+    secret: 'FMRd-u048h9_t95D-hJjTtO5K7uZFmmJ5ruHCP6TrUnaxiSVsKhFSE57jkH68EMc',
+    resave: false,
+    saveUninitialized: false
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -86,7 +90,7 @@ app.use(methodOverride());
 
 
 //CROSS SITE SCRIPT
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
@@ -127,10 +131,12 @@ require('./app/routes.js')(app);
 
 var request = require("request");
 var auth0ApiToken = '';
-var options = { method: 'POST',
+var options = {
+    method: 'POST',
     url: 'https://exploreauth.auth0.com/oauth/token',
-    headers: { 'content-type': 'application/json' },
-    body: '{"client_id":"yt6jXOEvG4IMyCmBHK4tFQM3y0J0CLk5","client_secret":"jMH6KWIMXkRGUeJWZQMkkFT7hqtTr2amnw49TxZDDxAmzt5ALhHiP_pRTmZFiGaJ","audience":"https://exploreauth.auth0.com/api/v2/","grant_type":"client_credentials"}' };
+    headers: {'content-type': 'application/json'},
+    body: '{"client_id":"yt6jXOEvG4IMyCmBHK4tFQM3y0J0CLk5","client_secret":"jMH6KWIMXkRGUeJWZQMkkFT7hqtTr2amnw49TxZDDxAmzt5ALhHiP_pRTmZFiGaJ","audience":"https://exploreauth.auth0.com/api/v2/","grant_type":"client_credentials"}'
+};
 
 request(options, function (error, response, body) {
     if (error) throw new Error(error);
@@ -147,9 +153,11 @@ app.post('/getProviderToken', function (request, res) {
     console.log('SERVER:: Auth0::  get provider token');
     console.log(request.body.user_id);
 
-    var options = { method: 'GET',
-        url: 'https://exploreauth.auth0.com/api/v2/users/'+request.body.user_id,
-        headers: { authorization: 'Bearer '+auth0ApiToken.access_token } };
+    var options = {
+        method: 'GET',
+        url: 'https://exploreauth.auth0.com/api/v2/users/' + request.body.user_id,
+        headers: {authorization: 'Bearer ' + auth0ApiToken.access_token}
+    };
 
     requestHttp(options, function (error, response, body) {
         if (error) throw new Error(error);
@@ -161,7 +169,6 @@ app.post('/getProviderToken', function (request, res) {
 
     });
 });
-
 
 
 ////################# Sabre Services Config ended #############################
@@ -176,12 +183,11 @@ var sockets = [];
 //REST calls for Postgres DB
 
 
-
 //Auth0
 //Auth0 callback handler
 app.get('/callback',
-    passport.authenticate('auth0', { failureRedirect: '/url-if-something-fails' }),
-    function(req, res) {
+    passport.authenticate('auth0', {failureRedirect: '/url-if-something-fails'}),
+    function (req, res) {
         console.log('inside callback auth0');
         if (!req.user) {
             throw new Error('user null');
@@ -190,12 +196,12 @@ app.get('/callback',
     });
 
 /*
-app.get('/user', function (req, res) {
-    res.render('user', {
-        user: req.user
-    });
-});
-*/
+ app.get('/user', function (req, res) {
+ res.render('user', {
+ user: req.user
+ });
+ });
+ */
 
 
 //////////// User Auth DB  ///////////////////////
@@ -353,7 +359,7 @@ app.post('/updateTripGeneralInfo', function (request, response) {
             return console.error('error fetching client from pool', err);
         }
         client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3), trip_description = ($4), email = ($5) WHERE id = ($6)",
-            [jsonTrip.trip_name, jsonTrip.start_date, jsonTrip.end_date, jsonTrip.trip_description,jsonTrip.email ,jsonTrip.trip_id]
+            [jsonTrip.trip_name, jsonTrip.start_date, jsonTrip.end_date, jsonTrip.trip_description, jsonTrip.email, jsonTrip.trip_id]
             , function (err, result) {
                 //call `done()` to release the client back to the pool
                 done();
@@ -396,7 +402,7 @@ app.post('/updateTrip', function (request, response) {
             return console.error('error fetching client from pool', err);
         }
         client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3) , continent = ($4), table_plan = ($5), trip_description = ($6), email = ($7) WHERE id = ($8)",
-            [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent, table_plan, tripGeneral.trip_description,tripGeneral.email ,tripGeneral.trip_id]
+            [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent, table_plan, tripGeneral.trip_description, tripGeneral.email, tripGeneral.trip_id]
             , function (err, result) {
                 //call `done()` to release the client back to the pool
                 done();
@@ -439,12 +445,39 @@ app.post('/activateTrip', function (request, response) {
     });
 
     //update the Trip to be active
-        pg.connect(conString, function (err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
         client.query("UPDATE trips SET active = ($1) WHERE id = ($2)",
             [true, request.body.trip_id]
+            , function (err, result) {
+                //call `done()` to release the client back to the pool
+                done();
+
+                if (err) {
+                    return console.error('error running query', err);
+                }
+                console.log(result);
+                //output: 1
+            });
+    });
+    response.status(200).end();
+
+});
+
+//postgres change track mode
+app.post('/trackConfig', function (request, response) {
+
+    console.log('SERVER:: Postgres:: config track mode ' + request.body);
+
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        //by default track mode is false, means not real time, user need to update manually by click update button from the app
+        client.query("UPDATE trips SET track_mode = ($1) WHERE id = ($2)",
+            [request.body.track_mode, request.body.trip_id]
             , function (err, result) {
                 //call `done()` to release the client back to the pool
                 done();
@@ -502,7 +535,6 @@ app.post('/getTrips', function (request, response, next) {
         });
     }
 });
-
 
 
 //Postgres get trip by id
@@ -700,23 +732,23 @@ app.post('/getGeoCode', function (request, response) {
 
 /*
 
-// Server-side applications use both the API key and secret.
-var client = new Dropbox.Client({
-    key: config.dropbox.key,
-    secret: config.dropbox.secret,
-    sandbox: false,
-    token: config.dropbox.token,
-    tokenSecret: config.dropbox.token.secret
-});
+ // Server-side applications use both the API key and secret.
+ var client = new Dropbox.Client({
+ key: config.dropbox.key,
+ secret: config.dropbox.secret,
+ sandbox: false,
+ token: config.dropbox.token,
+ tokenSecret: config.dropbox.token.secret
+ });
 
-client.getAccountInfo(function (error, accountInfo) {
-    if (error) {
-        console.log(error);
-        //return showError(error);  // Something went wrong.
-    } else console.log("Hello from DropBox, " + accountInfo.name + "!");
-});
+ client.getAccountInfo(function (error, accountInfo) {
+ if (error) {
+ console.log(error);
+ //return showError(error);  // Something went wrong.
+ } else console.log("Hello from DropBox, " + accountInfo.name + "!");
+ });
 
-*/
+ */
 
 /*
  client.writeFile("hello_world.txt", "Hello, world!\n", function(error, stat) {
@@ -819,10 +851,8 @@ function sendGpsPointToClient(GpsPoint) {
 
 
 }
+
 // #############################   End Firebase    ############################ //
-
-
-
 
 
 // ################### SITA           ############################## //
@@ -832,7 +862,7 @@ function sendGpsPointToClient(GpsPoint) {
 
 //by using this API I can find the X airports close to the lat, long point I will pass to the API.
 
-app.post('/getNearestAirports', function (request, response){
+app.post('/getNearestAirports', function (request, response) {
 //curl -v  -X GET "https://airport.api.aero/airport/nearest/31.0461/34.8516?maxAirports=4&user_key=f1aeb34aba3d0613f7cbb81cfd4b9d09"
 
     var http = require('https'); // get it to the top
@@ -840,11 +870,11 @@ app.post('/getNearestAirports', function (request, response){
 //The url we want is: 'www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new'
     var options = {
         host: 'airport.api.aero',
-        path: '/airport/nearest/'+request.body.lat+'/'+request.body.lng+'?maxAirports='+request.body.maxAirports+'&user_key=f1aeb34aba3d0613f7cbb81cfd4b9d09',
+        path: '/airport/nearest/' + request.body.lat + '/' + request.body.lng + '?maxAirports=' + request.body.maxAirports + '&user_key=f1aeb34aba3d0613f7cbb81cfd4b9d09',
         headers: {'accept': 'application/xml'}
     };
 
-    callback = function(res) {
+    callback = function (res) {
         var str = '';
 
         //another chunk of data has been recieved, so append it to `str`
@@ -875,8 +905,6 @@ app.post('/getNearestAirports', function (request, response){
 
 
 //################### End SITA        ############################## //
-
-
 
 
 // ################### Google Flights ############################## //
@@ -916,7 +944,7 @@ app.post('/getFlights', function (request, response) {
     url = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=AIzaSyBgSxdli3zXpI3dPtFR9H0fbVZIcSZOvyo"
 
     // fire request
-/*
+    /*
      request({
      url: url,
      method: "POST",
@@ -935,7 +963,7 @@ app.post('/getFlights', function (request, response) {
 
      }
      })
-*/
+     */
 
     response.send(tmp);
 });

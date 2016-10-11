@@ -48,6 +48,11 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/activateTrip',dataObj);
     };
 
+    //track Config
+    this.trackConfig = function (dataObj) { //create empty trip record
+        console.log('Client::dataBaseService:: activate trip');
+        return $http.post('/trackConfig',dataObj);
+    };
 
     //createTable
     this.createTable = function (dataTripId) { //create empty trip record

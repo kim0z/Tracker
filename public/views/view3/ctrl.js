@@ -64,7 +64,7 @@ trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, 
     }*/
 
     $scope.activateTrip = function (chunk){
-        var tripId = {trip_id: chunk.id, email: $scope.profile.email};
+        var tripId = {trip_id: chunk.id, email: $scope.profile.email, active: chunk.active};
         dataBaseService.activateTrip(tripId).then(function (results) {
             //$scope.message = data; //handle data back from server - not needed meanwhile
             console.log('Client:: Trips View :: activate Trip :: ' + tripId);
@@ -73,7 +73,16 @@ trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, 
         })
     }
 
-
+    $scope.trackConfigMode = function (chunk){
+        var tripId = {trip_id: chunk.id, email: $scope.profile.email, track_mode: chunk.track_mode};
+        console.log(chunk.track_mode);
+        dataBaseService.trackConfig(tripId).then(function (results) {
+            //$scope.message = data; //handle data back from server - not needed meanwhile
+            console.log('Client:: Trips View :: enable Real-time Track Trip :: ' + tripId);
+            //$window.location.reload();
+            //$route.reload();
+        })
+    }
 
     function getCoverPhoto(chunk) {
 
@@ -246,7 +255,7 @@ trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, 
         //create JSON list of trips in the Client
         for (var i = 0; i < $scope.trips.length; i++) {
             var jsonTrip = {
-                id: $scope.trips[i].id, title: $scope.trips[i].trip_name, description: $scope.trips[i].trip_description,
+                id: $scope.trips[i].id, title: $scope.trips[i].trip_name, description: $scope.trips[i].trip_description, track_mode:$scope.trips[i].track_mode,
                 expanded: false, content: {type: "QUOTE", quotes: ["quotedfdsgfdsgfdsfsdfsdfsdfdsfs"]}, active: $scope.trips[i].active
             };
 

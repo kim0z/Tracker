@@ -116,12 +116,12 @@
                                 </div>
                             </md-item>
                         </md-card>
-                        <md-card ng-if="chunk.expanded && !chunk.divider" ng-click="toggleChunkExpand(chunk)">
+                        <md-card ng-if="chunk.expanded && !chunk.divider" >
                             <div layout="column">
                                 <div>
                                     <img class="round-face" src="http://placekitten.com/g/48/48"/>
                                 </div>
-                                <md-card-content>
+                                <md-card-content ng-click="toggleChunkExpand(chunk)">
                                     <img ng-src="{{chunk.coverPhotoUrl}}"/>
 
                                     <h2>{{ chunk.title }}</h2>
@@ -150,7 +150,7 @@
                                         </md-button>
 
                                         <md-button class="md-warn"
-                                                ng-click="edit_mode = !edit_mode; deleteTrip(chunk.id);$event.stopPropagation();">
+                                                   ng-click="edit_mode = !edit_mode; deleteTrip(chunk.id);$event.stopPropagation();">
                                             Delete
                                         </md-button>
 
@@ -160,31 +160,28 @@
                                             </md-whiteframe>
                                         </div>
                                     </div>
-                                </md-card-content>
 
+                                </md-card-content>
 
                                 <div style="z-index: 100">
                                     <fieldset class="standard">
                                         <legend>Options:</legend>
                                         <div layout-wrap layout-gt-sm="row">
                                             <div flex-gt-sm="50">
-                                                <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+                                                <md-checkbox ng-model="chunk.active" ng-change="activateTrip(chunk)" aria-label="Checkbox 1" class="md-primary">
                                                     Active trip
                                                 </md-checkbox>
                                             </div>
 
                                             <div flex-gt-sm="50">
-                                                <md-checkbox md-indeterminate
+                                                <md-checkbox md-indeterminate ng-model="chunk.track_mode" ng-change="trackConfigMode(chunk)"
                                                              aria-label="Checkbox Indeterminate" class="md-primary">
-                                                    Offline tracking
+                                                    Real-time tracking
                                                 </md-checkbox>
                                             </div>
-
                                         </div>
                                     </fieldset>
-
                                 </div>
-
 
                             </div>
                         </md-card>

@@ -21,33 +21,43 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/public/views/offlinemap/ctrl.js">
+      <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/views/view3/ctrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.38176638">
-              <caret line="554" column="47" selection-start-line="554" selection-start-column="47" selection-end-line="554" selection-end-column="47" />
+            <state vertical-scroll-proportion="-5.148148">
+              <caret line="66" column="83" selection-start-line="66" selection-start-column="83" selection-end-line="66" selection-end-column="83" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="offlinemap.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/views/offlinemap/offlinemap.html">
+      <file leaf-file-name="dbSvc.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/services/dbSvc.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.5660377">
-              <caret line="448" column="87" selection-start-line="448" selection-start-column="87" selection-end-line="448" selection-end-column="87" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="53" column="39" selection-start-line="53" selection-start-column="39" selection-end-line="53" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-30.962963">
+              <caret line="472" column="0" selection-start-line="472" selection-start-column="0" selection-end-line="472" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="view3.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/public/views/view3/view3.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.33244327">
+              <caret line="103" column="80" selection-start-line="103" selection-start-column="76" selection-end-line="103" selection-end-column="80" />
               <folding>
-                <element signature="n#style#0;n#div#2;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#img#0;n#div#4;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#img#0;n#div#5;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#0;n#div#5;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#img#0;n#div#6;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#0;n#div#6;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#0;n#div#7;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#0;n#div#8;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#9;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#10;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#table#0;n#div#10;n#div#0;n#body#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#0;n#md-card#1;n#div#0;n#div#0;n#md-list#0;n#md-content#0;n#md-content#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -108,19 +118,19 @@
         <option value="$PROJECT_DIR$/public/assets/css/reset.css" />
         <option value="$PROJECT_DIR$/public/assets/css/styleNewTrip.css" />
         <option value="$PROJECT_DIR$/public/views/view1/view1.html" />
-        <option value="$PROJECT_DIR$/public/services/dbSvc.js" />
         <option value="$PROJECT_DIR$/public/views/view1/ctrl.js" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/public/app.js" />
         <option value="$PROJECT_DIR$/public/views/view3/ctrlNewTrip.js" />
-        <option value="$PROJECT_DIR$/public/views/view3/ctrl.js" />
         <option value="$PROJECT_DIR$/public/views/view3/newTrip.html" />
         <option value="$PROJECT_DIR$/public/index.html" />
         <option value="$PROJECT_DIR$/public/assets/css/style_new_trip.css" />
-        <option value="$PROJECT_DIR$/public/views/view3/view3.html" />
         <option value="$PROJECT_DIR$/public/views/view2/ctrl.js" />
         <option value="$PROJECT_DIR$/public/views/offlinemap/offlinemap.html" />
         <option value="$PROJECT_DIR$/public/views/offlinemap/ctrl.js" />
+        <option value="$PROJECT_DIR$/public/services/dbSvc.js" />
+        <option value="$PROJECT_DIR$/public/views/view3/view3.html" />
+        <option value="$PROJECT_DIR$/public/views/view3/ctrl.js" />
+        <option value="$PROJECT_DIR$/app.js" />
       </list>
     </option>
   </component>
@@ -246,72 +256,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="view2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tracker" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tracker" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="view1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tracker" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tracker" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="offlinemap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tracker" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tracker" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="services" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -364,7 +308,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
-    <property name="settings.editor.selected.configurable" value="project.propDebugger" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///Users/karim/Documents/workspace/Tracker/public/views/view0/view0.html" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
@@ -477,10 +421,9 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19483939" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19450317" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27108434" sideWeight="0.5024665" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.08795181" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1" sideWeight="0.5024665" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27108434" sideWeight="0.49753347" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -492,6 +435,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.08795181" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -689,9 +633,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.29675812">
           <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#42#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -727,7 +668,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="40" selection-start-line="0" selection-start-column="20" selection-end-line="0" selection-end-column="40" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -735,9 +675,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.31428573">
           <caret line="11" column="40" selection-start-line="11" selection-start-column="40" selection-end-line="11" selection-end-column="40" />
-          <folding>
-            <marker date="1475326477000" expanded="true" signature="1260:1263" placeholder="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -745,7 +682,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5714286">
           <caret line="20" column="5" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -753,7 +689,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="17" column="48" selection-start-line="17" selection-start-column="48" selection-end-line="17" selection-end-column="48" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -761,17 +696,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="11" column="18" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6537678">
-          <caret line="354" column="144" selection-start-line="354" selection-start-column="144" selection-end-line="354" selection-end-column="144" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -779,15 +703,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33290324">
           <caret line="3811" column="3" selection-start-line="3811" selection-start-column="3" selection-end-line="3811" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/services/dbSvc.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.021935483">
-          <caret line="39" column="30" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -809,27 +724,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/views/view3/ctrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.814815">
-          <caret line="14" column="168" selection-start-line="14" selection-start-column="168" selection-end-line="14" selection-end-column="194" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.023160763">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="7" selection-end-column="22" />
-          <folding>
-            <element signature="n#style#0;n#md-button#0;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#img#0;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <marker date="1475511204000" expanded="true" signature="9131:9288" placeholder="..." />
-            <marker date="1475511204000" expanded="true" signature="9224:9256" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3131579">
@@ -842,9 +736,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-6.8867927">
           <caret line="82" column="0" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
-          <folding>
-            <element signature="n#style#0;n#td#0;n#tr#1;n#table#0;n#form#0;n#td#0;n#tr#0;n#table#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -852,7 +743,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-24.884615">
           <caret line="47" column="1" selection-start-line="47" selection-start-column="1" selection-end-line="47" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -860,7 +750,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -868,15 +757,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-13.076923">
           <caret line="20" column="3" selection-start-line="20" selection-start-column="3" selection-end-line="20" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/views/view3/view3.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="50.81132">
-          <caret line="70" column="3" selection-start-line="70" selection-start-column="3" selection-end-line="70" selection-end-column="3" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -884,7 +764,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-4.4339623">
           <caret line="71" column="77" selection-start-line="71" selection-start-column="61" selection-end-line="71" selection-end-column="77" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -892,35 +771,63 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-11.962963">
           <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/views/offlinemap/ctrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4775561">
+          <caret line="554" column="47" selection-start-line="554" selection-start-column="47" selection-end-line="554" selection-end-column="47" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/views/offlinemap/offlinemap.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.5660377">
+        <state vertical-scroll-proportion="0.021907216">
           <caret line="448" column="87" selection-start-line="448" selection-start-column="87" selection-end-line="448" selection-end-column="87" />
-          <folding>
-            <element signature="n#style#0;n#div#2;n#div#0;n#body#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#img#0;n#div#4;n#div#0;n#body#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#img#0;n#div#5;n#div#0;n#body#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#div#5;n#div#0;n#body#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#img#0;n#div#6;n#div#0;n#body#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#div#6;n#div#0;n#body#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#div#7;n#div#0;n#body#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#div#8;n#div#0;n#body#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#9;n#div#0;n#body#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#10;n#div#0;n#body#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#table#0;n#div#10;n#div#0;n#body#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/views/offlinemap/ctrl.js">
+    <entry file="file://$PROJECT_DIR$/public/services/dbSvc.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38176638">
-          <caret line="554" column="47" selection-start-line="554" selection-start-column="47" selection-end-line="554" selection-end-column="47" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="53" column="39" selection-start-line="53" selection-start-column="39" selection-end-line="53" selection-end-column="39" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.27236316">
+          <caret line="12" column="13" selection-start-line="12" selection-start-column="10" selection-end-line="12" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/views/view3/ctrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.148148">
+          <caret line="66" column="83" selection-start-line="66" selection-start-column="83" selection-end-line="66" selection-end-column="83" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-30.962963">
+          <caret line="472" column="0" selection-start-line="472" selection-start-column="0" selection-end-line="472" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/views/view3/view3.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33244327">
+          <caret line="103" column="80" selection-start-line="103" selection-start-column="76" selection-end-line="103" selection-end-column="80" />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#div#0;n#md-card#1;n#div#0;n#div#0;n#md-list#0;n#md-content#0;n#md-content#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
