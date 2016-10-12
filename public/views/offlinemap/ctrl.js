@@ -743,6 +743,30 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             $scope.map.setCenter(path.pop());
             $scope.map.setZoom(12);
+
+
+
+            //Keep listening to new GPS point added by users
+            ref_read_path.limitToLast(1).on("value", function (tripPath) {
+                if (firstLoad_paths == false) {
+
+                    // get existing path
+                    var existsPath = polys[facebookId].getPath();
+
+                    tripPath.forEach(function (point) {
+
+                        // add new point
+                        existsPath.push(new google.maps.LatLng(JSON.parse(point.val()['coords'].latitude), JSON.parse(point.val()['coords'].longitude) ));
+
+                    });
+
+                    polys[facebookId].setPath(existsPath);
+
+                    //$scope.$apply();
+                }
+                firstLoad_paths = false;
+            })
+
         })
 
 
