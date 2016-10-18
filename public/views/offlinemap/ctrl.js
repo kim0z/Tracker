@@ -1,4 +1,4 @@
-trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $document, dataBaseService, messages, localStorageService, Facebook) {
+trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $document, dataBaseService, messages, localStorageService, Facebook, $filter) {
 
 
         $scope.profile = localStorageService.get('profile');
@@ -47,11 +47,13 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         //$scope.email = localStorageService.get('email');
 
 
+    //not relvant anymore belwo 2 lines
         var email_no_shtrodel = $scope.profile.email.replace('@', 'u0040');
         var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
 
 
         $scope.tripID = messages.getTripID();
+
         $scope.travelersList = [];
         $scope.data = []; // Travellers from PG DB
         $scope.messages = []; // Tips from Firebase, based on GPS point
@@ -96,6 +98,41 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         // 2. show the photos in Gallery of the enabled photos
 
         //var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + email_no_shtrodel_dot + "/offline/photos/facebook/trip/" + $scope.tripID);
+
+
+
+    //get trip info
+
+    var dataTripId = {trip_id: $scope.tripID};
+    dataBaseService.getTripById(dataTripId).then(function (results) {
+        $scope.trip = results.data;
+
+        //################################### Fill all fields of Trip definition #########################
+        console.log('end date: ' + $scope.trip[0].end_date);
+        console.log('start day: ' + $scope.trip[0].start_date);
+        console.log('trip desc: ' + $scope.trip[0].trip_description);
+
+        $scope.tripName = $scope.trip[0].trip_name;
+        $scope.tripDescription = $scope.trip[0].trip_description;
+        //$scope.dateStart = $scope.tripById[0].start_date;
+        //$scope.dateEnd = $scope.tripById[0].end_date;
+
+        $scope.dateStart = $filter('date')($scope.trip[0].start_date, 'MMM d, y');
+        $scope.dateEnd = $filter('date')($scope.trip[0].end_date, 'MMM d, y');
+
+
+
+
+    });
+
+
+
+
+
+
+
+
+
 
         var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
 

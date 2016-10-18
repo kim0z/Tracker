@@ -101,6 +101,8 @@
 <script src='bower_components/angular-aria/angular-aria.js'></script>
 <!-- end of - used for the list in my trips -->
 
+<!-- Hammer helps you add support for touch gestures to your page -->
+<script src="/bower_components/hammerjs/hammer.js"></script>
 
 <!-- bootstrap CSS-->
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -206,8 +208,8 @@
     <md-toolbar>
         <div class="md-toolbar-tools" ng-controller="mainIndexCtrl" scroll-shrink>
 
-            <md-button style="font-size: 20px" >tracker</md-button>
-            <md-button ng-click="menuClick('Home')">Home</md-button>
+            <md-button ng-click="menuClick('Home')" style="font-size: 20px" >tracker</md-button>
+            <!-- <md-button ng-click="menuClick('Home')">Home</md-button> -->
             <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
             <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
             <span flex></span>
