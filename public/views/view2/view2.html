@@ -5,6 +5,26 @@
     -->
 
     <style type="text/css">
+        .scroll {
+            width: 200px;
+            height: 400px;
+            background: red;
+            overflow: scroll;
+        }
+        .scroll::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .scroll::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+
+        .scroll::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+        }
+
         #map {
             /*
             height: 800px;
@@ -51,24 +71,27 @@
 </head>
 <body>
 
-<ul>
-    <li ng-repeat="item in data" style="margin: 30px">
-        <div id="users" class="list-group">
-            <button type="button" class="list-group-item" id={{item.id}}
-                    style="padding-left: 25px; background: url('../../assets/images/offline.png') left center/20px 20px no-repeat"
-                    ng-click="zoomIntoPath($event)">
-                <b>{{item.name}}</b>
-            </button>
-        </div>
-    </li>
-</ul>
+<div style="overflow: auto;height: 800px; width: 320px; float: left;">
+    <ul>
+        <li ng-repeat="item in data" style="margin: 30px">
+            <div id="users" class="list-group">
+                <button type="button" class="list-group-item" id={{item.id}}
+                        style="padding-left: 25px; background: url('../../assets/images/offline.png') left center/20px 20px no-repeat"
+                        ng-click="zoomIntoPath($event)">
+                    <b>{{item.name}}</b>
+                </button>
+            </div>
+        </li>
+    </ul>
+</div>
+
 
 
 <div id="map"></div>
 
+<div  style="overflow: auto;height: 800px; width: 320px; float: right;">
+    <div id="messages" class="scroll" ng-repeat="message in messages">
 
-<div style="max-height: 50%; width: 320px; float: right;">
-    <div id="messages" class="list-group" ng-repeat="message in messages">
         <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message.location)" >
 
             <md-icon md-svg-src="assets/icons/ic_message_black_48px.svg" ng-if="message.message.tip"></md-icon>

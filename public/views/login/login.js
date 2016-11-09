@@ -6,10 +6,12 @@ trackerApp.controller('Login', function ($scope, $location, $state, $http, auth,
 
     auth.signin({
         //popup: true,
+        //connection: 'Username-Password-Authentication',
+        connections: ['facebook'],
         closable: false,
         gravatar: false,
         primaryColor: '#3f51b5',
-        icon: 'assets/icons/backpack.gif',
+        icon: 'assets/icons/paw-xxl.png',
         socialBigButtons: true,
         disableSignupAction: true,
 
@@ -26,7 +28,12 @@ trackerApp.controller('Login', function ($scope, $location, $state, $http, auth,
 
         //get provider token
         serverSvc.getProviderToken(profile).then(function (results) {
-            localStorageService.set('providerToken', results.data.identities[0].access_token);
+            if(results == null || results ==''){
+                console.log('Login:: could not get token from server');
+            }else{
+                localStorageService.set('providerToken', results.data.identities[0].access_token);
+            }
+
         });
 
 

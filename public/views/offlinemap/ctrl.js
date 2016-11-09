@@ -845,20 +845,13 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             // add a new note to firebase
             var message_json = {};
 
-            var firebase_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + facebookId + '/' + $scope.tripID + '/tips');
+            var firebase_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + facebookId + '/' + $scope.tripID + '/messages');
 
             //var usersRef = firebase_ref.child('history');
 
+            var location = {coords:{latitude: $scope.message.lat, longitude: $scope.message.lng }};
+            message_json = {location: location, time: $scope.message.time, email: 'kareem9k@gmail.com' , message: {tip: $scope.message.text, invite: '', risk: '', price: ''}};
 
-            // should change it to be similar to how the mobile device add push the message
-            message_json = {
-                "message": {
-                    "text": $scope.message.text,
-                    "latitude": $scope.message.lat,
-                    "longitude": $scope.message.lng,
-                    "timestamp": $scope.message.time
-                }
-            }
             firebase_tips.push(message_json);
         }
 
