@@ -738,7 +738,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         //*******************************************************************
         //path for each user
         var path = [];
-        var ref_read_path = new Firebase('https://luminous-torch-9364.firebaseio.com/mobile/users/' + facebookId + '/' + $scope.tripID + '/path');
+        var ref_read_path = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + facebookId + '/' + $scope.tripID + '/path');
 
         //read path for user 'users.key()' trip 'trip.key()' that have active trip
         var firstLoad_paths = true;
