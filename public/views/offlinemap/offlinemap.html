@@ -1,29 +1,7 @@
 <!DOCTYPE html>
 <head>
 
-    <style type="text/css">
-
-        .scroll {
-            width: 200px;
-            height: 400px;
-            background: red;
-            overflow: scroll;
-        }
-        .scroll::-webkit-scrollbar {
-            width: 12px;
-        }
-
-        .scroll::-webkit-scrollbar-track {
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-            border-radius: 10px;
-        }
-
-        .scroll::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-        }
-
-
+        <style type="text/css">
         /* Photos slider*/
         * {
             margin: 0;
@@ -204,16 +182,16 @@
         side button
         */
         #hp-ctn-howItWorks-photos {
-            bottom: 0;
+            bottom: 110px;
             position: fixed;
             left: 0px;
             padding: 0px;
             margin: 0px;
             width: 55px;
-            height: 180px;
-            background: #FF931E;
+            height: 55px;
+            /*background: #FF931E;*/
             z-index: 15;
-            border-radius: 3px 0px 0px 3px;
+            /*border-radius: 3px 0px 0px 3px;*/
         }
 
         #hp-ctn-howItWorks-photos img {
@@ -229,16 +207,16 @@
         }
 
         #edit {
-            bottom: 0px;
+            bottom: 130px;
             position: fixed;
             right: 0px;
             padding: 0px;
             margin: 0px;
             width: 55px;
-            height: 180px;
-            background: #7599ff;
+            height: 55px;
+            /*background: #7599ff;*/
             z-index: 15;
-            border-radius: 3px 0px 0px 3px;
+            /*border-radius: 3px 0px 0px 3px;*/
         }
 
         #pano-button {
@@ -254,16 +232,16 @@
         }
 
         #hp-ctn-howItWorks-table {
-            bottom: 155px;
+            bottom: 50px;
             position: fixed;
             left: 0px;
             padding: 0px;
             margin: 0px;
             width: 55px;
-            height: 180px;
-            background: #7599ff;
+            height: 55px;
+            /*background: #7599ff;*/
             z-index: 15;
-            border-radius: 3px 0px 0px 3px;
+            /*border-radius: 3px 0px 0px 3px;*/
         }
 
         #hp-ctn-howItWorks-table img {
@@ -285,10 +263,10 @@
             padding: 0px;
             margin: 0px;
             width: 55px;
-            height: 180px;
-            background: #7599ff;
+            height: 55px;
+            /*background: #7599ff;*/
             z-index: 15;
-            border-radius: 3px 0px 0px 3px;
+            /*border-radius: 3px 0px 0px 3px;*/
         }
 
         #hp-ctn-howItWorks-information img {
@@ -481,28 +459,30 @@
 
     <!-- side button photos-->
 
+
     <div id="pano-button" ng-click="panoView()">
         <img src="assets/icons/Street-View-icon.png" style="height: 50px; width: 50px">
     </div>
 
     <div id="edit" ng-click="editModeSwitch()">
         <img src="../../assets/images/edit.gif" width="40" height="40" style="margin-left:8px"/>
-        <p style="width: 100px; height: 60px; font-size: 20px; margin-top:20px" class="text-rotate">
+        <!-- <p style="width: 100px; height: 60px; font-size: 20px; margin-top:20px" class="text-rotate"> 
             {{editButtonText}}</p>
+            -->
     </div>
     <div id="hp-ctn-howItWorks-information" ng-click="tableSlider = !tableSlider" ng-hide="editMode">
         <img src="../../assets/images/information.png" width="40" height="40" style="margin-left:8px" ;/>
-        <p class="text-rotate" style="font-size:20px">Info</p>
+        <!-- <p class="text-rotate" style="font-size:20px">Info</p> -->
     </div>
 
     <div id="hp-ctn-howItWorks-table" ng-click="tableSlider = !tableSlider" ng-hide="editMode">
         <img src="../../assets/images/table_icon2.svg" width="40" height="40" style="margin-left:8px"/>
-        <p class="text-rotate" style="font-size:20px">Table</p>
+        <!-- <p class="text-rotate" style="font-size:20px">Table</p> -->
     </div>
 
     <div id="hp-ctn-howItWorks-photos" ng-click="photosSlider = !photosSlider" ng-hide="editMode">
         <img src="../../assets/images/photos_icon.png" width="40" height="40" style="margin-left:8px"/>
-        <p class="text-rotate" style="font-size:20px">Photos</p>
+        <!-- <p class="text-rotate" style="font-size:20px">Photos</p> -->
     </div>
 
 
