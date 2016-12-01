@@ -493,6 +493,72 @@ app.post('/trackConfig', function (request, response) {
 
 });
 
+//postgres public
+app.post('/publicTrip', function (request, response) {
+
+    console.log('SERVER:: Postgres:: public trip ' + request.body);
+
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        //by default trip is not public
+        client.query("UPDATE trips SET public = ($1) WHERE id = ($2)",
+            [request.body.public, request.body.trip_id]
+            , function (err, result) {
+                //call `done()` to release the client back to the pool
+                done();
+
+                if (err) {
+                    return console.error('error running query', err);
+                }
+                console.log(result);
+                //output: 1
+            });
+    });
+    response.status(200).end();
+
+});
+
+//getPublicTrips
+app.post('/getPublicTrips', function (request, response) {
+
+        console.log('SERVER:: Postgres:: get all public trips');
+        var results = [];
+
+        // Get a Postgres client from the connection pool
+        pg.connect(conString, function (err, client, done) {
+            // Handle connection errors
+            if (err) {
+                done();
+                console.log(err);
+                return response.status(500).json({success: false, data: err});
+            }
+            //var email = "'" + request.body.email + "'";
+            // SQL Query > Select Data
+            var query = client.query("SELECT * FROM trips WHERE public = true ORDER BY id ASC  ;");
+
+            console.log(query);
+            // Stream results back one row at a time
+            query.on('row', function (row) {
+                console.log(row);
+                results.push(row);
+            });
+
+            // After all data is returned, close connection and return results
+            query.on('end', function () {
+                done();
+                return response.json(results);
+            });
+
+        });
+
+});
+
+
+
+
+
 //Postgres read trips table
 app.post('/getTrips', function (request, response, next) {
 

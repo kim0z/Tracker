@@ -114,6 +114,9 @@
 <script src="bower_components/auth0.js/build/auth0.min.js"></script>
 <script src="bower_components/auth0-angular/build/auth0-angular.min.js"></script>
 
+<!-- angular advanced searchbox includes -->
+<link rel="stylesheet" href="bower_components/angular-advanced-searchbox/dist/angular-advanced-searchbox.min.css">
+<script src="bower_components/angular-advanced-searchbox/dist/angular-advanced-searchbox-tpls.min.js"></script>
 
 <!-- Angular jwt -->
 <script src="bower_components/angular-jwt/dist/angular-jwt.min.js"></script>
@@ -192,10 +195,12 @@
 <script src="services/messages.js"></script>
 <script src="services/algorithmsSvc.js"></script>
 <script src="services/serverSvc.js"></script>
+<script src="views/index/welcomeCtrl.js"></script>
 <script src="views/view0/ctrl.js"></script>
 <script src="views/view1/ctrl.js"></script>
 <script src="views/view2/ctrl.js"></script>
 <script src="views/view3/ctrl.js"></script>
+<script src="views/trips/tripsCtrl.js"></script>
 <script src="views/view3/ctrlDialog.js"></script>
 <script src="views/view3/ctrlLeft.js"></script>
 <script src="views/view3/ctrlNewTrip.js"></script>
@@ -203,16 +208,16 @@
 <script src="views/offlinemap/ctrl.js"></script>
 
 
-<div layout="column" layout-fill>
+<div ng-hide="hideToolBar" layout="column" layout-fill>
 
     <md-toolbar>
         <div class="md-toolbar-tools" ng-controller="mainIndexCtrl" scroll-shrink>
 
-            <md-button ng-click="menuClick('Home')" style="font-size: 20px" >tracker</md-button>
+            <md-button ng-click="menuClick('Welcome')" style="font-size: 20px" >tracker</md-button>
 
                 <img src="assets/icons/paw-xxl.png" style="height: 30px; width: 30px">
 
-            <!-- <md-button ng-click="menuClick('Home')">Home</md-button> -->
+            <md-button ng-click="menuClick('Trips')">Trips</md-button>
             <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
             <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
             <span flex></span>

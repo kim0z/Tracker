@@ -412,6 +412,17 @@
     <div id="pano"></div>
 
 
+
+    <footer class="footer" style="background-color: #3F51B5; width: 70%; margin-left: 100px">
+        <div class="container">
+            <span class="text-muted" style="font-size: 14px;font-style: inherit">Trip name: {{tripName}} | Description: {{tripDescription}} | Date: {{dateStart}} - {{dateEnd}}</span>
+        </div>
+    </footer>
+
+
+
+
+
     <div  style="overflow: auto;height: 800px; width: 320px; float: right;">
         <div class="scroll" id="messages" class="list-group" ng-repeat="message in messages">
             <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
@@ -436,6 +447,11 @@
             </a>
         </div>
     </div>
+
+
+
+
+
 
 
     <!-- Load photos from AWS S3 - disabled, instead sync with Facebook photos
@@ -470,7 +486,7 @@
             {{editButtonText}}</p>
             -->
     </div>
-    <div id="hp-ctn-howItWorks-information" ng-click="tableSlider = !tableSlider" ng-hide="editMode">
+    <div id="hp-ctn-howItWorks-information" ng-click="inforSlide = !inforSlide" ng-hide="editMode">
         <img src="../../assets/images/information.png" width="40" height="40" style="margin-left:8px" ;/>
         <!-- <p class="text-rotate" style="font-size:20px">Info</p> -->
     </div>

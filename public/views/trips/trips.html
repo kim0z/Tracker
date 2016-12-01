@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/assets/css/style_tripList.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
 
+    <link media="all" rel="stylesheet" href="assets/css/welcome.css">
+
     <link src="/bower_components/ng-dialog/css/ngdialog-theme-plain.css">
     <link src="/bower_components/ng-dialog/css/ngDialog-custom-width.css">
 
@@ -53,12 +55,92 @@
         .checkboxdemoBasicUsage .ipsum {
             color: saddlebrown;
         }
+
+        /* override some CSS from welocme.css */
+        .flex-grid .flex-grid-item {
+            overflow: hidden;
+            display: inline-block;
+            margin-bottom: 8px;
+            width: calc(10% - 6px);
+            margin-right: 8px;
+            align-items: center;
+            justify-content: center; }
     </style>
 </head>
 <body layout="vertical" md-theme="blue" layout-fill>
 
 
-<div layout="column" layout-fill>
+<nit-advanced-searchbox
+        ng-model="searchParams"
+        parameters="availableSearchParams"
+        placeholder="Search...">
+</nit-advanced-searchbox>
+
+
+
+<section class="section" style="padding: 0px; background-color: #ffffff">
+    <h1 class="text-center">Choose your destination</h1>
+    <div class="flex-grid">
+        <div class="flex-grid-item">
+            <a href="" ng-click="openApp()">
+                <figure class="figure-container">
+                    <img src="assets/images/goldengate11.jpg" style="height: 100px; width: 328px" alt="San Francisco">
+                    <figcaption><h2>North America</h2></figcaption>
+                </figure>
+            </a>
+        </div>
+        <div class="flex-grid-item">
+            <a href="" ng-click="openApp()">
+                <figure class="figure-container">
+                    <img src="assets/images/italy.jpg" alt="New York City">
+                    <figcaption><h2>Europe</h2></figcaption>
+                </figure>
+            </a>
+        </div>
+        <div class="flex-grid-item">
+            <a href="" ng-click="openApp()">
+                <figure class="figure-container">
+                    <img src="assets/images/china.jpg" alt="Los Angeles">
+                    <figcaption><h2>Asia</h2></figcaption>
+                </figure>
+            </a>
+        </div>
+        <div class="flex-grid-item">
+            <a href="" ng-click="openApp()">
+                <figure class="figure-container">
+                    <img src="assets/images/sydney-opera.jpg" style="height: 150px; width: 390px" alt="Chicago">
+                    <figcaption><h2>Australia</h2></figcaption>
+                </figure>
+            </a>
+        </div>
+        <div class="flex-grid-item">
+            <a href="" ng-click="openApp()">
+                <figure class="figure-container">
+                    <img src="assets/images/africa.jpg" alt="Austin">
+                    <figcaption><h2>Africa</h2></figcaption>
+                </figure>
+            </a>
+        </div>
+        <div class="flex-grid-item">
+            <a href="" ng-click="openApp()">
+                <figure class="figure-container">
+                    <img src="assets/images/castillo-view.jpg" alt="Austin">
+                    <figcaption><h2>South America</h2></figcaption>
+                </figure>
+            </a>
+        </div>
+        <div class="flex-grid-item">
+            <a href="" ng-click="openApp()">
+                <figure class="figure-container">
+                    <img src="assets/images/antarctic-a.jpg" style="height: 150px; width: 400px" alt="Austin">
+                    <figcaption><h2>Antarctica</h2></figcaption>
+                </figure>
+            </a>
+        </div>
+    </div>
+</section>
+
+<div id="trips" layout="column" layout-fill>
     <!-- This menu is popup menu important for study
     <md-toolbar scroll-shrink layout="row">
         <div class="md-toolbar-tools">
@@ -69,14 +151,6 @@
         </div>
     </md-toolbar>
 -->
-
-    <nit-advanced-searchbox
-            ng-model="searchParams"
-            parameters="availableSearchParams"
-            placeholder="Search...">
-    </nit-advanced-searchbox>
-
-
     <md-content layout="vertical" flex>
         <!-- LEFT SIDEBAR -->
         <md-sidenav class="md-sidenav-left" md-component-id="left">
@@ -102,7 +176,7 @@
 
 
         <!-- MAIN CONTENT -->
-        <md-content id="main" layout="horizontal" layout-align="center">
+        <md-content id="main" layout="horizontal" layout-align="center" style="padding: 0px;">
             <md-list>
                 <div id="content">
                     <div ng-repeat="chunk in ::chunks">
@@ -140,27 +214,27 @@
                                         <md-button ng-click="show_quotes = !show_quotes; $event.stopPropagation();">Show
                                             {{chunk.content.quotes.length}} more details
                                         </md-button>
-                                        <md-button
+                                    <!--    <md-button
                                                 ng-click="edit_mode = !edit_mode; editTrip(chunk.id);$event.stopPropagation();">
                                             Edit Trip Plan
-                                        </md-button>
+                                        </md-button>-->
                                         <md-button
                                                 ng-click="edit_mode = !edit_mode; showActualMap(chunk.id);$event.stopPropagation();">
-                                            Show Actual Map
+                                            Open trip
                                         </md-button>
                                         <md-button
                                                 ng-click="edit_mode = !edit_mode; editTrip(chunk.id);$event.stopPropagation();">
                                             Share
                                         </md-button>
 
-                                        <md-button ng-click="activateTrip(chunk)">
+                                      <!--  <md-button ng-click="activateTrip(chunk)">
                                             Active
                                         </md-button>
 
                                         <md-button class="md-warn"
                                                    ng-click="edit_mode = !edit_mode; deleteTrip(chunk.id);$event.stopPropagation();">
                                             Delete
-                                        </md-button>
+                                        </md-button>-->
 
                                         <div ng-if="show_quotes" ng-repeat="quote in ::chunk.content.quotes">
                                             <md-whiteframe class="md-whiteframe-z1">
@@ -171,7 +245,7 @@
 
                                 </md-card-content>
 
-                                <div style="z-index: 100">
+                  <!--              <div style="z-index: 100">
                                     <fieldset class="standard">
                                         <legend>Options:</legend>
                                         <div layout-wrap layout-gt-sm="row">
@@ -196,8 +270,7 @@
                                             </div>
                                         </div>
                                     </fieldset>
-                                </div>
-
+                                </div>-->
                             </div>
                         </md-card>
                     </div>

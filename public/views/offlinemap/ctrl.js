@@ -66,6 +66,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
         $scope.photosSlider = true;
         $scope.tableSlider = true;
+        $scope.inforSlide = true;
 
 
         $scope.facebookAlbums = {}; //when page loaded, a Facebook API triggered to get user albums in case new album was added

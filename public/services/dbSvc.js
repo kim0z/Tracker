@@ -17,6 +17,12 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/getTrips', userEmail);
     };
 
+    //get all public trips
+    this.getPublicTrips = function (userEmail) { // userEmail not used in this case
+        console.log('Client::dataBaseService:: get all public trips');
+        return $http.post('/getPublicTrips', userEmail);
+    };
+
     //get trip by id
     this.getTripById = function (dataTripId) { // in use
         console.log('Client::dataBaseService:: get trip by id::'+dataTripId);
@@ -52,6 +58,12 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
     this.trackConfig = function (dataObj) { //create empty trip record
         console.log('Client::dataBaseService:: activate trip');
         return $http.post('/trackConfig',dataObj);
+    };
+
+    //Public trip
+    this.trackConfig = function (dataObj) {
+        console.log('Client::dataBaseService:: public trip');
+        return $http.post('/publicTrip',dataObj);
     };
 
     //createTable

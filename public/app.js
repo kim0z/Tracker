@@ -11,6 +11,7 @@ var trackerApp = angular.module('myApp', [
         'ngAutocomplete',
         'ui.grid',
         'angularNumberPicker',
+        'angular-advanced-searchbox',
         '720kb.datepicker',
         'smart-table',
         'ngMaterial',
@@ -34,6 +35,11 @@ var trackerApp = angular.module('myApp', [
         //
         // Now set up the states
         $stateProvider
+            .state('welcome', {
+                url: "/welcome",
+                templateUrl: "views/index/welcome.html",
+                controller: 'welcomeCtrl'
+            })
             .state('view0', {
                 url: "/view0",
                 templateUrl: "views/view0/view0.html",
@@ -61,6 +67,14 @@ var trackerApp = angular.module('myApp', [
                 controller: 'view3Ctrl',
                 data: {
                     requiresLogin: true
+                }
+            })
+            .state('trips', {
+                url: "/trips",
+                templateUrl: "views/trips/trips.html",
+                controller: 'tripsCtrl',
+                data: {
+                    requiresLogin: false
                 }
             })
             .state('viewError', {
@@ -151,6 +165,8 @@ var trackerApp = angular.module('myApp', [
         auth.hookEvents();
 
 
+        $rootScope.hideToolBar = false;
+
         //the new login Auth0
         // This events gets triggered on refresh or URL change
         $rootScope.$on('$locationChangeStart', function () {
@@ -203,11 +219,17 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
 
     $scope.menuClick = function (buttonText) {
         switch (buttonText) {
+            case 'Welcome':
+                window.open('#/welcome', '_self', false);
+                break;
             case 'Home':
                 window.open('#/view0', '_self', false);
                 break;
             case 'My Trips':
                 window.open('#/view3', '_self', false);
+                break;
+            case 'Trips':
+                window.open('#/trips', '_self', false);
                 break;
             case 'Plan Trip':
                 window.open('#/view1', '_self', false);
@@ -229,7 +251,7 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
         auth.signout();
         localStorageService.remove('profile');
         localStorageService.remove('token');
-        $state.go('view0');
+        $state.go('welcome');
     }
 
 

@@ -37,7 +37,7 @@ trackerApp.controller('Login', function ($scope, $location, $state, $http, auth,
         });
 
 
-        $state.go('view0');
+        $state.go('welcome');
     }, function (err) {
         console.log("Error :(", err);
     });
