@@ -23,6 +23,12 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/getPublicTrips', userEmail);
     };
 
+    //saveProfilePicture - Not used, when create new trip I also update the profile picture in the same function
+   /* this.saveProfilePicture = function (dataObj) { // userEmail not used in this case
+        console.log('Client::dataBaseService:: save profile picture');
+        return $http.post('/saveProfilePicture', dataObj);
+    };*/
+
     //get trip by id
     this.getTripById = function (dataTripId) { // in use
         console.log('Client::dataBaseService:: get trip by id::'+dataTripId);

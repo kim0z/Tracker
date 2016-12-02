@@ -358,8 +358,8 @@ app.post('/updateTripGeneralInfo', function (request, response) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3), trip_description = ($4), email = ($5) WHERE id = ($6)",
-            [jsonTrip.trip_name, jsonTrip.start_date, jsonTrip.end_date, jsonTrip.trip_description, jsonTrip.email, jsonTrip.trip_id]
+        client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3), trip_description = ($4), email = ($5), picture = ($6), continent = ($7) WHERE id = ($8)",
+            [jsonTrip.trip_name, jsonTrip.start_date, jsonTrip.end_date, jsonTrip.trip_description, jsonTrip.email,jsonTrip.profile_picture, '{'+jsonTrip.continent+'}', jsonTrip.trip_id]
             , function (err, result) {
                 //call `done()` to release the client back to the pool
                 done();
@@ -555,7 +555,41 @@ app.post('/getPublicTrips', function (request, response) {
 
 });
 
+//save facebook profile picture -- Not used, when create new trip I also update the profile picture in the same function
+/*app.post('/saveProfilePicture', function (request, response) {
 
+    console.log('SERVER:: Postgres:: save profile picture');
+    var results = [];
+
+    // Get a Postgres client from the connection pool
+    pg.connect(conString, function (err, client, done) {
+        // Handle connection errors
+        if (err) {
+            done();
+            console.log(err);
+            return response.status(500).json({success: false, data: err});
+        }
+        //var email = "'" + request.body.email + "'";
+        // SQL Query > Select Data
+        var query = client.query("UPDATE trips SET picture = ($1) WHERE id = ($2)",
+            [jsonTrip.picture, jsonTrip.trip_id]);
+
+        console.log(query);
+        // Stream results back one row at a time
+        query.on('row', function (row) {
+            console.log(row);
+            results.push(row);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function () {
+            done();
+            return response.json(results);
+        });
+
+    });
+
+});*/
 
 
 

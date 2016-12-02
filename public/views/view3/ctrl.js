@@ -92,7 +92,6 @@ trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, 
     }
 
     $scope.publicTrip = function (chunk){
-        alert(chunk.public);
         var tripId = {trip_id: chunk.id, email: $scope.profile.email, public: chunk.public};
         console.log(chunk.track_mode);
         dataBaseService.trackConfig(tripId).then(function (results) {
@@ -277,7 +276,7 @@ trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, 
         for (var i = 0; i < $scope.trips.length; i++) {
             var jsonTrip = {
                 id: $scope.trips[i].id, title: $scope.trips[i].trip_name, description: $scope.trips[i].trip_description, track_mode:$scope.trips[i].track_mode,
-                expanded: false, content: {type: "QUOTE", quotes: ["A great trip to .."]}, active: $scope.trips[i].active, public: $scope.trips[i].public
+                expanded: false, content: {type: "QUOTE", quotes: ["A great trip to .."]}, active: $scope.trips[i].active, public: $scope.trips[i].public, picture: $scope.trips[i].picture
             };
 
             if (new Date($scope.trips[i].end_date) > new Date()) {

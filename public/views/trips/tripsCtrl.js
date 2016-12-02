@@ -290,9 +290,14 @@ trackerApp.controller('tripsCtrl', function ($scope,$rootScope, $location, $anch
 
         //create JSON list of trips in the Client
         for (var i = 0; i < $scope.trips.length; i++) {
+            var continent = '';
+            if($scope.trips[i].continent != null){
+                continent = $scope.trips[i].continent[0];
+                console.log(continent);
+            }
             var jsonTrip = {
                 id: $scope.trips[i].id, title: $scope.trips[i].trip_name, description: $scope.trips[i].trip_description, track_mode:$scope.trips[i].track_mode,
-                expanded: false, content: {type: "QUOTE", quotes: ["A great trip to .."]}, active: $scope.trips[i].active, public: $scope.trips[i].public
+                expanded: false, content: {type: "QUOTE", quotes: ["A great trip to .."]}, active: $scope.trips[i].active, public: $scope.trips[i].public, continent: continent, picture: $scope.trips[i].picture
             };
 
             if (new Date($scope.trips[i].end_date) > new Date()) {

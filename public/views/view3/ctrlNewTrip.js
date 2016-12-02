@@ -25,7 +25,8 @@ trackerApp.controller('newTripCtrl', function ($scope, $http, $state,  ngDialog,
             trip_description: $scope.tripDescription,
             start_date: $scope.dateStart,
             end_date: $scope.dateEnd,
-            continent: 'America'
+            continent: $scope.selectedContinents,
+            profile_picture: $scope.profile.picture
         };
 
         //save updated trip into DB
@@ -40,7 +41,7 @@ trackerApp.controller('newTripCtrl', function ($scope, $http, $state,  ngDialog,
 
         $scope.closeThisDialog();
 
-    }
+    };
 
 
     $scope.closeDialog = function () {

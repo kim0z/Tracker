@@ -61,7 +61,8 @@
             overflow: hidden;
             display: inline-block;
             margin-bottom: 8px;
-            width: calc(10% - 6px);
+            width: 280px;
+            height: 130px;
             margin-right: 8px;
             align-items: center;
             justify-content: center; }
@@ -186,11 +187,11 @@
                                  ng-style="chunk.active === true ? { color:'green' } : { 'color': 'black' }">
                             <md-item layout="row">
                                 <div>
-                                    <img class="round-face" src="http://placekitten.com/g/48/48"/>
+                                    <img class="round-face" src="{{ chunk.picture }}"/>
                                 </div>
-                                <div class="collapsed-row" layout="row" layout-align="start center" flex>
+                                <div class="collapsed-row" style="width: 900px;" layout="row" layout-align="start center" flex>
                                     <span flex="45"><b>{{ chunk.title }}</b></span>
-                                    <span flex="45">{{ chunk.description }}</span>
+                                    <span flex="45">{{ chunk.continent }}</span>
                                     <span flex="5"></span>
                                      <span flex="10" ng-if="hover"><md-icon
                                              md-svg-src="bower_components/material-design-icons/content/svg/production/ic_archive_24px.svg"
@@ -325,11 +326,12 @@
 </md-button>
 -->
 
+<!-- should be deleted - only in MyTrips users can create new trip -- add security check
 <md-button id="mainFab" class="md-fab md-raised" ng-click="clickToOpen()" aria-label="Photos">
     <md-icon md-svg-src="bower_components/material-design-icons/content/svg/production/ic_add_24px.svg"
              style="width: 24px; height: 24px;"></md-icon>
 </md-button>
-
+-->
 
 <!-- the Original button -->
 <!--
