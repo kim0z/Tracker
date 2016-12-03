@@ -1,10 +1,17 @@
-trackerApp.controller('tripsCtrl', function ($scope,$rootScope, $location, $anchorScroll, $http, $window, $state,  googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages, localStorageService, ngDialog) {
+trackerApp.controller('tripsCtrl', function ($scope,$rootScope, $location, $anchorScroll, $http, $window, $filter,  $state,  googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages, localStorageService, ngDialog) {
 
     $rootScope.$on('ngDialog.closed', function (e, $dialog) {
         console.log('ngDialog closed: New trip' );
         //reload page when dialog closed to show the new added trip
         $state.reload();
     });
+
+    $scope.continentSelected = '';
+    //when select continent
+    $scope.continentSelection = function($event){
+        console.log($event.currentTarget.childNodes[1].children[1].innerText);
+        $scope.continentSelected = $event.currentTarget.childNodes[1].children[1].innerText;
+    };
 
     $scope.availableSearchParams = [
         { key: "name", name: "Name", placeholder: "Name..." },
