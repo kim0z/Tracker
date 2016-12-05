@@ -180,7 +180,7 @@
         <md-content id="main" layout="horizontal" layout-align="center" style="padding: 0px;">
             <md-list>
                 <div id="content">
-                    <div ng-repeat="chunk in ::chunks | filter: {continent: continentSelected } ">
+                    <div ng-repeat="chunk in chunks | filter: {continent: continentSelected } ">
                         <p ng-if="chunk.divider">{{chunk.title}}</p>
                         <md-card ng-if="!chunk.expanded && !chunk.divider" ng-click="toggleChunkExpand(chunk)"
                                  ng-mouseover="hover = true" ng-mouseout="hover = false"
