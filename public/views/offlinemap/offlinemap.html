@@ -140,7 +140,7 @@
             opacity: .99; /* Set the opacity for a slightly transparent Google Form */
             color: white;
 
-            position: absolute; /*or fixed*/
+           /* position: absolute;*/ /*or fixed*/
             right: 50%;
         }
 
@@ -345,7 +345,7 @@
             z-index: 1;
             top: 0;
             left: 0;
-            background-color: #111;
+            /*background-color: #111;*/
             overflow-x: hidden;
             transition: 0.5s;
             padding-top: 60px;
@@ -396,6 +396,52 @@
             box-shadow: inset 0 -2px transparent;
             border-bottom: 1px solid hsla(0,0%,54%,.3);
             box-sizing: border-box;
+        }
+
+
+
+    /*Sidebar settings - tabs*/
+        body {font-family: "Lato", sans-serif;}
+
+        ul.tab {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        /* Float the list items side by side */
+        ul.tab li {float: left;}
+
+        /* Style the links inside the list items */
+        ul.tab li a {
+            display: inline-block;
+            color: black;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+        /* Change background color of links on hover */
+        ul.tab li a:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        ul.tab li a:focus, .active {
+            background-color: #ccc;
+        }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 3px solid #ccc;
+            border-top: none;
         }
 
 
@@ -591,57 +637,108 @@ The markup will have a list with images and the titles-->
     <!-- ######################################################################### -->
 
 
-    <div id="mySidenav" class="sidenav" style="margin-top: 65px">
-        <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()">&times;</a>
-        <!--        <a href="#">About</a>
-                <a href="#">Services</a>
-                <a href="#">Clients</a>
-                <a href="#">Contact</a>-->
-        <p>Edit mode</p>
-        <!-- Facebook albums -->
-        <div name="facebookSync" style="z-index: 16; position: relative; margin-bottom: 10px" class="roundborder">
-            <label ng-repeat="album in facebookAlbums track by $index">{{album.albumName}}{{album.albumID}}
-                <input type="checkbox" ng-model="facebookAlbums[$index].checkbox">
-            </label><br/>
-            <div ng-dropdown-multiselect="" options="facebookAlbumsList" selected-model="selectedFacebookAlbum" events="selectAlbumEvents"></div>
+    <div id="mySidenav" class="sidenav" style="margin-top: 65px; color: white">
+        <a href="javascript:void(0)" class="closebtn" ng-click="editModeSwitch()">&times;</a>
 
-            <button ng-click="syncAlbums()">Sync</button>
-        </div>
+        <a style="padding-left: 2px">Settings</a>
 
-        <div>
-            <div id="upload_photo" style="z-index: 16; position: relative; margin-bottom: 10px" class="roundborder">
-                <p>Upload photo or KML (googlemaps export file)</p>
-            <span class="btn btn-default btn-file">
-                Browse <input type="file" id="file-chooser" style="height: 40px; width: 240px"/>
-            </span>
+        <ul class="tab">
+            <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'photos')" id="defaultOpen">Photos</a></li>
+            <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'maps')">Maps</a></li>
+            <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'tips')">Tips</a></li>
+            <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'gps')">GPS</a></li>
+        </ul>
+
+        <div id="photos" class="tabcontent">
+            <h3>Photos</h3>
+            <p>Sync your photos directly from Facebook album</p>
+            <!-- Facebook albums -->
+            <div  ng-repeat="album in facebookAlbums track by $index">
+                <label>{{album.albumName}}{{album.albumID}}
+                    <input type="checkbox" ng-model="facebookAlbums[$index].checkbox" style="float: right">
+                </label><br/>
+            </div>
+                <div ng-dropdown-multiselect="" options="facebookAlbumsList" selected-model="selectedFacebookAlbum" events="selectAlbumEvents"></div>
+
+                <button ng-click="syncAlbums()">Sync</button>
+
+
+            <p>Upload photos</p>
+            <div>
+                <span class="btn btn-default btn-file">
+                   Browse <input type="file" id="file-chooser" style="height: 40px; width: 300px; float: right"/>
+                </span>
                 <p></p>
                 <button type="button" class="btn btn-success" id="upload-button">Upload to S3</button>
                 <div id="results"></div>
             </div>
 
-            <div id="add_messages" style="z-index: 16; position: relative; margin-bottom: 10px" class="roundborder">
-                <p>Add message</p>
-                <ul>
-                    <p> Message: <input type="text" ng-model="message.text" style="width: 200px"/></p>
-                    <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/></p>
-                    <p> lng:<input type="text" ng-model="message.lng" style="width: 200px"/></p>
-                    <p> time: <input type="datetime" ng-model="message.time" style="width: 200px"/></p>
-                    <button type="button" class="btn btn-success" ng-click="addMessage()">add</button>
-                </ul>
-            </div>
 
-            <div id="add_GPS_toPhoto" style="z-index: 16; position: relative; margin-bottom: 10px" class="roundborder">
+        </div>
+
+        <div id="maps" class="tabcontent">
+            <h3>Map</h3>
+            <p>Upload an exist map, KML file</p>
+
+        </div>
+
+
+        <div id="tips" class="tabcontent">
+            <h3>Tips</h3>
+            <p>Add new tip, manually by with GPS location</p>
+            <p>Add message</p>
+            <ul class="input-group-addon">
+                <p> Message: <input type="text" ng-model="message.text"  style="width: 300px; float: right"/></p>
+                <p> lat: <input type="text" ng-model="message.lat" style="width: 300px; float: right"/></p>
+                <p> lng:<input type="text" ng-model="message.lng" style="width: 300px; float: right"/></p>
+                <p> time: <input type="datetime" ng-model="message.time" style="width: 300px; float: right"/></p>
+                <button type="button" class="btn btn-success" ng-click="addMessage()">add</button>
+            </ul>
+        </div>
+
+        <div id="gps" class="tabcontent">
+            <h3>GPS</h3>
+            <p>Select a photo and then point to the location in the map</p>
+            <!-- <div id="add_GPS_toPhoto" style="z-index: 16; position: relative; margin-bottom: 10px" class="roundborder"> -->
                 <p>Add GPS to photo</p>
                 <ul>
-                    <p> Image path: <input type="text" ng-model="image.path" style="width: 200px"/></p>
-                    <p> lat: <input type="text" ng-model="message.lat" style="width: 200px"/></p>
-                    <p> lng:<input type="text" ng-model="message.lng" style="width: 200px"/></p>
+                    <p> Image path: <input type="text" ng-model="image.path" style="width: 300px; float: right"/></p>
+                    <p> lat: <input type="text" ng-model="message.lat" style="width: 300px; float: right"/></p>
+                    <p> lng:<input type="text" ng-model="message.lng" style="width: 300px; float: right"/></p>
                     <button type="button" class="btn btn-success" id="addGPStoPhoto" ng-click="saveGPStoThisPhoto()">add
                     </button>
                     <div id="results_photo_gps"></div>
                 </ul>
-            </div>
+            <!--</div>-->
+        </div>
 
+        <script>
+            function openCity(evt, cityName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(cityName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+
+            // Get the element with id="defaultOpen" and click on it
+            document.getElementById("defaultOpen").click();
+        </script>
+
+
+
+
+
+
+
+
+<!--
             <div style="z-index: 16; position: relative; margin-bottom: 10px" class="roundborderlong">
                 <p>Add Day</p>
                 <ul id="add_day">
@@ -657,7 +754,7 @@ The markup will have a list with images and the titles-->
                 </ul>
             </div>
 
-
+-->
     </div>
 
 

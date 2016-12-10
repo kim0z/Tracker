@@ -83,7 +83,7 @@
     <h1 class="text-center" style="font-weight: 200;line-height: 55px;font-size: 34px">Choose your destination</h1>
     <div class="flex-grid">
         <div class="flex-grid-item">
-            <a href="" ng-click="continentSelection($event)">
+            <a href="" ng-click="continentSelection('North America')">
                 <figure class="figure-container">
                     <img src="assets/images/goldengate11.jpg" style="height: 100px; width: 328px" alt="">
                     <figcaption><h2>North America</h2></figcaption>
@@ -91,7 +91,7 @@
             </a>
         </div>
         <div class="flex-grid-item">
-            <a href="" ng-click="continentSelection($event)">
+            <a href="" ng-click="continentSelection('Europe')">
                 <figure class="figure-container">
                     <img src="assets/images/italy.jpg" alt="">
                     <figcaption><h2>Europe</h2></figcaption>
@@ -99,7 +99,7 @@
             </a>
         </div>
         <div class="flex-grid-item">
-            <a href="" ng-click="continentSelection($event)">
+            <a href="" ng-click="continentSelection('Asia')">
                 <figure class="figure-container">
                     <img src="assets/images/china.jpg" alt="">
                     <figcaption><h2>Asia</h2></figcaption>
@@ -107,7 +107,7 @@
             </a>
         </div>
         <div class="flex-grid-item">
-            <a href="" ng-click="continentSelection($event)">
+            <a href="" ng-click="continentSelection('Australia')">
                 <figure class="figure-container">
                     <img src="assets/images/sydney-opera.jpg" style="height: 150px; width: 390px" alt="">
                     <figcaption><h2>Australia</h2></figcaption>
@@ -115,7 +115,7 @@
             </a>
         </div>
         <div class="flex-grid-item">
-            <a href="" ng-click="continentSelection($event)">
+            <a href="" ng-click="continentSelection('Africa')">
                 <figure class="figure-container">
                     <img src="assets/images/africa.jpg" alt="">
                     <figcaption><h2>Africa</h2></figcaption>
@@ -123,7 +123,7 @@
             </a>
         </div>
         <div class="flex-grid-item">
-            <a href="" ng-click="continentSelection($event)">
+            <a href="" ng-click="continentSelection('South America')">
                 <figure class="figure-container">
                     <img src="assets/images/castillo-view.jpg" alt="">
                     <figcaption><h2>South America</h2></figcaption>
@@ -131,7 +131,7 @@
             </a>
         </div>
         <div class="flex-grid-item">
-            <a href="" ng-click="continentSelection($event)">
+            <a href="" ng-click="continentSelection('Antarctica')">
                 <figure class="figure-container">
                     <img src="assets/images/antarctic-a.jpg" style="height: 150px; width: 400px" alt="Austin">
                     <figcaption><h2>Antarctica</h2></figcaption>
@@ -180,7 +180,7 @@
         <md-content id="main" layout="horizontal" layout-align="center" style="padding: 0px;">
             <md-list>
                 <div id="content">
-                    <div ng-repeat="chunk in chunks | filter: {continent: continentSelected } ">
+                    <div ng-repeat="chunk in chunks | filter: {continent: continentSelected}" >
                         <p ng-if="chunk.divider">{{chunk.title}}</p>
                         <md-card ng-if="!chunk.expanded && !chunk.divider" ng-click="toggleChunkExpand(chunk)"
                                  ng-mouseover="hover = true" ng-mouseout="hover = false"

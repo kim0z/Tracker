@@ -429,8 +429,13 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
                 if (file) {
                     results.innerHTML = '';
-                    var params = {
+                  /*  var params = {
                         Key: $scope.profile.email + '/' + $scope.tripID + '/' + file.name,
+                        ContentType: file.type,
+                        Body: file
+                    };*/
+                    var params = {
+                        Key: facebookId + '/' + $scope.tripID + '/' + file.name,
                         ContentType: file.type,
                         Body: file
                     };

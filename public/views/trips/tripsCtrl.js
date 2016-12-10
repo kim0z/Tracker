@@ -8,9 +8,8 @@ trackerApp.controller('tripsCtrl', function ($scope,$rootScope, $location, $anch
 
     $scope.continentSelected = '';
     //when select continent
-    $scope.continentSelection = function($event){
-        console.log($event.currentTarget.childNodes[1].children[1].innerText);
-        $scope.continentSelected = $event.currentTarget.childNodes[1].children[1].innerText;
+    $scope.continentSelection = function(continent){
+        $scope.continentSelected = continent;
     };
 
     $scope.availableSearchParams = [

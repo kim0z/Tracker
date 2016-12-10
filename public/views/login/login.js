@@ -1,7 +1,7 @@
 /**
  * Created by karim on 23/01/2016.
  */
-trackerApp.controller('Login', function ($scope, $location, $state, $http, auth, localStorageService, serverSvc) {
+trackerApp.controller('Login', function ($scope, $location, $state, $http, auth, localStorageService, serverSvc, messages) {
 //  $scope.signin = function() {
 
     auth.signin({
@@ -35,7 +35,6 @@ trackerApp.controller('Login', function ($scope, $location, $state, $http, auth,
             }
 
         });
-
 
         $state.go('welcome');
     }, function (err) {

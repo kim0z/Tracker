@@ -3,6 +3,8 @@ trackerApp.service('messages', function () {
     var trip_id ='';
     var user='';
     var email='';
+    var prevSatate = 'welcome';
+    var lastState = '';
 
     this.saveTripID = function (id) {
         console.log('Messages service - save trip id');
@@ -28,6 +30,19 @@ trackerApp.service('messages', function () {
     this.getUserEmail = function () {
         console.log('Messages service - get user email: '+ email);
         return email;
+    };
+
+    this.savePrevState = function (currentState, toState) {
+        console.log('Messages service - Prev stat :', currentState);
+        if(currentState.name){
+            prevSatate = currentState.name;
+            lastState = toState.name;
+        }
+    };
+
+    this.getPrevState = function () {
+        console.log('Messages service - get Prev stat: ', prevSatate);
+        return prevSatate;
     };
 
 });

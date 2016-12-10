@@ -3,7 +3,6 @@
 // Declare app level module which depends on views, and components
 var trackerApp = angular.module('myApp', [
         'auth0',
-        'nemLogging',
         'ui.router',
         'angular-jwt',
         'ngDialog',
@@ -31,7 +30,7 @@ var trackerApp = angular.module('myApp', [
         $urlMatcherFactoryProvider.strictMode(false);
 
         // For any unmatched url, redirect to /state1
-        //$urlRouterProvider.otherwise("/view0");
+        $urlRouterProvider.otherwise("/welcome");
         //
         // Now set up the states
         $stateProvider
@@ -184,7 +183,6 @@ var trackerApp = angular.module('myApp', [
 
                         }, function (err) {
                         });
-                        ;
                     }
                 } else {
                     // Either show Login page or use the refresh token to get a new idToken
@@ -195,14 +193,40 @@ var trackerApp = angular.module('myApp', [
     });
 
 
-trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorageService, auth, $state) {
+trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorageService, auth, $state, messages) {
 
     //debug ui router changes
     $rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
+        console.log('from: ' + fromState.name);
+        console.log('to: ' + toState.name);
 
-        console.log(fromState);
-        console.log(toState);
+        if(toState.name == 'login' && fromState.name && fromState.name != '') {
+            localStorageService.set('preLoginState', fromState.name);
+        }
+        messages.savePrevState(fromState, toState);
     });
+
+
+    //$rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState) {
+    //    console.log('$stateChangeStart');
+    //    console.log('from: ' + fromState.name);
+    //    console.log('to: ' + toState.name);
+    //    console.log('-------------------------------');
+    //});
+    //
+    //$rootScope.$on('$stateChangeSuccess', function(e, toState, toParams, fromState) {
+    //    console.log('$stateChangeSuccess');
+    //    console.log('from: ' + fromState.name);
+    //    console.log('to: ' + toState.name);
+    //    console.log('-------------------------------');
+    //});
+    //
+    //$rootScope.$on('$stateChangeError', function(e, toState, toParams, fromState) {
+    //    console.log('$stateChangeError');
+    //    console.log('from: ' + fromState.name);
+    //    console.log('to: ' + toState.name);
+    //    console.log('-------------------------------');
+    //});
 
 
     $scope.profile = localStorageService.get('profile');
@@ -252,7 +276,7 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
         localStorageService.remove('profile');
         localStorageService.remove('token');
         $state.go('welcome');
-    }
+    };
 
 
     $scope.authUser = function () {
@@ -278,6 +302,9 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
         if (!profile && $scope.authButton == 'Login') {
             $scope.authButton = 'Logout';
             $scope.expressionAuth = 'md-raised md-warn md-button md-default-theme';
+            console.log('+++++++++++++++++++++++++++++');
+            console.log($state);
+            console.log('+++++++++++++++++++++++++++++');
             $state.go('login'); //the login will redirect to view0 when done
             console.log('try to login');
             $scope.profile = localStorageService.get('profile');
