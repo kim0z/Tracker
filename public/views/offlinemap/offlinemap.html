@@ -467,6 +467,13 @@
 
 
 
+	<!-- Tips filter -->
+	<div class="btn-group" style="float: right;" role="group" aria-label="...">
+		<button type="button" ng-click="filterTips('all')" class="btn btn-secondary">All</button>
+ 		<button type="button" ng-click="filterTips('tips')" class="btn btn-primary">Tips</button>
+   	 	<button type="button" ng-click="filterTips('risks')" class="btn btn-danger">Risks</button>
+ 		<button type="button" ng-click="filterTips('expense')" class="btn btn-warning">Expense</button>
+	</div>
 
 
     <div  style="overflow: auto;height: 800px; width: 320px; float: right;">
@@ -479,10 +486,10 @@
                 <md-icon md-svg-src="assets/icons/ic_face_black_48px.svg" ng-if="message.message.invite"></md-icon>
 
                 <!-- show the right data according to what is not empty, should be only 1 data avaliabale -->
-                <h4 class="list-group-item-heading" ng-if="message.message.tip" >{{message.message.tip}}</h4>
-                <h4 class="list-group-item-heading" ng-if="message.message.risk" >{{message.message.risk}}</h4>
-                <h4 class="list-group-item-heading" ng-if="message.message.price" >{{message.message.price}}</h4>
-                <h4 class="list-group-item-heading" ng-if="message.message.invite" >Invitation to join me..</h4>
+                <h4 class="list-group-item-heading" ng-hide="{{filterAllTips}}" ng-if="message.message.tip" >{{message.message.tip}}</h4>
+                <h4 class="list-group-item-heading" ng-hide="{{filterTips}}" ng-if="message.message.risk" >{{message.message.risk}}</h4>
+                <h4 class="list-group-item-heading" ng-hide="{{filterRisks}}" ng-if="message.message.price" >{{message.message.price}}</h4>
+                <h4 class="list-group-item-heading" ng-hide="{{filterExpense}}" ng-if="message.message.invite" >Invitation to join me..</h4>
 
                 <!--
                 <p class="list-group-item-text">{{message.email}}</p>
@@ -552,7 +559,7 @@
 
     <!-- We will make a simple accordian with hover effects
 The markup will have a list with images and the titles-->
-    <div class="footer accordian" ng-hide="facebookProvider" ng-hide="photosSlider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
+    <div class="footer accordian" ng-hide="!facebookProvider" ng-hide="photosSlider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
         <ul>
             <li ng-repeat="item in items">
                 <div class="image_title">
@@ -567,14 +574,14 @@ The markup will have a list with images and the titles-->
     <!-- end facebook photos -->
 
     <!-- photos from aws -->
-    <div class="footer accordian" ng-hide="awsProvider" ng-hide="photosSlider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
+    <div class="footer accordian" ng-hide="!awsProvider" ng-hide="photosSlider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
         <ul>
-            <li ng-repeat="photo in photos">
+            <li ng-repeat="photo in photos">            
                 <div class="image_title">
                     <a href="#">Photo title</a>
                 </div>
                 <a ng-click="showPhotoOnMap($event)">
-                    <img ng-src="{{photo.img}}"/>
+                    <img ng-src="{{photo}}"/>
                 </a>
             </li>
         </ul>

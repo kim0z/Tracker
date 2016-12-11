@@ -64,6 +64,13 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         $scope.editButtonText = 'Edit Mode';
         var showMessageOnMap_clicked = false;
 
+
+        //Filter for the tips
+        $scope.filterAllTips = true;
+        $scope.filterTips = false;
+        $scope.filterRisks = false;
+        $scope.filterExpense = false;
+
         $scope.photosSlider = true;
         $scope.tableSlider = true;
         $scope.inforSlide = true;
@@ -139,10 +146,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             var obj = {trip_id: $scope.tripID, photos_provider: 'facebook'};
             dataBaseService.updateTripPhotosProvider(obj).then(function (results) {
-
-
-             });
-
+            });
         };
 
         $scope.enableAwsProvider = function () {
@@ -150,12 +154,13 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             var obj = {trip_id: $scope.tripID, photos_provider: 'aws'};
             dataBaseService.updateTripPhotosProvider(obj).then(function (results) {
-
-
-              });
-
+            });
         };
 
+
+        $scope.filterTips = function(filterStr) {
+  
+       }
 
         var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
 
@@ -394,7 +399,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 Bucket: 'tracker.photos',
                 //Marker: localStorageService.get('email') + '/' + chunk.id
                 Delimiter: '/',
-                Prefix: $scope.profile.email + '/' + $scope.tripID + '/'
+                Prefix: facebookId + '/' + $scope.tripID + '/'
             }
         });
 
@@ -435,7 +440,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     results.innerHTML = '';
 
                     var params = {
-                        Key: $scope.profile.email + '/' + $scope.tripID + '/' + 'map_kml.kml',
+                        Key: facebookId + '/' + $scope.tripID + '/' + 'map_kml.kml',
                         ContentType: file.type,
                         Body: file
                     };
