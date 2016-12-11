@@ -47,7 +47,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         //$scope.email = localStorageService.get('email');
 
 
-    //not relvant anymore belwo 2 lines
+        //not relvant anymore belwo 2 lines
         var email_no_shtrodel = $scope.profile.email.replace('@', 'u0040');
         var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
 
@@ -101,38 +101,60 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         //var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + email_no_shtrodel_dot + "/offline/photos/facebook/trip/" + $scope.tripID);
 
 
+        //get trip
+        var dataTripId = {trip_id: $scope.tripID};
+        dataBaseService.getTripById(dataTripId).then(function (results) {
+            $scope.trip = results.data;
 
-    //get trip info
+            //################################### Fill all fields of Trip definition #########################
+            console.log('end date: ' + $scope.trip[0].end_date);
+            console.log('start day: ' + $scope.trip[0].start_date);
+            console.log('trip desc: ' + $scope.trip[0].trip_description);
 
-    var dataTripId = {trip_id: $scope.tripID};
-    dataBaseService.getTripById(dataTripId).then(function (results) {
-        $scope.trip = results.data;
+            $scope.tripName = $scope.trip[0].trip_name;
+            $scope.tripDescription = $scope.trip[0].trip_description;
+            //$scope.dateStart = $scope.tripById[0].start_date;
+            //$scope.dateEnd = $scope.tripById[0].end_date;
 
-        //################################### Fill all fields of Trip definition #########################
-        console.log('end date: ' + $scope.trip[0].end_date);
-        console.log('start day: ' + $scope.trip[0].start_date);
-        console.log('trip desc: ' + $scope.trip[0].trip_description);
+            $scope.dateStart = $filter('date')($scope.trip[0].start_date, 'MMM d, y');
+            $scope.dateEnd = $filter('date')($scope.trip[0].end_date, 'MMM d, y');
 
-        $scope.tripName = $scope.trip[0].trip_name;
-        $scope.tripDescription = $scope.trip[0].trip_description;
-        //$scope.dateStart = $scope.tripById[0].start_date;
-        //$scope.dateEnd = $scope.tripById[0].end_date;
+            $scope.photosSource = $scope.trip[0].photos_provider;
 
-        $scope.dateStart = $filter('date')($scope.trip[0].start_date, 'MMM d, y');
-        $scope.dateEnd = $filter('date')($scope.trip[0].end_date, 'MMM d, y');
+            if ($scope.photosSource == 'aws') {
+                $scope.awsProvider = true;
+                $scope.facebookProvider = false;
+            } else {
+                $scope.awsProvider = false;
+                $scope.facebookProvider = true;
+            }
 
-
-
-
-    });
-
-
-
+        });
 
 
+        //$scope.tripID
+        //value to update
+        $scope.enableFacebookProvider = function () {
+            $scope.awsProvider = false;
+
+            var obj = {trip_id: $scope.tripID, photos_provider: 'facebook'};
+            dataBaseService.updateTripPhotosProvider(obj).then(function (results) {
 
 
+             });
 
+        };
+
+        $scope.enableAwsProvider = function () {
+            $scope.facebookProvider = false;
+
+            var obj = {trip_id: $scope.tripID, photos_provider: 'aws'};
+            dataBaseService.updateTripPhotosProvider(obj).then(function (results) {
+
+
+              });
+
+        };
 
 
         var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
@@ -429,11 +451,11 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
                 if (file) {
                     results.innerHTML = '';
-                  /*  var params = {
-                        Key: $scope.profile.email + '/' + $scope.tripID + '/' + file.name,
-                        ContentType: file.type,
-                        Body: file
-                    };*/
+                    /*  var params = {
+                     Key: $scope.profile.email + '/' + $scope.tripID + '/' + file.name,
+                     ContentType: file.type,
+                     Body: file
+                     };*/
                     var params = {
                         Key: facebookId + '/' + $scope.tripID + '/' + file.name,
                         ContentType: file.type,
@@ -493,24 +515,24 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 //Help function - show item on map
                 showItemOnMap(Latlng_message, message);
 
-            /*    $timeout(function () {
-                    $scope.map.setZoom(5);
-                }, 10000);*/
+                /*    $timeout(function () {
+                 $scope.map.setZoom(5);
+                 }, 10000);*/
 
 
-        /*        //#646c73
-                if (showMessageOnMap_clicked == false) {
-                    showMessageOnMap_clicked = true;
-                    var Latlng_message = {lat: message.location.coords.latitude, lng: message.location.coords.longitude};
+                /*        //#646c73
+                 if (showMessageOnMap_clicked == false) {
+                 showMessageOnMap_clicked = true;
+                 var Latlng_message = {lat: message.location.coords.latitude, lng: message.location.coords.longitude};
 
-                    //Help function - show item on map
-                    showItemOnMap(Latlng_message, message);
+                 //Help function - show item on map
+                 showItemOnMap(Latlng_message, message);
 
-                } else {
-                    showMessageOnMap_clicked = false;
-                    //if clicked again, the marker should deleted and back the zoom to normal
-                    $scope.map.setZoom(5);
-                }*/
+                 } else {
+                 showMessageOnMap_clicked = false;
+                 //if clicked again, the marker should deleted and back the zoom to normal
+                 $scope.map.setZoom(5);
+                 }*/
             }
         }
 
@@ -586,7 +608,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             //Google panorama street view - update with new position
             $scope.panoPosition = Latlng;
             //if pano view already opened, then reload, else just update position as done in top of this row
-            if($scope.panoViewState == true){
+            if ($scope.panoViewState == true) {
                 $scope.panoViewState = false;
                 $scope.panoView();
             }
@@ -697,10 +719,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             if ($scope.panoViewState == false) {
 
                 // var path = polys[].getPath();
-            /*    $scope.panorama = new google.maps.StreetViewPanorama(
-                    document.getElementById('pano'), {
-                        position: path.pop()
-                    });*/
+                /*    $scope.panorama = new google.maps.StreetViewPanorama(
+                 document.getElementById('pano'), {
+                 position: path.pop()
+                 });*/
 
                 $scope.panorama = new google.maps.StreetViewPanorama(
                     document.getElementById('pano'), {
@@ -788,7 +810,6 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             $scope.map.setZoom(12);
 
 
-
             //Keep listening to new GPS point added by users
             ref_read_path.limitToLast(1).on("value", function (tripPath) {
                 if (firstLoad_paths == false) {
@@ -799,7 +820,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     tripPath.forEach(function (point) {
 
                         // add new point
-                        existsPath.push(new google.maps.LatLng(JSON.parse(point.val()['coords'].latitude), JSON.parse(point.val()['coords'].longitude) ));
+                        existsPath.push(new google.maps.LatLng(JSON.parse(point.val()['coords'].latitude), JSON.parse(point.val()['coords'].longitude)));
 
                     });
 
@@ -855,8 +876,13 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             //var usersRef = firebase_ref.child('history');
 
-            var location = {coords:{latitude: $scope.message.lat, longitude: $scope.message.lng }};
-            message_json = {location: location, time: $scope.message.time, email: 'kareem9k@gmail.com' , message: {tip: $scope.message.text, invite: '', risk: '', price: ''}};
+            var location = {coords: {latitude: $scope.message.lat, longitude: $scope.message.lng}};
+            message_json = {
+                location: location,
+                time: $scope.message.time,
+                email: 'kareem9k@gmail.com',
+                message: {tip: $scope.message.text, invite: '', risk: '', price: ''}
+            };
 
             firebase_tips.push(message_json);
         }

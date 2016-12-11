@@ -41,6 +41,12 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/deleteTripById', dataTripId);
     };
 
+    //update trip photo provider in DB Postgres, by default it aws, could be Facebook, in the future will be also Instagram
+    this.updateTripPhotosProvider = function (dataTripId) { // in use
+        console.log('Client::dataBaseService:: get trip photos source::'+dataTripId);
+        return $http.post('/updateTripPhotosProvider', dataTripId);
+    };
+
 
     //updateTrip - used for planning page
     this.updateTrip = function (dataObj) { //create empty trip record

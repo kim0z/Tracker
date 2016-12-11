@@ -555,6 +555,45 @@ app.post('/getPublicTrips', function (request, response) {
 
 });
 
+
+//update trip photo provider in DB Postgres, by default it aws, could be Facebook, in the future will be also Instagram
+app.post('/updateTripPhotosProvider', function (request, response) {
+
+    console.log('SERVER:: Postgres:: update trip photos provider');
+    var results = [];
+
+    // Get a Postgres client from the connection pool
+    pg.connect(conString, function (err, client, done) {
+        // Handle connection errors
+        if (err) {
+            done();
+            console.log(err);
+            return response.status(500).json({success: false, data: err});
+        }
+        var query = client.query("UPDATE trips SET photos_provider = ($1) WHERE id = ($2)", [request.body.photos_provider, request.body.trip_id]);
+
+        console.log(query);
+        // Stream results back one row at a time
+        query.on('row', function (row) {
+            console.log(row);
+            results.push(row);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function () {
+            done();
+            return response.json(results);
+        });
+
+    });
+
+});
+
+
+
+
+
+
 //save facebook profile picture -- Not used, when create new trip I also update the profile picture in the same function
 /*app.post('/saveProfilePicture', function (request, response) {
 

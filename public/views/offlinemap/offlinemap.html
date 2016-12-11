@@ -552,11 +552,11 @@
 
     <!-- We will make a simple accordian with hover effects
 The markup will have a list with images and the titles-->
-    <div class="footer accordian" ng-hide="photosSlider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
+    <div class="footer accordian" ng-hide="facebookProvider" ng-hide="photosSlider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
         <ul>
             <li ng-repeat="item in items">
                 <div class="image_title">
-                    <a href="#">KungFu Panda</a>
+                    <a href="#">Photo title</a>
                 </div>
                 <a ng-click="showPhotoOnMap($event)">
                     <img ng-src="{{item.img}}"/>
@@ -564,6 +564,22 @@ The markup will have a list with images and the titles-->
             </li>
         </ul>
     </div>
+    <!-- end facebook photos -->
+
+    <!-- photos from aws -->
+    <div class="footer accordian" ng-hide="awsProvider" ng-hide="photosSlider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
+        <ul>
+            <li ng-repeat="photo in photos">
+                <div class="image_title">
+                    <a href="#">Photo title</a>
+                </div>
+                <a ng-click="showPhotoOnMap($event)">
+                    <img ng-src="{{photo.img}}"/>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- End aws photos -->
 
 
 <!-- Table -->
@@ -651,7 +667,11 @@ The markup will have a list with images and the titles-->
 
         <div id="photos" class="tabcontent">
             <h3>Photos</h3>
-            <p>Sync your photos directly from Facebook album</p>
+            <div flex-gt-sm="50">
+                <md-checkbox ng-model="facebookProvider" ng-change="enableFacebookProvider()" aria-label="Checkbox 1" class="md-primary">
+                    Sync your photos directly from Facebook album
+                </md-checkbox>
+            </div>
             <!-- Facebook albums -->
             <div  ng-repeat="album in facebookAlbums track by $index">
                 <label>{{album.albumName}}{{album.albumID}}
@@ -664,6 +684,11 @@ The markup will have a list with images and the titles-->
 
 
             <p>Upload photos</p>
+            <div flex-gt-sm="50">
+                <md-checkbox ng-model="awsProvider" ng-change="enableAwsProvider()" aria-label="Checkbox 1" class="md-primary">
+                    Private album
+                </md-checkbox>
+            </div>
             <div>
                 <span class="btn btn-default btn-file">
                    Browse <input type="file" id="file-chooser" style="height: 40px; width: 300px; float: right"/>
