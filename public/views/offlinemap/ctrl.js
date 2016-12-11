@@ -159,7 +159,42 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
 
         $scope.filterTips = function(filterStr) {
-  
+            switch(filterStr) {
+                case 'all': {
+                    $scope.filterAllTips = true;
+                    $scope.filterTips = false;
+                    $scope.filterRisks = false;
+                    $scope.filterExpense = false;
+                    break;
+                }
+                case 'tips': {
+                    $scope.filterAllTips = false;
+                    $scope.filterTips = true;
+                    $scope.filterRisks = false;
+                    $scope.filterExpense = false;
+                    break;
+                }
+                case 'risks': {
+                    $scope.filterAllTips = false;
+                    $scope.filterTips = false;
+                    $scope.filterRisks = true;
+                    $scope.filterExpense = false;
+                    break;
+                }
+                case 'expense': {
+                    $scope.filterAllTips = false;
+                    $scope.filterTips = false;
+                    $scope.filterRisks = false;
+                    $scope.filterExpense = true;
+                    break;
+                }
+                default: {
+                    $scope.filterAllTips = true;
+                    $scope.filterTips = false;
+                    $scope.filterRisks = false;
+                    $scope.filterExpense = false;
+                }
+            }  
        }
 
         var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
