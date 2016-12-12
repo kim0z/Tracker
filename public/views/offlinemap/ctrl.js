@@ -70,6 +70,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         $scope.filterTips = false;
         $scope.filterRisks = false;
         $scope.filterExpense = false;
+        $scope.filterInvite = false;
 
         $scope.photosSlider = true;
         $scope.tableSlider = true;
@@ -158,42 +159,41 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         };
 
 
-        $scope.filterTips = function(filterStr) {
+        $scope.filterTipsOnClick = function(filterStr) {
             switch(filterStr) {
                 case 'all': {
-                    $scope.filterAllTips = true;
-                    $scope.filterTips = false;
-                    $scope.filterRisks = false;
-                    $scope.filterExpense = false;
+                    $scope.filterAllTips = false;
+                    $scope.filterTips = true;
+                    $scope.filterRisks = true;
+                    $scope.filterExpense = true;
+                    //$scope.filterInvite
                     break;
                 }
                 case 'tips': {
-                    $scope.filterAllTips = false;
-                    $scope.filterTips = true;
-                    $scope.filterRisks = false;
-                    $scope.filterExpense = false;
+                    $scope.filterAllTips = true;
+                    $scope.filterTips = false;
+                    $scope.filterRisks = true;
+                    $scope.filterExpense = true;
+                    //$scope.filterInvite
                     break;
                 }
                 case 'risks': {
-                    $scope.filterAllTips = false;
-                    $scope.filterTips = false;
-                    $scope.filterRisks = true;
-                    $scope.filterExpense = false;
+                    $scope.filterAllTips = true;
+                    $scope.filterTips = true;
+                    $scope.filterRisks = false;
+                    $scope.filterExpense = true;
+                    //$scope.filterInvite
                     break;
                 }
                 case 'expense': {
-                    $scope.filterAllTips = false;
-                    $scope.filterTips = false;
-                    $scope.filterRisks = false;
-                    $scope.filterExpense = true;
+                    $scope.filterAllTips = true;
+                    $scope.filterTips = true;
+                    $scope.filterRisks = true;
+                    $scope.filterExpense = false;
+                    //$scope.filterInvite
                     break;
                 }
-                default: {
-                    $scope.filterAllTips = true;
-                    $scope.filterTips = false;
-                    $scope.filterRisks = false;
-                    $scope.filterExpense = false;
-                }
+               
             }  
        }
 
