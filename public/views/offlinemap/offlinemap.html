@@ -469,6 +469,7 @@
 
 
 	<!-- Tips filter -->
+	<div>
 	<div class="btn-group" style="float: right;" role="group" aria-label="...">
 		<button type="button" ng-click="filterTipsOnClick('all')" class="btn btn-secondary">All</button>
  		<button type="button" ng-click="filterTipsOnClick('tips')" class="btn btn-primary">Tips</button>
@@ -478,7 +479,8 @@
 
 
     <div  style="overflow: auto;height: 800px; width: 320px; float: right;">
-        <div class="scroll" id="messages" class="list-group" ng-repeat="message in messages">
+        <div class="scroll" id="messages" class="list-group" ng-repeat="message in messages" ng-show="showAllTips || showTips && message.message.tip || showRisks && message.message.risk || showExpense && message.message.price">
+
             <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
 
                 <md-icon md-svg-src="assets/icons/ic_message_black_48px.svg" ng-if="message.message.tip"></md-icon>
@@ -487,10 +489,10 @@
                 <md-icon md-svg-src="assets/icons/ic_face_black_48px.svg" ng-if="message.message.invite"></md-icon>
 
                 <!-- show the right data according to what is not empty, should be only 1 data avaliabale -->
-                <h4 class="list-group-item-heading" ng-hide="filterTips" ng-if="message.message.tip" >{{message.message.tip}}</h4>
-                <h4 class="list-group-item-heading" ng-hide="filterRisks" ng-if="message.message.risk" >{{message.message.risk}}</h4>
-                <h4 class="list-group-item-heading" ng-hide="filterExpense" ng-if="message.message.price" >{{message.message.price}}</h4>
-                <h4 class="list-group-item-heading" ng-hide="filterInvite" ng-if="message.message.invite" >Invitation to join me..</h4>
+                <h4 class="list-group-item-heading" ng-if="message.message.tip" >{{message.message.tip}}</h4>
+                <h4 class="list-group-item-heading" ng-if="message.message.risk" >{{message.message.risk}}</h4>
+                <h4 class="list-group-item-heading" ng-if="message.message.price" >{{message.message.price}}</h4>
+                <h4 class="list-group-item-heading" ng-if="message.message.invite" >Invitation to join me..</h4>
 
                 <!--
                 <p class="list-group-item-text">{{message.email}}</p>
@@ -501,7 +503,7 @@
             </a>
         </div>
     </div>
-
+    </div>
 
 
 
