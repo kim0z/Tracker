@@ -22,8 +22,8 @@
         */
 
         .accordian {
-           /* width: 720px; height: 480px; */
-            width: 520px; height: 280px;
+            width: 720px; height: 480px;
+            /*width: 520px; height: 280px; */
             overflow: hidden;
 
             /*Time for some styling*/
@@ -95,7 +95,7 @@
             height: 100%;
             width: 100%;
             position: absolute;
-            top: 0;
+            top: 120px;
             left: 0;
             z-index: 0;
             padding: 0;
@@ -133,7 +133,7 @@
 
         #photos {
             z-index: 1; /* The z-index should be higher than Google Maps */
-            width: 900px;
+            width: 400px;
             /*margin: 60px auto 0;*/
             padding: 10px;
             background: transparent;
@@ -258,7 +258,7 @@
         }
 
         #hp-ctn-howItWorks-information {
-            top: 65px;
+            top: 150px;
             position: fixed;
             left: 0px;
             padding: 0px;
@@ -346,7 +346,7 @@
             z-index: 1;
             top: 0;
             left: 0;
-            /*background-color: #111;*/
+            background-color: #111;
             overflow-x: hidden;
             transition: 0.5s;
             padding-top: 60px;
@@ -376,6 +376,7 @@
         #main {
             transition: margin-left .5s;
             padding: 16px;
+            background: white;
         }
 
         @media screen and (max-height: 450px) {
@@ -460,21 +461,25 @@
 
 
 
+
     <footer class="footer" style="background-color: #3F51B5; width: 70%; margin-left: 100px">
         <div class="container">
             <span class="text-muted" style="font-size: 14px;font-style: inherit">Trip name: {{tripName}} | Description: {{tripDescription}} | Date: {{dateStart}} - {{dateEnd}}</span>
         </div>
     </footer>
 
-
+    <!-- Slider -->
+    <rzslider rz-slider-model="slider.value"
+              rz-slider-options="slider.options"></rzslider>
 
 	<!-- Tips filter -->
-	<div style="position: absolute; right: 30px; top: 70px;">
+	<div style="position: absolute; right: 30px; top: 125px;">
 	<div class="btn-group" role="group" aria-label="...">
 		<button type="button" ng-click="filterTipsOnClick('all')" class="btn btn-secondary">All</button>
  		<button type="button" ng-click="filterTipsOnClick('tips')" class="btn btn-primary">Tips</button>
    	 	<button type="button" ng-click="filterTipsOnClick('risks')" class="btn btn-danger">Risks</button>
  		<button type="button" ng-click="filterTipsOnClick('expense')" class="btn btn-warning">Expense</button>
+        <button type="button" ng-click="filterTipsOnClick('invite')" class="btn btn-info">Invite</button>
 	</div>
 
 
@@ -531,27 +536,31 @@
 
     <!-- side button photos-->
 
-
+    <!-- Google street button -->
     <div id="pano-button" ng-click="panoView()">
         <img src="assets/icons/Street-View-icon.png" style="height: 50px; width: 50px">
     </div>
 
+    <!-- Open settings -->
     <div id="edit" ng-click="editModeSwitch()">
         <img src="../../assets/images/edit.gif" width="40" height="40" style="margin-left:8px"/>
         <!-- <p style="width: 100px; height: 60px; font-size: 20px; margin-top:20px" class="text-rotate"> 
             {{editButtonText}}</p>
             -->
+    <!-- Show trip information-->
     </div>
     <div id="hp-ctn-howItWorks-information" ng-click="inforSlide = !inforSlide" ng-hide="editMode">
         <img src="../../assets/images/information.png" width="40" height="40" style="margin-left:8px" ;/>
         <!-- <p class="text-rotate" style="font-size:20px">Info</p> -->
     </div>
 
+    <!-- Show table-->
     <div id="hp-ctn-howItWorks-table" ng-click="tableSlider = !tableSlider" ng-hide="editMode">
         <img src="../../assets/images/table_icon2.svg" width="40" height="40" style="margin-left:8px"/>
         <!-- <p class="text-rotate" style="font-size:20px">Table</p> -->
     </div>
 
+    <!-- Show photos-->
     <div id="hp-ctn-howItWorks-photos" ng-click="photosSlider = !photosSlider" ng-hide="editMode">
         <img src="../../assets/images/photos_icon.png" width="40" height="40" style="margin-left:8px"/>
         <!-- <p class="text-rotate" style="font-size:20px">Photos</p> -->
@@ -562,7 +571,7 @@
 
     <!-- We will make a simple accordian with hover effects
 The markup will have a list with images and the titles-->
-    <div class="footer accordian" ng-hide="!facebookProvider" ng-hide="photosSlider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
+    <div class="footer accordian" ng-show="photosSlider && facebookProvider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
         <ul>
             <li ng-repeat="item in items">
                 <div class="image_title">
@@ -577,7 +586,7 @@ The markup will have a list with images and the titles-->
     <!-- end facebook photos -->
 
     <!-- photos from aws -->
-    <div class="footer accordian" ng-hide="!awsProvider" ng-hide="photosSlider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
+    <div class="footer accordian" ng-show="photosSlider && awsProvider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
         <ul>
             <li ng-repeat="photo in photos">
                 <div class="image_title">
@@ -663,19 +672,19 @@ The markup will have a list with images and the titles-->
     <!-- ######################################################################### -->
 
 
-    <div id="mySidenav" class="sidenav" style="margin-top: 65px; color: white">
+    <div id="mySidenav" class="sidenav" style="margin-top: 60px; color: white">
         <a href="javascript:void(0)" class="closebtn" ng-click="editModeSwitch()">&times;</a>
 
         <a style="padding-left: 2px">Settings</a>
 
         <ul class="tab">
-            <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'photos')" id="defaultOpen">Photos</a></li>
-            <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'maps')">Maps</a></li>
-            <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'tips')">Tips</a></li>
-            <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'gps')">GPS</a></li>
+            <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'photosSettingsTab')" id="defaultOpen">Photos</a></li>
+            <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'mapsSettingTab')">Maps</a></li>
+            <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'tipsSettingTab')">Tips</a></li>
+            <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'gpsSettingsTab')">GPS</a></li>
         </ul>
 
-        <div id="photos" class="tabcontent">
+        <div id="photosSettingsTab" class="tabcontent">
             <h3>Photos</h3>
             <div flex-gt-sm="50">
                 <md-checkbox ng-model="facebookProvider" ng-change="enableFacebookProvider()" aria-label="Checkbox 1" class="md-primary">
@@ -711,14 +720,14 @@ The markup will have a list with images and the titles-->
 
         </div>
 
-        <div id="maps" class="tabcontent">
+        <div id="mapsSettingTab" class="tabcontent">
             <h3>Map</h3>
             <p>Upload an exist map, KML file</p>
 
         </div>
 
 
-        <div id="tips" class="tabcontent">
+        <div id="tipsSettingTab" class="tabcontent">
             <h3>Tips</h3>
             <p>Add new tip, manually by with GPS location</p>
             <p>Add message</p>
@@ -731,7 +740,7 @@ The markup will have a list with images and the titles-->
             </ul>
         </div>
 
-        <div id="gps" class="tabcontent">
+        <div id="gpsSettingsTab" class="tabcontent">
             <h3>GPS</h3>
             <p>Select a photo and then point to the location in the map</p>
             <!-- <div id="add_GPS_toPhoto" style="z-index: 16; position: relative; margin-bottom: 10px" class="roundborder"> -->

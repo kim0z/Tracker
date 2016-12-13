@@ -1,4 +1,4 @@
-trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $document, dataBaseService, messages, localStorageService, Facebook, $filter) {
+trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $document, dataBaseService, messages, localStorageService, Facebook,  $filter) {
 
 
         $scope.profile = localStorageService.get('profile');
@@ -72,7 +72,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         $scope.showExpense = false;
         $scope.showInvite = false;
 
-        $scope.photosSlider = true;
+        $scope.photosSlider = false;
         $scope.tableSlider = true;
         $scope.inforSlide = true;
 
@@ -100,7 +100,6 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         $scope.selectedFacebookAlbum = [];
         $scope.facebookAlbumsList = []; //Facebook albums from Firebase
 
-
         //read albums from Firebase config and then load photos
         //read albums from Firebase for:
         // 1. update edit mode list witht the enabled albums (not to update the list witht the albums list, only if it enabled, reason: could be that the list in facebook more updated)
@@ -115,9 +114,9 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             $scope.trip = results.data;
 
             //################################### Fill all fields of Trip definition #########################
-            console.log('end date: ' + $scope.trip[0].end_date);
-            console.log('start day: ' + $scope.trip[0].start_date);
-            console.log('trip desc: ' + $scope.trip[0].trip_description);
+            //console.log('end date: ' + $scope.trip[0].end_date);
+            //console.log('start day: ' + $scope.trip[0].start_date);
+            //console.log('trip desc: ' + $scope.trip[0].trip_description);
 
             $scope.tripName = $scope.trip[0].trip_name;
             $scope.tripDescription = $scope.trip[0].trip_description;
@@ -126,6 +125,23 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             $scope.dateStart = $filter('date')($scope.trip[0].start_date, 'MMM d, y');
             $scope.dateEnd = $filter('date')($scope.trip[0].end_date, 'MMM d, y');
+
+            $scope.tripDays = Math.abs(Math.floor(( Date.parse($scope.dateStart) - Date.parse($scope.dateEnd) ) / 86400000));
+
+
+            //Slider
+            $scope.slider = { //requires angular-bootstrap to display tooltips
+                value: 5,
+                options: {
+                    floor: 1,
+                    ceil: $scope.tripDays,
+                    showTicksValues: true,
+                    ticksValuesTooltip: function(v) {
+                        return 'Tooltip for ' + v;
+                    }
+                }
+            };
+
 
             $scope.photosSource = $scope.trip[0].photos_provider;
 
@@ -138,6 +154,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             }
 
         });
+
 
 
         //$scope.tripID
@@ -166,7 +183,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     $scope.showTips = false;
                     $scope.showRisks = false;
                     $scope.filterExpense = false;
-                    //$scope.filterInvite
+                    $scope.showInvite = false;
                     break;
                 }
                 case 'tips': {
@@ -174,7 +191,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     $scope.showTips = true;
                     $scope.showRisks = false;
                     $scope.showExpense = false;
-                    //$scope.filterInvite
+                    $scope.showInvite = false;
                     break;
                 }
                 case 'risks': {
@@ -182,7 +199,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     $scope.showTips = false;
                     $scope.showRisks = true;
                     $scope.showExpense = false;
-                    //$scope.filterInvite
+                    $scope.showInvite = false;
                     break;
                 }
                 case 'expense': {
@@ -190,12 +207,21 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     $scope.showTips = false;
                     $scope.showRisks = false;
                     $scope.showExpense = true;
-                    //$scope.filterInvite
+                    $scope.showInvite = false;
                     break;
                 }
-               
+                case 'invite': {
+                    $scope.showAllTips = false;
+                    $scope.showTips = false;
+                    $scope.showRisks = false;
+                    $scope.showExpense = false;
+                    $scope.showInvite = true;
+                    break;
+                }
             }  
        }
+
+
 
         var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
 
@@ -233,14 +259,14 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                         "/" + $scope.facebookAlbumsFriebase[i].albumID + "/photos?access_token=" + $scope.userAccessToken,
                         function (album) {
                             if (album && !album.error) {
-                                console.log('photos');
+                                //console.log('photos');
                                 for (var photoIndex = 0; photoIndex < album.data.length; photoIndex++) {
                                     Facebook.api(
                                         "/" + album.data[photoIndex].id + "/picture?access_token=" + $scope.userAccessToken,
                                         function (photo) {
                                             if (photo && !photo.error) {
                                                 /* handle the result */
-                                                console.log(photo.data.url);
+                                                //console.log(photo.data.url);
                                                 $scope.facebookPhotos.push(photo.data.url);
                                                 $scope.prod.imagePaths.push({
                                                     custom: photo.data.url,
@@ -251,7 +277,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                                         });
                                     if (photoIndex == album.data.length - 1) {
                                         $scope.facebookImagesReady = true;
-                                        console.log('ready');
+                                        //console.log('ready');
                                         $scope.$apply();
                                     }
                                 }

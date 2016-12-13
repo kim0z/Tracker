@@ -47,7 +47,8 @@
 
     <link rel="stylesheet" href="/bower_components/angular-material/angular-material.css">
     <link rel="stylesheet" href="/assets/css/style_tripList.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic"> -->
+    <link rel="stylesheet" href="/assets/css/fonts_google.css">
 
 </head>
 
@@ -126,6 +127,9 @@
 <!-- Local storage, session storage -->
 <script src='bower_components/angular-local-storage/dist/angular-local-storage.js'></script>
 
+<!-- Slider -->
+<link rel="stylesheet" type="text/css" href="bower_components/angularjs-slider/dist/rzslider.min.css"/>
+<script src="bower_components/angularjs-slider/dist/rzslider.min.js"></script>
 
 <!-- AngularJS Timer -->
 <script src='bower_components/angular-timer/dist/angular-timer.min.js'></script>
@@ -142,16 +146,20 @@
 <script src="bower_components/angular-simple-logger/satellizer/satellizer.js"></script>
 <script src="bower_components/angular-simple-logger/satellizer/satellizer.min.js"></script>
 -->
-<script src="//cdn.jsdelivr.net/satellizer/0.13.4/satellizer.min.js"></script>
+
+
+<!-- <script src="//cdn.jsdelivr.net/satellizer/0.13.4/satellizer.min.js"></script> -->
 
 <script src="bower_components/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
 
 
 <!-- Firebase - connect directly from client -->
 <!-- Firebase -->
-<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+<!--<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>-->
+<script src="bower_components/firebase/firebase.js"></script>
 <!-- AngularFire -->
-<script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
+<!-- <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script> -->
+<script src="bower_components/angularfire/dist/angularfire.min.js"></script>
 
 
 <!-- AWS SDK -->
@@ -178,9 +186,12 @@
 <script type="text/javascript" src="bower_components/lodash/lodash.js"></script>
 
 <!-- this angular facebook login module should be replaced with bower install (bower didn't work for me, check again) -->
-
+<!-- moved to auth0 not sure below module is relevant !! -->
+<!--
 <script data-require "angular.js@1.1.5" data-semver="1.1.5" src="http://rawgithub.com/Ciul/angular-facebook/master/lib/angular-facebook.js"></script>
+-->
 
+<script type="text/javascript" src="bower_components/angular-facebook/lib/angular-facebook.js"></script>
 
 <script src="services/googleAPISvc.js"></script>
 <script src="services/dbSvc.js"></script>
@@ -227,11 +238,6 @@
         </div>
     </md-toolbar>
 
-
-    <!--[if lt IE 7]>
-    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-        your browser</a> to improve your experience.</p>
-    <![endif]-->
 
     <div ui-view></div>
 

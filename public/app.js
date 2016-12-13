@@ -11,13 +11,14 @@ var trackerApp = angular.module('myApp', [
         'ui.grid',
         'angularNumberPicker',
         'angular-advanced-searchbox',
+        'rzModule',
         '720kb.datepicker',
         'smart-table',
         'ngMaterial',
         'ngAnimate',
         'ngAria',
         'ngTable',
-        'satellizer',
+        /*'satellizer',*/
         'facebook',
         'LocalStorageModule',
         'firebase',
@@ -329,6 +330,7 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
 
 //Login Facebook -- old login, now I am using login.js with auth0
 //****************************************************************
+/*
 trackerApp.controller('login1',
     ['$scope', '$timeout', 'Facebook', 'dataBaseService', 'messages', 'localStorageService', function ($scope, $timeout, Facebook, dataBaseService, messages, localStorageService) {
 
@@ -347,10 +349,10 @@ trackerApp.controller('login1',
         // $scope.byebye = false;
         // $scope.salutation = false;
 
-        /**
+        /!**
          * Watch for Facebook to be ready.
          * There's also the event that could be used
-         */
+         *!/
         $scope.$watch(
             function () {
                 return Facebook.isReady();
@@ -381,18 +383,18 @@ trackerApp.controller('login1',
             }
         });
 
-        /**
+        /!**
          * IntentLogin
-         */
+         *!/
         $scope.IntentLogin = function () {
             if (!userIsConnected) {
                 $scope.login();
             }
         };
 
-        /**
+        /!**
          * Login
-         */
+         *!/
         $scope.login = function () {
             Facebook.login(function (response) {
                 if (response.status == 'connected') {
@@ -402,14 +404,14 @@ trackerApp.controller('login1',
             }, {scope: 'publish_actions,user_photos'});
         };
 
-        /**
+        /!**
          * me
-         */
+         *!/
         $scope.me = function () {
             Facebook.api('/me?fields=id,name,email,timezone', function (response) {
-                /**
+                /!**
                  * Using $scope.$apply since this happens outside angular framework.
-                 */
+                 *!/
                 $scope.$apply(function () {
                     $scope.user = response;
 
@@ -423,7 +425,7 @@ trackerApp.controller('login1',
                     firebase_users_add_f.set($scope.user);
 
 
-                    /*
+                    /!*
 
 
                      //check if node 'users' exists, only for the init of the app, one time action
@@ -438,7 +440,7 @@ trackerApp.controller('login1',
                      firebase_users_add.set($scope.user);
                      } else {
                      //else, when users node already exists then we should check if the user already exists
-                     */
+                     *!/
 
 
                     //
@@ -502,9 +504,9 @@ trackerApp.controller('login1',
             });
         };
 
-        /**
+        /!**
          * Logout
-         */
+         *!/
         $scope.logout = function () {
             Facebook.logout(function () {
                 $scope.$apply(function () {
@@ -517,9 +519,9 @@ trackerApp.controller('login1',
             });
         }
 
-        /**
+        /!**
          * Taking approach of Events :D
-         */
+         *!/
         $scope.$on('Facebook:statusChange', function (ev, data) {
             console.log('Status: ', data);
             if (data.status == 'connected') {
@@ -539,12 +541,12 @@ trackerApp.controller('login1',
                     $scope.logged = false;
                     localStorageService.set('logged', $scope.logged);
 
-                    /*
+                    /!*
                      // Dismiss byebye message after two seconds
                      $timeout(function () {
                      $scope.byebye = false;
                      }, 2000)
-                     */
+                     *!/
                 });
             }
 
@@ -552,10 +554,10 @@ trackerApp.controller('login1',
         })
     }])
 
-    /**
+    /!**
      * Just for debugging purposes.
      * Shows objects in a pretty way
-     */
+     *!/
     .directive('debug1', function () {
         return {
             restrict: 'E',
@@ -570,4 +572,4 @@ trackerApp.controller('login1',
                 };
             }
         }
-    });
+    });*/
