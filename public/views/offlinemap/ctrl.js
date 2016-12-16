@@ -126,16 +126,9 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             $scope.dateStart = $filter('date')($scope.trip[0].start_date, 'MMM d, y');
             $scope.dateEnd = $filter('date')($scope.trip[0].end_date, 'MMM d, y');
 
-            //TESTING - work well
-            var x = new Date($scope.trip[0].start_date);
-            console.log('XXXXX');
-            console.log(x);
-            console.log(x.setDate(x.getDate() + 5));
-            console.log($filter('date')(x, 'MMM d, y'));
-            //END TESTING
-
             //Date to be used for slider, helps to add days on top of start day
             $scope.startDateSlider = new Date($scope.trip[0].start_date);
+            $scope.startDateSliderForPath = new Date($scope.trip[0].start_date);
 
 
             $scope.test = new Date($scope.trip[0].start_date);
@@ -143,8 +136,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             $scope.tripDays = Math.abs(Math.floor(( Date.parse($scope.dateStart) - Date.parse($scope.dateEnd) ) / 86400000));
 
             $scope.sliderChangeListener = function() {
-
-                console.log($scope.slider.value);
+                //console.log($scope.slider.value);
             };
 
             //Slider
@@ -180,8 +172,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         $scope.filterTips = function(day)
         {
             return function(message) {
-                console.log('Tips filter, for slider');
-                console.log($scope.slider);
+                //console.log('Tips filter, for slider');
+                //console.log($scope.slider);
                 //example:
                 //if day = 1 it means, start day, day = 2, it means start day + 1;
 
@@ -480,7 +472,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             $scope.facebookPhotos = [];
             var coverSelected = false;
-            console.log($scope.facebookAlbums);
+            //console.log($scope.facebookAlbums);
             var albumLen = Object.keys($scope.facebookAlbums).length;
             for (var i = 0; i < albumLen; i++) {
                 if ($scope.facebookAlbums[i].checkbox) {
@@ -492,7 +484,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                             "/" + $scope.facebookAlbums[i].albumID + "/picture",
                             function (cover) {
                                 if (cover && !cover.error) {
-                                    console.log("https://trackerconfig.firebaseio.com/web/" + facebookId + "/tripslist/coverphoto/trip/" + $scope.tripID);
+                                    //console.log("https://trackerconfig.firebaseio.com/web/" + facebookId + "/tripslist/coverphoto/trip/" + $scope.tripID);
                                     //save Facebook album cover in Firebase
                                     var firebase_config_coverPhoto = new Firebase("https://trackerconfig.firebaseio.com/web/" + facebookId + "/tripslist/coverphoto/trip/" + $scope.tripID);
                                     firebase_config_coverPhoto.set(cover.data.url);
@@ -506,15 +498,15 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                         "/" + $scope.facebookAlbums[i].albumID + "/photos",
                         function (album) {
                             if (album && !album.error) {
-                                console.log('photos');
+                                //console.log('photos');
                                 for (var photoIndex = 0; photoIndex < album.data.length; photoIndex++) {
                                     Facebook.api(
                                         "/" + album.data[photoIndex].id + "/picture",
                                         function (photo) {
                                             if (photo && !photo.error) {
-                                                console.log(photo.data.url);
+                                                //console.log(photo.data.url);
                                                 $scope.facebookPhotos.push(photo.data.url);
-                                                console.log($scope.facebookAlbums);
+                                                //console.log($scope.facebookAlbums);
                                             }
                                         });
                                 }
@@ -719,7 +711,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
 
                             var fileGpsUrl = S3URL + 'tracker.photos/' + $scope.profile.email + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt';
-                            console.log(fileGpsUrl);
+                            //console.log(fileGpsUrl);
 
                             // get GPS point of the selected photo from AWS S3
                             $http({
@@ -969,6 +961,76 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             })
 
         })
+
+
+
+
+        //Filter map according to the selected day in the
+        //each time $scope.slider.value changes then filter map and then apply
+        $scope.$watch('slider.value', function() {
+            console.log('Filter map');
+            var filteredPath = [];
+
+            var tempDate = new Date($scope.startDateSliderForPath);
+
+            $scope.startDateSliderForPath = new Date($scope.startDateSliderForPath.setDate($scope.startDateSliderForPath.getDate() + $scope.slider.value));
+
+
+
+            //I should read from path, that already set and ready, but meanwhile I saved only lat, lang in path instaed of all the point
+            var ref_read_path_filter = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + facebookId + '/' + $scope.tripID + '/path');
+
+            ref_read_path_filter.once("value", function (path) {
+                path.forEach(function (point) {
+
+                    //console.log(point.val());
+                    var pointTime = $filter('date')(point.val()['timestamp'], 'MMM d, y');
+                    var selectedDatePath = $filter('date')($scope.startDateSliderForPath, 'MMM d, y');
+
+                    if (pointTime == selectedDatePath) {
+                        filteredPath.push({
+                            lat: JSON.parse(point.val()['coords'].latitude),
+                            lng: JSON.parse(point.val()['coords'].longitude)
+                        });
+                    }
+
+                });
+
+                $scope.startDateSliderForPath = tempDate;
+
+                //update map with filtered path
+                //set the path for the first load, for the real time load, I added the same code into the listener of Firebase above
+                //dashed line
+                var lineSymbol = {
+                    path: 'M 0,-1 0,1',
+                    strokeOpacity: 1,
+                    scale: 4
+                };
+
+                //Hash table for all users path
+                polys[facebookId] = new google.maps.Polyline({
+                    path: filteredPath,
+                    geodesic: true,
+                    strokeColor: '#000000', //getRandomColor(),
+                    strokeOpacity: 0,
+                    strokeWeight: 2,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '0',
+                        repeat: '20px'
+                    }]
+                });
+
+                polys[facebookId].setMap($scope.map);
+
+                $scope.map.setCenter(path.pop());
+                $scope.map.setZoom(12);
+
+            });
+        });
+
+
+
 
 
         //load Table from Firebase
