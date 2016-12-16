@@ -1027,7 +1027,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
                 polys[facebookId].setMap($scope.map);
 
-                $scope.map.setCenter(path.pop());
+                $scope.map.setCenter(filteredPath.pop());
                 $scope.map.setZoom(12);
 
             });
