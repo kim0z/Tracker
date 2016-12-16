@@ -126,8 +126,26 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             $scope.dateStart = $filter('date')($scope.trip[0].start_date, 'MMM d, y');
             $scope.dateEnd = $filter('date')($scope.trip[0].end_date, 'MMM d, y');
 
+            //TESTING - work well
+            var x = new Date($scope.trip[0].start_date);
+            console.log('XXXXX');
+            console.log(x);
+            console.log(x.setDate(x.getDate() + 5));
+            console.log($filter('date')(x, 'MMM d, y'));
+            //END TESTING
+
+            //Date to be used for slider, helps to add days on top of start day
+            $scope.startDateSlider = new Date($scope.trip[0].start_date);
+
+
+            $scope.test = new Date($scope.trip[0].start_date);
+
             $scope.tripDays = Math.abs(Math.floor(( Date.parse($scope.dateStart) - Date.parse($scope.dateEnd) ) / 86400000));
 
+            $scope.sliderChangeListener = function() {
+
+                console.log($scope.slider.value);
+            };
 
             //Slider
             $scope.slider = { //requires angular-bootstrap to display tooltips
@@ -138,9 +156,12 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     showTicksValues: true,
                     ticksValuesTooltip: function(v) {
                         return 'Tooltip for ' + v;
-                    }
+                    },
+                    onChange: $scope.sliderChangeListener
                 }
             };
+
+
 
 
             $scope.photosSource = $scope.trip[0].photos_provider;
@@ -155,7 +176,48 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
         });
 
+        //Filter - used to get value from slider to filter tips
+        $scope.filterTips = function(day)
+        {
+            return function(message) {
+                console.log('Tips filter, for slider');
+                console.log($scope.slider);
+                //example:
+                //if day = 1 it means, start day, day = 2, it means start day + 1;
 
+                //add days number to start date
+                $scope.selectedDate = new Date();
+                $scope.selectedDate = $scope.selectedDate.setDate($scope.startDateSlider.getDate() + $scope.slider.value);
+
+                //check if item date is equal to the selected date (slider), if yes return true else false
+                //get item date
+                var messageDate = $filter('date')(message.time, 'MMM d, y');
+                var sliderDate = $filter('date')($scope.selectedDate, 'MMM d, y');
+
+                if(messageDate == sliderDate)
+                    return true;
+                else
+                    return false;
+
+                //else
+                    //console.log('FALSE');
+               // console.log(message.time);
+               // console.log($filter('date')(message.time, 'MMM d, y'));
+               // console.log($filter('date')($scope.selectedDate, 'MMM d, y'));
+
+
+
+               // return true;
+            }
+
+        };
+
+        //Filter - used to get value from slider to filter map
+        /*      $scope.filterTips = function(car)
+         {
+
+         };
+         */
 
         //$scope.tripID
         //value to update
