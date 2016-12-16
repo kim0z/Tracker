@@ -5,6 +5,7 @@ var trackerApp = angular.module('myApp', [
         'auth0',
         'ui.router',
         'angular-jwt',
+        'ngAnimate',
         'ngDialog',
         'uiGmapgoogle-maps',
         'ngAutocomplete',
@@ -15,10 +16,10 @@ var trackerApp = angular.module('myApp', [
         '720kb.datepicker',
         'smart-table',
         'ngMaterial',
-        'ngAnimate',
+
         'ngAria',
         'ngTable',
-        /*'satellizer',*/
+        /*'satellizer', */
         'facebook',
         'LocalStorageModule',
         'firebase',

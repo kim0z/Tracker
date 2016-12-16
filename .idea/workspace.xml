@@ -21,11 +21,55 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ctrl.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/views/offlinemap/ctrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.31096774">
+            <state vertical-scroll-proportion="-8.925926">
               <caret line="146" column="49" selection-start-line="146" selection-start-column="49" selection-end-line="146" selection-end-column="49" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/public/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.37783712">
+              <caret line="98" column="48" selection-start-line="98" selection-start-column="48" selection-end-line="98" selection-end-column="48" />
+              <folding>
+                <element signature="n#style#0;n#md-button#0;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#img#0;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#img#1;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bower.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bower.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-9.320755">
+              <caret line="45" column="18" selection-start-line="45" selection-start-column="13" selection-end-line="45" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-2.5185184">
+              <caret line="4" column="9" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.2592592">
+              <caret line="7" column="20" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -34,8 +78,8 @@
       <file leaf-file-name="offlinemap.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/views/offlinemap/offlinemap.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.4150944">
-              <caret line="487" column="91" selection-start-line="487" selection-start-column="91" selection-end-line="487" selection-end-column="113" />
+            <state vertical-scroll-proportion="-4.6981134">
+              <caret line="487" column="95" selection-start-line="487" selection-start-column="94" selection-end-line="487" selection-end-column="95" />
               <folding>
                 <element signature="n#style#0;n#footer#0;n#div#1;n#body#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#span#0;n#div#0;n#footer#0;n#div#1;n#body#0;n#!!top" expanded="true" />
@@ -70,7 +114,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/config/auth.js" />
         <option value="$PROJECT_DIR$/public/views/login/index.ejs" />
         <option value="$PROJECT_DIR$/public/views/login/profile.ejs" />
         <option value="$PROJECT_DIR$/config/passport.js" />
@@ -113,14 +156,15 @@
         <option value="$PROJECT_DIR$/public/views/index/welcome.html" />
         <option value="$PROJECT_DIR$/public/views/trips/trips.html" />
         <option value="$PROJECT_DIR$/public/views/trips/tripsCtrl.js" />
-        <option value="$PROJECT_DIR$/bower.json" />
         <option value="$PROJECT_DIR$/public/services/dbSvc.js" />
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/public/assets/css/fonts_google.css" />
-        <option value="$PROJECT_DIR$/public/index.html" />
-        <option value="$PROJECT_DIR$/public/app.js" />
         <option value="$PROJECT_DIR$/public/views/offlinemap/offlinemap.html" />
         <option value="$PROJECT_DIR$/public/views/offlinemap/ctrl.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/bower.json" />
+        <option value="$PROJECT_DIR$/public/app.js" />
+        <option value="$PROJECT_DIR$/public/index.html" />
       </list>
     </option>
   </component>
@@ -227,6 +271,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="offlinemap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tracker" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tracker" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bower_components" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -374,6 +436,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22339676" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1" sideWeight="0.5024665" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6012048" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27108434" sideWeight="0.49753347" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -386,7 +449,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6012048" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -519,13 +581,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="17" column="48" selection-start-line="17" selection-start-column="48" selection-end-line="17" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/bower_components/angular-ui-router/release/angular-ui-router.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33290324">
-          <caret line="3811" column="3" selection-start-line="3811" selection-start-column="3" selection-end-line="3811" selection-end-column="3" />
         </state>
       </provider>
     </entry>
@@ -690,13 +745,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/bower_components/angular-simple-logger/dist/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.607232">
-          <caret line="29" column="54" selection-start-line="29" selection-start-column="39" selection-end-line="29" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -709,13 +757,6 @@
         <state vertical-scroll-proportion="0.80548626">
           <caret line="38" column="8" selection-start-line="38" selection-start-column="8" selection-end-line="38" selection-end-column="8" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bower.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.27319586">
-          <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
         </state>
       </provider>
     </entry>
@@ -751,87 +792,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/bower_components/angular/angular.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1465329707000" expanded="true" signature="23106:23588" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="23145:23506" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="23599:24027" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="23674:24015" placeholder="[...]" />
-            <marker date="1465329707000" expanded="true" signature="23702:24014" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="23767:23854" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="23889:23984" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="29756:30350" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="29782:30337" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="30084:30190" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="30468:30716" placeholder="[...]" />
-            <marker date="1465329707000" expanded="true" signature="30496:30715" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="30619:30704" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="46019:46072" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="46198:46242" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="46439:47484" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="46484:46735" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="46549:46721" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="46781:47058" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="46872:47044" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="47102:47474" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="47167:47460" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="47570:47704" placeholder="//..." />
-            <marker date="1465329707000" expanded="true" signature="47756:47806" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="47813:48007" placeholder="//..." />
-            <marker date="1465329707000" expanded="true" signature="48044:48123" placeholder="[...]" />
-            <marker date="1465329707000" expanded="true" signature="48072:48122" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="48217:48255" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="48359:48502" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="48531:48624" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="48652:48770" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="153020:153144" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="153286:153696" placeholder="[...]" />
-            <marker date="1465329707000" expanded="true" signature="153384:153695" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="153432:153679" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="153451:153543" placeholder="//..." />
-            <marker date="1465329707000" expanded="true" signature="153766:153831" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="153850:153920" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="154314:154455" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="154391:154439" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="154531:154576" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="154697:154833" placeholder="[...]" />
-            <marker date="1465329707000" expanded="true" signature="154739:154832" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="154872:155537" placeholder="[...]" />
-            <marker date="1465329707000" expanded="true" signature="154970:155524" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="155019:155508" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="155117:155316" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="155138:155248" placeholder="//..." />
-            <marker date="1465329707000" expanded="true" signature="155322:155491" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="155343:155436" placeholder="//..." />
-            <marker date="1465329707000" expanded="true" signature="155600:155642" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="155661:155757" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="155782:155934" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="155963:156038" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="205178:205804" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="205463:205589" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="205673:205790" placeholder="..." />
-            <marker date="1465329707000" expanded="true" signature="205933:206343" placeholder="[...]" />
-            <marker date="1465329707000" expanded="true" signature="205993:206342" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="206121:206330" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="206184:206238" placeholder="{...}" />
-            <marker date="1465329707000" expanded="true" signature="206397:206436" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/bower_components/angularfire/dist/angularfire.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/assets/css/fonts_google.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.50386596">
@@ -840,30 +800,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.528302">
-          <caret line="193" column="95" selection-start-line="193" selection-start-column="95" selection-end-line="193" selection-end-column="95" />
-          <folding>
-            <element signature="n#style#0;n#md-button#0;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#img#0;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#img#1;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44513714">
-          <caret line="21" column="19" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/views/offlinemap/offlinemap.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.4150944">
-          <caret line="487" column="91" selection-start-line="487" selection-start-column="91" selection-end-line="487" selection-end-column="113" />
+        <state vertical-scroll-proportion="-4.6981134">
+          <caret line="487" column="95" selection-start-line="487" selection-start-column="94" selection-end-line="487" selection-end-column="95" />
           <folding>
             <element signature="n#style#0;n#footer#0;n#div#1;n#body#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#div#0;n#footer#0;n#div#1;n#body#0;n#!!top" expanded="true" />
@@ -880,11 +820,55 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.5185184">
+          <caret line="4" column="9" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/bower_components/angular-animate/bower.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21907216">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.320755">
+          <caret line="45" column="18" selection-start-line="45" selection-start-column="13" selection-end-line="45" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/views/offlinemap/ctrl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31096774">
+        <state vertical-scroll-proportion="-8.925926">
           <caret line="146" column="49" selection-start-line="146" selection-start-column="49" selection-end-line="146" selection-end-column="49" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.2592592">
+          <caret line="7" column="20" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.37783712">
+          <caret line="98" column="48" selection-start-line="98" selection-start-column="48" selection-end-line="98" selection-end-column="48" />
+          <folding>
+            <element signature="n#style#0;n#md-button#0;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#img#0;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#img#1;n#div#0;n#md-toolbar#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
