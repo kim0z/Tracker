@@ -186,18 +186,27 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 //if day = 1 it means, start day, day = 2, it means start day + 1;
 
                 //add days number to start date
-                $scope.selectedDate = new Date();
-                $scope.selectedDate = $scope.selectedDate.setDate($scope.startDateSlider.getDate() + $scope.slider.value);
+                //$scope.selectedDate = new Date($scope.startDateSlider.getDate());
+
+                var tempDate = new Date($scope.startDateSlider);
+
+                $scope.startDateSlider = new Date($scope.startDateSlider.setDate($scope.startDateSlider.getDate() + $scope.slider.value));
 
                 //check if item date is equal to the selected date (slider), if yes return true else false
                 //get item date
                 var messageDate = $filter('date')(message.time, 'MMM d, y');
-                var sliderDate = $filter('date')($scope.selectedDate, 'MMM d, y');
+                var sliderDate = $filter('date')($scope.startDateSlider, 'MMM d, y');
 
-                if(messageDate == sliderDate)
+                if(messageDate == sliderDate){
+                    $scope.startDateSlider = tempDate;
                     return true;
-                else
+                }
+
+                else{
+                    $scope.startDateSlider = tempDate;
                     return false;
+                }
+
 
                 //else
                     //console.log('FALSE');
