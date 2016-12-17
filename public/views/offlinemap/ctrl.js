@@ -1,5 +1,4 @@
-trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $document, dataBaseService, messages, localStorageService, Facebook,  $filter) {
-
+trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $document, dataBaseService, messages, localStorageService, Facebook, $filter) {
 
         $scope.profile = localStorageService.get('profile');
         $scope.userAccessToken = localStorageService.get('providerToken');
@@ -63,6 +62,9 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         $scope.panoPosition = '';
         $scope.editButtonText = 'Edit Mode';
         var showMessageOnMap_clicked = false;
+
+        $scope.pathSaved = [];
+        $scope.pathLoaded = false;
 
 
         //Filter for the tips
@@ -135,7 +137,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             $scope.tripDays = Math.abs(Math.floor(( Date.parse($scope.dateStart) - Date.parse($scope.dateEnd) ) / 86400000));
 
-            $scope.sliderChangeListener = function() {
+            $scope.sliderChangeListener = function () {
                 //console.log($scope.slider.value);
             };
 
@@ -146,14 +148,12 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     floor: 1,
                     ceil: $scope.tripDays,
                     showTicksValues: true,
-                    ticksValuesTooltip: function(v) {
+                    ticksValuesTooltip: function (v) {
                         return 'Tooltip for ' + v;
                     },
                     onChange: $scope.sliderChangeListener
                 }
             };
-
-
 
 
             $scope.photosSource = $scope.trip[0].photos_provider;
@@ -169,9 +169,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         });
 
         //Filter - used to get value from slider to filter tips
-        $scope.filterTips = function(day)
-        {
-            return function(message) {
+        $scope.filterTips = function (day) {
+            return function (message) {
                 //console.log('Tips filter, for slider');
                 //console.log($scope.slider);
                 //example:
@@ -189,26 +188,25 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 var messageDate = $filter('date')(message.time, 'MMM d, y');
                 var sliderDate = $filter('date')($scope.startDateSlider, 'MMM d, y');
 
-                if(messageDate == sliderDate){
+                if (messageDate == sliderDate) {
                     $scope.startDateSlider = tempDate;
                     return true;
                 }
 
-                else{
+                else {
                     $scope.startDateSlider = tempDate;
                     return false;
                 }
 
 
                 //else
-                    //console.log('FALSE');
-               // console.log(message.time);
-               // console.log($filter('date')(message.time, 'MMM d, y'));
-               // console.log($filter('date')($scope.selectedDate, 'MMM d, y'));
+                //console.log('FALSE');
+                // console.log(message.time);
+                // console.log($filter('date')(message.time, 'MMM d, y'));
+                // console.log($filter('date')($scope.selectedDate, 'MMM d, y'));
 
 
-
-               // return true;
+                // return true;
             }
 
         };
@@ -239,9 +237,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         };
 
 
-        $scope.filterTipsOnClick = function(filterStr) {
-            switch(filterStr) {
-                case 'all': {
+        $scope.filterTipsOnClick = function (filterStr) {
+            switch (filterStr) {
+                case 'all':
+                {
                     $scope.showAllTips = true;
                     $scope.showTips = false;
                     $scope.showRisks = false;
@@ -249,7 +248,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     $scope.showInvite = false;
                     break;
                 }
-                case 'tips': {
+                case 'tips':
+                {
                     $scope.showAllTips = false;
                     $scope.showTips = true;
                     $scope.showRisks = false;
@@ -257,7 +257,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     $scope.showInvite = false;
                     break;
                 }
-                case 'risks': {
+                case 'risks':
+                {
                     $scope.showAllTips = false;
                     $scope.showTips = false;
                     $scope.showRisks = true;
@@ -265,7 +266,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     $scope.showInvite = false;
                     break;
                 }
-                case 'expense': {
+                case 'expense':
+                {
                     $scope.showAllTips = false;
                     $scope.showTips = false;
                     $scope.showRisks = false;
@@ -273,7 +275,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     $scope.showInvite = false;
                     break;
                 }
-                case 'invite': {
+                case 'invite':
+                {
                     $scope.showAllTips = false;
                     $scope.showTips = false;
                     $scope.showRisks = false;
@@ -281,9 +284,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     $scope.showInvite = true;
                     break;
                 }
-            }  
-       }
-
+            }
+        }
 
 
         var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
@@ -906,6 +908,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     lat: JSON.parse(point.val()['coords'].latitude),
                     lng: JSON.parse(point.val()['coords'].longitude)
                 });
+                //all path saved to be used later for slider filter, instead of calling Firebase api again
+                $scope.pathSaved.push(point.val());
 
             })
 
@@ -954,6 +958,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     });
 
                     polys[facebookId].setPath(existsPath);
+                    $scope.pathLoaded = true;
 
                     //$scope.$apply();
                 }
@@ -963,38 +968,54 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         })
 
 
-
-
         //Filter map according to the selected day in the
         //each time $scope.slider.value changes then filter map and then apply
-        $scope.$watch('slider.value', function() {
-            console.log('Filter map');
-            var filteredPath = [];
+        $scope.$watch('slider.value', function () {
 
-            var tempDate = new Date($scope.startDateSliderForPath);
+            if (!$scope.pathLoaded) {
+                $timeout(function() { $scope.pathLoaded = true; });
+            } else {
 
-            $scope.startDateSliderForPath = new Date($scope.startDateSliderForPath.setDate($scope.startDateSliderForPath.getDate() + $scope.slider.value));
+                console.log('Filter map');
+                var filteredPath = [];
+
+                var tempDate = new Date($scope.startDateSliderForPath);
+
+                $scope.startDateSliderForPath = new Date($scope.startDateSliderForPath.setDate($scope.startDateSliderForPath.getDate() + $scope.slider.value));
 
 
+                //I should read from path, that already set and ready, but meanwhile I saved only lat, lang in path instaed of all the point
+                /*  var ref_read_path_filter = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + facebookId + '/' + $scope.tripID + '/path');
 
-            //I should read from path, that already set and ready, but meanwhile I saved only lat, lang in path instaed of all the point
-            var ref_read_path_filter = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + facebookId + '/' + $scope.tripID + '/path');
+                 ref_read_path_filter.once("value", function (path) {
+                 path.forEach(function (point) {
 
-            ref_read_path_filter.once("value", function (path) {
-                path.forEach(function (point) {
+                 //console.log(point.val());
+                 var pointTime = $filter('date')(point.val()['timestamp'], 'MMM d, y');
+                 var selectedDatePath = $filter('date')($scope.startDateSliderForPath, 'MMM d, y');
 
-                    //console.log(point.val());
-                    var pointTime = $filter('date')(point.val()['timestamp'], 'MMM d, y');
+                 if (pointTime == selectedDatePath) {
+                 filteredPath.push({
+                 lat: JSON.parse(point.val()['coords'].latitude),
+                 lng: JSON.parse(point.val()['coords'].longitude)
+                 });
+                 }
+
+                 });*/
+
+
+                for (var i = 0; i < $scope.pathSaved.length; i++) {
+                    var pointTime = $filter('date')($scope.pathSaved[i]['timestamp'], 'MMM d, y');
                     var selectedDatePath = $filter('date')($scope.startDateSliderForPath, 'MMM d, y');
 
                     if (pointTime == selectedDatePath) {
                         filteredPath.push({
-                            lat: JSON.parse(point.val()['coords'].latitude),
-                            lng: JSON.parse(point.val()['coords'].longitude)
+                            lat: JSON.parse($scope.pathSaved[i]['coords'].latitude),
+                            lng: JSON.parse($scope.pathSaved[i]['coords'].longitude)
                         });
                     }
+                }
 
-                });
 
                 $scope.startDateSliderForPath = tempDate;
 
@@ -1030,11 +1051,12 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 $scope.map.setCenter(filteredPath.pop());
                 $scope.map.setZoom(12);
 
-            });
+            }
+
+
+
+
         });
-
-
-
 
 
         //load Table from Firebase
