@@ -95,6 +95,7 @@
             height: 100%;
             width: 100%;
             position: absolute;
+            /*top: 0px;*/
             top: 120px;
             left: 0;
             z-index: 0;
@@ -183,7 +184,7 @@
         side button
         */
         #hp-ctn-howItWorks-photos {
-            bottom: 110px;
+            bottom: 125px;
             position: fixed;
             left: 0px;
             padding: 0px;
@@ -208,7 +209,7 @@
         }
 
         #edit {
-            bottom: 130px;
+            bottom: 65px;
             position: fixed;
             right: 0px;
             padding: 0px;
@@ -221,7 +222,7 @@
         }
 
         #pano-button {
-            bottom: 200px;
+            bottom: 125px;
             position: fixed;
             right: 0px;
             padding: 0px;
@@ -233,7 +234,7 @@
         }
 
         #hp-ctn-howItWorks-table {
-            bottom: 50px;
+            bottom: 65px;
             position: fixed;
             left: 0px;
             padding: 0px;
@@ -460,16 +461,16 @@
     <div id="pano"></div>
 
 
+<!-- #3F51B5 -->
 
-
-    <footer class="footer" style="background-color: #3F51B5; width: 70%; margin-left: 100px">
+    <footer class="footer" style="background-color: #1E1E1E; width: 100%; margin-right: 0px; right: 0px">
         <div class="container">
-            <span class="text-muted" style="font-size: 14px;font-style: inherit">Trip name: {{tripName}} | Description: {{tripDescription}} | Date: {{dateStart}} - {{dateEnd}}</span>
+            <span class="text-muted" style="font-size: 18px; text-align: left; font-style: inherit">Trip name: {{tripName}} | Description: {{tripDescription}} | Date: {{dateStart}} - {{dateEnd}}</span>
         </div>
     </footer>
 
     <!-- Slider -->
-    <rzslider rz-slider-model="slider.value"
+    <rzslider style="bottom: 10px;" rz-slider-model="slider.value"
               rz-slider-options="slider.options"></rzslider>
 
     <!--************************************** TIPS *******************************-->
@@ -589,7 +590,7 @@ The markup will have a list with images and the titles-->
     <!-- end facebook photos -->
 
     <!-- photos from aws -->
-    <div class="footer accordian" ng-show="photosSlider && awsProvider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
+    <div class="footer accordian" ng-show="photosSlider && awsProvider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px;">
         <ul>
             <li ng-repeat="photo in photos">
                 <div class="image_title">

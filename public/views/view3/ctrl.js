@@ -122,7 +122,7 @@ trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, 
         console.log('Client:: Click Shoe actual map - trip :: id:: ' + trip_id);
         messages.saveTripID(trip_id); //save trip id into message
         window.open('#/offlinemap', '_self', false);
-    }
+    };
     /*
  should be deleted added by wrong
      $scope.chunk = function (trip_id) {
@@ -137,17 +137,23 @@ trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, 
         console.log('Client:: Click Edit trip :: id:: ' + trip_id);
         messages.saveTripID(trip_id); //save trip id into message
         window.open('#/view1', '_self', false);
-    }
+    };
 
     $scope.deleteTrip = function (trip_id) {
         dataTripId = {trip_id: trip_id};
-        dataBaseService.deleteTripById(dataTripId).then(function (results) {
-            //$scope.message = data; //handle data back from server - not needed meanwhile
-            console.log('Client:: View3:: Fun:: openTripPlanPage :: Delete trip id:: ' + trip_id);
-            $window.location.reload();
-            //$route.reload();
-        })
-    }
+
+        var deleteTrip = $window.confirm('Are you sure you want to delete the trip?');
+
+        if (deleteTrip) {
+            //$window.alert('Going to delete the user');
+            dataBaseService.deleteTripById(dataTripId).then(function (results) {
+                //$scope.message = data; //handle data back from server - not needed meanwhile
+                console.log('Client:: View3:: Fun:: openTripPlanPage :: Delete trip id:: ' + trip_id);
+                $window.location.reload();
+                //$route.reload();
+            })
+        }
+    };
 
     //when click on create new test 'the red circule button'
     $scope.openTripPlanPage = function ($event) {

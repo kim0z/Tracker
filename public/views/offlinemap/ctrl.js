@@ -145,7 +145,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             $scope.slider = { //requires angular-bootstrap to display tooltips
                 value: 5,
                 options: {
-                    floor: 1,
+                    floor: 0,
                     ceil: $scope.tripDays,
                     showTicksValues: true,
                     ticksValuesTooltip: function (v) {
@@ -938,9 +938,9 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             });
 
             polys[facebookId].setMap($scope.map);
-
+            $scope.pathLoaded = true;
             $scope.map.setCenter(path.pop());
-            $scope.map.setZoom(12);
+            $scope.map.setZoom(14);
 
 
             //Keep listening to new GPS point added by users
@@ -958,7 +958,6 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     });
 
                     polys[facebookId].setPath(existsPath);
-                    $scope.pathLoaded = true;
 
                     //$scope.$apply();
                 }
@@ -1049,7 +1048,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 polys[facebookId].setMap($scope.map);
 
                 $scope.map.setCenter(filteredPath.pop());
-                $scope.map.setZoom(12);
+                $scope.map.setZoom(14);
 
             }
 

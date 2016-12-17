@@ -16,7 +16,6 @@ var trackerApp = angular.module('myApp', [
         '720kb.datepicker',
         'smart-table',
         'ngMaterial',
-
         'ngAria',
         'ngTable',
         /*'satellizer', */
@@ -201,6 +200,7 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
     $rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
         console.log('from: ' + fromState.name);
         console.log('to: ' + toState.name);
+        localStorageService.set('directToAfterLogin', toState.name);
 
         if(toState.name == 'login' && fromState.name && fromState.name != '') {
             localStorageService.set('preLoginState', fromState.name);

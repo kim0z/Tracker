@@ -221,7 +221,7 @@
 <script src="views/offlinemap/ctrl.js"></script>
 
 
-<div ng-hide="hideToolBar" layout="column" layout-fill>
+<div ng-hide="hideToolBar" layout="column" layout-fill style="background: white">
 
     <md-toolbar>
         <div class="md-toolbar-tools" ng-controller="mainIndexCtrl" scroll-shrink>
@@ -238,7 +238,7 @@
                     width: 48px;
                     margin: 2px;
                     border-radius: 48px;
-                    border: 1px solid #ddd;">
+                    border: 0px solid #ddd;">
             <md-button ng-click="authUser()" ng-class="expressionAuth">{{authButton}}</md-button>
             <md-button class="md-icon-button" aria-label="More">
                 <md-icon md-svg-icon="assets/icons/ic_menu_black_48px.svg"></md-icon>
