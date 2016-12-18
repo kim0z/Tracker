@@ -99,7 +99,8 @@
 <!-- app not working because of this package -->
 <script src='bower_components/angular-animate/angular-animate.js'></script>
 
-
+<!-- ngStorage -->
+<script src='bower_components/ngstorage/ngStorage.min.js'></script>
 <!-- ngAria-->
 <script src='bower_components/angular-aria/angular-aria.js'></script>
 <!-- end of - used for the list in my trips -->
@@ -234,7 +235,7 @@
             <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
             <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
             <span flex></span>
-            <img ng-src="{{profile.picture}}" style="
+            <img ng-src="{{profilePic}}" style="
                     width: 48px;
                     margin: 2px;
                     border-radius: 48px;

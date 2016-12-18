@@ -7,6 +7,7 @@ var trackerApp = angular.module('myApp', [
         'angular-jwt',
         'ngAnimate',
         'ngDialog',
+    'ngStorage',
         'uiGmapgoogle-maps',
         'ngAutocomplete',
         'ui.grid',
@@ -193,8 +194,23 @@ var trackerApp = angular.module('myApp', [
 
     });
 
+/*
+trackerApp.controller('headerCtrl', ['$scope', 'UserService',
+    function ($scope, UserService) {
+        //$scope.isAuth = UserService.isAuthenticated;
+        //$scope.user = UserService.getUserInfo;
+        //$scope.login = UserService.login;
 
-trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorageService, auth, $state, messages) {
+        $scope.profile = UserService.getUserInfo;
+
+        $scope.$watch('profile', function () {
+            console.log('kandsmnfm,43iu2o34923849823094892389482308402934');
+            console.log($scope.profile);
+        });
+
+    }]);*/
+
+trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorageService, $localStorage, auth, $state, messages) {
 
     //debug ui router changes
     $rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
@@ -230,8 +246,31 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
     //    console.log('-------------------------------');
     //});
 
+    //watch profile in local storage for login change
+    $scope.$storage = $localStorage;
+    $scope.profile = $scope.$storage.pro; //localStorageService.get('profile');
 
-    $scope.profile = localStorageService.get('profile');
+    $scope.$watch('$storage.pro', function () {
+        console.log('watch profile ***************');
+        console.log($scope.$storage.pro);
+        if($scope.$storage.pro) {
+            $scope.profile = $scope.$storage.pro;
+            $scope.profilePic = $scope.profile.picture;
+            $scope.authButton = 'Logout';
+            $scope.expressionAuth = 'md-raised md-warn md-button md-default-theme';
+        }
+        else{
+            $scope.profile = null;
+            $scope.profilePic = '/assets/icons/ic_person_white_48dp_2x.png';
+            $scope.authButton = 'Login';
+            $scope.expressionAuth = 'md-raised md-primary md-button md-default-theme';
+        }
+
+    });
+
+
+
+    //$scope.profile = UserService.getUserInfo();
 
     if (localStorageService.get('profile')) {
         $scope.authButton = 'Logout';
@@ -273,6 +312,8 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
     };
 
     $scope.logout = function () {
+        delete $scope.$storage.pro;
+        $scope.profile.picture = null;
         $scope.profile = null;
         auth.signout();
         localStorageService.remove('profile');

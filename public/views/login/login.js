@@ -1,7 +1,7 @@
 /**
  * Created by karim on 23/01/2016.
  */
-trackerApp.controller('Login', function ($scope, $location, $state, $http, auth, localStorageService, serverSvc, messages) {
+trackerApp.controller('Login', function ($scope, $location, $state, $http, auth, localStorageService, serverSvc, $localStorage) {
 //  $scope.signin = function() {
 
     auth.signin({
@@ -25,6 +25,10 @@ trackerApp.controller('Login', function ($scope, $location, $state, $http, auth,
         localStorageService.set('token', idToken);
         localStorageService.set('accessToken', accessToken);
         localStorageService.set('state', state);
+
+        $scope.$storage = $localStorage.$default({
+            pro: profile
+        });
 
         //get provider token
         serverSvc.getProviderToken(profile).then(function (results) {
