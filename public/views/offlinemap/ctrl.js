@@ -961,7 +961,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             polys[facebookId].setMap($scope.map);
             $scope.pathLoaded = true;
             $scope.map.setCenter(path.pop());
-            $scope.map.setZoom(16);
+            $scope.map.setZoom(10);
 
 
             //Keep listening to new GPS point added by users
@@ -1069,7 +1069,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 polys[facebookId].setMap($scope.map);
 
                 $scope.map.setCenter(filteredPath.pop());
-                $scope.map.setZoom(16);
+                $scope.map.setZoom(10);
 
             }
 
