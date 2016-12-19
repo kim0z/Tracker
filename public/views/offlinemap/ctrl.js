@@ -1,4 +1,4 @@
-trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $document, dataBaseService, messages, localStorageService, Facebook, $filter) {
+trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $state, $document, dataBaseService, messages, localStorageService, Facebook, $filter) {
 
         $scope.profile = localStorageService.get('profile');
         $scope.userAccessToken = localStorageService.get('providerToken');
@@ -1211,8 +1211,6 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             $scope.noTripId = true;
             $state.go('trips');
-
-
         }
       
 
