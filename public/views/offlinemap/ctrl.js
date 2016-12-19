@@ -181,7 +181,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
                 var tempDate = new Date($scope.startDateSlider);
 
-                if($scope.startDateSlider != null && $scope.slider.value != null){
+                if($scope.startDateSlider != null && $scope.slider != null){
                     $scope.startDateSlider = new Date($scope.startDateSlider.setDate($scope.startDateSlider.getDate() + $scope.slider.value));
                 }else{
                     console.log('Client :: Offline page :: issue with dates while filtering by slider');
@@ -1006,7 +1006,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
                 var tempDate = new Date($scope.startDateSliderForPath);
 
-                if($scope.startDateSliderForPath != null && $scope.slider.value != null){
+                if($scope.startDateSliderForPath != null && $scope.slider != null){
                      $scope.startDateSliderForPath = new Date($scope.startDateSliderForPath.setDate($scope.startDateSliderForPath.getDate() + $scope.slider.value));
                 }else{
                     console.log('Client :: Offline page :: issue with dates while in the watcher of the slider');
