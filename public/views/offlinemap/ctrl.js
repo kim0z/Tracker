@@ -626,6 +626,27 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             mapTypeId: google.maps.MapTypeId.TERRAIN
         });
 
+        var drawingManager = new google.maps.drawing.DrawingManager({
+          drawingMode: google.maps.drawing.OverlayType.MARKER,
+          drawingControl: true,
+          drawingControlOptions: {
+            position: google.maps.ControlPosition.TOP_CENTER,
+            drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
+          },
+          markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
+          circleOptions: {
+            fillColor: '#ffff00',
+            fillOpacity: 1,
+            strokeWeight: 5,
+            clickable: false,
+            editable: true,
+            zIndex: 1
+          }
+        });
+
+        drawingManager.setMap($scope.map);
+
+
         $scope.map.addListener('click', function (e) {
             $scope.message = {lat: e.latLng.lat(), lng: e.latLng.lng()};
             $scope.$apply();
@@ -940,7 +961,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             polys[facebookId].setMap($scope.map);
             $scope.pathLoaded = true;
             $scope.map.setCenter(path.pop());
-            $scope.map.setZoom(14);
+            $scope.map.setZoom(16);
 
 
             //Keep listening to new GPS point added by users
@@ -1048,7 +1069,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 polys[facebookId].setMap($scope.map);
 
                 $scope.map.setCenter(filteredPath.pop());
-                $scope.map.setZoom(14);
+                $scope.map.setZoom(16);
 
             }
 

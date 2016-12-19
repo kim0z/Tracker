@@ -96,7 +96,7 @@ var trackerApp = angular.module('myApp', [
                 templateUrl: "views/offlinemap/offlinemap.html",
                 controller: 'offlinemapCtrl',
                 data: {
-                    requiresLogin: true
+                    requiresLogin: false
                 }
             });
     })

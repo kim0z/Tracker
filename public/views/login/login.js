@@ -41,7 +41,12 @@ trackerApp.controller('Login', function ($scope, $location, $state, $http, auth,
         });
 
         //$state.go('welcome');
-        $state.go(localStorageService.get('directToAfterLogin'));
+        if(localStorageService.get('directToAfterLogin') == 'login'){
+        	$state.go('welcome');
+        }else{
+        	$state.go(localStorageService.get('directToAfterLogin'));
+        }
+       
         //window.open('#/'+localStorageService.get('directToAfterLogin'), '_self', false);
     }, function (err) {
         console.log("Error :(", err);
