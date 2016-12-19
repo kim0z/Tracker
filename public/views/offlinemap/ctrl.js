@@ -181,7 +181,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
                 var tempDate = new Date($scope.startDateSlider);
 
-                if($scope.startDateSlider.getDate() != null && $scope.slider.value != null){
+                if($scope.startDateSlider != null && $scope.slider.value != null){
                     $scope.startDateSlider = new Date($scope.startDateSlider.setDate($scope.startDateSlider.getDate() + $scope.slider.value));
                 }else{
                     console.log('Client :: Offline page :: issue with dates while filtering by slider');
@@ -966,7 +966,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             polys[facebookId].setMap($scope.map);
             $scope.pathLoaded = true;
             $scope.map.setCenter(path.pop());
-            $scope.map.setZoom(10);
+            $scope.map.setZoom(12);
 
 
             //Keep listening to new GPS point added by users
@@ -1006,7 +1006,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
                 var tempDate = new Date($scope.startDateSliderForPath);
 
-                if($scope.startDateSliderForPath.getDate() != null && $scope.slider.value != null){
+                if($scope.startDateSliderForPath != null && $scope.slider.value != null){
                      $scope.startDateSliderForPath = new Date($scope.startDateSliderForPath.setDate($scope.startDateSliderForPath.getDate() + $scope.slider.value));
                 }else{
                     console.log('Client :: Offline page :: issue with dates while in the watcher of the slider');
@@ -1082,7 +1082,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 polys[facebookId].setMap($scope.map);
 
                 $scope.map.setCenter(filteredPath.pop());
-                $scope.map.setZoom(10);
+                $scope.map.setZoom(12);
 
             }
 

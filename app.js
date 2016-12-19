@@ -679,37 +679,40 @@ app.post('/getTrips', function (request, response, next) {
 //Postgres get trip by id
 app.post('/getTripById', function (request, response) {
 
-    console.log('SERVER:: Postgres:: get trip by id :: trip id ::' + request.body.trip_id);
-    var trip_id = request.body.trip_id;
-    var results = [];
+    if(request.body.trip_id){
+        console.log('SERVER:: Postgres:: get trip by id :: trip id ::' + request.body.trip_id);
+        var trip_id = request.body.trip_id;
+        var results = [];
 
-    // Get a Postgres client from the connection pool
-    pg.connect(conString, function (err, client, done) {
-        // Handle connection errors
-        if (err) {
-            done();
-            console.log(err);
-            return response.status(500).json({success: false, data: err});
-        }
+        // Get a Postgres client from the connection pool
+        pg.connect(conString, function (err, client, done) {
+            // Handle connection errors
+            if (err) {
+                done();
+                console.log(err);
+                return response.status(500).json({success: false, data: err});
+            }
 
-        // SQL Query > Select Data
-        var query = client.query("SELECT * FROM trips WHERE id = " + trip_id + ";");
+            // SQL Query > Select Data
+            var query = client.query("SELECT * FROM trips WHERE id = " + trip_id + ";");
 
-        // Stream results back one row at a time
-        query.on('row', function (row) {
-            results.push(row);
+            // Stream results back one row at a time
+            query.on('row', function (row) {
+                results.push(row);
+            });
+
+            // After all data is returned, close connection and return results
+            query.on('end', function () {
+                done();
+                console.log(results); // looks like : [{....}]
+                //tripById = results;
+                tripById = results; //save instance of the trip to be used in other places, like get the date while creating the table
+                return response.json(results);
+            });
         });
-
-        // After all data is returned, close connection and return results
-        query.on('end', function () {
-            done();
-            console.log(results); // looks like : [{....}]
-            //tripById = results;
-            tripById = results; //save instance of the trip to be used in other places, like get the date while creating the table
-            return response.json(results);
-        });
-
-    });
+    }else{
+        console.log('error:: SERVER:: Postgres:: get trip by id :: trip id :: No trip id');
+    }
 });
 
 //Postgres Delete trip by id
