@@ -130,7 +130,7 @@ trackerApp.controller('tripsCtrl', function ($scope,$rootScope, $location, $anch
         firebase_config.on("value", function(snapshot) {
             console.log(snapshot.val());
             chunk.coverPhotoUrl = snapshot.val();
-            $scope.$apply();
+            //$scope.$apply();
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
         });

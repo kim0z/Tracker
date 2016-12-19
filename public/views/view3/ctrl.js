@@ -111,7 +111,7 @@ trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, 
         firebase_config.on("value", function(snapshot) {
             console.log(snapshot.val());
             chunk.coverPhotoUrl = snapshot.val();
-            $scope.$apply();
+            //$scope.$apply();
         }, function (errorObject) {
             console.log("The read failed: " + errorObject.code);
         });

@@ -343,7 +343,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                                     if (photoIndex == album.data.length - 1) {
                                         $scope.facebookImagesReady = true;
                                         //console.log('ready');
-                                        $scope.$apply();
+                                        //$scope.$apply();
                                     }
                                 }
                             }
@@ -386,7 +386,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                         //$scope.facebookAlbumsList[i] = ({albumID: response.data[i].id, albumName: response.data[i].name, checkbox: false});
                     }
                 }
-                $scope.$apply();
+                //$scope.$apply();
             }
         );
 
@@ -544,7 +544,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
                         $scope.photos.push(S3URL + 'tracker.photos/' + data.Contents[i].Key);
                     }
-                    $scope.$apply();
+                    //$scope.$apply(); becaus of disableing this, AWS images for the will not be rendered directly after upload, only when refresh 
                 }
             }
         });
@@ -649,7 +649,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
         $scope.map.addListener('click', function (e) {
             $scope.message = {lat: e.latLng.lat(), lng: e.latLng.lng()};
-            $scope.$apply();
+            //$scope.$apply(); I don't know what will be the behave after disable this
         });
 
         var ctaLayer = new google.maps.KmlLayer({
@@ -906,7 +906,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 //$scope.messages.unshift(childData['message']);
                 $scope.messages.unshift(childData);
             });
-            $scope.$apply();
+            //$scope.$apply();
 
         }, function (errorObject) {
             console.log("Read Tips from Firebase failed: " + errorObject.code);
@@ -1188,6 +1188,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         }
 
     })
+/*
     .directive('infiniteScroll', function () {
         return {
             restrict: 'A',
@@ -1204,7 +1205,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             }
         }
     })
-
+*/
 
 //*********************************************
 //**************** Help functions *************
