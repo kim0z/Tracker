@@ -1051,7 +1051,9 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 //Hash table for all users path
 
                 //delete current path
-                polys[facebookId].setMap(null);
+                if(polys[facebookId]){
+                    polys[facebookId].setMap(null);
+                }
 
                 polys[facebookId] = new google.maps.Polyline({
                     path: filteredPath,
