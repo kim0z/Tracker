@@ -160,8 +160,8 @@ app.post('/getProviderToken', function (request, res) {
     };
 
     requestHttp(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
+        if (error) //throw new Error(error);
+            console.log('error :: server :: getProviderToken :: no token, server shold be restart, bug: re ask for the token')
 
         console.log(body);
         res.end(body);

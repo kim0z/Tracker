@@ -78,6 +78,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         $scope.tableSlider = true;
         $scope.inforSlide = true;
 
+        $scope.noTripId = false;
+
 
         $scope.facebookAlbums = {}; //when page loaded, a Facebook API triggered to get user albums in case new album was added
                                     //to show it in edit mode to allow users select the new albums
@@ -112,6 +114,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
         //get trip
         var dataTripId = {trip_id: $scope.tripID};
+        if($scope.tripID){ //if no trip id then nothing will work, show message in that case
+          
         dataBaseService.getTripById(dataTripId).then(function (results) {
             $scope.trip = results.data;
 
@@ -1200,7 +1204,19 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             }
         }
 
-    })
+
+
+
+        }else{
+
+            $scope.noTripId = true;
+            $state.go('trips');
+
+
+        }
+      
+
+    });
 /*
     .directive('infiniteScroll', function () {
         return {
