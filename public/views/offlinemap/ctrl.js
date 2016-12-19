@@ -181,7 +181,12 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
                 var tempDate = new Date($scope.startDateSlider);
 
-                $scope.startDateSlider = new Date($scope.startDateSlider.setDate($scope.startDateSlider.getDate() + $scope.slider.value));
+                if(!$scope.startDateSlider.getDate() == undefined && !$scope.slider.value == undefined){
+                    $scope.startDateSlider = new Date($scope.startDateSlider.setDate($scope.startDateSlider.getDate() + $scope.slider.value));
+                }else{
+                    console.log('Client :: Offline page :: issue with dates while filtering by slider');
+                }
+                
 
                 //check if item date is equal to the selected date (slider), if yes return true else false
                 //get item date
@@ -1001,7 +1006,13 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
                 var tempDate = new Date($scope.startDateSliderForPath);
 
-                $scope.startDateSliderForPath = new Date($scope.startDateSliderForPath.setDate($scope.startDateSliderForPath.getDate() + $scope.slider.value));
+                if(!$scope.startDateSliderForPath.getDate() == undefined && !$scope.slider.value == undefined){
+                     $scope.startDateSliderForPath = new Date($scope.startDateSliderForPath.setDate($scope.startDateSliderForPath.getDate() + $scope.slider.value));
+                }else{
+                    console.log('Client :: Offline page :: issue with dates while in the watcher of the slider');
+                }
+
+               
 
 
                 //I should read from path, that already set and ready, but meanwhile I saved only lat, lang in path instaed of all the point
