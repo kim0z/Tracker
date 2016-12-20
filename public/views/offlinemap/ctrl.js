@@ -974,7 +974,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 strokeOpacity: 0,
                 strokeWeight: 2,
                 icons: [{
-                    icon: lineSymbol,
+                    icon: iconsetngs,
                     offset: '0',
                     repeat: '20px'
                 }]
