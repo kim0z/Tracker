@@ -35,8 +35,17 @@ var Dropbox = require("dropbox");                       //dropbox - to get the f
 var pg = require('pg');
 //var conString = "postgres://postgres:789852@localhost/database"; //should be saved as Env variable
 
-// production -- var conString = "pg://postgres:1234@localhost:5432/tracker";
-var conString = "pg://karim:1234@localhost:5432/karim";
+
+var conString = '';
+
+if(process.argv[2] == 'production'){
+    console.log('production mode')
+    conString = "pg://postgres:1234@localhost:5432/tracker";
+}else{
+    console.log('test mode')
+    conString = "pg://karim:1234@localhost:5432/karim";
+}
+
 var client = new pg.Client(conString);
 //client.connect();
 
