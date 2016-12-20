@@ -953,17 +953,19 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             //set the path for the first load, for the real time load, I added the same code into the listener of Firebase above
             //dashed line
+            /*
             var iconsetngs = {
                 path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
                 strokeColor: "#FF0000"
             };
-            /*
+            */
+
             var lineSymbol = {
                 path: 'M 0,-1 0,1',
                 strokeOpacity: 1,
                 scale: 4,
             };
-            */
+
             //Hash table for all users path
             polys[$scope.facebookId] = new google.maps.Polyline({
                 path: path,
@@ -972,7 +974,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 strokeOpacity: 0,
                 strokeWeight: 2,
                 icons: [{
-                    icon: iconsetngs,
+                    icon: lineSymbol,
                     offset: '0',
                     repeat: '20px'
                 }]
