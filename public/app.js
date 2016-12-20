@@ -17,6 +17,7 @@ var trackerApp = angular.module('myApp', [
         '720kb.datepicker',
         'smart-table',
         'ngMaterial',
+    'ngProgress',
         'ngAria',
         'ngTable',
         /*'satellizer', */

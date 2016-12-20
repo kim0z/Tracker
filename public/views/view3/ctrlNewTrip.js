@@ -12,8 +12,11 @@ trackerApp.controller('newTripCtrl', function ($scope, $http, $state,  ngDialog,
     $scope.continents = ["Africa", "Europe", "Asia", "North America", "South America", "Antarctica", "Australia"];
 
     if ($scope.trip_id == '') {
+        console.log('error:: Client :: View3 :: Trips :: no trip id');
         window.open('#/viewError', '_self', false);
     }
+
+    $scope.facebookId = $scope.profile.identities[0].user_id;
 
     $scope.addTrip = function () {
 
@@ -26,7 +29,8 @@ trackerApp.controller('newTripCtrl', function ($scope, $http, $state,  ngDialog,
             start_date: $scope.dateStart,
             end_date: $scope.dateEnd,
             continent: $scope.selectedContinents,
-            profile_picture: $scope.profile.picture
+            profile_picture: $scope.profile.picture,
+            facebook_id: $scope.facebookId
         };
 
         //save updated trip into DB

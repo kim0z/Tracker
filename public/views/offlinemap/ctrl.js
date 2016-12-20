@@ -1,4 +1,4 @@
-trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $state, $document, dataBaseService, messages, localStorageService, Facebook, $filter) {
+trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $state, $document, dataBaseService, messages, localStorageService, Facebook, $filter, ngProgressFactory) {
 
         $scope.profile = localStorageService.get('profile');
         $scope.userAccessToken = localStorageService.get('providerToken');
@@ -10,7 +10,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         //var facebookIdNotClean = $scope.profile.user_id; //"facebook|"
         //var facebookId = facebookIdNotClean.replace(/^\D+/g, '');
 
-        var facebookId = $scope.profile.identities[0].user_id;
+        //var facebookId = $scope.profile.identities[0].user_id;
 
 //NOTES:
 //**** Should I move all AWS S3 to server? it is risky to be in the client?
@@ -135,6 +135,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             //Date to be used for slider, helps to add days on top of start day
             $scope.startDateSlider = new Date($scope.trip[0].start_date);
             $scope.startDateSliderForPath = new Date($scope.trip[0].start_date);
+
+            $scope.facebookId = $scope.trip[0].facebook_id;
 
 
             $scope.test = new Date($scope.trip[0].start_date);
@@ -297,7 +299,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         }
 
 
-        var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
+        var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + $scope.facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
 
 
         firebase_config_get_albums.on("value", function (snapshot) {
@@ -381,7 +383,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         // 1. update edit mode list witht he enabled albums
 
         Facebook.api(
-            "/" + facebookId + "/albums?access_token=" + $scope.userAccessToken,
+            "/" + $scope.facebookId + "/albums?access_token=" + $scope.userAccessToken,
             function (response) {
                 if (response && !response.error) {
                     /* handle the result */
@@ -450,7 +452,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
 
         // Get a Firebase database reference to our posts
-        var firebase_ref = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + facebookId + '/' + $scope.tripID);
+        var firebase_ref = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID);
 
 
         if ($scope.profile.email == '' || $scope.tripID == '')
@@ -478,7 +480,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         //Sync Facebook albums
         $scope.syncAlbums = function () {
             //save in Firebase config
-            var firebase_config_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
+            var firebase_config_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + $scope.facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
             firebase_config_albums.set($scope.facebookAlbums);
 
             $scope.facebookPhotos = [];
@@ -534,7 +536,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 Bucket: 'tracker.photos',
                 //Marker: localStorageService.get('email') + '/' + chunk.id
                 Delimiter: '/',
-                Prefix: facebookId + '/' + $scope.tripID + '/'
+                Prefix: $scope.facebookId + '/' + $scope.tripID + '/'
             }
         });
 
@@ -575,7 +577,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     results.innerHTML = '';
 
                     var params = {
-                        Key: facebookId + '/' + $scope.tripID + '/' + 'map_kml.kml',
+                        Key: $scope.facebookId + '/' + $scope.tripID + '/' + 'map_kml.kml',
                         ContentType: file.type,
                         Body: file
                     };
@@ -597,7 +599,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                      Body: file
                      };*/
                     var params = {
-                        Key: facebookId + '/' + $scope.tripID + '/' + file.name,
+                        Key: $scope.facebookId + '/' + $scope.tripID + '/' + file.name,
                         ContentType: file.type,
                         Body: file
                     };
@@ -905,7 +907,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         //**********************  load Tips from Firebase ******************
         //******************************************************************
         //******************************************************************
-        var firebase_ref_readTips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + facebookId + '/' + $scope.tripID + '/messages');
+        var firebase_ref_readTips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/messages');
 
         firebase_ref_readTips.on("value", function (snapshot) {
             $scope.messages = [];
@@ -921,19 +923,25 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             console.log("Read Tips from Firebase failed: " + errorObject.code);
         });
 
+            $scope.progressbar = ngProgressFactory.createInstance();
+            $scope.progressbar.start();
 
         //************************
         //*******************************handle paths
         //*******************************************************************
         //path for each user
         var path = [];
-        var ref_read_path = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + facebookId + '/' + $scope.tripID + '/path');
+        var ref_read_path = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + $scope.facebookId + '/' + $scope.tripID + '/path');
 
         //read path for user 'users.key()' trip 'trip.key()' that have active trip
         var firstLoad_paths = true;
 
         ref_read_path.once("value", function (tripPath) {
+            var pathLen = tripPath.length;
             tripPath.forEach(function (point) {
+
+
+
                 path.push({
                     lat: JSON.parse(point.val()['coords'].latitude),
                     lng: JSON.parse(point.val()['coords'].longitude)
@@ -947,14 +955,19 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             //set the path for the first load, for the real time load, I added the same code into the listener of Firebase above
             //dashed line
+            var iconsetngs = {
+                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                strokeColor: "#FF0000"
+            };
+            /*
             var lineSymbol = {
                 path: 'M 0,-1 0,1',
                 strokeOpacity: 1,
-                scale: 4
+                scale: 4,
             };
-
+            */
             //Hash table for all users path
-            polys[facebookId] = new google.maps.Polyline({
+            polys[$scope.facebookId] = new google.maps.Polyline({
                 path: path,
                 geodesic: true,
                 strokeColor: '#000000', //getRandomColor(),
@@ -967,7 +980,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 }]
             });
 
-            polys[facebookId].setMap($scope.map);
+            polys[$scope.facebookId].setMap($scope.map);
             $scope.pathLoaded = true;
             $scope.map.setCenter(path.pop());
             $scope.map.setZoom(12);
@@ -978,7 +991,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 if (firstLoad_paths == false) {
 
                     // get existing path
-                    var existsPath = polys[facebookId].getPath();
+                    var existsPath = polys[$scope.facebookId].getPath();
 
                     tripPath.forEach(function (point) {
 
@@ -987,7 +1000,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
                     });
 
-                    polys[facebookId].setPath(existsPath);
+                    polys[$scope.facebookId].setPath(existsPath);
 
                     //$scope.$apply();
                 }
@@ -1066,11 +1079,11 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 //Hash table for all users path
 
                 //delete current path
-                if(polys[facebookId]){
-                    polys[facebookId].setMap(null);
+                if(polys[$scope.facebookId]){
+                    polys[$scope.facebookId].setMap(null);
                 }
 
-                polys[facebookId] = new google.maps.Polyline({
+                polys[$scope.facebookId] = new google.maps.Polyline({
                     path: filteredPath,
                     geodesic: true,
                     strokeColor: '#000000', //getRandomColor(),
@@ -1083,7 +1096,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     }]
                 });
 
-                polys[facebookId].setMap($scope.map);
+                polys[$scope.facebookId].setMap($scope.map);
 
                 $scope.map.setCenter(filteredPath.pop());
                 $scope.map.setZoom(12);
@@ -1097,7 +1110,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
 
         //load Table from Firebase
-        var firebase_ref_readTable = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + facebookId + '/' + $scope.tripID + '/table');
+        var firebase_ref_readTable = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/table');
 
         firebase_ref_readTable.on("value", function (snapshot) {
             $scope.table = []; //reset table
@@ -1126,7 +1139,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             console.log('Offline page:: add day');
             console.log($scope.day);
 
-            var firebase_table = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + facebookId + "/" + $scope.tripID + "/table/" + $scope.day.dayNumber);
+            var firebase_table = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + "/" + $scope.tripID + "/table/" + $scope.day.dayNumber);
             firebase_table.set($scope.day);
         }
 
@@ -1134,7 +1147,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             // add a new note to firebase
             var message_json = {};
 
-            var firebase_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + facebookId + '/' + $scope.tripID + '/messages');
+            var firebase_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/messages');
 
             //var usersRef = firebase_ref.child('history');
 
