@@ -172,8 +172,6 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 $scope.facebookProvider = true;
             }
 
-        });
-
         //Filter - used to get value from slider to filter tips
         $scope.filterTips = function (day) {
             return function (message) {
@@ -1217,7 +1215,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             }
         }
 
-
+        });
 
 
         }else{
@@ -1225,9 +1223,11 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             $scope.noTripId = true;
             $state.go('trips');
         }
-      
+
 
     });
+
+
 /*
     .directive('infiniteScroll', function () {
         return {
