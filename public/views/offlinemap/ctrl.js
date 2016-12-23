@@ -671,7 +671,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             if ($scope.editMode == false) {
 
-                if(message.location.coords.latitude && message.location.coords.longitude){
+                if(message.location.coords){
                     var Latlng_message = {lat: message.location.coords.latitude, lng: message.location.coords.longitude};
 
                     //Help function - show item on map
