@@ -671,10 +671,12 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             if ($scope.editMode == false) {
 
-                var Latlng_message = {lat: message.location.coords.latitude, lng: message.location.coords.longitude};
+                if(message.location.coords.latitude && message.location.coords.longitude){
+                    var Latlng_message = {lat: message.location.coords.latitude, lng: message.location.coords.longitude};
 
-                //Help function - show item on map
-                showItemOnMap(Latlng_message, message);
+                    //Help function - show item on map
+                    showItemOnMap(Latlng_message, message);
+                }
 
                 /*    $timeout(function () {
                  $scope.map.setZoom(5);
@@ -938,9 +940,6 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         ref_read_path.once("value", function (tripPath) {
             var pathLen = tripPath.length;
             tripPath.forEach(function (point) {
-
-
-
                 path.push({
                     lat: JSON.parse(point.val()['coords'].latitude),
                     lng: JSON.parse(point.val()['coords'].longitude)
