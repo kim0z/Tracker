@@ -33,7 +33,7 @@ var trackerApp = angular.module('myApp', [
         $urlMatcherFactoryProvider.strictMode(false);
 
         // For any unmatched url, redirect to /state1
-        $urlRouterProvider.otherwise("/welcome");
+        //$urlRouterProvider.otherwise("/welcome");
         //
         // Now set up the states
         $stateProvider

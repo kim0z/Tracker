@@ -666,7 +666,6 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             map: $scope.map
         });
 
-
         $scope.showMessageOnMap = function (message) {
 
             if ($scope.editMode == false) {
