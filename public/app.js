@@ -273,13 +273,14 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
 
     //$scope.profile = UserService.getUserInfo();
 
-    if (localStorageService.get('profile')) {
+    //used when the page loaded to find out if the user is authenticated
+/*    if (localStorageService.get('profile')) {
         $scope.authButton = 'Logout';
         $scope.expressionAuth = 'md-raised md-warn md-button md-default-theme';
     } else {
         $scope.authButton = 'Login';
         $scope.expressionAuth = 'md-raised md-primary md-button md-default-theme';
-    }
+    }*/
 
     $scope.auth = auth;
 
@@ -361,7 +362,15 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
 
             if(profile == null){
                 //it means use is not authenticated
-                $scope.authButton = 'Login';
+                $scope.authButton = 'Logout';
+                $scope.expressionAuth = 'md-raised md-warn md-button md-default-theme';
+                console.log('+++++++++++++++++++++++++++++');
+                console.log($state);
+                console.log('+++++++++++++++++++++++++++++');
+                $state.go('login'); //the login will redirect to view0 when done
+                console.log('try to login');
+                $scope.profile = localStorageService.get('profile');
+                console.log($scope.profile);
             }
 
         }

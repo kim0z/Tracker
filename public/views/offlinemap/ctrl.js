@@ -47,8 +47,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
 
         //not relvant anymore belwo 2 lines
-        var email_no_shtrodel = $scope.profile.email.replace('@', 'u0040');
-        var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
+        //var email_no_shtrodel = $scope.profile.email.replace('@', 'u0040');
+        //var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
 
 
         $scope.tripID = messages.getTripID();
@@ -453,8 +453,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         var firebase_ref = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID);
 
 
-        if ($scope.profile.email == '' || $scope.tripID == '')
-            alert('no email or trip id')
+        if ($scope.facebookId == '' || $scope.tripID == '')
+            alert('no facebook id or trip id')
         //AWS Config
         AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
 
@@ -662,7 +662,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         });
 
         var ctaLayer = new google.maps.KmlLayer({
-            url: 'https://s3-us-west-2.amazonaws.com/tracker.photos/' + $scope.profile.email + '/' + $scope.tripID + '/map_kml.kml',
+            url: 'https://s3-us-west-2.amazonaws.com/tracker.photos/' + $scope.facebookId + '/' + $scope.tripID + '/map_kml.kml',
             map: $scope.map
         });
 
@@ -742,7 +742,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                             // var bucket_getGPS_forPhoto = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt'}});
 
 
-                            var fileGpsUrl = S3URL + 'tracker.photos/' + $scope.profile.email + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt';
+                            var fileGpsUrl = S3URL + 'tracker.photos/' + $scope.facebookId + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt';
                             //console.log(fileGpsUrl);
 
                             // get GPS point of the selected photo from AWS S3
@@ -854,7 +854,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             console.log(file_noExtenstion);
 
             var params = {
-                Key: $scope.profile.email + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt',
+                Key: $scope.facebookId + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt',
                 Body: JSON.stringify(gps_point)
             };
             bucket_create_photo_gps.upload(params, function (err, data) {
@@ -909,6 +909,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
         firebase_ref_readTips.on("value", function (snapshot) {
             $scope.messages = [];
+
+            $scope.progressbar = ngProgressFactory.createInstance();
+            $scope.progressbar.start();
+
             snapshot.forEach(function (childSnapshot) {
                 //var key = childSnapshot.key();
                 var childData = childSnapshot.val(); // childData = location and message and time
@@ -916,13 +920,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 $scope.messages.unshift(childData);
             });
             //$scope.$apply();
-
+            $scope.progressbar.stop();
         }, function (errorObject) {
             console.log("Read Tips from Firebase failed: " + errorObject.code);
         });
-
-            $scope.progressbar = ngProgressFactory.createInstance();
-            $scope.progressbar.start();
 
         //************************
         //*******************************handle paths
@@ -1155,7 +1156,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             message_json = {
                 location: location,
                 time: $scope.message.time,
-                email: 'kareem9k@gmail.com',
+                email: '',
                 message: {tip: $scope.message.text, invite: '', risk: '', price: ''}
             };
 
