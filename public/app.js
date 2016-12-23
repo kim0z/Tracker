@@ -254,7 +254,7 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
     $scope.$watch('$storage.pro', function () {
         console.log('watch profile ***************');
         console.log($scope.$storage.pro);
-        if($scope.$storage.pro) {
+        if($scope.$storage.pro && localStorageService.get('profile')) {
             $scope.profile = $scope.$storage.pro;
             $scope.profilePic = $scope.profile.picture;
             $scope.authButton = 'Logout';
@@ -274,13 +274,13 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
     //$scope.profile = UserService.getUserInfo();
 
     //used when the page loaded to find out if the user is authenticated
-/*    if (localStorageService.get('profile')) {
+    if (localStorageService.get('profile')) {
         $scope.authButton = 'Logout';
         $scope.expressionAuth = 'md-raised md-warn md-button md-default-theme';
     } else {
         $scope.authButton = 'Login';
         $scope.expressionAuth = 'md-raised md-primary md-button md-default-theme';
-    }*/
+    }
 
     $scope.auth = auth;
 
