@@ -5,14 +5,8 @@
 //
 // #############################################################################
 
-
-// Google API's
-// Google flights : 764755235403-acq12nfulcu93pilc1fa189mu7f4h1mb.apps.googleusercontent.com
-// Google flights : hqYL2H9wJK2pqN92XYYPhiv2
-// Google maps  : AIzaSyBgSxdli3zXpI3dPtFR9H0fbVZIcSZOvyo
-
 var http = require('http');
-
+var database = require('./config/databases');
 
 var express = require('express');
 var app = express(); 								// create our app w/ express
@@ -33,17 +27,15 @@ var Dropbox = require("dropbox");                       //dropbox - to get the f
 
 //PostgresSQL
 var pg = require('pg');
-//var conString = "postgres://postgres:789852@localhost/database"; //should be saved as Env variable
-
 
 var conString = '';
 
 if(process.argv[2] == 'production'){
     console.log('production mode')
-    conString = "pg://postgres:1234@localhost:5432/tracker";
+    conString = database.production;
 }else{
     console.log('test mode')
-    conString = "pg://karim:1234@localhost:5432/karim";
+    conString = database.test;
 }
 
 var client = new pg.Client(conString);

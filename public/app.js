@@ -7,7 +7,7 @@ var trackerApp = angular.module('myApp', [
         'angular-jwt',
         'ngAnimate',
         'ngDialog',
-    'ngStorage',
+        'ngStorage',
         'uiGmapgoogle-maps',
         'ngAutocomplete',
         'ui.grid',
@@ -17,7 +17,7 @@ var trackerApp = angular.module('myApp', [
         '720kb.datepicker',
         'smart-table',
         'ngMaterial',
-    'ngProgress',
+        'ngProgress',
         'ngAria',
         'ngTable',
         /*'satellizer', */
@@ -28,7 +28,7 @@ var trackerApp = angular.module('myApp', [
         'angular-flexslider',
         'angularjs-dropdown-multiselect'
     ])
-    .config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider, auth) {
 
         $urlMatcherFactoryProvider.strictMode(false);
 
@@ -195,21 +195,6 @@ var trackerApp = angular.module('myApp', [
 
     });
 
-/*
-trackerApp.controller('headerCtrl', ['$scope', 'UserService',
-    function ($scope, UserService) {
-        //$scope.isAuth = UserService.isAuthenticated;
-        //$scope.user = UserService.getUserInfo;
-        //$scope.login = UserService.login;
-
-        $scope.profile = UserService.getUserInfo;
-
-        $scope.$watch('profile', function () {
-            console.log('kandsmnfm,43iu2o34923849823094892389482308402934');
-            console.log($scope.profile);
-        });
-
-    }]);*/
 
 trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorageService, $localStorage, auth, $state, messages) {
 
@@ -225,7 +210,7 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
         messages.savePrevState(fromState, toState);
     });
 
-
+    //for debug
     //$rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState) {
     //    console.log('$stateChangeStart');
     //    console.log('from: ' + fromState.name);
@@ -268,8 +253,6 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
         }
 
     });
-
-
 
     //$scope.profile = UserService.getUserInfo();
 

@@ -22,6 +22,10 @@ module.exports = {
         'clientID'      : 'your-secret-clientID-here',
         'clientSecret'  : 'your-client-secret-here',
         'callbackURL'   : 'http://localhost:8080/auth/google/callback'
+    },
+    'auth0'      : {
+        domain          : 'exploreauth.auth0.com',
+        clientID        : 'QqJgTRPIWyFTKdpkMD8ATmeSwvw6oBCA'
     }
 
 };
