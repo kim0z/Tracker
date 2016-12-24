@@ -77,6 +77,8 @@
     </nit-advanced-searchbox>
 
 
+    <h1 class="text-center" style="font-weight: 200;line-height: 55px;font-size: 34px; padding-top: 15px;padding-bottom: 10px;margin: 0px">Creat new trip</h1>
+
     <md-content layout="vertical" flex>
         <!-- LEFT SIDEBAR -->
         <md-sidenav class="md-sidenav-left" md-component-id="left">
@@ -106,7 +108,7 @@
             <md-list>
                 <div id="content">
                     <div ng-repeat="chunk in ::chunks">
-                        <p ng-if="chunk.divider">{{chunk.title}}</p>
+                       <!-- <p ng-if="chunk.divider">{{chunk.title}}</p> -->
                         <md-card ng-if="!chunk.expanded && !chunk.divider" ng-click="toggleChunkExpand(chunk)"
                                  ng-mouseover="hover = true" ng-mouseout="hover = false"
                                  ng-style="chunk.active === true ? { color:'green' } : { 'color': 'black' }">
