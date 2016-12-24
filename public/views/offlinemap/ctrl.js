@@ -138,6 +138,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             $scope.facebookId = $scope.trip[0].facebook_id;
 
+            $scope.continent = $scope.trip[0].continent;
 
             $scope.test = new Date($scope.trip[0].start_date);
 
@@ -149,7 +150,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             //Slider
             $scope.slider = { //requires angular-bootstrap to display tooltips
-                value: 5,
+                value: 4,
                 options: {
                     floor: 0,
                     ceil: $scope.tripDays,
@@ -631,7 +632,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         $scope.map = new google.maps.Map(document.getElementById('map'), {
             //center: {lat: 34.397, lng: 40.644},
             center: {lat: 0, lng: 0},
-            zoom: 5,
+            zoom: 4,
             mapTypeId: google.maps.MapTypeId.TERRAIN
         });
 
