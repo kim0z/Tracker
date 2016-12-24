@@ -28,7 +28,7 @@ var trackerApp = angular.module('myApp', [
         'angular-flexslider',
         'angularjs-dropdown-multiselect'
     ])
-    .config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider, auth) {
+    .config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
 
         $urlMatcherFactoryProvider.strictMode(false);
 

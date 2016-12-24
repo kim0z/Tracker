@@ -6,7 +6,7 @@
 // #############################################################################
 
 var http = require('http');
-var database = require('./config/databases');
+var database = require('./config/database');
 
 var express = require('express');
 var app = express(); 								// create our app w/ express
