@@ -544,8 +544,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 document.getElementById('status').innerHTML =
                     'Could not load objects from S3';
             } else {
-                document.getElementById('status').innerHTML =
-                    'Loaded ' + data.Contents.length + ' items from S3';
+                //document.getElementById('status').innerHTML =
+                    //'Loaded ' + data.Contents.length + ' items from S3';
                 for (var i = 0; i < data.Contents.length; i++) {
                     var photo_extenstion = data.Contents[i].Key.split('.').pop();
 
