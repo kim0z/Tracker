@@ -936,14 +936,37 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
         //read path for user 'users.key()' trip 'trip.key()' that have active trip
         var firstLoad_paths = true;
-
+var i =0;
+//.limitToFirst(250)
         ref_read_path.once("value", function (tripPath) {
             var pathLen = tripPath.length;
             tripPath.forEach(function (point) {
-                path.push({
+                i++;
+                //console.log(i);
+                //console.log(point.val());
+                //console.log(point.val()['timestamp']);
+                //var x = new Date(point.val()['timestamp']);
+                //console.log(x);
+                //console.log(x.getDate());
+                //if(x.getDate()== 30){
+                  //  console.log(i);
+                  //  console.log(point.val());
+                //}
+                if(i<165 || i >300){
+                    //console.log(i);
+                      path.push({
                     lat: JSON.parse(point.val()['coords'].latitude),
                     lng: JSON.parse(point.val()['coords'].longitude)
                 });
+                }else{
+                    console.log(point.val()['coords'].latitude)
+                    console.log(point.val()['coords'].longitude)
+                    console.log('**************')
+                }
+                //path.push({
+                  //  lat: JSON.parse(point.val()['coords'].latitude),
+                  //  lng: JSON.parse(point.val()['coords'].longitude)
+                //});
                 //all path saved to be used later for slider filter, instead of calling Firebase api again
                 $scope.pathSaved.push(point.val());
 
