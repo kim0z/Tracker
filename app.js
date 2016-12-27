@@ -7,9 +7,10 @@
 
 var http = require('http');
 var database = require('./config/database');
-
+//var compression = require('compression');
 var express = require('express');
-var app = express(); 								// create our app w/ express
+var app = express(); 	
+//app.use(compression());							
 var port = process.env.PORT || 9090;
 var server = http.createServer(app);
 
