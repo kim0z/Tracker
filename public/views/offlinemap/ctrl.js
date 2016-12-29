@@ -947,10 +947,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             var draw = function () {
 
                 //path.push(new google.maps.LatLng($scope.pathSaved[index].coords.latitude, $scope.pathSaved[index].coords.longitude));
-                path.push(new google.maps.LatLng($scope.pathHash[slider.value][index].coords.latitude, $scope.pathHash[slider.value][index].coords.longitude));
+                path.push(new google.maps.LatLng($scope.pathHash[$scope.slider.value][index].lat, $scope.pathHash[$scope.slider.value][index].lang));
                 index++;
 
-                if(index<160 || index >301){
+                //if(index<160 || index >301){
                     //Hash table for all users path
                     polys[$scope.facebookId] = new google.maps.Polyline({
                         path: path,
@@ -966,7 +966,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     });
                    
                     polys[$scope.facebookId].setMap($scope.map);
-                }
+                //}
 
                 if(index < $scope.pathSaved.length){
                     setTimeout(function(){ draw() }, 50);
@@ -1159,7 +1159,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     polys[$scope.facebookId].setMap(null);
                 }
 
-                $scope.pathHash[slider.value] = filteredPath;
+                if($scope.slider.value){
+                    $scope.pathHash[$scope.slider.value] = filteredPath;
+                }
+                
 
                 polys[$scope.facebookId] = new google.maps.Polyline({
                     path: filteredPath,
