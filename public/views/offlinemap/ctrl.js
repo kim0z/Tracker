@@ -104,6 +104,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
         $scope.selectedFacebookAlbum = [];
         $scope.facebookAlbumsList = []; //Facebook albums from Firebase
 
+        $scope.pathHash = [];
         //read albums from Firebase config and then load photos
         //read albums from Firebase for:
         // 1. update edit mode list witht the enabled albums (not to update the list witht the albums list, only if it enabled, reason: could be that the list in facebook more updated)
@@ -927,6 +928,58 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
             console.log("Read Tips from Firebase failed: " + errorObject.code);
         });
 
+
+        //************ animate path **************************
+        $scope.runPathAnimation = function () {
+            //remove path to animate path on clean map 
+            polys[$scope.facebookId].setMap(null);
+
+            var lineSymbol = {
+                path: 'M 0,-1 0,1',
+                strokeOpacity: 1,
+                scale: 4,
+            };
+
+            
+
+            var index = 0;
+            var path  = [];
+            var draw = function () {
+
+                //path.push(new google.maps.LatLng($scope.pathSaved[index].coords.latitude, $scope.pathSaved[index].coords.longitude));
+                path.push(new google.maps.LatLng($scope.pathHash[slider.value][index].coords.latitude, $scope.pathHash[slider.value][index].coords.longitude));
+                index++;
+
+                if(index<160 || index >301){
+                    //Hash table for all users path
+                    polys[$scope.facebookId] = new google.maps.Polyline({
+                        path: path,
+                        geodesic: true,
+                        strokeColor: '#000000', //getRandomColor(),
+                        strokeOpacity: 0,
+                        strokeWeight: 2,
+                        icons: [{
+                            icon: lineSymbol,
+                            offset: '0',
+                            repeat: '20px'
+                        }]
+                    });
+                   
+                    polys[$scope.facebookId].setMap($scope.map);
+                }
+
+                if(index < $scope.pathSaved.length){
+                    setTimeout(function(){ draw() }, 50);
+                }
+
+            }
+
+            draw();
+        }
+    //}
+
+        //****************************************************
+
         //************************
         //*******************************handle paths
         //*******************************************************************
@@ -936,8 +989,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
         //read path for user 'users.key()' trip 'trip.key()' that have active trip
         var firstLoad_paths = true;
-var i =0;
-//.limitToFirst(250)
+        var i =0;
+        //.limitToFirst(250)
         ref_read_path.once("value", function (tripPath) {
             var pathLen = tripPath.length;
             tripPath.forEach(function (point) {
@@ -1105,6 +1158,8 @@ var i =0;
                 if(polys[$scope.facebookId]){
                     polys[$scope.facebookId].setMap(null);
                 }
+
+                $scope.pathHash[slider.value] = filteredPath;
 
                 polys[$scope.facebookId] = new google.maps.Polyline({
                     path: filteredPath,

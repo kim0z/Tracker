@@ -234,6 +234,18 @@
             border-radius: 3px 0px 0px 3px;
         }
 
+            #play-button {
+            bottom: 180px;
+            position: fixed;
+            right: 0px;
+            padding: 0px;
+            margin: 0px;
+            width: 55px;
+            height: 55px;
+            z-index: 15;
+            border-radius: 3px 0px 0px 3px;
+        }
+
         #hp-ctn-howItWorks-table {
             bottom: 65px;
             position: fixed;
@@ -469,6 +481,11 @@
             <span class="text-muted" style="font-size: 18px; text-align: left; font-style: inherit">Trip name: {{tripName}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Description: {{tripDescription}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Date: {{dateStart}} - {{dateEnd}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Continent: {{continent}}</span>
         </div>
     </footer>
+
+   <!-- Pךשט פשאי -->
+    <div id="play-button" ng-click="runPathAnimation()">
+        <img src="assets/icons/ic_play_circle_outline_black_48dp_1x.png" style="height: 50px; width: 50px">
+    </div>
 
     <!-- Slider -->
     <rzslider style="top: 30px" rz-slider-model="slider.value"
