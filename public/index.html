@@ -242,7 +242,7 @@
 
             <md-button ng-click="menuClick('Trips')">Trips</md-button>
             <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
-            <md-button ng-click="menuClick('Rel-Time Travelers')">Rel-Time Travelers</md-button>
+            <md-button ng-click="menuClick('Rel-Time Travelers')" ng-disabled="true">Rel-Time Travelers</md-button>
             <span flex></span>
             <img ng-src="{{profilePic}}" style="
                     width: 48px;
@@ -250,7 +250,7 @@
                     border-radius: 48px;
                     border: 0px solid #ddd;">
             <md-button ng-click="authUser()" ng-class="expressionAuth">{{authButton}}</md-button>
-            <md-button class="md-icon-button" aria-label="More">
+            <md-button class="md-icon-button" aria-label="More" ng-disabled="true">
                 <md-icon md-svg-icon="assets/icons/ic_menu_black_48px.svg"></md-icon>
             </md-button>
 
