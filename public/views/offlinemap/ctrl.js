@@ -1,25 +1,5 @@
 trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $state, $document,$interval,  dataBaseService, messages, localStorageService, Facebook, $filter, ngProgressFactory) {
 
-
-    $scope.spin = function($interval) {
-        var self = this;
-
-        self.activated = true;
-        self.determinateValue = 30;
-
-        // Iterate every 100ms, non-stop and increment
-        // the Determinate loader.
-        $interval(function() {
-
-            self.determinateValue += 1;
-            if (self.determinateValue > 100) {
-                self.determinateValue = 30;
-            }
-
-        }, 100);
-    }
-
-
     $scope.loading = true;
 
     $scope.profile = localStorageService.get('profile');
@@ -657,14 +637,28 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 //center: {lat: 34.397, lng: 40.644},
                 center: {lat: 0, lng: 0},
                 zoom: 4,
-                mapTypeId: google.maps.MapTypeId.TERRAIN
+                mapTypeControl: true,
+                mapTypeControlOptions: {
+                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                    position: google.maps.ControlPosition.LEFT_CENTER
+                },
+                mapTypeId: google.maps.MapTypeId.TERRAIN,
+                zoomControl: true,
+                zoomControlOptions: {
+                    position: google.maps.ControlPosition.LEFT_CENTER
+                },
+                scaleControl: true,
+                streetViewControl: false,
+                streetViewControlOptions: {
+                    position: google.maps.ControlPosition.LEFT_TOP
+                }
             });
 
             var drawingManager = new google.maps.drawing.DrawingManager({
                 drawingMode: google.maps.drawing.OverlayType.MARKER,
                 drawingControl: true,
                 drawingControlOptions: {
-                    position: google.maps.ControlPosition.TOP_CENTER,
+                    position: google.maps.ControlPosition.LEFT_CENTER,
                     drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
                 },
                 markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
@@ -1167,8 +1161,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                         });
 
                         polys[$scope.facebookId].setMap($scope.map);
-
                         $scope.map.setCenter(filteredPath.pop());
+                        //$scope.map.setCenter(filteredPath[filteredPath.length / 2]);
                         $scope.map.setZoom(12);
 
                     } else {
@@ -1251,8 +1245,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                         });
 
                         polys[$scope.facebookId].setMap($scope.map);
-
                         $scope.map.setCenter(filteredPath.pop());
+                        //console.log(filteredPath.length/2);
+                        //console.log(filteredPath[filteredPath.length/2]);
+                        //$scope.map.setCenter(new google.maps.LatLng(JSON.parse(filteredPath[filteredPath.length/2].lat), JSON.parse(filteredPath[filteredPath.length/2].lng)));
                         $scope.map.setZoom(12);
 
 

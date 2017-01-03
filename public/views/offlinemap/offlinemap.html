@@ -150,8 +150,8 @@
             height: 100%;
             width: 100%;
             position: absolute;
-            /*top: 0px;*/
-            top: 100px;
+            top: 0px;
+            /*top: 100px;*/
             left: 0;
             z-index: 0;
             padding: 0;
@@ -533,6 +533,14 @@
             margin-left: -100px;
             z-index: 11;
         }
+        .rzslider .rz-bubble:not(.rz-limit) {
+            color: #FFF;
+            background: #333;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 30px;
+            bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -555,13 +563,18 @@
         </div>
     </footer>
 
-    <!-- Pךשט פשאי -->
+    <!-- Animate path -->
     <div id="play-button" ng-click="runPathAnimation()">
         <img src="assets/icons/ic_play_circle_outline_black_48dp_1x.png" style="height: 50px; width: 50px">
     </div>
 
     <!-- Slider -->
-    <rzslider style="top: 30px" rz-slider-model="slider.value"
+    <rzslider style="top: 50px;   color: #FFF;
+            background: #333;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 30px;
+            bottom: 20px;" rz-slider-model="slider.value"
               rz-slider-options="slider.options"></rzslider>
 
     <!--************************************** TIPS *******************************-->
