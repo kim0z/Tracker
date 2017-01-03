@@ -934,72 +934,39 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             //************ animate path **************************
 
+   // Use the DOM setInterval() function to change the offset of the symbol
+      // at fixed intervals.
+      function animateCircle(line) {
+          var count = 0;
+          window.setInterval(function() {
+            count = (count + 1) % 200;
+
+            var icons = line.get('icons');
+            icons[0].offset = (count / 2) + '%';
+            line.set('icons', icons);
+        }, 300);
+      }
+
             $scope.runPathAnimation = function () {
-                //remove path to animate path on clean map
                 polys[$scope.facebookId].setMap(null);
 
-                var lineSymbol = {
-                    path: 'M 0,-1 0,1',
-                    strokeOpacity: 1,
-                    scale: 4
+                // Define the symbol, using one of the predefined paths ('CIRCLE')
+                // supplied by the Google Maps JavaScript API.
+                var lineSymbolCircle = {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 8,
+                    strokeColor: '#393'
                 };
-                //prepare new polyline
-                var animatePath = [];
-                polys[$scope.facebookId] = new google.maps.Polyline({
+
+                 polys[$scope.facebookId] = new google.maps.Polyline({
                     map: $scope.map,
-                    path: animatePath,
-                    geodesic: true,
-                    strokeColor: '#0000ff', //getRandomColor(),
-                    strokeOpacity: 0,
-                    strokeWeight: 2,
+                    path: $scope.pathHash[$scope.slider.value],
                     icons: [{
-                        icon: lineSymbol,
-                        offset: '0',
-                        repeat: '20px'
+                        icon: lineSymbolCircle,
+                        offset: '100%'
                     }]
                 });
-                //polys[$scope.facebookId].setMap($scope.map);
-                var index = 0;
-
-                var pls = new google.maps.Polyline({
-                    map: $scope.map,
-                    path: animatePath,
-                    geodesic: true,
-                    strokeColor: '#0000ff', //getRandomColor(),
-                    strokeOpacity: 0,
-                    strokeWeight: 2,
-                    icons: [{
-                        icon: lineSymbol,
-                        offset: '0',
-                        repeat: '20px'
-                    }]
-                });
-                var p1 = [];
-
-                // get existing full path for the selected day in the slider
-                //$scope.pathHash[$scope.slider.value]
-                var draw = function () {
-
-
-
-                    //p1 = polys[$scope.facebookId].getPath();
-                    // add new point
-
-                        p1.push(new google.maps.LatLng($scope.pathHash[$scope.slider.value][index].lat, $scope.pathHash[$scope.slider.value][index].lang));
-                    
-
-                    // update the polyline with the updated path
-                    pls.setPath(p1);
-                    //pls.setMap($scope.map);
-                    //polys[$scope.facebookId].setMap($scope.map);
-                    index++;
-                    if (index < $scope.pathHash[$scope.slider.value].length) {
-                        setTimeout(function () {
-                            draw()
-                        }, 50);
-                    }
-                }
-                draw();
+                 animateCircle(polys[$scope.facebookId]);
             }
             //}
 
@@ -1047,8 +1014,9 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     //});
                     //all path saved to be used later for slider filter, instead of calling Firebase api again
                     $scope.pathSaved.push(point.val());
-
                 })
+
+                $scope.pathHash[0] = path;
 
                 $scope.panoPosition = path.pop();
 
