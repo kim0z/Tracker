@@ -1,4 +1,26 @@
-trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $state, $document, dataBaseService, messages, localStorageService, Facebook, $filter, ngProgressFactory) {
+trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $state, $document,$interval,  dataBaseService, messages, localStorageService, Facebook, $filter, ngProgressFactory) {
+
+
+    $scope.spin = function($interval) {
+        var self = this;
+
+        self.activated = true;
+        self.determinateValue = 30;
+
+        // Iterate every 100ms, non-stop and increment
+        // the Determinate loader.
+        $interval(function() {
+
+            self.determinateValue += 1;
+            if (self.determinateValue > 100) {
+                self.determinateValue = 30;
+            }
+
+        }, 100);
+    }
+
+
+    $scope.loading = true;
 
     $scope.profile = localStorageService.get('profile');
     $scope.userAccessToken = localStorageService.get('providerToken');
@@ -139,8 +161,9 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
 
             $scope.facebookId = $scope.trip[0].facebook_id;
 
-            $scope.continent = $scope.trip[0].continent;
-
+            if($scope.trip[0].continent) {
+                $scope.continent = $scope.trip[0].continent[0];
+            }
             $scope.test = new Date($scope.trip[0].start_date);
 
             $scope.tripDays = Math.abs(Math.floor(( Date.parse($scope.dateStart) - Date.parse($scope.dateEnd) ) / 86400000));
@@ -959,12 +982,12 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 };
 
                  polys[$scope.facebookId] = new google.maps.Polyline({
-                    map: $scope.map,
-                    path: $scope.pathHash[$scope.slider.value],
-                    icons: [{
-                        icon: lineSymbolCircle,
-                        offset: '100%'
-                    }]
+                     map: $scope.map,
+                     path: $scope.pathHash[$scope.slider.value],
+                     icons: [{
+                         icon: lineSymbolCircle,
+                         offset: '100%'
+                     }]
                 });
                  animateCircle(polys[$scope.facebookId]);
             }
@@ -1004,9 +1027,9 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                             lng: JSON.parse(point.val()['coords'].longitude)
                         });
                     } else {
-                        console.log(point.val()['coords'].latitude)
-                        console.log(point.val()['coords'].longitude)
-                        console.log('**************')
+                        //console.log(point.val()['coords'].latitude)
+                        //console.log(point.val()['coords'].longitude)
+                        //console.log('**************')
                     }
                     //path.push({
                     //  lat: JSON.parse(point.val()['coords'].latitude),
@@ -1017,6 +1040,9 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                 })
 
                 $scope.pathHash[0] = path;
+                //enable page after path is ready on the map
+                $scope.loading = false;
+                $scope.$apply();
 
                 $scope.panoPosition = path.pop();
 
@@ -1040,7 +1066,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                     //map: $scope.map,
                     path: path,
                     geodesic: true,
-                    strokeColor: '#000000', //getRandomColor(),
+                    //strokeColor: '#000000', //getRandomColor(), #E38C2D
+                    strokeColor: '#000000',
                     strokeOpacity: 0,
                     strokeWeight: 2,
                     icons: [{

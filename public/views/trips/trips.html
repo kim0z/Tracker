@@ -66,6 +66,11 @@
             margin-right: 8px;
             align-items: center;
             justify-content: center; }
+
+        .cont-img {
+            height: 70px;
+            width: 270px
+        }
     </style>
 </head>
 <body layout="vertical" md-theme="blue" layout-fill>
@@ -77,63 +82,62 @@
         placeholder="Search...">
 </nit-advanced-searchbox>
 
-
-
 <!-- <section class="section" style="padding: 0px; background-color: #ffffff"> -->
     <h1 class="text-center" style="font-weight: 200;line-height: 55px;font-size: 34px; padding-top: 15px;padding-bottom: 10px;margin: 0px">Choose your destination</h1>
+    <md-button class="md-raised" ng-click="continentSelection('')">clear filter</md-button>
     <div class="flex-grid">
         <div class="flex-grid-item">
             <a href="" ng-click="continentSelection('North America')">
-                <figure class="figure-container">
-                    <img src="assets/images/goldengate11.jpg" style="height: 100px; width: 328px" alt="">
+                <figure class="figure-container" style=" height: 100px; width: 270px">
+                    <img src="assets/images/goldengate11.jpg" style="height: 100px; width: 270px"  alt="">
                     <figcaption><h2>North America</h2></figcaption>
                 </figure>
             </a>
         </div>
-        <div class="flex-grid-item">
+        <div class="flex-grid-item" class="cont-img">
             <a href="" ng-click="continentSelection('Europe')">
-                <figure class="figure-container">
-                    <img src="assets/images/italy.jpg" alt="">
+                <figure class="figure-container" style="height: 100px; width: 270px">
+                    <img src="assets/images/italy.jpg" style="height: 100px; width: 270px" alt="">
                     <figcaption><h2>Europe</h2></figcaption>
                 </figure>
             </a>
         </div>
-        <div class="flex-grid-item">
+        <div class="flex-grid-item" class="cont-img">
             <a href="" ng-click="continentSelection('Asia')">
-                <figure class="figure-container">
-                    <img src="assets/images/china.jpg" alt="">
+                <figure class="figure-container" style=" height: 100px; width: 270px">
+                    <img src="assets/images/china.jpg" style=" height: 100px; width: 270px" alt="">
                     <figcaption><h2>Asia</h2></figcaption>
                 </figure>
             </a>
         </div>
         <div class="flex-grid-item">
             <a href="" ng-click="continentSelection('Australia')">
-                <figure class="figure-container">
-                    <img src="assets/images/sydney-opera.jpg" style="height: 150px; width: 390px" alt="">
+                <figure class="figure-container" style=" height: 100px; width: 270px">
+                    <img src="assets/images/sydney-opera.jpg" style=" height: 100px; width: 270px" alt="">
                     <figcaption><h2>Australia</h2></figcaption>
                 </figure>
             </a>
         </div>
         <div class="flex-grid-item">
             <a href="" ng-click="continentSelection('Africa')">
-                <figure class="figure-container">
-                    <img src="assets/images/africa.jpg" alt="">
+                <figure class="figure-container" style=" height: 100px; width: 270px">
+                    <img src="assets/images/africa.jpg" style=" height: 100px; width: 270px" alt="">
                     <figcaption><h2>Africa</h2></figcaption>
                 </figure>
             </a>
         </div>
         <div class="flex-grid-item">
             <a href="" ng-click="continentSelection('South America')">
-                <figure class="figure-container">
-                    <img src="assets/images/castillo-view.jpg" alt="">
+                <figure class="figure-container" style=" height: 100px; width: 270px">
+                    <img src="assets/images/castillo-view.jpg" style=" height: 100px; width: 270px" alt="">
                     <figcaption><h2>South America</h2></figcaption>
                 </figure>
             </a>
         </div>
         <div class="flex-grid-item">
             <a href="" ng-click="continentSelection('Antarctica')">
-                <figure class="figure-container">
-                    <img src="assets/images/antarctic-a.jpg" style="height: 150px; width: 400px" alt="Austin">
+                <figure class="figure-container" style=" height: 100px; width: 270px">
+                    <img src="assets/images/antarctic-a.jpg" style=" height: 100px; width: 270px" alt="Austin">
                     <figcaption><h2>Antarctica</h2></figcaption>
                 </figure>
             </a>

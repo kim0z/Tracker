@@ -1,12 +1,60 @@
 <!DOCTYPE html>
 <head>
 
-        <style type="text/css">
+    <style type="text/css">
+
+        .progressCirculardemoBasicUsage body {
+            padding: 20px;
+        }
+
+        .progressCirculardemoBasicUsage h4 {
+            margin: 10px 0;
+        }
+
+        .progressCirculardemoBasicUsage md-progress-circular {
+            margin-bottom: 20px;
+        }
+
+        .progressCirculardemoBasicUsage #loaders > md-switch {
+            margin: 0;
+            margin-left: 10px;
+            margin-top: -10px;
+        }
+
+        .progressCirculardemoBasicUsage #loaders > h5 {
+            margin-top: 0;
+        }
+
+        .progressCirculardemoBasicUsage #loaders > p {
+            margin-right: 20px;
+            margin-bottom: 24px;
+        }
+
+        .progressCirculardemoBasicUsage p.small {
+            font-size: 0.8em;
+            margin-top: -18px;
+        }
+
+        .progressCirculardemoBasicUsage hr {
+            width: 100%;
+            margin-top: 20px;
+            border-color: rgba(221, 221, 177, 0.1);
+        }
+
+        .progressCirculardemoBasicUsage p.small > code {
+            font-size: 0.8em;
+        }
+
+        .progressCirculardemoBasicUsage .visible {
+            border-color: rgba(221, 221, 177, 0);
+        }
+
         /* Photos slider*/
         * {
             margin: 0;
             padding: 0;
         }
+
         body {
             background: #ccc;
             font-family: arial, verdana, tahoma;
@@ -22,7 +70,8 @@
         */
 
         .accordian {
-            width: 720px; height: 480px;
+            width: 720px;
+            height: 480px;
             /*width: 520px; height: 280px; */
             overflow: hidden;
 
@@ -62,11 +111,15 @@
         }
 
         /*Reduce with of un-hovered elements*/
-        .accordian ul:hover li {width: 40px;}
+        .accordian ul:hover li {
+            width: 40px;
+        }
+
         /*Lets apply hover effects now*/
         /*The LI hover style should override the UL hover style*/
-        .accordian ul li:hover {width: 640px;}
-
+        .accordian ul li:hover {
+            width: 640px;
+        }
 
         .accordian li img {
             display: block;
@@ -76,10 +129,12 @@
         .image_title {
             background: rgba(0, 0, 0, 0.5);
             position: absolute;
-            left: 0; bottom: 0;
+            left: 0;
+            bottom: 0;
             width: 640px;
 
         }
+
         .image_title a {
             display: block;
             color: #fff;
@@ -87,7 +142,6 @@
             padding: 20px;
             font-size: 16px;
         }
-
 
         /* General CSS*/
         #map {
@@ -143,7 +197,7 @@
             opacity: .99; /* Set the opacity for a slightly transparent Google Form */
             color: white;
 
-           /* position: absolute;*/ /*or fixed*/
+            /* position: absolute;*/ /*or fixed*/
             right: 50%;
         }
 
@@ -185,7 +239,7 @@
         side button
         */
         #hp-ctn-howItWorks-photos {
-            bottom: 125px;
+            bottom: 155px;
             position: fixed;
             left: 0px;
             padding: 0px;
@@ -223,9 +277,9 @@
         }
 
         #pano-button {
-            bottom: 125px;
+            bottom: 80px;
             position: fixed;
-            right: 0px;
+            left: 0px;
             padding: 0px;
             margin: 0px;
             width: 55px;
@@ -234,10 +288,10 @@
             border-radius: 3px 0px 0px 3px;
         }
 
-            #play-button {
-            bottom: 180px;
+        #play-button {
+            bottom: 200px;
             position: fixed;
-            right: 0px;
+            left: 0px;
             padding: 0px;
             margin: 0px;
             width: 55px;
@@ -410,14 +464,14 @@
             position: relative;
             overflow: visible;
             box-shadow: inset 0 -2px transparent;
-            border-bottom: 1px solid hsla(0,0%,54%,.3);
+            border-bottom: 1px solid hsla(0, 0%, 54%, .3);
             box-sizing: border-box;
         }
 
-
-
-    /*Sidebar settings - tabs*/
-        body {font-family: "Lato", sans-serif;}
+        /*Sidebar settings - tabs*/
+        body {
+            font-family: "Lato", sans-serif;
+        }
 
         ul.tab {
             list-style-type: none;
@@ -429,7 +483,9 @@
         }
 
         /* Float the list items side by side */
-        ul.tab li {float: left;}
+        ul.tab li {
+            float: left;
+        }
 
         /* Style the links inside the list items */
         ul.tab li a {
@@ -459,30 +515,47 @@
             border: 3px solid #ccc;
             border-top: none;
         }
-
-
+        div.fade {
+            opacity:    0.5;
+            background: #000;
+            width:      100%;
+            height:     100%;
+            z-index:    10;
+            top:        0;
+            left:       0;
+            position:   fixed;
+        }
+        .centered {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -50px;
+            margin-left: -100px;
+            z-index: 11;
+        }
     </style>
 </head>
 <body>
 
-<div class="fluid" ></div>
+<md-progress-circular ng-disabled="!vm.activated" md-diameter="96" class="centered" ng-show="loading"></md-progress-circular>
+</md-content>
 
-<div id="main">
+<div class="fluid"></div>
+
+<div id="main" ng-class="{fade :loading}">
 
     <div id="map"></div>
 
     <div id="pano"></div>
 
-
-<!-- #3F51B5 -->
-
+    <!-- #3F51B5 -->
     <footer class="footer" style="background-color: #1E1E1E; width: 100%; margin-right: 0px; right: 0px">
         <div class="container">
             <span class="text-muted" style="font-size: 18px; text-align: left; font-style: inherit">Trip name: {{tripName}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Description: {{tripDescription}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Date: {{dateStart}} - {{dateEnd}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Continent: {{continent}}</span>
         </div>
     </footer>
 
-   <!-- Pךשט פשאי -->
+    <!-- Pךשט פשאי -->
     <div id="play-button" ng-click="runPathAnimation()">
         <img src="assets/icons/ic_play_circle_outline_black_48dp_1x.png" style="height: 50px; width: 50px">
     </div>
@@ -492,47 +565,45 @@
               rz-slider-options="slider.options"></rzslider>
 
     <!--************************************** TIPS *******************************-->
-	<!-- Tips filter -->
-	<div style="position: absolute; right: 30px; top: 125px;">
-	<div class="btn-group" role="group" aria-label="...">
-		<button type="button" ng-click="filterTipsOnClick('all')" class="btn btn-secondary">All</button>
- 		<button type="button" ng-click="filterTipsOnClick('tips')" class="btn btn-primary">Tips</button>
-   	 	<button type="button" ng-click="filterTipsOnClick('risks')" class="btn btn-danger">Risks</button>
- 		<button type="button" ng-click="filterTipsOnClick('expense')" class="btn btn-warning">Expense</button>
-        <button type="button" ng-click="filterTipsOnClick('invite')" class="btn btn-info">Invite</button>
-	</div>
+    <!-- Tips filter -->
+    <div style="position: absolute; right: 30px; top: 125px;">
+        <div class="btn-group" role="group" aria-label="...">
+            <button type="button" ng-click="filterTipsOnClick('all')" class="btn btn-secondary">All</button>
+            <button type="button" ng-click="filterTipsOnClick('tips')" class="btn btn-primary">Tips</button>
+            <button type="button" ng-click="filterTipsOnClick('risks')" class="btn btn-danger">Risks</button>
+            <button type="button" ng-click="filterTipsOnClick('expense')" class="btn btn-warning">Expense</button>
+            <button type="button" ng-click="filterTipsOnClick('invite')" class="btn btn-info">Invite</button>
+        </div>
 
 
-    <div  style="overflow: auto;height: 800px; width: 320px; ">
-        <div class="scroll" id="messages" class="list-group" ng-repeat="message in messages | filter:filterTips()" ng-show="showAllTips || showTips && message.message.tip || showRisks && message.message.risk || showExpense && message.message.price">
+        <div style="overflow: auto;height: 800px; width: 320px; ">
+            <div class="scroll" id="messages" class="list-group" ng-repeat="message in messages | filter:filterTips()"
+                 ng-show="showAllTips || showTips && message.message.tip || showRisks && message.message.risk || showExpense && message.message.price">
 
-            <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
+                <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
 
-                <md-icon md-svg-src="assets/icons/ic_message_black_48px.svg" ng-if="message.message.tip"></md-icon>
-                <md-icon md-svg-src="assets/icons/ic_warning_black_48px.svg" ng-if="message.message.risk"></md-icon>
-                <md-icon md-svg-src="assets/icons/ic_attach_money_black_48px.svg" ng-if="message.message.price"></md-icon>
-                <md-icon md-svg-src="assets/icons/ic_face_black_48px.svg" ng-if="message.message.invite"></md-icon>
+                    <md-icon md-svg-src="assets/icons/ic_message_black_48px.svg" ng-if="message.message.tip"></md-icon>
+                    <md-icon md-svg-src="assets/icons/ic_warning_black_48px.svg" ng-if="message.message.risk"></md-icon>
+                    <md-icon md-svg-src="assets/icons/ic_attach_money_black_48px.svg"
+                             ng-if="message.message.price"></md-icon>
+                    <md-icon md-svg-src="assets/icons/ic_face_black_48px.svg" ng-if="message.message.invite"></md-icon>
 
-                <!-- show the right data according to what is not empty, should be only 1 data avaliabale -->
-                <h4 class="list-group-item-heading" ng-if="message.message.tip" >{{message.message.tip}}</h4>
-                <h4 class="list-group-item-heading" ng-if="message.message.risk" >{{message.message.risk}}</h4>
-                <h4 class="list-group-item-heading" ng-if="message.message.price" >{{message.message.price}}</h4>
-                <h4 class="list-group-item-heading" ng-if="message.message.invite" >Invitation to join me..</h4>
+                    <!-- show the right data according to what is not empty, should be only 1 data avaliabale -->
+                    <h4 class="list-group-item-heading" ng-if="message.message.tip">{{message.message.tip}}</h4>
+                    <h4 class="list-group-item-heading" ng-if="message.message.risk">{{message.message.risk}}</h4>
+                    <h4 class="list-group-item-heading" ng-if="message.message.price">{{message.message.price}}</h4>
+                    <h4 class="list-group-item-heading" ng-if="message.message.invite">Invitation to join me..</h4>
 
-                <!--
-                <p class="list-group-item-text">{{message.email}}</p>
-                <p> {{message.location.coords.latitude}}</p>
-                <p> {{message.location.coords.longitude}}</p>
-                -->
-                <p class="list-group-item-text">{{message.time | date:'medium'}}</p>
-            </a>
+                    <!--
+                    <p class="list-group-item-text">{{message.email}}</p>
+                    <p> {{message.location.coords.latitude}}</p>
+                    <p> {{message.location.coords.longitude}}</p>
+                    -->
+                    <p class="list-group-item-text">{{message.time | date:'medium'}}</p>
+                </a>
+            </div>
         </div>
     </div>
-    </div>
-
-
-
-
 
 
     <!-- Load photos from AWS S3 - disabled, instead sync with Facebook photos
@@ -560,40 +631,42 @@
     <!--**************************** Buttons in main view ******************************* -->
     <!-- Google street button -->
     <div id="pano-button" ng-click="panoView()">
-        <img src="assets/icons/Street-View-icon.png" style="height: 50px; width: 50px">
+        <img src="assets/icons/ic_directions_walk_black_48dp_2x.png" style="height: 50px; width: 50px">
     </div>
 
     <!-- Open settings, just to MyTrips, not trips -->
-    
-    <div id="edit" ng-click="editModeSwitch()">
+    <!--
+    <div id="edit" ng-click="editModeSwitch()" >
         <img src="../../assets/images/edit.gif" width="40" height="40" style="margin-left:8px"/>
-      
+     -->
 
     <!-- Show trip information-->
-    </div>
-    <div id="hp-ctn-howItWorks-information" ng-click="inforSlide = !inforSlide" ng-hide="editMode">
-        <img src="../../assets/images/information.png" width="40" height="40" style="margin-left:8px" ;/>
-        <!-- <p class="text-rotate" style="font-size:20px">Info</p> -->
-    </div>
+    <!-- ng-click="inforSlide = !inforSlide" -->
+    <!--
+        <div id="hp-ctn-howItWorks-information" ng-hide="editMode" >
+            <img src="../../assets/images/information.png" width="40" height="40" style="margin-left:8px"/>
+        </div>
+    -->
+
 
     <!-- Show table-->
-    <div id="hp-ctn-howItWorks-table" ng-click="tableSlider = !tableSlider" ng-hide="editMode">
+    <!-- ng-click="tableSlider = !tableSlider" ->
+    <div id="hp-ctn-howItWorks-table"  ng-hide="editMode" ng-disabled="true">
         <img src="../../assets/images/table_icon2.svg" width="40" height="40" style="margin-left:8px"/>
-        <!-- <p class="text-rotate" style="font-size:20px">Table</p> -->
     </div>
 
     <!-- Show photos-->
     <div id="hp-ctn-howItWorks-photos" ng-click="photosSlider = !photosSlider" ng-hide="editMode">
-        <img src="../../assets/images/photos_icon.png" width="40" height="40" style="margin-left:8px"/>
-        <!-- <p class="text-rotate" style="font-size:20px">Photos</p> -->
+        <img src="../../assets/icons/ic_add_a_photo_black_48dp_2x.png" width="40" height="40" style="margin-left:8px"/>
     </div>
 
 
-<!--**************************** Photos slider *************************************-->
+    <!--**************************** Photos slider *************************************-->
 
     <!-- We will make a simple accordian with hover effects
 The markup will have a list with images and the titles-->
-    <div class="footer accordian" ng-show="photosSlider && facebookProvider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
+    <div class="footer accordian" ng-show="photosSlider && facebookProvider"
+         style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
         <ul>
             <li ng-repeat="item in items">
                 <div class="image_title">
@@ -608,7 +681,8 @@ The markup will have a list with images and the titles-->
     <!-- end facebook photos -->
 
     <!-- photos from aws -->
-    <div class="footer accordian" ng-show="photosSlider && awsProvider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px;">
+    <div class="footer accordian" ng-show="photosSlider && awsProvider"
+         style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px;">
         <ul>
             <li ng-repeat="photo in photos">
                 <div class="image_title">
@@ -623,7 +697,7 @@ The markup will have a list with images and the titles-->
     <!-- End aws photos -->
 
 
-<!--********************************* Table ************************ -->
+    <!--********************************* Table ************************ -->
     <div style="margin-left: 55px" class="footer" class='animate-hide ' ng-hide="tableSlider">
         <table style="width:100%" class="table table-bordered"> 
             <tr>
@@ -700,7 +774,8 @@ The markup will have a list with images and the titles-->
         <a style="padding-left: 2px">Settings</a>
 
         <ul class="tab">
-            <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'photosSettingsTab')" id="defaultOpen">Photos</a></li>
+            <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'photosSettingsTab')"
+                   id="defaultOpen">Photos</a></li>
             <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'mapsSettingTab')">Maps</a></li>
             <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'tipsSettingTab')">Tips</a></li>
             <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'gpsSettingsTab')">GPS</a></li>
@@ -709,24 +784,26 @@ The markup will have a list with images and the titles-->
         <div id="photosSettingsTab" class="tabcontent">
             <h3>Photos</h3>
             <div flex-gt-sm="50">
-                <md-checkbox ng-model="facebookProvider" ng-change="enableFacebookProvider()" aria-label="Checkbox 1" class="md-primary">
+                <md-checkbox ng-model="facebookProvider" ng-change="enableFacebookProvider()" aria-label="Checkbox 1"
+                             class="md-primary">
                     Sync your photos directly from Facebook album
                 </md-checkbox>
             </div>
             <!-- Facebook albums -->
-            <div  ng-repeat="album in facebookAlbums track by $index">
+            <div ng-repeat="album in facebookAlbums track by $index">
                 <label>{{album.albumName}}{{album.albumID}}
                     <input type="checkbox" ng-model="facebookAlbums[$index].checkbox" style="float: right">
                 </label><br/>
             </div>
-                <!-- <div ng-dropdown-multiselect="" options="facebookAlbumsList" selected-model="selectedFacebookAlbum" events="selectAlbumEvents"></div> -->
+            <!-- <div ng-dropdown-multiselect="" options="facebookAlbumsList" selected-model="selectedFacebookAlbum" events="selectAlbumEvents"></div> -->
 
-                <button ng-click="syncAlbums()">Sync</button>
+            <button ng-click="syncAlbums()">Sync</button>
 
 
             <p>Upload photos</p>
             <div flex-gt-sm="50">
-                <md-checkbox ng-model="awsProvider" ng-change="enableAwsProvider()" aria-label="Checkbox 1" class="md-primary">
+                <md-checkbox ng-model="awsProvider" ng-change="enableAwsProvider()" aria-label="Checkbox 1"
+                             class="md-primary">
                     Private album
                 </md-checkbox>
             </div>
@@ -754,7 +831,7 @@ The markup will have a list with images and the titles-->
             <p>Add new tip, manually by with GPS location</p>
             <p>Add message</p>
             <ul class="input-group-addon">
-                <p> Message: <input type="text" ng-model="message.text"  style="width: 300px; float: right"/></p>
+                <p> Message: <input type="text" ng-model="message.text" style="width: 300px; float: right"/></p>
                 <p> lat: <input type="text" ng-model="message.lat" style="width: 300px; float: right"/></p>
                 <p> lng:<input type="text" ng-model="message.lng" style="width: 300px; float: right"/></p>
                 <p> time: <input type="datetime" ng-model="message.time" style="width: 300px; float: right"/></p>
@@ -766,15 +843,15 @@ The markup will have a list with images and the titles-->
             <h3>GPS</h3>
             <p>Select a photo and then point to the location in the map</p>
             <!-- <div id="add_GPS_toPhoto" style="z-index: 16; position: relative; margin-bottom: 10px" class="roundborder"> -->
-                <p>Add GPS to photo</p>
-                <ul>
-                    <p> Image path: <input type="text" ng-model="image.path" style="width: 300px; float: right"/></p>
-                    <p> lat: <input type="text" ng-model="message.lat" style="width: 300px; float: right"/></p>
-                    <p> lng:<input type="text" ng-model="message.lng" style="width: 300px; float: right"/></p>
-                    <button type="button" class="btn btn-success" id="addGPStoPhoto" ng-click="saveGPStoThisPhoto()">add
-                    </button>
-                    <div id="results_photo_gps"></div>
-                </ul>
+            <p>Add GPS to photo</p>
+            <ul>
+                <p> Image path: <input type="text" ng-model="image.path" style="width: 300px; float: right"/></p>
+                <p> lat: <input type="text" ng-model="message.lat" style="width: 300px; float: right"/></p>
+                <p> lng:<input type="text" ng-model="message.lng" style="width: 300px; float: right"/></p>
+                <button type="button" class="btn btn-success" id="addGPStoPhoto" ng-click="saveGPStoThisPhoto()">add
+                </button>
+                <div id="results_photo_gps"></div>
+            </ul>
             <!--</div>-->
         </div>
 
@@ -798,33 +875,23 @@ The markup will have a list with images and the titles-->
         </script>
 
 
+        <!--
+                    <div style="z-index: 16; position: relative; margin-bottom: 10px" class="roundborderlong">
+                        <p>Add Day</p>
+                        <ul id="add_day">
+                            <p> Day Number: <input type="text" ng-model="day.dayNumber" style="width: 200px"/></p>
+                            <p> Date: <input type="text" ng-model="day.date" style="width: 200px"/></p>
+                            <p> Flight:<input type="text" ng-model="day.flight" style="width: 200px"/></p>
+                            <p> Hotel: <input type="datetime" ng-model="day.hotel" style="width: 200px"/></p>
+                            <p> Car: <input type="datetime" ng-model="day.car" style="width: 200px"/></p>
+                            <p> Action1: <input type="datetime" ng-model="day.action1" style="width: 200px"/></p>
+                            <p> Action2: <input type="datetime" ng-model="day.action2" style="width: 200px"/></p>
+                            <p> Expense: <input type="datetime" ng-model="day.expense" style="width: 200px"/></p>
+                            <button type="button" class="btn btn-success" ng-click="addDay()">add</button>
+                        </ul>
+                    </div>
 
-
-
-
-
-
-<!--
-            <div style="z-index: 16; position: relative; margin-bottom: 10px" class="roundborderlong">
-                <p>Add Day</p>
-                <ul id="add_day">
-                    <p> Day Number: <input type="text" ng-model="day.dayNumber" style="width: 200px"/></p>
-                    <p> Date: <input type="text" ng-model="day.date" style="width: 200px"/></p>
-                    <p> Flight:<input type="text" ng-model="day.flight" style="width: 200px"/></p>
-                    <p> Hotel: <input type="datetime" ng-model="day.hotel" style="width: 200px"/></p>
-                    <p> Car: <input type="datetime" ng-model="day.car" style="width: 200px"/></p>
-                    <p> Action1: <input type="datetime" ng-model="day.action1" style="width: 200px"/></p>
-                    <p> Action2: <input type="datetime" ng-model="day.action2" style="width: 200px"/></p>
-                    <p> Expense: <input type="datetime" ng-model="day.expense" style="width: 200px"/></p>
-                    <button type="button" class="btn btn-success" ng-click="addDay()">add</button>
-                </ul>
-            </div>
-
--->
-    </div>
-
-
-
+        -->
     </div>
 </div>
 </body>

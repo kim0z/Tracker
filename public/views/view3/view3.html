@@ -143,24 +143,24 @@
                                             {{chunk.content.quotes.length}} more details
                                         </md-button>
                                         <md-button
-                                                ng-click="edit_mode = !edit_mode; editTrip(chunk.id);$event.stopPropagation();">
+                                                ng-click="edit_mode = !edit_mode; editTrip(chunk.id);$event.stopPropagation();" ng-disabled="true">
                                             Edit Trip Plan
                                         </md-button>
                                         <md-button
-                                                ng-click="edit_mode = !edit_mode; showActualMap(chunk.id);$event.stopPropagation();">
+                                                ng-click="edit_mode = !edit_mode; showActualMap(chunk.id);$event.stopPropagation();" ng-disabled="true">
                                             Show Actual Map
                                         </md-button>
                                         <md-button
-                                                ng-click="edit_mode = !edit_mode; editTrip(chunk.id);$event.stopPropagation();">
+                                                ng-click="edit_mode = !edit_mode; editTrip(chunk.id);$event.stopPropagation();" ng-disabled="true">
                                             Share
                                         </md-button>
 
-                                        <md-button ng-click="activateTrip(chunk)">
+                                        <md-button ng-click="activateTrip(chunk)" ng-disabled="true">
                                             Active
                                         </md-button>
 
                                         <md-button class="md-warn"
-                                                   ng-click="edit_mode = !edit_mode; deleteTrip(chunk.id);$event.stopPropagation();">
+                                                   ng-click="edit_mode = !edit_mode; deleteTrip(chunk.id);$event.stopPropagation();" ng-disabled="true">
                                             Delete
                                         </md-button>
 
