@@ -306,11 +306,11 @@ trackerApp.controller('tripsCtrl', function ($scope,$rootScope, $location, $anch
                 expanded: false, content: {type: "QUOTE", quotes: ["A great trip to .."]}, active: $scope.trips[i].active, public: $scope.trips[i].public, continent: continent, picture: $scope.trips[i].picture
             };
 
-            if (new Date($scope.trips[i].end_date) > new Date()) {
-                $scope.chunks_future.push(jsonTrip);
-            } else {
+            //if (new Date($scope.trips[i].end_date) > new Date()) {
+                //$scope.chunks_future.push(jsonTrip);
+            //} else {
                 $scope.chunks_history.push(jsonTrip);
-            }
+            //}
             var chunks = $scope.chunks_future.concat($scope.chunks_history);
             $scope.chunks = chunks;
         }
