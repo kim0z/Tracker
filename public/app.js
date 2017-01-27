@@ -284,7 +284,7 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
             case 'Plan Trip':
                 window.open('#/view1', '_self', false);
                 break;
-            case 'Rel-Time Travelers':
+            case 'Real-Time Travelers':
                 window.open('#/view2', '_self', false);
                 break;
             case 'Login':
