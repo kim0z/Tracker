@@ -1005,7 +1005,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
           //  var anomalyDetected = false;
            // var lastNormalPoint = '';
             //.limitToFirst(250)
-            ref_read_path.on("value", function (tripPath) {
+            ref_read_path.once("value", function (tripPath) {
                 var pathLen = tripPath.length;
                 tripPath.forEach(function (point) {
                     i++;
@@ -1047,10 +1047,6 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, 
                  //   }
 
                    // prevPoint = point.val();
-
-
-
-
 
                 });
 
