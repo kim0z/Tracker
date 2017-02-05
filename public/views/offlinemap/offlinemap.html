@@ -618,7 +618,6 @@
         </div>
     </div>
 
-
     <!-- Load photos from AWS S3 - disabled, instead sync with Facebook photos
     <td>
        <div id="status"></div>
@@ -702,12 +701,13 @@ The markup will have a list with images and the titles-->
         </li>
     </ul>
 -->
-    <ul>
-        <li lightgallery ng-repeat="photo in photos">
-            <img ng-src="{{photo}}" />
-        </li>
-    </ul>
-
+<!--
+<ul>
+  <li lightgallery ng-repeat="photo in photos" data-src="{{photo}}" style="width: 100px; height: 100px">
+    <img ng-src="{{photo}}" />
+  </li>
+</ul>
+-->
     <!--
     <div class="footer accordian" ng-show="photosSlider && awsProvider"
          style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px;">

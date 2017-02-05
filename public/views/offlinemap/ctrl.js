@@ -1,6 +1,10 @@
 trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $timeout, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, localStorageService, Facebook, $filter, ngProgressFactory) {
 
-
+ $(document).ready(function() {
+        $("#lightgallery").lightGallery({
+            thumbnail:true
+        }); 
+    });
 
 
 

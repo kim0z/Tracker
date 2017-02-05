@@ -31,12 +31,26 @@ var pg = require('pg');
 
 var conString = '';
 
-if(process.argv[2] == 'production'){
-    console.log('production mode')
+
+
+
+switch (process.argv[2]) {
+  case 'production':
+  	console.log('production mode')
     conString = database.production;
-}else{
+    break;
+  case 'test':
     console.log('test mode')
     conString = database.test;
+    break;
+  case 'test_work':
+    console.log('test at work mode')
+    conString = database.test_work;
+    break;
+  default:
+    console.log('test mode')
+    conString = database.test;
+    break;
 }
 
 var client = new pg.Client(conString);
