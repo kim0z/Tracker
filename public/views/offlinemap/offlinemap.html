@@ -694,6 +694,21 @@ The markup will have a list with images and the titles-->
     <!-- end facebook photos -->
 
     <!-- photos from aws -->
+
+<!--
+    <ul id="lightgallery">
+        <li ng-repeat="photo in photos">
+            <img ng-src="{{photo}}" />
+        </li>
+    </ul>
+-->
+    <ul>
+        <li lightgallery ng-repeat="photo in photos">
+            <img ng-src="{{photo}}" />
+        </li>
+    </ul>
+
+    <!--
     <div class="footer accordian" ng-show="photosSlider && awsProvider"
          style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px;">
         <ul>
@@ -707,6 +722,7 @@ The markup will have a list with images and the titles-->
             </li>
         </ul>
     </div>
+    -->
     <!-- End aws photos -->
 
 
