@@ -151,6 +151,7 @@
             width: 100%;
             position: absolute;
             top: 0px;
+
             /*top: 100px;*/
             left: 0;
             z-index: 0;
@@ -541,7 +542,25 @@
             font-size: 30px;
             bottom: 20px;
         }
+
+            .demo {
+      list-style: none outside none;
+      padding-left: 0;
+    }
+    .demo li {
+      display: block;
+      float: left;
+      height: 100px;
+      margin-bottom: 6px;
+      margin-right: 6px;
+      width: 100px;
+    }
+    .demo img {
+      max-width: 100%;
+      height: auto;
+    }
     </style>
+
 </head>
 <body>
 
@@ -557,7 +576,7 @@
     <div id="pano"></div>
 
     <!-- #3F51B5 -->
-    <footer class="footer" style="background-color: #1E1E1E; width: 100%; margin-right: 0px; right: 0px">
+    <footer class="navbar navbar-default navbar-fixed-bottom" style="background-color: #1E1E1E; width: 100%; margin-right: 0px; right: 0px">
         <div class="container">
             <span class="text-muted" style="font-size: 18px; text-align: left; font-style: inherit">Trip name: {{tripName}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Description: {{tripDescription}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Date: {{dateStart}} - {{dateEnd}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Continent: {{continent}}</span>
         </div>
@@ -694,20 +713,37 @@ The markup will have a list with images and the titles-->
 
     <!-- photos from aws -->
 
-<!--
-    <ul id="lightgallery">
-        <li ng-repeat="photo in photos">
-            <img ng-src="{{photo}}" />
-        </li>
+<div>
+  <style>
+    .demo {
+      list-style: none outside none;
+      padding-left: 0;
+    }
+    .demo li {
+      display: block;
+      float: left;
+      height: 65px;
+      margin-bottom: 6px;
+      margin-right: 6px;
+      width: 100px;
+    }
+    .demo img {
+      max-width: 100%;
+      height: auto;
+    }
+    .meir {
+      background-color: pink
+    }
+  </style>
+
+  <div class="navbar navbar-default navbar-fixed-bottom" style="bottom: 50px" >
+    <ul class="demo">
+      <li lightgallery ng-repeat="photo in photos" data-src="{{photo.fullres}}">
+        <img ng-src="{{photo.thumbnail}}" />
+      </li>
     </ul>
--->
-<!--
-<ul>
-  <li lightgallery ng-repeat="photo in photos" data-src="{{photo}}" style="width: 100px; height: 100px">
-    <img ng-src="{{photo}}" />
-  </li>
-</ul>
--->
+  </div>
+</div>
     <!--
     <div class="footer accordian" ng-show="photosSlider && awsProvider"
          style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px;">
@@ -723,6 +759,8 @@ The markup will have a list with images and the titles-->
         </ul>
     </div>
     -->
+
+
     <!-- End aws photos -->
 
 

@@ -8,7 +8,6 @@
 <!--[if gt IE 8]><!-->
 <html class="html" lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
 <head>
-
     <style>
         .user {
             display: inline-block;
@@ -50,25 +49,14 @@
     <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic"> -->
     <link rel="stylesheet" href="/assets/css/fonts_google.css">
 
-    <link type="text/css" rel="stylesheet" href="bower_components/lightgallery/css/lightGallery.css" />
-
-</head>
-
-<body>
 
 
-<!-- In production use:
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
--->
-
-<!-- jQuery -->
-<script src='bower_components/jquery/dist/jquery.min.js'></script>
-<script src='bower_components/jquery/dist/jquery.js'></script>
+        <script src='bower_components/jquery/dist/jquery.js'></script>
 
 
-<script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-<script src="app.js"></script>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+
 <!-- Google maps-->
 <!-- <script src='https://maps.googleapis.com/maps/api/js?sensor=false'></script> -->
 <!-- city autoComplete google API libraries-->
@@ -215,9 +203,14 @@
 <script type="text/javascript" src="bower_components/angular-facebook/lib/angular-facebook.js"></script>
 
 <!-- lightgallery plugins -->
+<link rel="stylesheet" href="./bower_components/lightgallery/dist/css/lightgallery.css" />
 <script src="bower_components/lightgallery/dist/js/lightgallery.min.js"></script>
-<script src="bower_components/lightgallery/dist/js/lightgallery.js"></script>
 
+   <!-- lightgallery plugins -->
+    <script src="bower_components/lg-thumbnail/dist/lg-thumbnail.min.js"></script>
+
+
+        <script src="app.js"></script>
 
 <script src="services/googleAPISvc.js"></script>
 <script src="services/dbSvc.js"></script>
@@ -236,6 +229,20 @@
 <script src="views/view3/ctrlNewTrip.js"></script>
 <script src="views/login/login.js"></script>
 <script src="views/offlinemap/ctrl.js"></script>
+<script src="views/test/test.js"></script>
+
+</head>
+
+<body>
+
+
+<!-- In production use:
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+-->
+
+<!-- jQuery -->
+<!-- <script src='bower_components/jquery/dist/jquery.min.js'></script> -->
+
 
 
 <div ng-hide="hideToolBar" layout="column" layout-fill style="background: white">
@@ -265,7 +272,7 @@
     </md-toolbar>
 
 
-    <div ui-view></div>
+    <div ui-view style="margin: 5px 10px 10px 10px;"></div>
 
 </div>
 
