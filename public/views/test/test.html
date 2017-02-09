@@ -22,7 +22,15 @@
     }
   </style>
 
-  <div ng-controller="DemoController">
+
+
+    <div id="main-container" class="container">
+      <div class="row">
+        <div id="sidebar" class="col-xs-3">
+          
+
+
+            <div ng-controller="DemoController">
     <ul class="demo">
       <li lightgallery ng-repeat="photo in photos" data-src="{{photo.fullres}}">
         <img ng-src="{{photo.thumbnail}}"  class="meir"/>
@@ -30,3 +38,12 @@
     </ul>
   </div>
 </div>
+
+
+
+        </div>
+        <div id="content" class="col-xs-9">
+         
+        </div>
+      </div>
+    </div>
