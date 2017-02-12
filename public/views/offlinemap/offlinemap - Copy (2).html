@@ -1,0 +1,366 @@
+<link rel="stylesheet" href="/assets/css/offlinemap.css">
+<style>
+#map {
+    box-shadow: 3px 3px 10px gray;
+    /* make Google map -> background*/
+    height: 100%;
+    width: 100%;
+    /*position: absolute;*/
+    position: absolute;
+    top: 0px;
+
+    /*top: 100px;*/
+    left: 0;
+    /*z-index: 0;*/
+    padding: 0;
+    font-size: 0; /* Remember to change it back to normal font size if have captions */
+    list-style: none;
+    background-color: #000;
+}
+</style>
+
+<div id="main" ng-class="{fade :loading}"></div>
+
+<div>
+    <div style="border : 1px green solid;">
+        <button>row1</button>
+
+
+            <div id="map"></div>
+
+     
+
+        <md-progress-circular ng-disabled="!vm.activated" md-diameter="96" class="centered" ng-show="loading"></md-progress-circular>
+
+        <div class="fluid"></div>
+        
+        <div id="pano"></div>
+        <!-- Slider -->
+        <rzslider style="color: #FFF;
+            background: #333;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 30px;
+            bottom: 20px;" rz-slider-model="slider.value" rz-slider-options="slider.options"></rzslider>
+        <!--************************************** TIPS *******************************-->
+        <!-- Tips filter -->
+        <div style="position: absolute; right: 30px; top: 125px;">
+            <div class="btn-group" role="group" aria-label="...">
+                <button type="button" ng-click="filterTipsOnClick('all')" class="btn btn-secondary">All</button>
+                <button type="button" ng-click="filterTipsOnClick('tips')" class="btn btn-primary">Tips</button>
+                <button type="button" ng-click="filterTipsOnClick('risks')" class="btn btn-danger">Risks</button>
+                <button type="button" ng-click="filterTipsOnClick('expense')" class="btn btn-warning">Expense</button>
+                <button type="button" ng-click="filterTipsOnClick('invite')" class="btn btn-info">Invite</button>
+            </div>
+            <div style="overflow: auto;height: 800px; width: 320px; ">
+                <div class="scroll" id="messages" class="list-group" ng-repeat="message in messages | filter:filterTips()" ng-show="showAllTips || showTips && message.message.tip || showRisks && message.message.risk || showExpense && message.message.price">
+                    <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
+                        <md-icon md-svg-src="assets/icons/ic_message_black_48px.svg" ng-if="message.message.tip"></md-icon>
+                        <md-icon md-svg-src="assets/icons/ic_warning_black_48px.svg" ng-if="message.message.risk"></md-icon>
+                        <md-icon md-svg-src="assets/icons/ic_attach_money_black_48px.svg" ng-if="message.message.price"></md-icon>
+                        <md-icon md-svg-src="assets/icons/ic_face_black_48px.svg" ng-if="message.message.invite"></md-icon>
+                        <!-- show the right data according to what is not empty, should be only 1 data avaliabale -->
+                        <h4 class="list-group-item-heading" ng-if="message.message.tip">{{message.message.tip}}</h4>
+                        <h4 class="list-group-item-heading" ng-if="message.message.risk">{{message.message.risk}}</h4>
+                        <h4 class="list-group-item-heading" ng-if="message.message.price">{{message.message.price}}</h4>
+                        <h4 class="list-group-item-heading" ng-if="message.message.invite">Invitation to join me..</h4>
+                        <!--
+                    <p class="list-group-item-text">{{message.email}}</p>
+                    <p> {{message.location.coords.latitude}}</p>
+                    <p> {{message.location.coords.longitude}}</p>
+                    -->
+                        <p class="list-group-item-text">{{message.time | date:'medium'}}</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Load photos from AWS S3 - disabled, instead sync with Facebook photos
+    <td>
+       <div id="status"></div>
+        <il id="objects"></il>
+        <ul id="rig">
+            <li ng-repeat="photo in photos track by $index">
+                <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)">
+                    <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px" >
+                    <span class="rig-overlay"></span>
+                    <span class="rig-text">show on map</span>
+                </a>
+            </li>
+        </ul>
+    </td>
+    -->
+        <!-- id status used for AWS S3 status -->
+        <!-- <div id="status"></div> -->
+        <!-- side button photos-->
+        <!--**************************** Buttons in main view ******************************* -->
+        <!-- Google street button -->
+        <div id="pano-button" ng-click="panoView()">
+            <img src="assets/icons/ic_directions_walk_black_48dp_2x.png" style="height: 50px; width: 50px">
+        </div>
+        <!-- Animate path -->
+        <div id="play-button" ng-click="runPathAnimation()">
+            <img src="assets/icons/ic_play_circle_outline_black_48dp_1x.png" style="height: 50px; width: 50px">
+        </div>
+        <!-- Show photos-->
+        <div id="hp-ctn-howItWorks-photos" ng-click="photosSlider = !photosSlider" ng-hide="editMode">
+            <img src="../../assets/icons/ic_add_a_photo_black_48dp_2x.png" width="40" height="40" style="margin-left:8px" />
+        </div>
+        <!-- Open settings, just to MyTrips, not trips -->
+        <!--
+    <div id="edit" ng-click="editModeSwitch()" >
+        <img src="../../assets/images/edit.gif" width="40" height="40" style="margin-left:8px"/>
+     -->
+        <!-- Show trip information-->
+        <!-- ng-click="inforSlide = !inforSlide" -->
+        <!--
+        <div id="hp-ctn-howItWorks-information" ng-hide="editMode" >
+            <img src="../../assets/images/information.png" width="40" height="40" style="margin-left:8px"/>
+        </div>
+    -->
+        <!-- Show table-->
+        <!-- ng-click="tableSlider = !tableSlider" ->
+    <div id="hp-ctn-howItWorks-table"  ng-hide="editMode" ng-disabled="true">
+        <img src="../../assets/images/table_icon2.svg" width="40" height="40" style="margin-left:8px"/>
+    </div>
+
+    <!--**************************** Photos slider *************************************-->
+        <!-- We will make a simple accordian with hover effects
+The markup will have a list with images and the titles-->
+        <div class="footer accordian" ng-show="photosSlider && facebookProvider" style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
+            <ul>
+                <li ng-repeat="item in items">
+                    <div class="image_title">
+                        <a href="#">Photo title</a>
+                    </div>
+                    <a ng-click="showPhotoOnMap($event)">
+                        <img ng-src="{{item.img}}" />
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- end facebook photos -->
+        <!-- photos from aws -->
+        <!--
+    <div class="footer accordian" ng-show="photosSlider && awsProvider"
+         style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px;">
+        <ul>
+            <li ng-repeat="photo in photos">
+                <div class="image_title">
+                    <a href="#">Photo title</a>
+                </div>
+                <a ng-click="showPhotoOnMap($event)">
+                    <img ng-src="{{photo}}" style="max-width:100%; max-height:100%;"/>
+                </a>
+            </li>
+        </ul>
+    </div>
+    -->
+        <!-- End aws photos -->
+        <!--********************************* Table ************************ -->
+        <div style="margin-left: 55px" class="footer" class='animate-hide ' ng-hide="tableSlider">
+            <table style="width:100%" class="table table-bordered">
+                <tr>
+                    <th> Activity / Day</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{Utils.keys(day)[0]}}</td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].date}}</td>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <input value="{{day[Utils.keys(day)[0]].date}}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Flight</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].flight}}</td>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <input value="{{day[Utils.keys(day)[0]].flight}}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Hotel</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].hotel}}</td>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <input value="{{day[Utils.keys(day)[0]].hotel}}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Car</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].car}}</td>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <input value="{{day[Utils.keys(day)[0]].car}}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Action1</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].action1}}</td>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <input value="{{day[Utils.keys(day)[0]].action1}}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Action2</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].action2}}</td>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <input value="{{day[Utils.keys(day)[0]].action2}}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Expense</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].expense}}</td>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <input value="{{day[Utils.keys(day)[0]].expense}}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Delete</th>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <button type="button" class="btn btn-danger">Delete Day!</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- ######################################################################### -->
+        <!-- Edit Mode -->
+        <!-- ######################################################################### -->
+        <div id="mySidenav" class="sidenav" style="margin-top: 60px; color: white">
+            <a href="javascript:void(0)" class="closebtn" ng-click="editModeSwitch()">&times;</a>
+            <a style="padding-left: 2px">Settings</a>
+            <ul class="tab">
+                <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'photosSettingsTab')" id="defaultOpen">Photos</a></li>
+                <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'mapsSettingTab')">Maps</a></li>
+                <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'tipsSettingTab')">Tips</a></li>
+                <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'gpsSettingsTab')">GPS</a></li>
+            </ul>
+            <div id="photosSettingsTab" class="tabcontent">
+                <h3>Photos</h3>
+                <div flex-gt-sm="50">
+                    <md-checkbox ng-model="facebookProvider" ng-change="enableFacebookProvider()" aria-label="Checkbox 1" class="md-primary">
+                        Sync your photos directly from Facebook album
+                    </md-checkbox>
+                </div>
+                <!-- Facebook albums -->
+                <div ng-repeat="album in facebookAlbums track by $index">
+                    <label>{{album.albumName}}{{album.albumID}}
+                        <input type="checkbox" ng-model="facebookAlbums[$index].checkbox" style="float: right">
+                    </label>
+                    <br/>
+                </div>
+                <!-- <div ng-dropdown-multiselect="" options="facebookAlbumsList" selected-model="selectedFacebookAlbum" events="selectAlbumEvents"></div> -->
+                <button ng-click="syncAlbums()">Sync</button>
+                <p>Upload photos</p>
+                <div flex-gt-sm="50">
+                    <md-checkbox ng-model="awsProvider" ng-change="enableAwsProvider()" aria-label="Checkbox 1" class="md-primary">
+                        Private album
+                    </md-checkbox>
+                </div>
+                <div>
+                    <span class="btn btn-default btn-file">
+                   Browse <input type="file" id="file-chooser" style="height: 40px; width: 300px; float: right"/>
+                </span>
+                    <p></p>
+                    <button type="button" class="btn btn-success" id="upload-button">Upload to S3</button>
+                    <div id="results"></div>
+                </div>
+            </div>
+            <div id="mapsSettingTab" class="tabcontent">
+                <h3>Map</h3>
+                <p>Upload an exist map, KML file</p>
+            </div>
+            <div id="tipsSettingTab" class="tabcontent">
+                <h3>Tips</h3>
+                <p>Add new tip, manually by with GPS location</p>
+                <p>Add message</p>
+                <ul class="input-group-addon">
+                    <p> Message:
+                        <input type="text" ng-model="message.text" style="width: 300px; float: right" />
+                    </p>
+                    <p> lat:
+                        <input type="text" ng-model="message.lat" style="width: 300px; float: right" />
+                    </p>
+                    <p> lng:
+                        <input type="text" ng-model="message.lng" style="width: 300px; float: right" />
+                    </p>
+                    <p> time:
+                        <input type="datetime" ng-model="message.time" style="width: 300px; float: right" />
+                    </p>
+                    <button type="button" class="btn btn-success" ng-click="addMessage()">add</button>
+                </ul>
+            </div>
+            <div id="gpsSettingsTab" class="tabcontent">
+                <h3>GPS</h3>
+                <p>Select a photo and then point to the location in the map</p>
+                <!-- <div id="add_GPS_toPhoto" style="z-index: 16; position: relative; margin-bottom: 10px" class="roundborder"> -->
+                <p>Add GPS to photo</p>
+                <ul>
+                    <p> Image path:
+                        <input type="text" ng-model="image.path" style="width: 300px; float: right" />
+                    </p>
+                    <p> lat:
+                        <input type="text" ng-model="message.lat" style="width: 300px; float: right" />
+                    </p>
+                    <p> lng:
+                        <input type="text" ng-model="message.lng" style="width: 300px; float: right" />
+                    </p>
+                    <button type="button" class="btn btn-success" id="addGPStoPhoto" ng-click="saveGPStoThisPhoto()">add
+                    </button>
+                    <div id="results_photo_gps"></div>
+                </ul>
+                <!--</div>-->
+            </div>
+            <script>
+            function openCity(evt, cityName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(cityName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+
+            // Get the element with id="defaultOpen" and click on it
+            document.getElementById("defaultOpen").click();
+            </script>
+            <!--
+                    <div style="z-index: 16; position: relative; margin-bottom: 10px" class="roundborderlong">
+                        <p>Add Day</p>
+                        <ul id="add_day">
+                            <p> Day Number: <input type="text" ng-model="day.dayNumber" style="width: 200px"/></p>
+                            <p> Date: <input type="text" ng-model="day.date" style="width: 200px"/></p>
+                            <p> Flight:<input type="text" ng-model="day.flight" style="width: 200px"/></p>
+                            <p> Hotel: <input type="datetime" ng-model="day.hotel" style="width: 200px"/></p>
+                            <p> Car: <input type="datetime" ng-model="day.car" style="width: 200px"/></p>
+                            <p> Action1: <input type="datetime" ng-model="day.action1" style="width: 200px"/></p>
+                            <p> Action2: <input type="datetime" ng-model="day.action2" style="width: 200px"/></p>
+                            <p> Expense: <input type="datetime" ng-model="day.expense" style="width: 200px"/></p>
+                            <button type="button" class="btn btn-success" ng-click="addDay()">add</button>
+                        </ul>
+                    </div>
+
+        -->
+        </div>
+    </div>
+</div>
+<!-- END ROW 1-->
+<div style="border : 1px green solid;">
+    <button>row2</button>
+    <ul class="demo">
+        <li lightgallery ng-repeat="photo in photos" data-src="{{photo.fullres}}">
+            <img ng-src="{{photo.thumbnail}}" />
+        </li>
+    </ul>
+</div>
+<!-- END ROW 2-->
+<div style="border : 1px green solid;">
+    <button>row3</button>
+    <div>
+        <span class="text-muted" style="font-size: 18px; text-align: left; font-style: inherit">Trip name: {{tripName}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Description: {{tripDescription}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Date: {{dateStart}} - {{dateEnd}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Continent: {{continent}}</span>
+    </div>
+</div>
+<!-- END ROW 3-->
+</div>

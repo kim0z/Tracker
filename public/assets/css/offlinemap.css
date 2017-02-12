@@ -235,7 +235,7 @@ default width = 800/5 = 160px;
 side button
 */
 #hp-ctn-howItWorks-photos {
-    bottom: 155px;
+    bottom: 255px;
     position: fixed;
     left: 0px;
     padding: 0px;
@@ -273,7 +273,7 @@ side button
 }
 
 #pano-button {
-    bottom: 80px;
+    bottom: 180px;
     position: fixed;
     left: 0px;
     padding: 0px;
@@ -285,7 +285,7 @@ side button
 }
 
 #play-button {
-    bottom: 200px;
+    bottom: 300px;
     position: fixed;
     left: 0px;
     padding: 0px;
