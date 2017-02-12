@@ -1,0 +1,561 @@
+.progressCirculardemoBasicUsage body {
+    padding: 20px;
+}
+
+.progressCirculardemoBasicUsage h4 {
+    margin: 10px 0;
+}
+
+.progressCirculardemoBasicUsage md-progress-circular {
+    margin-bottom: 20px;
+}
+
+.progressCirculardemoBasicUsage #loaders > md-switch {
+    margin: 0;
+    margin-left: 10px;
+    margin-top: -10px;
+}
+
+.progressCirculardemoBasicUsage #loaders > h5 {
+    margin-top: 0;
+}
+
+.progressCirculardemoBasicUsage #loaders > p {
+    margin-right: 20px;
+    margin-bottom: 24px;
+}
+
+.progressCirculardemoBasicUsage p.small {
+    font-size: 0.8em;
+    margin-top: -18px;
+}
+
+.progressCirculardemoBasicUsage hr {
+    width: 100%;
+    margin-top: 20px;
+    border-color: rgba(221, 221, 177, 0.1);
+}
+
+.progressCirculardemoBasicUsage p.small > code {
+    font-size: 0.8em;
+}
+
+.progressCirculardemoBasicUsage .visible {
+    border-color: rgba(221, 221, 177, 0);
+}
+
+/* Photos slider*/
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #ccc;
+    font-family: arial, verdana, tahoma;
+}
+
+/*Time to apply widths for accordian to work
+Width of image = 640px
+total images = 5
+so width of hovered image = 640px
+width of un-hovered image = 40px - you can set this to anything
+so total container width = 640 + 40*4 = 800px;
+default width = 800/5 = 160px;
+*/
+
+.accordian {
+    width: 720px;
+    height: 480px;
+    /*width: 520px; height: 280px; */
+    overflow: hidden;
+
+    /*Time for some styling*/
+    margin: 100px auto;
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.35);
+    -webkit-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.35);
+    -moz-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.35);
+}
+
+/*A small hack to prevent flickering on some browsers*/
+.accordian ul {
+    width: 2000px;
+    /*This will give ample space to the last item to move
+    instead of falling down/flickering during hovers.*/
+}
+
+.accordian li {
+    position: relative;
+    display: block;
+    /*width: 160px;*/
+    width: 320px;
+    float: left;
+
+    border-left: 1px solid #888;
+
+    box-shadow: 0 0 25px 10px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 25px 10px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 25px 10px rgba(0, 0, 0, 0.5);
+
+    /*Transitions to give animation effect*/
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    /*If you hover on the images now you should be able to
+    see the basic accordian*/
+}
+
+/*Reduce with of un-hovered elements*/
+.accordian ul:hover li {
+    width: 40px;
+}
+
+/*Lets apply hover effects now*/
+/*The LI hover style should override the UL hover style*/
+.accordian ul li:hover {
+    width: 640px;
+}
+
+.accordian li img {
+    display: block;
+}
+
+/*Image title styles*/
+.image_title {
+    background: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 640px;
+
+}
+
+.image_title a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 20px;
+    font-size: 16px;
+}
+
+/* General CSS*/
+#map {
+    box-shadow: 3px 3px 10px gray;
+    /* make Google map -> background*/
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+
+    /*top: 100px;*/
+    left: 0;
+    z-index: 0;
+    padding: 0;
+    font-size: 0; /* Remember to change it back to normal font size if have captions */
+    list-style: none;
+    background-color: #000;
+}
+
+#pano {
+    box-shadow: 3px 3px 10px gray;
+    /* make Google map -> background*/
+    height: 100%;
+    width: 0%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    padding: 0;
+    font-size: 0; /* Remember to change it back to normal font size if have captions */
+    list-style: none;
+    background-color: #000;
+}
+
+#messages {
+    width: 300px;
+    /*margin: 60px auto 0;*/
+    padding: 5px;
+    background: transparent;
+    height: auto;
+    opacity: .99; /* Set the opacity for a slightly transparent Google Form */
+    color: white;
+    position: initial; /*or fixed*/
+    right: 0px;
+}
+
+#photos {
+    z-index: 1; /* The z-index should be higher than Google Maps */
+    width: 400px;
+    /*margin: 60px auto 0;*/
+    padding: 10px;
+    background: transparent;
+    height: auto;
+    opacity: .99; /* Set the opacity for a slightly transparent Google Form */
+    color: white;
+
+    /* position: absolute;*/ /*or fixed*/
+    right: 50%;
+}
+
+.center {
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 91%;
+    z-index: 1;
+}
+
+.animate-hide {
+    -webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+    -moz-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+    -o-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+    transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+    line-height: 20px;
+    opacity: 1;
+    padding: 10px;
+    border: 1px solid black;
+    background: white;
+    position: absolute;
+    left: 0;
+}
+
+.animate-hide.ng-hide {
+    left: -100%;
+    opacity: 0;
+    padding: 0 10px;
+}
+
+/*
+side button
+*/
+#hp-ctn-howItWorks-photos {
+    bottom: 155px;
+    position: fixed;
+    left: 0px;
+    padding: 0px;
+    margin: 0px;
+    width: 55px;
+    height: 55px;
+    /*background: #FF931E;*/
+    z-index: 15;
+    /*border-radius: 3px 0px 0px 3px;*/
+}
+
+#hp-ctn-howItWorks-photos img {
+    margin: 15px 0px 45px 13px;
+}
+
+#hp-ctn-howItWorks-photos p {
+    color: #fff;
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+}
+
+#edit {
+    bottom: 65px;
+    position: fixed;
+    right: 0px;
+    padding: 0px;
+    margin: 0px;
+    width: 55px;
+    height: 55px;
+    /*background: #7599ff;*/
+    z-index: 15;
+    /*border-radius: 3px 0px 0px 3px;*/
+}
+
+#pano-button {
+    bottom: 80px;
+    position: fixed;
+    left: 0px;
+    padding: 0px;
+    margin: 0px;
+    width: 55px;
+    height: 55px;
+    z-index: 15;
+    border-radius: 3px 0px 0px 3px;
+}
+
+#play-button {
+    bottom: 200px;
+    position: fixed;
+    left: 0px;
+    padding: 0px;
+    margin: 0px;
+    width: 55px;
+    height: 55px;
+    z-index: 15;
+    border-radius: 3px 0px 0px 3px;
+}
+
+#hp-ctn-howItWorks-table {
+    bottom: 65px;
+    position: fixed;
+    left: 0px;
+    padding: 0px;
+    margin: 0px;
+    width: 55px;
+    height: 55px;
+    /*background: #7599ff;*/
+    z-index: 15;
+    /*border-radius: 3px 0px 0px 3px;*/
+}
+
+#hp-ctn-howItWorks-table img {
+    margin: 15px 0px 40px 13px;
+}
+
+#hp-ctn-howItWorks-table p {
+    color: #fff;
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+}
+
+#hp-ctn-howItWorks-information {
+    top: 150px;
+    position: fixed;
+    left: 0px;
+    padding: 0px;
+    margin: 0px;
+    width: 55px;
+    height: 55px;
+    /*background: #7599ff;*/
+    z-index: 15;
+    /*border-radius: 3px 0px 0px 3px;*/
+}
+
+#hp-ctn-howItWorks-information img {
+    margin: 15px 0px 40px 13px;
+}
+
+#hp-ctn-howItWorks-information p {
+    color: #fff;
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+}
+
+.text-rotate {
+    color: #fff;
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+}
+
+/* Photo slider */
+#carousel img {
+    display: block;
+    opacity: .5;
+    cursor: pointer;
+}
+
+#carousel .flex-active-slide img {
+    opacity: 1;
+    cursor: default;
+}
+
+.roundborder {
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px;
+    width: 400px;
+    height: 400px;
+}
+
+.roundborderlong {
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px;
+    width: 400px;
+    height: 400px;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s
+}
+
+.sidenav a:hover, .offcanvas a:focus {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 16px;
+    background: white;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+
+    .sidenav a {
+        font-size: 18px;
+    }
+}
+
+.fluid .fluid-subnav {
+    background-color: #fff;
+    width: 100%;
+    height: 50px;
+    position: relative;
+    overflow: visible;
+    box-shadow: inset 0 -2px transparent;
+    border-bottom: 1px solid hsla(0, 0%, 54%, .3);
+    box-sizing: border-box;
+}
+
+/*Sidebar settings - tabs*/
+body {
+    font-family: "Lato", sans-serif;
+}
+
+ul.tab {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Float the list items side by side */
+ul.tab li {
+    float: left;
+}
+
+/* Style the links inside the list items */
+ul.tab li a {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of links on hover */
+ul.tab li a:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+ul.tab li a:focus, .active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 3px solid #ccc;
+    border-top: none;
+}
+
+div.fade {
+    opacity: 0.5;
+    background: #000;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    position: fixed;
+}
+
+.centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -100px;
+    z-index: 11;
+}
+
+.rzslider .rz-bubble:not(.rz-limit) {
+    color: #FFF;
+    background: #333;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 30px;
+    bottom: 20px;
+}
+
+.demo {
+    list-style: none outside none;
+    padding-left: 0;
+}
+
+.demo li {
+    display: block;
+    float: left;
+    height: 100px;
+    margin-bottom: 6px;
+    margin-right: 6px;
+    width: 100px;
+}
+
+.demo img {
+    max-width: 100%;
+    height: auto;
+}
