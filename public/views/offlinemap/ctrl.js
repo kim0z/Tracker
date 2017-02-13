@@ -1,25 +1,14 @@
 trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $timeout, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, localStorageService, Facebook, $filter, ngProgressFactory) {
 
 
-/*
-   $scope.photosx = [{
-    fullres: 'http://wallpaper-gallery.net/images/nature/nature-7.jpg',
-    thumbnail: 'http://wallpaper-gallery.net/images/nature/nature-7.jpg'
-  }, {
-    fullres: 'http://wallpaper-gallery.net/images/nature/nature-7.jpg',
-    thumbnail: 'http://wallpaper-gallery.net/images/nature/nature-7.jpg'
-  }, {
-    fullres: 'http://wallpaper-gallery.net/images/nature/nature-7.jpg',
-    thumbnail: 'http://wallpaper-gallery.net/images/nature/nature-7.jpg'
-  }, {
-    fullres: 'http://wallpaper-gallery.net/images/nature/nature-7.jpg',
-    thumbnail: 'http://wallpaper-gallery.net/images/nature/nature-7.jpg'
-  }];
+$scope.photoMouseOver = function (event) {
+    //console.log(event.target);
+    $scope.showPhotoOnMap(event.target); 
+}
 
-  for (var i = 0; i < $scope.photosx.length; i++) {
-    $scope.photosx[i].fullres = $sce.trustAsResourceUrl($scope.photosx[i].fullres);
-  }
-*/
+
+
+
 
     $scope.loading = true;
 
@@ -489,6 +478,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
 
             // below AWS S3 code used to get photos and show in offline page
             var S3URL = 'https://s3-us-west-2.amazonaws.com/';
+            var S3CDN = 'http://dcfzra40jo7ha.cloudfront.net/';
             $scope.photos = [];
 
 
@@ -577,12 +567,20 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                         if (photo_extenstion == "gif" || photo_extenstion == "png" || photo_extenstion == "bmp" || photo_extenstion == "jpeg" || photo_extenstion == "jpg"
                             || photo_extenstion == "GIF" || photo_extenstion == "PNG" || photo_extenstion == "BMP" || photo_extenstion == "GPEG" || photo_extenstion == "JPG") {
 
+
                             //$scope.photos.push(S3URL + 'tracker.photos/' + data.Contents[i].Key);
                             //$scope.photos[i].fullres = $sce.trustAsResourceUrl($scope.photos[i].fullres);
-                             var strict_escape_url = $sce.trustAsResourceUrl(S3URL + 'tracker.photos/' + data.Contents[i].Key);
-                            $scope.photos.push({fullres: strict_escape_url, thumbnail: S3URL + 'tracker.photos/' + data.Contents[i].Key}); 
+
+                            //use S3 URL without CDN
+                            //var strict_escape_url = $sce.trustAsResourceUrl(S3URL + 'tracker.photos/' + data.Contents[i].Key);
+                           // $scope.photos.push({fullres: strict_escape_url, thumbnail: S3URL + 'tracker.photos/' + data.Contents[i].Key}); 
+
+                           //use S3 CDN
+                           var strict_escape_url = $sce.trustAsResourceUrl(S3CDN + data.Contents[i].Key);
+                           $scope.photos.push({fullres: strict_escape_url, thumbnail: S3CDN + data.Contents[i].Key}); 
+
                            
-                            //$scope.photos.fullres = $sce.trustAsResourceUrl($scope.photos[i].fullres);
+                           
                         }
                         //$scope.$apply(); becaus of disableing this, AWS images for the will not be rendered directly after upload, only when refresh
                     }
@@ -749,7 +747,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
 
             $scope.showPhotoOnMap = function (image) {
                 //console.log(image.currentTarget.childNodes[1]);
-                var img = image.currentTarget.childNodes[1];  //the second element is IMG, should add validation
+                //var img = image.currentTarget.childNodes[1];  //the second element is IMG, should add validation
+                var img = image;
                 if ($scope.editMode == true) {
                     //if Edit mode enabled then ask the user to set the GPS lat lng for the photos
                     addGPStoPhoto(img);
