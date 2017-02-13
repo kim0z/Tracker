@@ -790,7 +790,10 @@ $scope.photoMouseOver = function (event) {
                                 // var bucket_getGPS_forPhoto = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt'}});
 
 
-                                var fileGpsUrl = S3URL + 'tracker.photos/' + $scope.facebookId + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt';
+                                //var fileGpsUrl = S3URL + 'tracker.photos/' + $scope.facebookId + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt';
+                                
+                                var fileGpsUrl = S3CDN + $scope.facebookId + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt';
+
                                 //console.log(fileGpsUrl);
 
                                 // get GPS point of the selected photo from AWS S3
