@@ -344,12 +344,9 @@ The markup will have a list with images and the titles-->
         max-width: 100%;
         height: auto;
     }
-    
-    .meir {
-        background-color: pink
-    }
+
     </style>
-    <div class="navbar navbar-default navbar-fixed-bottom" style="bottom: 50px; overflow: auto;">
+    <div class="navbar navbar-default navbar-fixed-bottom" style="bottom: 50px; overflow: scroll; background-color: inherit;">
         <ul class="demo">
             <li lightgallery ng-repeat="photo in photos" data-src="{{photo.fullres}}">
                 <img ng-src="{{photo.thumbnail}}" ng-mouseover="photoMouseOver($event)"/>
