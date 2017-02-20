@@ -613,6 +613,12 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                     if (file_extenstion == "gif" || file_extenstion == "png" || file_extenstion == "bmp" || file_extenstion == "jpeg" || file_extenstion == "jpg" || file_extenstion == "GIF" || file_extenstion == "PNG" || file_extenstion == "BMP" || file_extenstion == "GPEG" || file_extenstion == "JPG") {
 
                         if (file) {
+
+
+                            //resizeImage(file);
+
+
+
                             results.innerHTML = '';
                             /*  var params = {
                              Key: $scope.profile.email + '/' + $scope.tripID + '/' + file.name,
@@ -689,6 +695,77 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                         zIndex: 1
                     }
                 });
+
+                // %%%% Listeners to save drawing data to firebase %%%%
+                //circles
+                var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/circles');
+                google.maps.event.addDomListener(drawingManager, 'circlecomplete', function(circle) {
+                    console.log('new circle added to firebase');
+                    firebase_circles.push({strokeWeight:circle.strokeWeight, fillColor:circle.fillColor , fillOpacity:circle.fillOpacity, radius:circle.radius , center:{lat: circle.center.lat(), lng: circle.center.lng()}});
+                });
+
+                firebase_drawing.once("value", function(snapshot) {
+                    console.log('reading circles from firebase to load it to map');
+                    snapshot.forEach(function(childSnapshot) {
+                        new google.maps.Circle({
+                            strokeWeight: childSnapshot.val().strokeWeight,
+                            fillColor: childSnapshot.val().fillColor,
+                            fillOpacity: childSnapshot.val().fillOpacity,
+                            map: $scope.map,
+                            center: childSnapshot.val().center,
+                            radius: childSnapshot.val().radius
+                        });
+                    });
+                }, function(errorObject) {
+                    console.log("Read circles from Firebase failed: " + errorObject.code);
+                });
+                // Circles END
+
+                // Markers
+                var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/markers');
+                google.maps.event.addDomListener(drawingManager, 'markercomplete', function(marker) {
+                    console.log('new marker added to firebase');
+                    console.log(marker);
+                    firebase_drawing.push({icon: marker.icon, position: { lat: marker.position.lat(), lng: marker.position.lng()}});
+                });
+
+                firebase_drawing.once("value", function(snapshot) {
+                    snapshot.forEach(function(childSnapshot) {
+                        console.log('reading markers from firebase to load it to map');
+                        console.log(childSnapshot.val()); // childData = location and message and time
+                        new google.maps.Marker({
+                            map: $scope.map,
+                            position: childSnapshot.val().position,
+                            icon: childSnapshot.val().icon
+                        });
+                    });
+                }, function(errorObject) {
+                    console.log("Read markers from Firebase failed: " + errorObject.code);
+                });
+                // Markers END
+
+                // XXX
+                var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/markers');
+                google.maps.event.addDomListener(drawingManager, 'markercomplete', function(marker) {
+                    console.log('new marker added to firebase');
+                    console.log(marker);
+                    firebase_drawing.push({icon: marker.icon, position: { lat: marker.position.lat(), lng: marker.position.lng()}});
+                });
+
+                firebase_drawing.once("value", function(snapshot) {
+                    snapshot.forEach(function(childSnapshot) {
+                        console.log('reading markers from firebase to load it to map');
+                        console.log(childSnapshot.val()); // childData = location and message and time
+                        new google.maps.Marker({
+                            map: $scope.map,
+                            position: childSnapshot.val().position,
+                            icon: childSnapshot.val().icon
+                        });
+                    });
+                }, function(errorObject) {
+                    console.log("Read markers from Firebase failed: " + errorObject.code);
+                });
+                // Markers END
 
                 drawingManager.setMap($scope.map);
 
@@ -1428,6 +1505,50 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
             $scope.noTripId = true;
             $state.go('trips');
         }
+
+    //####################### HELP Functions ##################
+    var resizeImage = function (file) {
+        // from an input element
+/*        var filesToUpload = input.files;
+        var file = filesToUpload[0];
+
+        var img = document.createElement("img");
+        var reader = new FileReader();
+        reader.onload = function(e) {img.src = e.target.result}*/
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        var img = document.createElement("img");
+        var canvas = document.createElement('canvas');
+
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+
+        var MAX_WIDTH = 800;
+        var MAX_HEIGHT = 600;
+        var width = img.width;
+        var height = img.height;
+
+        if (width > height) {
+            if (width > MAX_WIDTH) {
+                height *= MAX_WIDTH / width;
+                width = MAX_WIDTH;
+            }
+        } else {
+            if (height > MAX_HEIGHT) {
+                width *= MAX_HEIGHT / height;
+                height = MAX_HEIGHT;
+            }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        var dataurl = canvas.toDataURL("image/png");
+
+    }
+    //###################### END HELP #########################
 
 
     })
