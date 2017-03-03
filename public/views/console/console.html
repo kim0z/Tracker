@@ -1,0 +1,38 @@
+<table>
+    <tr>
+        <th>activity type </th>
+        <th>activity confidence</th>
+        <th>battery is_charging</th>
+        <th>battery level</th>
+        <th>coords accuracy</th>
+        <th>coords altitude</th>
+        <th>coords altitudeAccuracy</th>
+        <th>coords heading</th>
+        <th>coords latitude</th>
+        <th>coords longitude</th>
+        <th>coords speed</th>
+        <th>is_heartbeat</th>
+        <th>is_moving</th>
+        <th>odometer</th>
+        <th>timestamp</th>
+        <th>uuid</th>
+    </tr>
+    <tr ng-repeat="step in steps">
+        <td>{{ step.activity.type }}</td>
+        <td>{{ step.activity.confidence }}</td>
+        <td>{{ step.battery.is_charging }}</td>
+        <td>{{ step.battery.level }}</td>
+        <td>{{ step.coords.accuracy }}</td>
+        <td>{{ step.coords.altitude }}</td>
+        <td>{{ step.coords.altitudeAccuracy }}</td>
+        <td>{{ step.coords.heading }}</td>
+        <td>{{ step.coords.latitude }}</td>
+        <td>{{ step.coords.longitude }}</td>
+        <td>{{ step.coords.speed }}</td>
+        <td>{{ step.is_heartbeat }}</td>
+        <td>{{ step.is_moving }}</td>
+        <td>{{ step.odometer }}</td>
+        <td>{{ step.timestamp }}</td>
+        <td>{{ step.uuid }}</td>
+    </tr>
+</table>

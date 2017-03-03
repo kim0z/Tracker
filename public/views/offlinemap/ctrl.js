@@ -176,7 +176,6 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                     }
                 };
 
-
                 $scope.photosSource = $scope.trip[0].photos_provider;
 
                 if ($scope.photosSource == 'aws') {
@@ -696,7 +695,8 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                     }
                 });
 
-                // %%%% Listeners to save drawing data to firebase %%%%
+
+               /* // %%%% Listeners to save drawing data to firebase %%%%
                 //circles
                 var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/circles');
                 google.maps.event.addDomListener(drawingManager, 'circlecomplete', function(circle) {
@@ -744,14 +744,14 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 });
                 // Markers END
 
-                // XXX
-                var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/markers');
-                google.maps.event.addDomListener(drawingManager, 'markercomplete', function(marker) {
-                    console.log('new marker added to firebase');
-                    console.log(marker);
-                    firebase_drawing.push({icon: marker.icon, position: { lat: marker.position.lat(), lng: marker.position.lng()}});
+                // polyline
+                //var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/polyline');
+                google.maps.event.addDomListener(drawingManager, 'polylinecomplete', function(polyline) {
+                    console.log('new polyline added to firebase');
+                    console.log(polyline);
+                    //firebase_drawing.push({icon: marker.icon, position: { lat: marker.position.lat(), lng: marker.position.lng()}});
                 });
-
+/!*
                 firebase_drawing.once("value", function(snapshot) {
                     snapshot.forEach(function(childSnapshot) {
                         console.log('reading markers from firebase to load it to map');
@@ -765,7 +765,9 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 }, function(errorObject) {
                     console.log("Read markers from Firebase failed: " + errorObject.code);
                 });
-                // Markers END
+                *!/
+                // polyline END
+                */
 
                 drawingManager.setMap($scope.map);
 
@@ -1136,10 +1138,22 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                         //                      if(removeAnomaly(prevPoint, point.val(), anomalyDetected)){
                         //if (i < 165 || i > 300) {
                         //console.log(i);
-                        path.push({
-                            lat: JSON.parse(point.val()['coords'].latitude),
-                            lng: JSON.parse(point.val()['coords'].longitude)
-                        });
+
+                        //remove points without timestamp
+                        if(point.val()['timestamp']){
+                            if(point.val()['coords'].accuracy < 20){
+                                path.push({
+                                    lat: JSON.parse(point.val()['coords'].latitude),
+                                    lng: JSON.parse(point.val()['coords'].longitude),
+                                    timestamp: point.val()['timestamp']
+                                })
+
+                                //all path saved to be used later for slider filter, instead of calling Firebase api again
+                                $scope.pathSaved.push(point.val());
+                            }
+                        }
+
+
                         //} else {
                         //console.log(point.val()['coords'].latitude)
                         //console.log(point.val()['coords'].longitude)
@@ -1149,8 +1163,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                         //  lat: JSON.parse(point.val()['coords'].latitude),
                         //  lng: JSON.parse(point.val()['coords'].longitude)
                         //});
-                        //all path saved to be used later for slider filter, instead of calling Firebase api again
-                        $scope.pathSaved.push(point.val());
+
 
 
                         //   }else{
@@ -1162,10 +1175,29 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
                     });
 
+                    //sort array by timestamp before show on map
+                    path.sort(function(a,b){
+                        // Turn your strings into dates, and then subtract them
+                        // to get a value that is either negative, positive, or zero.
+                        return new Date(b.timestamp) - new Date(a.timestamp);
+                    });
+
                     $scope.pathHash[0] = path;
                     //enable page after path is ready on the map
                     $scope.loading = false;
                     $scope.$apply();
+
+                    //sort saved path to be used for select days filter and console
+                    $scope.pathSaved.sort(function(a,b){
+                        // Turn your strings into dates, and then subtract them
+                        // to get a value that is either negative, positive, or zero.
+                        return new Date(b.timestamp) - new Date(a.timestamp);
+                    });
+
+                    //### Console ###
+                    messages.addSteps($scope.pathSaved);
+                    //############################
+
 
                     $scope.panoPosition = path.pop();
 

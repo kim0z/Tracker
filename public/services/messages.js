@@ -5,6 +5,7 @@ trackerApp.service('messages', function () {
     var email='';
     var prevSatate = 'welcome';
     var lastState = '';
+    var steps = []; // for debug
 
     this.saveTripID = function (id) {
         console.log('Messages service - save trip id');
@@ -43,6 +44,18 @@ trackerApp.service('messages', function () {
     this.getPrevState = function () {
         console.log('Messages service - get Prev stat: ', prevSatate);
         return prevSatate;
+    };
+
+    //console
+    this.addSteps = function (allSteps) {
+        //console.log('Messages service - save all steps (for debugging - console) : ', allSteps);
+        steps = allSteps;
+    };
+
+    //console
+    this.getSteps = function () {
+        //console.log('Messages service - get steps (for debugging - console) : ', steps);
+        return steps;
     };
 
 });

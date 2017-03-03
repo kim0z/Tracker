@@ -37,10 +37,10 @@ var trackerApp = angular.module('myApp', [
         //
         // Now set up the states
         $stateProvider
-         .state('test', {
-                url: "/test",
-                templateUrl: "views/test/test.html",
-                controller: 'DemoController'
+         .state('console', {
+                url: "/console",
+                templateUrl: "views/console/console.html",
+                controller: 'console'
             })
             .state('welcome', {
                 url: "/welcome",
