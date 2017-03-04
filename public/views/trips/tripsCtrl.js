@@ -139,7 +139,8 @@ trackerApp.controller('tripsCtrl', function ($scope,$rootScope, $location, $anch
     //Open actual map for the trip (the map after the trip was executed), this functionality should be available when the trip end date < current date
     $scope.showActualMap = function(trip_id) {
         console.log('Client:: Click Shoe actual map - trip :: id:: ' + trip_id);
-        messages.saveTripID(trip_id); //save trip id into message
+        messages.saveTripID(trip_id); //save trip id into message, NOT needed any more, now using localstorage instead
+        localStorageService.set('tripId', trip_id);
         window.open('#/offlinemap', '_self', false);
     }
     /*

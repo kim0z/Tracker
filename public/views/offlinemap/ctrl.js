@@ -1,19 +1,11 @@
-trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $timeout, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory) {
-
-
-        $scope.photoMouseOver = function(event) {
-            //console.log(event.target);
-            $scope.showPhotoOnMap(event.target);
-        }
-
-
-
+trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $timeout, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory) {
 
 
         $scope.loading = true;
-
+        $scope.tripID = localStorageService.get('tripId');
         $scope.profile = localStorageService.get('profile');
         $scope.userAccessToken = localStorageService.get('providerToken');
+
 
         if (!$scope.profile) {
             console.log('offline:: auth :: no data about the user, profile is emppty');
@@ -31,25 +23,6 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
         //****
         //****
 
-        $scope.columns = [
-            { title: 'Name', field: 'name', visible: true, filter: { 'name': 'text' } },
-            { title: 'Age', field: 'age', visible: true },
-            { title: 'country', field: 'add', visible: true, subfield: 'coun' }
-        ];
-
-
-        $rootScope.Utils = {
-            keys: Object.keys
-        }
-
-        $scope.openNav = function() {
-            document.getElementById("mySidenav").style.width = "420px";
-        }
-
-        $scope.closeNav = function() {
-            document.getElementById("mySidenav").style.width = "0";
-        }
-
 
         $scope.user = messages.getUser(); //replace with local service like next line
 
@@ -63,7 +36,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
         //var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
 
 
-        $scope.tripID = messages.getTripID();
+        //$scope.tripID = messages.getTripID(); in this way user can't refresh, I moved to get trip id from local storage
 
         $scope.travelersList = [];
         $scope.data = []; // Travellers from PG DB
@@ -124,12 +97,36 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
         //var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + email_no_shtrodel_dot + "/offline/photos/facebook/trip/" + $scope.tripID);
 
+        //remove mouse over event, make it too much
+        $scope.photoMouseOver = function (event) {
+            //console.log(event.target);
+            $scope.showPhotoOnMap(event.target);
+        }
+
+        $scope.columns = [
+            {title: 'Name', field: 'name', visible: true, filter: {'name': 'text'}},
+            {title: 'Age', field: 'age', visible: true},
+            {title: 'country', field: 'add', visible: true, subfield: 'coun'}
+        ];
+
+        $rootScope.Utils = {
+            keys: Object.keys
+        }
+
+        $scope.openNav = function () {
+            document.getElementById("mySidenav").style.width = "420px";
+        }
+
+        $scope.closeNav = function () {
+            document.getElementById("mySidenav").style.width = "0";
+        }
 
         //get trip
-        var dataTripId = { trip_id: $scope.tripID };
+        var dataTripId = {trip_id: $scope.tripID};
+
         if ($scope.tripID) { //if no trip id then nothing will work, show message in that case
 
-            dataBaseService.getTripById(dataTripId).then(function(results) {
+            dataBaseService.getTripById(dataTripId).then(function (results) {
                 $scope.trip = results.data;
 
                 //################################### Fill all fields of Trip definition #########################
@@ -158,7 +155,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
                 $scope.tripDays = Math.abs(Math.floor((Date.parse($scope.dateStart) - Date.parse($scope.dateEnd)) / 86400000));
 
-                $scope.sliderChangeListener = function() {
+                $scope.sliderChangeListener = function () {
                     //console.log($scope.slider.value);
                 };
 
@@ -169,7 +166,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                         floor: 0,
                         ceil: $scope.tripDays + 1,
                         showTicksValues: true,
-                        ticksValuesTooltip: function(v) {
+                        ticksValuesTooltip: function (v) {
                             return 'Tooltip for ' + v;
                         },
                         onChange: $scope.sliderChangeListener
@@ -187,8 +184,8 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 }
 
                 //Filter - used to get value from slider to filter tips
-                $scope.filterTips = function(day) {
-                    return function(message) {
+                $scope.filterTips = function (day) {
+                    return function (message) {
                         //console.log('Tips filter, for slider');
                         //console.log($scope.slider);
                         //example:
@@ -241,68 +238,70 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
                 //$scope.tripID
                 //value to update
-                $scope.enableFacebookProvider = function() {
+                $scope.enableFacebookProvider = function () {
                     $scope.awsProvider = false;
 
-                    var obj = { trip_id: $scope.tripID, photos_provider: 'facebook' };
-                    dataBaseService.updateTripPhotosProvider(obj).then(function(results) {});
+                    var obj = {trip_id: $scope.tripID, photos_provider: 'facebook'};
+                    dataBaseService.updateTripPhotosProvider(obj).then(function (results) {
+                    });
                 };
 
-                $scope.enableAwsProvider = function() {
+                $scope.enableAwsProvider = function () {
                     $scope.facebookProvider = false;
 
-                    var obj = { trip_id: $scope.tripID, photos_provider: 'aws' };
-                    dataBaseService.updateTripPhotosProvider(obj).then(function(results) {});
+                    var obj = {trip_id: $scope.tripID, photos_provider: 'aws'};
+                    dataBaseService.updateTripPhotosProvider(obj).then(function (results) {
+                    });
                 };
 
 
-                $scope.filterTipsOnClick = function(filterStr) {
+                $scope.filterTipsOnClick = function (filterStr) {
                     switch (filterStr) {
                         case 'all':
-                            {
-                                $scope.showAllTips = true;
-                                $scope.showTips = false;
-                                $scope.showRisks = false;
-                                $scope.filterExpense = false;
-                                $scope.showInvite = false;
-                                break;
-                            }
+                        {
+                            $scope.showAllTips = true;
+                            $scope.showTips = false;
+                            $scope.showRisks = false;
+                            $scope.filterExpense = false;
+                            $scope.showInvite = false;
+                            break;
+                        }
                         case 'tips':
-                            {
-                                $scope.showAllTips = false;
-                                $scope.showTips = true;
-                                $scope.showRisks = false;
-                                $scope.showExpense = false;
-                                $scope.showInvite = false;
-                                break;
-                            }
+                        {
+                            $scope.showAllTips = false;
+                            $scope.showTips = true;
+                            $scope.showRisks = false;
+                            $scope.showExpense = false;
+                            $scope.showInvite = false;
+                            break;
+                        }
                         case 'risks':
-                            {
-                                $scope.showAllTips = false;
-                                $scope.showTips = false;
-                                $scope.showRisks = true;
-                                $scope.showExpense = false;
-                                $scope.showInvite = false;
-                                break;
-                            }
+                        {
+                            $scope.showAllTips = false;
+                            $scope.showTips = false;
+                            $scope.showRisks = true;
+                            $scope.showExpense = false;
+                            $scope.showInvite = false;
+                            break;
+                        }
                         case 'expense':
-                            {
-                                $scope.showAllTips = false;
-                                $scope.showTips = false;
-                                $scope.showRisks = false;
-                                $scope.showExpense = true;
-                                $scope.showInvite = false;
-                                break;
-                            }
+                        {
+                            $scope.showAllTips = false;
+                            $scope.showTips = false;
+                            $scope.showRisks = false;
+                            $scope.showExpense = true;
+                            $scope.showInvite = false;
+                            break;
+                        }
                         case 'invite':
-                            {
-                                $scope.showAllTips = false;
-                                $scope.showTips = false;
-                                $scope.showRisks = false;
-                                $scope.showExpense = false;
-                                $scope.showInvite = true;
-                                break;
-                            }
+                        {
+                            $scope.showAllTips = false;
+                            $scope.showTips = false;
+                            $scope.showRisks = false;
+                            $scope.showExpense = false;
+                            $scope.showInvite = true;
+                            break;
+                        }
                     }
                 }
 
@@ -310,9 +309,9 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + $scope.facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
 
 
-                firebase_config_get_albums.on("value", function(snapshot) {
+                firebase_config_get_albums.on("value", function (snapshot) {
                     //  var i = 0;
-                    snapshot.forEach(function(childsnapshot) {
+                    snapshot.forEach(function (childsnapshot) {
                         $scope.facebookAlbumsFriebase[childsnapshot.key()] = {
                             checkbox: childsnapshot.val()['checkbox'],
                             albumID: childsnapshot.val()['albumID'],
@@ -330,7 +329,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                         //if Yes then add the id to the selected list of the List in edit mode
                         //the list will be checked according to the enabled albums
                         if (childsnapshot.val()['checkbox'] == true) {
-                            $scope.selectedFacebookAlbum[childsnapshot.key()] = { id: childsnapshot.key() };
+                            $scope.selectedFacebookAlbum[childsnapshot.key()] = {id: childsnapshot.key()};
                         }
                     })
 
@@ -341,13 +340,13 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                         if ($scope.facebookAlbumsFriebase[i].checkbox) {
                             Facebook.api(
                                 "/" + $scope.facebookAlbumsFriebase[i].albumID + "/photos?access_token=" + $scope.userAccessToken,
-                                function(album) {
+                                function (album) {
                                     if (album && !album.error) {
                                         //console.log('photos');
                                         for (var photoIndex = 0; photoIndex < album.data.length; photoIndex++) {
                                             Facebook.api(
                                                 "/" + album.data[photoIndex].id + "/picture?access_token=" + $scope.userAccessToken,
-                                                function(photo) {
+                                                function (photo) {
                                                     if (photo && !photo.error) {
                                                         /* handle the result */
                                                         //console.log(photo.data.url);
@@ -356,7 +355,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                                                             custom: photo.data.url,
                                                             thumbnail: photo.data.url
                                                         });
-                                                        $scope.items.push({ id: i, name: 'item' + i, img: photo.data.url });
+                                                        $scope.items.push({id: i, name: 'item' + i, img: photo.data.url});
                                                     }
                                                 });
                                             if (photoIndex == album.data.length - 1) {
@@ -369,7 +368,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                                 });
                         }
                     }
-                }, function(errorObject) {
+                }, function (errorObject) {
                     console.log("The read failed: " + errorObject.code);
                 });
 
@@ -392,7 +391,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
                 Facebook.api(
                     "/" + $scope.facebookId + "/albums?access_token=" + $scope.userAccessToken,
-                    function(response) {
+                    function (response) {
                         if (response && !response.error) {
                             /* handle the result */
                             // console.log(response);
@@ -411,7 +410,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
                 // MultiSelect Drop down select - Event - Facebook albums
                 $scope.selectAlbumEvents = {
-                    onItemSelect: function(property) {
+                    onItemSelect: function (property) {
                         console.log('select > ' + property);
                         console.log(property);
                         //update albums array that will be saved in Firebase
@@ -423,7 +422,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                         console.log($scope.facebookAlbums);
                     },
 
-                    onItemDeselect: function(property) {
+                    onItemDeselect: function (property) {
                         console.log('deselect : ' + property);
                         $scope.facebookAlbums[property.id] = {
                             checkbox: false,
@@ -432,7 +431,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                         }
                         console.log($scope.facebookAlbums);
                     },
-                    onSelectAll: function(property) {
+                    onSelectAll: function (property) {
                         console.log('select all : ' + property);
                         //create a new array from scratch with checkbox = true
                         for (var index = 0; index < property.length; index++) {
@@ -444,7 +443,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                         }
                         console.log($scope.facebookAlbums);
                     },
-                    onDeselectAll: function(property) {
+                    onDeselectAll: function (property) {
                         console.log('deselect all : ' + property);
                         //create a new array from scratch with checkbox = false
                         for (var index = 0; index < property.length; index++) {
@@ -465,7 +464,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
                 if ($scope.facebookId == '' || $scope.tripID == '')
                     alert('no facebook id or trip id')
-                    //AWS Config
+                //AWS Config
                 AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
 
                 // Configure your region
@@ -477,7 +476,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 $scope.photos = [];
 
 
-                Facebook.getLoginStatus(function(response) {
+                Facebook.getLoginStatus(function (response) {
                     if (response.status == 'connected') {
                         console.log('user is connected')
                     }
@@ -487,7 +486,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
 
                 //Sync Facebook albums
-                $scope.syncAlbums = function() {
+                $scope.syncAlbums = function () {
                     //save in Firebase config
                     var firebase_config_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + $scope.facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
                     firebase_config_albums.set($scope.facebookAlbums);
@@ -504,7 +503,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                                 //save cover photo only from the first album
                                 Facebook.api(
                                     "/" + $scope.facebookAlbums[i].albumID + "/picture",
-                                    function(cover) {
+                                    function (cover) {
                                         if (cover && !cover.error) {
                                             //console.log("https://trackerconfig.firebaseio.com/web/" + facebookId + "/tripslist/coverphoto/trip/" + $scope.tripID);
                                             //save Facebook album cover in Firebase
@@ -518,13 +517,13 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                             //load photos from all selected albums
                             Facebook.api(
                                 "/" + $scope.facebookAlbums[i].albumID + "/photos",
-                                function(album) {
+                                function (album) {
                                     if (album && !album.error) {
                                         //console.log('photos');
                                         for (var photoIndex = 0; photoIndex < album.data.length; photoIndex++) {
                                             Facebook.api(
                                                 "/" + album.data[photoIndex].id + "/picture",
-                                                function(photo) {
+                                                function (photo) {
                                                     if (photo && !photo.error) {
                                                         //console.log(photo.data.url);
                                                         $scope.facebookPhotos.push(photo.data.url);
@@ -549,7 +548,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                     }
                 });
 
-                bucket.listObjects(function(err, data) {
+                bucket.listObjects(function (err, data) {
                     if (err) {
                         document.getElementById('status').innerHTML =
                             'Could not load objects from S3';
@@ -571,8 +570,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
                                 //use S3 CDN
                                 var strict_escape_url = $sce.trustAsResourceUrl(S3CDN + data.Contents[i].Key);
-                                $scope.photos.push({ fullres: strict_escape_url, thumbnail: S3CDN + data.Contents[i].Key });
-
+                                $scope.photos.push({fullres: strict_escape_url, thumbnail: S3CDN + data.Contents[i].Key});
 
 
                             }
@@ -582,15 +580,15 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 });
 
                 //upload file to AWS S3
-                var bucket_upload = new AWS.S3({ params: { Bucket: 'tracker.photos' } }); // should I use a new bucket variable?
+                var bucket_upload = new AWS.S3({params: {Bucket: 'tracker.photos'}}); // should I use a new bucket variable?
 
                 var fileChooser = document.getElementById('file-chooser');
                 var button = document.getElementById('upload-button');
                 var results = document.getElementById('results');
-                button.addEventListener('click', function() {
-                    var file = fileChooser.files[0];
+                button.addEventListener('click', function () {
 
                     //if it's a KML file then override the exists one, save it in the same name
+                    var file = fileChooser.files[0];
                     var file_extenstion = file.name.split('.').pop();
                     if (file_extenstion == 'kml' || file_extenstion == 'KML') {
 
@@ -602,42 +600,43 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                                 ContentType: file.type,
                                 Body: file
                             };
-                            bucket_upload.upload(params, function(err, data) {
+                            bucket_upload.upload(params, function (err, data) {
                                 results.innerHTML = err ? 'ERROR!' : 'UPLOADED.';
                             });
                         } else {
                             results.innerHTML = 'Nothing to upload.';
                         }
                     }
-                    if (file_extenstion == "gif" || file_extenstion == "png" || file_extenstion == "bmp" || file_extenstion == "jpeg" || file_extenstion == "jpg" || file_extenstion == "GIF" || file_extenstion == "PNG" || file_extenstion == "BMP" || file_extenstion == "GPEG" || file_extenstion == "JPG") {
 
-                        if (file) {
+                    for (var i = 0; fileChooser.files.length > 0; i++) {
+                        var file = fileChooser.files[i];
+                        var file_extenstion = file.name.split('.').pop();
 
-
-                            //resizeImage(file);
-
-
-
-                            results.innerHTML = '';
-                            /*  var params = {
-                             Key: $scope.profile.email + '/' + $scope.tripID + '/' + file.name,
-                             ContentType: file.type,
-                             Body: file
-                             };*/
-                            var params = {
-                                Key: $scope.facebookId + '/' + $scope.tripID + '/' + file.name,
-                                ContentType: file.type,
-                                Body: file
-                            };
-                            bucket_upload.upload(params, function(err, data) {
-                                results.innerHTML = err ? 'ERROR!' : 'UPLOADED.';
-                            });
+                        if (file_extenstion == "gif" || file_extenstion == "png" || file_extenstion == "bmp" || file_extenstion == "jpeg" || file_extenstion == "jpg" || file_extenstion == "GIF" || file_extenstion == "PNG" || file_extenstion == "BMP" || file_extenstion == "GPEG" || file_extenstion == "JPG") {
+                            if (file) {
+                                //resizeImage(file);
+                                results.innerHTML = '';
+                                /*  var params = {
+                                 Key: $scope.profile.email + '/' + $scope.tripID + '/' + file.name,
+                                 ContentType: file.type,
+                                 Body: file
+                                 };*/
+                                var params = {
+                                    Key: $scope.facebookId + '/' + $scope.tripID + '/' + file.name,
+                                    ContentType: file.type,
+                                    Body: file
+                                };
+                                bucket_upload.upload(params, function (err, data) {
+                                    results.innerHTML = err ? 'ERROR!' : 'UPLOADED.';
+                                });
+                            } else {
+                                results.innerHTML = 'Nothing to upload.';
+                            }
                         } else {
-                            results.innerHTML = 'Nothing to upload.';
+                            alert('file not supported')
                         }
-                    } else {
-                        alert('file not supported')
                     }
+
                 }, false);
 
 
@@ -658,7 +657,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 //Map configuration
                 $scope.map = new google.maps.Map(document.getElementById('map'), {
                     //center: {lat: 34.397, lng: 40.644},
-                    center: { lat: 0, lng: 0 },
+                    center: {lat: 0, lng: 0},
                     zoom: 4,
                     mapTypeControl: true,
                     mapTypeControlOptions: {
@@ -684,7 +683,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                         position: google.maps.ControlPosition.LEFT_CENTER,
                         drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
                     },
-                    markerOptions: { icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png' },
+                    markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
                     circleOptions: {
                         fillColor: '#ffff00',
                         fillOpacity: 1,
@@ -696,84 +695,84 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 });
 
 
-               /* // %%%% Listeners to save drawing data to firebase %%%%
-                //circles
-                var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/circles');
-                google.maps.event.addDomListener(drawingManager, 'circlecomplete', function(circle) {
-                    console.log('new circle added to firebase');
-                    firebase_circles.push({strokeWeight:circle.strokeWeight, fillColor:circle.fillColor , fillOpacity:circle.fillOpacity, radius:circle.radius , center:{lat: circle.center.lat(), lng: circle.center.lng()}});
-                });
+                /* // %%%% Listeners to save drawing data to firebase %%%%
+                 //circles
+                 var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/circles');
+                 google.maps.event.addDomListener(drawingManager, 'circlecomplete', function(circle) {
+                 console.log('new circle added to firebase');
+                 firebase_circles.push({strokeWeight:circle.strokeWeight, fillColor:circle.fillColor , fillOpacity:circle.fillOpacity, radius:circle.radius , center:{lat: circle.center.lat(), lng: circle.center.lng()}});
+                 });
 
-                firebase_drawing.once("value", function(snapshot) {
-                    console.log('reading circles from firebase to load it to map');
-                    snapshot.forEach(function(childSnapshot) {
-                        new google.maps.Circle({
-                            strokeWeight: childSnapshot.val().strokeWeight,
-                            fillColor: childSnapshot.val().fillColor,
-                            fillOpacity: childSnapshot.val().fillOpacity,
-                            map: $scope.map,
-                            center: childSnapshot.val().center,
-                            radius: childSnapshot.val().radius
-                        });
-                    });
-                }, function(errorObject) {
-                    console.log("Read circles from Firebase failed: " + errorObject.code);
-                });
-                // Circles END
+                 firebase_drawing.once("value", function(snapshot) {
+                 console.log('reading circles from firebase to load it to map');
+                 snapshot.forEach(function(childSnapshot) {
+                 new google.maps.Circle({
+                 strokeWeight: childSnapshot.val().strokeWeight,
+                 fillColor: childSnapshot.val().fillColor,
+                 fillOpacity: childSnapshot.val().fillOpacity,
+                 map: $scope.map,
+                 center: childSnapshot.val().center,
+                 radius: childSnapshot.val().radius
+                 });
+                 });
+                 }, function(errorObject) {
+                 console.log("Read circles from Firebase failed: " + errorObject.code);
+                 });
+                 // Circles END
 
-                // Markers
-                var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/markers');
-                google.maps.event.addDomListener(drawingManager, 'markercomplete', function(marker) {
-                    console.log('new marker added to firebase');
-                    console.log(marker);
-                    firebase_drawing.push({icon: marker.icon, position: { lat: marker.position.lat(), lng: marker.position.lng()}});
-                });
+                 // Markers
+                 var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/markers');
+                 google.maps.event.addDomListener(drawingManager, 'markercomplete', function(marker) {
+                 console.log('new marker added to firebase');
+                 console.log(marker);
+                 firebase_drawing.push({icon: marker.icon, position: { lat: marker.position.lat(), lng: marker.position.lng()}});
+                 });
 
-                firebase_drawing.once("value", function(snapshot) {
-                    snapshot.forEach(function(childSnapshot) {
-                        console.log('reading markers from firebase to load it to map');
-                        console.log(childSnapshot.val()); // childData = location and message and time
-                        new google.maps.Marker({
-                            map: $scope.map,
-                            position: childSnapshot.val().position,
-                            icon: childSnapshot.val().icon
-                        });
-                    });
-                }, function(errorObject) {
-                    console.log("Read markers from Firebase failed: " + errorObject.code);
-                });
-                // Markers END
+                 firebase_drawing.once("value", function(snapshot) {
+                 snapshot.forEach(function(childSnapshot) {
+                 console.log('reading markers from firebase to load it to map');
+                 console.log(childSnapshot.val()); // childData = location and message and time
+                 new google.maps.Marker({
+                 map: $scope.map,
+                 position: childSnapshot.val().position,
+                 icon: childSnapshot.val().icon
+                 });
+                 });
+                 }, function(errorObject) {
+                 console.log("Read markers from Firebase failed: " + errorObject.code);
+                 });
+                 // Markers END
 
-                // polyline
-                //var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/polyline');
-                google.maps.event.addDomListener(drawingManager, 'polylinecomplete', function(polyline) {
-                    console.log('new polyline added to firebase');
-                    console.log(polyline);
-                    //firebase_drawing.push({icon: marker.icon, position: { lat: marker.position.lat(), lng: marker.position.lng()}});
-                });
-/!*
-                firebase_drawing.once("value", function(snapshot) {
-                    snapshot.forEach(function(childSnapshot) {
-                        console.log('reading markers from firebase to load it to map');
-                        console.log(childSnapshot.val()); // childData = location and message and time
-                        new google.maps.Marker({
-                            map: $scope.map,
-                            position: childSnapshot.val().position,
-                            icon: childSnapshot.val().icon
-                        });
-                    });
-                }, function(errorObject) {
-                    console.log("Read markers from Firebase failed: " + errorObject.code);
-                });
-                *!/
-                // polyline END
-                */
+                 // polyline
+                 //var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/polyline');
+                 google.maps.event.addDomListener(drawingManager, 'polylinecomplete', function(polyline) {
+                 console.log('new polyline added to firebase');
+                 console.log(polyline);
+                 //firebase_drawing.push({icon: marker.icon, position: { lat: marker.position.lat(), lng: marker.position.lng()}});
+                 });
+                 /!*
+                 firebase_drawing.once("value", function(snapshot) {
+                 snapshot.forEach(function(childSnapshot) {
+                 console.log('reading markers from firebase to load it to map');
+                 console.log(childSnapshot.val()); // childData = location and message and time
+                 new google.maps.Marker({
+                 map: $scope.map,
+                 position: childSnapshot.val().position,
+                 icon: childSnapshot.val().icon
+                 });
+                 });
+                 }, function(errorObject) {
+                 console.log("Read markers from Firebase failed: " + errorObject.code);
+                 });
+                 *!/
+                 // polyline END
+                 */
 
                 drawingManager.setMap($scope.map);
 
 
-                $scope.map.addListener('click', function(e) {
-                    $scope.message = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+                $scope.map.addListener('click', function (e) {
+                    $scope.message = {lat: e.latLng.lat(), lng: e.latLng.lng()};
                     //$scope.$apply(); I don't know what will be the behave after disable this
                 });
 
@@ -782,7 +781,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                     map: $scope.map
                 });
 
-                $scope.showMessageOnMap = function(message) {
+                $scope.showMessageOnMap = function (message) {
 
                     if ($scope.editMode == false) {
 
@@ -818,14 +817,11 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 }
 
 
-                $scope.showPhotoOnMap = function(element) {
+                $scope.showPhotoOnMap = function (element) {
                     var image = element.src;
 
-            
 
-             
-
-                    serverSvc.getPhotoMetadata(image).then(function(result) {
+                    serverSvc.getPhotoMetadata(image).then(function (result) {
 
                         console.log(result.data);
 
@@ -833,76 +829,76 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
 
                     /*
-                    //console.log(image.currentTarget.childNodes[1]);
-                    //var img = image.currentTarget.childNodes[1];  //the second element is IMG, should add validation
-                    var img = image;
-                    if ($scope.editMode == true) {
-                        //if Edit mode enabled then ask the user to set the GPS lat lng for the photos
-                        addGPStoPhoto(img);
-                    } else if ($scope.editMode == false) {
-                        if (img) {
-                            EXIF.getData(img, function () {
-                                var make = EXIF.getTag(img, "Make"),
-                                    model = EXIF.getTag(img, "Model");
-                                GPS_lat = EXIF.getTag(img, "GPSLatitude");
-                                GPS_lng = EXIF.getTag(img, "GPSLongitude");
+                     //console.log(image.currentTarget.childNodes[1]);
+                     //var img = image.currentTarget.childNodes[1];  //the second element is IMG, should add validation
+                     var img = image;
+                     if ($scope.editMode == true) {
+                     //if Edit mode enabled then ask the user to set the GPS lat lng for the photos
+                     addGPStoPhoto(img);
+                     } else if ($scope.editMode == false) {
+                     if (img) {
+                     EXIF.getData(img, function () {
+                     var make = EXIF.getTag(img, "Make"),
+                     model = EXIF.getTag(img, "Model");
+                     GPS_lat = EXIF.getTag(img, "GPSLatitude");
+                     GPS_lng = EXIF.getTag(img, "GPSLongitude");
 
-                                // alert("I was taken by a " + make + " " + model);
-                                // alert("GPSLongitude " + GPS);
+                     // alert("I was taken by a " + make + " " + model);
+                     // alert("GPSLongitude " + GPS);
 
-                                var toDecimal = function (number) {
-                                    return number[0].numerator + number[1].numerator /
-                                        (60 * number[1].denominator) + number[2].numerator / (3600 * number[2].denominator);
-                                };
+                     var toDecimal = function (number) {
+                     return number[0].numerator + number[1].numerator /
+                     (60 * number[1].denominator) + number[2].numerator / (3600 * number[2].denominator);
+                     };
 
-                                if (GPS_lat && GPS_lng) {
+                     if (GPS_lat && GPS_lng) {
 
-                                    //console.log("lat: " + toDecimal(GPS_lat) + "  lng: " + toDecimal(GPS_lng));
-                                    // alert("toDecimal " + toDecimal(GPS[1])  );
+                     //console.log("lat: " + toDecimal(GPS_lat) + "  lng: " + toDecimal(GPS_lng));
+                     // alert("toDecimal " + toDecimal(GPS[1])  );
 
-                                    var photo_lat_lng = {lat: toDecimal(GPS_lat), lng: toDecimal(GPS_lng)};
+                     var photo_lat_lng = {lat: toDecimal(GPS_lat), lng: toDecimal(GPS_lng)};
 
-                                    //Help function - show item on map
-                                    showItemOnMap(photo_lat_lng, null);
+                     //Help function - show item on map
+                     showItemOnMap(photo_lat_lng, null);
 
-                                } else {
-                                    console.log('No GPS point embed to photo ' + img);
-                                    console.log('Check if image have GPS point that was added by user and saved to AWS S3 with the photo');
-                                    var file_path = img.currentSrc;
+                     } else {
+                     console.log('No GPS point embed to photo ' + img);
+                     console.log('Check if image have GPS point that was added by user and saved to AWS S3 with the photo');
+                     var file_path = img.currentSrc;
 
-                                    var filename = file_path.replace(/^.*[\\\/]/, '');
-                                    var file_noExtenstion = filename.replace(/\.[^/.]+$/, "");
-
-
-                                    // var bucket_getGPS_forPhoto = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt'}});
+                     var filename = file_path.replace(/^.*[\\\/]/, '');
+                     var file_noExtenstion = filename.replace(/\.[^/.]+$/, "");
 
 
-                                    //var fileGpsUrl = S3URL + 'tracker.photos/' + $scope.facebookId + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt';
-                                    
-                                    var fileGpsUrl = S3CDN + $scope.facebookId + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt';
-
-                                    //console.log(fileGpsUrl);
-
-                                    // get GPS point of the selected photo from AWS S3
-                                    $http({
-                                        method: 'GET',
-                                        url: fileGpsUrl
-                                    }).then(function successCb(response) {
-                                        console.dir(response);
-
-                                        showItemOnMap({lat: response.data.lat, lng: response.data.lng}, null);
+                     // var bucket_getGPS_forPhoto = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID + '/' + file_noExtenstion +'.txt'}});
 
 
-                                    }, function errorCb(response) {
-                                        console.log('No GPS point in AWS S3 for this photo');
-                                    });
-                                }
-                            });
-                        }
-                    } */
+                     //var fileGpsUrl = S3URL + 'tracker.photos/' + $scope.facebookId + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt';
+
+                     var fileGpsUrl = S3CDN + $scope.facebookId + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt';
+
+                     //console.log(fileGpsUrl);
+
+                     // get GPS point of the selected photo from AWS S3
+                     $http({
+                     method: 'GET',
+                     url: fileGpsUrl
+                     }).then(function successCb(response) {
+                     console.dir(response);
+
+                     showItemOnMap({lat: response.data.lat, lng: response.data.lng}, null);
+
+
+                     }, function errorCb(response) {
+                     console.log('No GPS point in AWS S3 for this photo');
+                     });
+                     }
+                     });
+                     }
+                     } */
                 }
 
-                var showItemOnMap = function(Latlng, message) {
+                var showItemOnMap = function (Latlng, message) {
 
                     //Google panorama street view - update with new position
                     $scope.panoPosition = Latlng;
@@ -953,7 +949,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
                             var zoom_time = 3000;
                             $scope.countdown = 100;
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 smoothZoom($scope.map, 12, $scope.map.getZoom())
                             }, 1000); // call smoothZoom, parameters map, final zoomLevel
 
@@ -962,7 +958,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 }
 
 
-                var addGPStoPhoto = function(img) {
+                var addGPStoPhoto = function (img) {
                     //get gps point from map and then
 
                     //$scope.message
@@ -973,14 +969,14 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
                 }
 
-                $scope.saveGPStoThisPhoto = function() {
+                $scope.saveGPStoThisPhoto = function () {
                     //create a file and save it in AWS S3 with the same name of the photo with new extension name
 
                     //create file
 
-                    var bucket_create_photo_gps = new AWS.S3({ params: { Bucket: 'tracker.photos' } });
+                    var bucket_create_photo_gps = new AWS.S3({params: {Bucket: 'tracker.photos'}});
 
-                    var gps_point = { lat: $scope.message.lat, lng: $scope.message.lng };
+                    var gps_point = {lat: $scope.message.lat, lng: $scope.message.lng};
                     var button = document.getElementById('addGPStoPhoto');
                     var results = document.getElementById('results_photo_gps');
                     // button.addEventListener('click', function() {
@@ -995,14 +991,14 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                         Key: $scope.facebookId + '/' + $scope.tripID + '/' + file_noExtenstion + '.txt',
                         Body: JSON.stringify(gps_point)
                     };
-                    bucket_create_photo_gps.upload(params, function(err, data) {
+                    bucket_create_photo_gps.upload(params, function (err, data) {
                         results.innerHTML = err ? 'ERROR!' : 'SAVED.';
                     });
                     // }, false);
 
                 }
 
-                $scope.editModeSwitch = function() {
+                $scope.editModeSwitch = function () {
                     $scope.editMode = !$scope.editMode;
                     if ($scope.editMode == true) {
                         $scope.editButtonText = 'View Mode';
@@ -1013,7 +1009,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                     }
                 }
 
-                $scope.panoView = function() {
+                $scope.panoView = function () {
                     if ($scope.panoViewState == false) {
 
                         // var path = polys[].getPath();
@@ -1044,13 +1040,13 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 //******************************************************************
                 var firebase_ref_readTips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/messages');
 
-                firebase_ref_readTips.on("value", function(snapshot) {
+                firebase_ref_readTips.on("value", function (snapshot) {
                     $scope.messages = [];
 
                     $scope.progressbar = ngProgressFactory.createInstance();
                     $scope.progressbar.start();
 
-                    snapshot.forEach(function(childSnapshot) {
+                    snapshot.forEach(function (childSnapshot) {
                         //var key = childSnapshot.key();
                         var childData = childSnapshot.val(); // childData = location and message and time
                         //$scope.messages.unshift(childData['message']);
@@ -1058,7 +1054,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                     });
                     //$scope.$apply();
                     $scope.progressbar.stop();
-                }, function(errorObject) {
+                }, function (errorObject) {
                     console.log("Read Tips from Firebase failed: " + errorObject.code);
                 });
 
@@ -1069,7 +1065,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 // at fixed intervals.
                 function animateCircle(line) {
                     var count = 0;
-                    window.setInterval(function() {
+                    window.setInterval(function () {
                         count = (count + 1) % 200;
 
                         var icons = line.get('icons');
@@ -1078,31 +1074,30 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                     }, 300);
                 }
 
-                $scope.runPathAnimation = function() {
-                        polys[$scope.facebookId].setMap(null);
+                $scope.runPathAnimation = function () {
+                    polys[$scope.facebookId].setMap(null);
 
-                        // Define the symbol, using one of the predefined paths ('CIRCLE')
-                        // supplied by the Google Maps JavaScript API.
-                        var lineSymbolCircle = {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            scale: 8,
-                            strokeColor: '#393'
-                        };
+                    // Define the symbol, using one of the predefined paths ('CIRCLE')
+                    // supplied by the Google Maps JavaScript API.
+                    var lineSymbolCircle = {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 8,
+                        strokeColor: '#393'
+                    };
 
-                        polys[$scope.facebookId] = new google.maps.Polyline({
-                            map: $scope.map,
-                            path: $scope.pathHash[$scope.slider.value],
-                            icons: [{
-                                icon: lineSymbolCircle,
-                                offset: '100%'
-                            }]
-                        });
-                        animateCircle(polys[$scope.facebookId]);
-                    }
-                    //}
+                    polys[$scope.facebookId] = new google.maps.Polyline({
+                        map: $scope.map,
+                        path: $scope.pathHash[$scope.slider.value],
+                        icons: [{
+                            icon: lineSymbolCircle,
+                            offset: '100%'
+                        }]
+                    });
+                    animateCircle(polys[$scope.facebookId]);
+                }
+                //}
 
                 //****************************************************
-
 
 
                 //************************
@@ -1119,9 +1114,9 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 //  var anomalyDetected = false;
                 // var lastNormalPoint = '';
                 //.limitToFirst(250)
-                ref_read_path.once("value", function(tripPath) {
+                ref_read_path.once("value", function (tripPath) {
                     var pathLen = tripPath.length;
-                    tripPath.forEach(function(point) {
+                    tripPath.forEach(function (point) {
                         i++;
                         //console.log(i);
                         //console.log(point.val());
@@ -1140,8 +1135,8 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                         //console.log(i);
 
                         //remove points without timestamp
-                        if(point.val()['timestamp']){
-                            if(point.val()['coords'].accuracy < 20){
+                        if (point.val()['timestamp']) {
+                            if (point.val()['coords'].accuracy < 20) {
                                 path.push({
                                     lat: JSON.parse(point.val()['coords'].latitude),
                                     lng: JSON.parse(point.val()['coords'].longitude),
@@ -1165,7 +1160,6 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                         //});
 
 
-
                         //   }else{
                         //     console.log('anomaly detected while preparing path on map');
                         //}
@@ -1176,7 +1170,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                     });
 
                     //sort array by timestamp before show on map
-                    path.sort(function(a,b){
+                    path.sort(function (a, b) {
                         // Turn your strings into dates, and then subtract them
                         // to get a value that is either negative, positive, or zero.
                         return new Date(b.timestamp) - new Date(a.timestamp);
@@ -1188,7 +1182,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                     $scope.$apply();
 
                     //sort saved path to be used for select days filter and console
-                    $scope.pathSaved.sort(function(a,b){
+                    $scope.pathSaved.sort(function (a, b) {
                         // Turn your strings into dates, and then subtract them
                         // to get a value that is either negative, positive, or zero.
                         return new Date(b.timestamp) - new Date(a.timestamp);
@@ -1239,13 +1233,13 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
 
                     //Keep listening to new GPS point added by users
-                    ref_read_path.limitToLast(1).on("value", function(tripPath) {
+                    ref_read_path.limitToLast(1).on("value", function (tripPath) {
                         if (firstLoad_paths == false) {
 
                             // get existing path
                             var existsPath = polys[$scope.facebookId].getPath();
 
-                            tripPath.forEach(function(point) {
+                            tripPath.forEach(function (point) {
 
                                 // add new point
                                 existsPath.push(new google.maps.LatLng(JSON.parse(point.val()['coords'].latitude), JSON.parse(point.val()['coords'].longitude)));
@@ -1264,10 +1258,10 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
                 //Filter map according to the selected day in the
                 //each time $scope.slider.value changes then filter map and then apply
-                $scope.$watch('slider.value', function() {
+                $scope.$watch('slider.value', function () {
 
                     if (!$scope.pathLoaded) {
-                        $timeout(function() {
+                        $timeout(function () {
                             $scope.pathLoaded = true;
                         });
                     } else {
@@ -1425,9 +1419,9 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 //load Table from Firebase
                 var firebase_ref_readTable = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/table');
 
-                firebase_ref_readTable.on("value", function(snapshot) {
+                firebase_ref_readTable.on("value", function (snapshot) {
                     $scope.table = []; //reset table
-                    snapshot.forEach(function(childSnapshot) {
+                    snapshot.forEach(function (childSnapshot) {
                         // key will be "fred" the first time and "barney" the second time
                         var key = childSnapshot.key();
                         // childData will be the actual contents of the child
@@ -1439,7 +1433,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                     });
                     //$scope.$apply();
 
-                }, function(errorObject) {
+                }, function (errorObject) {
                     console.log("Read Table from Firebase failed: " + errorObject.code);
                 });
 
@@ -1448,7 +1442,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 // Edit Mode - Start
                 // ##################################################################
 
-                $scope.addDay = function() {
+                $scope.addDay = function () {
                     console.log('Offline page:: add day');
                     console.log($scope.day);
 
@@ -1456,7 +1450,7 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                     firebase_table.set($scope.day);
                 }
 
-                $scope.addMessage = function() {
+                $scope.addMessage = function () {
                     // add a new note to firebase
                     var message_json = {};
 
@@ -1464,12 +1458,12 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
 
                     //var usersRef = firebase_ref.child('history');
 
-                    var location = { coords: { latitude: $scope.message.lat, longitude: $scope.message.lng } };
+                    var location = {coords: {latitude: $scope.message.lat, longitude: $scope.message.lng}};
                     message_json = {
                         location: location,
                         time: $scope.message.time,
                         email: '',
-                        message: { tip: $scope.message.text, invite: '', risk: '', price: '' }
+                        message: {tip: $scope.message.text, invite: '', risk: '', price: ''}
                     };
 
                     firebase_tips.push(message_json);
@@ -1484,11 +1478,11 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                 //Help functions
                 //Read text file from AWS S3
                 //no need for the below fun I used $http req
-                var readTextFile = function(file) {
+                var readTextFile = function (file) {
                     var file_content = '';
                     var rawFile = new XMLHttpRequest();
                     rawFile.open("GET", file, true);
-                    rawFile.onreadystatechange = function() {
+                    rawFile.onreadystatechange = function () {
                         if (rawFile.readyState === 4) {
                             if (rawFile.status === 200 || rawFile.status == 0) {
                                 var allText = rawFile.responseText;
@@ -1519,11 +1513,11 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
                     if (cnt >= max) {
                         return;
                     } else {
-                        z = google.maps.event.addListener(map, 'zoom_changed', function(event) {
+                        z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
                             google.maps.event.removeListener(z);
                             smoothZoom(map, max, cnt + 1);
                         });
-                        setTimeout(function() {
+                        setTimeout(function () {
                             map.setZoom(cnt)
                         }, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
                     }
@@ -1538,56 +1532,56 @@ trackerApp.controller('offlinemapCtrl', function($rootScope, $scope, $sce, $time
             $state.go('trips');
         }
 
-    //####################### HELP Functions ##################
-    var resizeImage = function (file) {
-        // from an input element
-/*        var filesToUpload = input.files;
-        var file = filesToUpload[0];
+        //####################### HELP Functions ##################
+        var resizeImage = function (file) {
+            // from an input element
+            /*        var filesToUpload = input.files;
+             var file = filesToUpload[0];
 
-        var img = document.createElement("img");
-        var reader = new FileReader();
-        reader.onload = function(e) {img.src = e.target.result}*/
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
+             var img = document.createElement("img");
+             var reader = new FileReader();
+             reader.onload = function(e) {img.src = e.target.result}*/
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
 
-        var img = document.createElement("img");
-        var canvas = document.createElement('canvas');
+            var img = document.createElement("img");
+            var canvas = document.createElement('canvas');
 
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
 
-        var MAX_WIDTH = 800;
-        var MAX_HEIGHT = 600;
-        var width = img.width;
-        var height = img.height;
+            var MAX_WIDTH = 800;
+            var MAX_HEIGHT = 600;
+            var width = img.width;
+            var height = img.height;
 
-        if (width > height) {
-            if (width > MAX_WIDTH) {
-                height *= MAX_WIDTH / width;
-                width = MAX_WIDTH;
+            if (width > height) {
+                if (width > MAX_WIDTH) {
+                    height *= MAX_WIDTH / width;
+                    width = MAX_WIDTH;
+                }
+            } else {
+                if (height > MAX_HEIGHT) {
+                    width *= MAX_HEIGHT / height;
+                    height = MAX_HEIGHT;
+                }
             }
-        } else {
-            if (height > MAX_HEIGHT) {
-                width *= MAX_HEIGHT / height;
-                height = MAX_HEIGHT;
-            }
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+
+            var dataurl = canvas.toDataURL("image/png");
+
         }
-        canvas.width = width;
-        canvas.height = height;
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, width, height);
-
-        var dataurl = canvas.toDataURL("image/png");
-
-    }
-    //###################### END HELP #########################
+        //###################### END HELP #########################
 
 
     })
-    .directive('lightgallery', function() {
+    .directive('lightgallery', function () {
         return {
             restrict: 'A',
-            link: function(scope, element, attrs) {
+            link: function (scope, element, attrs) {
                 if (scope.$last) {
                     element.parent().lightGallery({
                         mode: 'lg-fade'
