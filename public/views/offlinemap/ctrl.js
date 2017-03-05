@@ -1205,9 +1205,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                      */
 
                     var lineSymbol = {
-                        path: 'M 0,-1 0,1',
+                        //path: 'M 0,-1 0,1',
+                        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
                         strokeOpacity: 1,
-                        scale: 4,
+                        scale: 2,
                     };
 
                     //Hash table for all users path
@@ -1284,9 +1285,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                             }
 
                             var lineSymbol = {
-                                path: 'M 0,-1 0,1',
+                                //path: 'M 0,-1 0,1',
+                                path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
                                 strokeOpacity: 1,
-                                scale: 4
+                                scale: 2
                             };
 
                             //Hash table for all users path
@@ -1369,9 +1371,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                             //set the path for the first load, for the real time load, I added the same code into the listener of Firebase above
                             //dashed line
                             var lineSymbol = {
-                                path: 'M 0,-1 0,1',
+                                //path: 'M 0,-1 0,1',
+                                path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
                                 strokeOpacity: 1,
-                                scale: 4
+                                scale: 2
                             };
 
                             //Hash table for all users path
