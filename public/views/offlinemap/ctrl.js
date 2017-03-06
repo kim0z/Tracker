@@ -223,7 +223,6 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                         // console.log($filter('date')(message.time, 'MMM d, y'));
                         // console.log($filter('date')($scope.selectedDate, 'MMM d, y'));
 
-
                         // return true;
                     }
 
@@ -654,6 +653,12 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                 $scope.map;
                 $scope.lastGPSpoint = "";
 
+                var moveToLocation = function (lat, lng){
+                    var center = new google.maps.LatLng(lat, lng);
+                    // using global variable:
+                    $scope.map.panTo(center);
+                }
+
                 //Map configuration
                 $scope.map = new google.maps.Map(document.getElementById('map'), {
                     //center: {lat: 34.397, lng: 40.644},
@@ -1065,12 +1070,16 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                 // at fixed intervals.
                 function animateCircle(line) {
                     var count = 0;
+                    var pathArray = line.getPath().getArray();
                     window.setInterval(function () {
                         count = (count + 1) % 200;
 
                         var icons = line.get('icons');
                         icons[0].offset = (count / 2) + '%';
                         line.set('icons', icons);
+                        
+                        //moveToLocation(pathArray[count].lat(), pathArray[count].lng() );
+
                     }, 300);
                 }
 
