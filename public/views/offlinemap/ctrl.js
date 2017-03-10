@@ -472,6 +472,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                 // below AWS S3 code used to get photos and show in offline page
                 var S3URL = 'https://s3-us-west-2.amazonaws.com/';
                 var S3CDN = 'http://dcfzra40jo7ha.cloudfront.net/';
+                var S3URL_RESIZE = 'http://tracker.photos.s3-website-us-west-2.amazonaws.com/'
                 $scope.photos = [];
 
 
@@ -567,9 +568,12 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                                 //var strict_escape_url = $sce.trustAsResourceUrl(S3URL + 'tracker.photos/' + data.Contents[i].Key);
                                 // $scope.photos.push({fullres: strict_escape_url, thumbnail: S3URL + 'tracker.photos/' + data.Contents[i].Key}); 
 
-                                //use S3 CDN
+                                //use S3 CDN + S3 Lambda resize API
                                 var strict_escape_url = $sce.trustAsResourceUrl(S3CDN + data.Contents[i].Key);
-                                $scope.photos.push({fullres: strict_escape_url, thumbnail: S3CDN + data.Contents[i].Key});
+                                $scope.photos.push({fullres: strict_escape_url, thumbnail: S3URL_RESIZE + '100x100/' + data.Contents[i].Key});
+
+                                //use resize Lambda API Example:
+                                //http://tracker.photos.s3-website-us-west-2.amazonaws.com/150x150/10207022211887806/216/IMG_3516.JPG
 
 
                             }
