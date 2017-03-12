@@ -570,7 +570,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
 
                                 //use S3 CDN + S3 Lambda resize API
                                 var strict_escape_url = $sce.trustAsResourceUrl(S3CDN + data.Contents[i].Key);
-                                $scope.photos.push({fullres: strict_escape_url, thumbnail: S3URL_RESIZE + '100x100/' + data.Contents[i].Key});
+                                $scope.photos.push({
+                                    fullres: strict_escape_url,
+                                    thumbnail: S3URL_RESIZE + '100x100/' + data.Contents[i].Key
+                                });
 
                                 //use resize Lambda API Example:
                                 //http://tracker.photos.s3-website-us-west-2.amazonaws.com/150x150/10207022211887806/216/IMG_3516.JPG
@@ -657,7 +660,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                 $scope.map;
                 $scope.lastGPSpoint = "";
 
-                var moveToLocation = function (lat, lng){
+                var moveToLocation = function (lat, lng) {
                     var center = new google.maps.LatLng(lat, lng);
                     // using global variable:
                     $scope.map.panTo(center);
@@ -704,78 +707,102 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                 });
 
 
-                /* // %%%% Listeners to save drawing data to firebase %%%%
-                 //circles
-                 var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/circles');
-                 google.maps.event.addDomListener(drawingManager, 'circlecomplete', function(circle) {
-                 console.log('new circle added to firebase');
-                 firebase_circles.push({strokeWeight:circle.strokeWeight, fillColor:circle.fillColor , fillOpacity:circle.fillOpacity, radius:circle.radius , center:{lat: circle.center.lat(), lng: circle.center.lng()}});
-                 });
+                // %%%% Listeners to save drawing data to firebase %%%%
+                //////circles
+                var firebase_drawing_circles = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/circles');
+                google.maps.event.addDomListener(drawingManager, 'circlecomplete', function (circle) {
+                    console.log('new circle added to firebase');
+                    firebase_drawing_circles.push({
+                        strokeWeight: circle.strokeWeight,
+                        fillColor: circle.fillColor,
+                        fillOpacity: circle.fillOpacity,
+                        radius: circle.radius,
+                        center: {lat: circle.center.lat(), lng: circle.center.lng()}
+                    });
+                });
 
-                 firebase_drawing.once("value", function(snapshot) {
-                 console.log('reading circles from firebase to load it to map');
-                 snapshot.forEach(function(childSnapshot) {
-                 new google.maps.Circle({
-                 strokeWeight: childSnapshot.val().strokeWeight,
-                 fillColor: childSnapshot.val().fillColor,
-                 fillOpacity: childSnapshot.val().fillOpacity,
-                 map: $scope.map,
-                 center: childSnapshot.val().center,
-                 radius: childSnapshot.val().radius
-                 });
-                 });
-                 }, function(errorObject) {
-                 console.log("Read circles from Firebase failed: " + errorObject.code);
-                 });
-                 // Circles END
+                firebase_drawing_circles.once("value", function (snapshot) {
+                    console.log('reading circles from firebase to load it to map');
+                    snapshot.forEach(function (childSnapshot) {
+                        new google.maps.Circle({
+                            strokeWeight: childSnapshot.val().strokeWeight,
+                            fillColor: childSnapshot.val().fillColor,
+                            fillOpacity: childSnapshot.val().fillOpacity,
+                            map: $scope.map,
+                            center: childSnapshot.val().center,
+                            radius: childSnapshot.val().radius
+                        });
+                    });
+                }, function (errorObject) {
+                    console.log("Read circles from Firebase failed: " + errorObject.code);
+                });
+                ////// Circles END
 
-                 // Markers
-                 var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/markers');
-                 google.maps.event.addDomListener(drawingManager, 'markercomplete', function(marker) {
-                 console.log('new marker added to firebase');
-                 console.log(marker);
-                 firebase_drawing.push({icon: marker.icon, position: { lat: marker.position.lat(), lng: marker.position.lng()}});
-                 });
+                ////// Markers
+                var firebase_drawing_markers = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/markers');
+                google.maps.event.addDomListener(drawingManager, 'markercomplete', function (marker) {
+                    console.log('new marker added to firebase');
+                    console.log(marker);
+                    firebase_drawing_markers.push({
+                        icon: marker.icon,
+                        position: {lat: marker.position.lat(), lng: marker.position.lng()}
+                    });
+                });
 
-                 firebase_drawing.once("value", function(snapshot) {
-                 snapshot.forEach(function(childSnapshot) {
-                 console.log('reading markers from firebase to load it to map');
-                 console.log(childSnapshot.val()); // childData = location and message and time
-                 new google.maps.Marker({
-                 map: $scope.map,
-                 position: childSnapshot.val().position,
-                 icon: childSnapshot.val().icon
-                 });
-                 });
-                 }, function(errorObject) {
-                 console.log("Read markers from Firebase failed: " + errorObject.code);
-                 });
-                 // Markers END
+                firebase_drawing_markers.once("value", function (snapshot) {
+                    snapshot.forEach(function (childSnapshot) {
+                        console.log('reading markers from firebase to load it to map');
+                        console.log(childSnapshot.val()); // childData = location and message and time
+                        new google.maps.Marker({
+                            map: $scope.map,
+                            position: childSnapshot.val().position,
+                            icon: childSnapshot.val().icon
+                        });
+                    });
+                }, function (errorObject) {
+                    console.log("Read markers from Firebase failed: " + errorObject.code);
+                });
+                /////// Markers END
 
-                 // polyline
-                 //var firebase_drawing = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/polyline');
-                 google.maps.event.addDomListener(drawingManager, 'polylinecomplete', function(polyline) {
-                 console.log('new polyline added to firebase');
-                 console.log(polyline);
-                 //firebase_drawing.push({icon: marker.icon, position: { lat: marker.position.lat(), lng: marker.position.lng()}});
-                 });
-                 /!*
-                 firebase_drawing.once("value", function(snapshot) {
-                 snapshot.forEach(function(childSnapshot) {
-                 console.log('reading markers from firebase to load it to map');
-                 console.log(childSnapshot.val()); // childData = location and message and time
-                 new google.maps.Marker({
-                 map: $scope.map,
-                 position: childSnapshot.val().position,
-                 icon: childSnapshot.val().icon
-                 });
-                 });
-                 }, function(errorObject) {
-                 console.log("Read markers from Firebase failed: " + errorObject.code);
-                 });
-                 *!/
-                 // polyline END
-                 */
+                // polyline
+                var firebase_drawing_polyline = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/polylines');
+                google.maps.event.addDomListener(drawingManager, 'polylinecomplete', function (polyline) {
+                    console.log('new polyline added to firebase');
+                    console.log(polyline.getPath());
+                    var polyline_path = [];
+                    polyline.getPath().forEach(function(element) {
+                        console.log(element.lat());
+                        console.log(element.lng());
+
+                        polyline_path.push({lat: element.lat(), lng: element.lng()});
+                    });
+
+                    firebase_drawing_polyline.push(polyline_path);
+                });
+
+
+                firebase_drawing_polyline.once("value", function (snapshot) {
+                    snapshot.forEach(function (childSnapshot) {
+                        console.log('reading polylines from firebase to load it to map');
+                        console.log(childSnapshot.val()); // childData = location and message and time
+
+                        var polyline = childSnapshot.val();
+                        new google.maps.Polyline({
+                            map: $scope.map,
+                            path: polyline,
+                            geodesic: true,
+                            strokeColor: '#FF0000',
+                            strokeOpacity: 1.0,
+                            strokeWeight: 2
+                        });
+                    });
+                }, function (errorObject) {
+                    console.log("Read markers from Firebase failed: " + errorObject.code);
+                });
+
+
+                /////// polyline END
+                // ****************************** Drawing events end *******************************
 
                 drawingManager.setMap($scope.map);
 
@@ -1081,7 +1108,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                         var icons = line.get('icons');
                         icons[0].offset = (count / 2) + '%';
                         line.set('icons', icons);
-                        
+
                         //moveToLocation(pathArray[count].lat(), pathArray[count].lng() );
 
                     }, 300);
