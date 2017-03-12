@@ -107,7 +107,25 @@
         <img src="../../assets/images/table_icon2.svg" width="40" height="40" style="margin-left:8px"/>
     </div>
 
-
+<!-- List of map items -->
+    <ol class="rounded-list">
+        <li><a href="">Markers</a>
+            <ol>
+                <li ng-repeat="marker in markers"><a href="">{{marker.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true"> </span> </a></li>
+            </ol>
+        </li>
+        <li><a href="">Polylines</a>
+            <ol>
+                <li ng-repeat="polyline in polylines"><a href="">{{polyline.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true"> </span> </a></li>
+            </ol>
+        </li>
+        <li><a href="">Circles</a>
+            <ol>
+                <li ng-repeat="circle in circles"><a href="">{{circle.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true"> </span> </a></li>
+            </ol>
+        </li>
+    </ol>
+<!-- End of list of map items -->
 
 
     <!--**************************** Photos slider *************************************-->

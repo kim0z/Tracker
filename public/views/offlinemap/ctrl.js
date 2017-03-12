@@ -708,6 +708,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
 
 
                 // %%%% Listeners to save drawing data to firebase %%%%
+                $scope.circles = [];
+                $scope.markers = [];
+                $scope.polylines = [];
+
                 //////circles
                 var firebase_drawing_circles = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/circles');
                 google.maps.event.addDomListener(drawingManager, 'circlecomplete', function (circle) {
@@ -724,14 +728,19 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                 firebase_drawing_circles.once("value", function (snapshot) {
                     console.log('reading circles from firebase to load it to map');
                     snapshot.forEach(function (childSnapshot) {
-                        new google.maps.Circle({
+                        var circle = new google.maps.Circle({
                             strokeWeight: childSnapshot.val().strokeWeight,
                             fillColor: childSnapshot.val().fillColor,
                             fillOpacity: childSnapshot.val().fillOpacity,
                             map: $scope.map,
                             center: childSnapshot.val().center,
-                            radius: childSnapshot.val().radius
+                            radius: childSnapshot.val().radius,
+                            id: childSnapshot.key()
                         });
+                        //push to scope: 1. manage items 2. show as a list 3. delete item 4. update item
+                        $scope.circles.push(circle);
+
+                        //$scope.circles.push({key: childSnapshot.key(), val: childSnapshot.val()});
                     });
                 }, function (errorObject) {
                     console.log("Read circles from Firebase failed: " + errorObject.code);
@@ -742,7 +751,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                 var firebase_drawing_markers = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/markers');
                 google.maps.event.addDomListener(drawingManager, 'markercomplete', function (marker) {
                     console.log('new marker added to firebase');
-                    console.log(marker);
+                    //console.log(marker);
                     firebase_drawing_markers.push({
                         icon: marker.icon,
                         position: {lat: marker.position.lat(), lng: marker.position.lng()}
@@ -752,12 +761,17 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                 firebase_drawing_markers.once("value", function (snapshot) {
                     snapshot.forEach(function (childSnapshot) {
                         console.log('reading markers from firebase to load it to map');
-                        console.log(childSnapshot.val()); // childData = location and message and time
-                        new google.maps.Marker({
+                        //console.log(childSnapshot.val()); // childData = location and message and time
+                        var marker = new google.maps.Marker({
                             map: $scope.map,
                             position: childSnapshot.val().position,
-                            icon: childSnapshot.val().icon
+                            icon: childSnapshot.val().icon,
+                            id: childSnapshot.key()
                         });
+                        //$scope.markers.push({key: childSnapshot.key() , val: childSnapshot.val() });
+                        //push to scope: 1. manage items 2. show as a list 3. delete item 4. update item
+                        $scope.markers.push(marker);
+
                     });
                 }, function (errorObject) {
                     console.log("Read markers from Firebase failed: " + errorObject.code);
@@ -768,7 +782,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                 var firebase_drawing_polyline = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/polylines');
                 google.maps.event.addDomListener(drawingManager, 'polylinecomplete', function (polyline) {
                     console.log('new polyline added to firebase');
-                    console.log(polyline.getPath());
+                    //console.log(polyline.getPath());
                     var polyline_path = [];
                     polyline.getPath().forEach(function(element) {
                         console.log(element.lat());
@@ -780,24 +794,28 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                     firebase_drawing_polyline.push(polyline_path);
                 });
 
-
                 firebase_drawing_polyline.once("value", function (snapshot) {
                     snapshot.forEach(function (childSnapshot) {
                         console.log('reading polylines from firebase to load it to map');
-                        console.log(childSnapshot.val()); // childData = location and message and time
+                        //console.log(childSnapshot.val()); // childData = location and message and time
 
-                        var polyline = childSnapshot.val();
-                        new google.maps.Polyline({
+                        var polyline_path = childSnapshot.val();
+                        var polyline = new google.maps.Polyline({
                             map: $scope.map,
-                            path: polyline,
+                            path: polyline_path,
                             geodesic: true,
                             strokeColor: '#FF0000',
                             strokeOpacity: 1.0,
-                            strokeWeight: 2
+                            strokeWeight: 2,
+                            id: childSnapshot.key()
                         });
+                        //$scope.polylines.push({key: childSnapshot.key(), val:childSnapshot.val()});
+                        //push to scope: 1. manage items 2. show as a list 3. delete item 4. update item
+                        $scope.polylines.push(polyline);
+
                     });
                 }, function (errorObject) {
-                    console.log("Read markers from Firebase failed: " + errorObject.code);
+                    console.log("Read polylines from Firebase failed: " + errorObject.code);
                 });
 
 
