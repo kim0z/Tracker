@@ -674,17 +674,17 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                     mapTypeControl: true,
                     mapTypeControlOptions: {
                         style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-                        position: google.maps.ControlPosition.LEFT_CENTER
+                        position: google.maps.ControlPosition.LEFT_TOP
                     },
                     mapTypeId: google.maps.MapTypeId.TERRAIN,
                     zoomControl: true,
                     zoomControlOptions: {
-                        position: google.maps.ControlPosition.LEFT_CENTER
+                        position: google.maps.ControlPosition.RIGHT_CENTER
                     },
                     scaleControl: true,
                     streetViewControl: false,
                     streetViewControlOptions: {
-                        position: google.maps.ControlPosition.LEFT_TOP
+                        position: google.maps.ControlPosition.RIGHT_CENTER
                     }
                 });
 
@@ -692,7 +692,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                     drawingMode: google.maps.drawing.OverlayType.MARKER,
                     drawingControl: true,
                     drawingControlOptions: {
-                        position: google.maps.ControlPosition.LEFT_CENTER,
+                        position: google.maps.ControlPosition.RIGHT_TOP,
                         drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
                     },
                     markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
@@ -785,6 +785,12 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                 google.maps.event.addDomListener(drawingManager, 'polylinecomplete', function (polyline) {
                     console.log('new polyline added to firebase');
                     //console.log(polyline.getPath());
+
+                    polyline.set("id","444");
+                    polyline.set("key","e444");
+
+                    $scope.polylines.push(polyline);
+                    $scope.$digest();
 
                     var polyline_path = [];
                     polyline.getPath().forEach(function(element) {

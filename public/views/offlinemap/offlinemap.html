@@ -16,19 +16,22 @@
 <div id="main" ng-class="{fade :loading}">
 
     <!-- Slider -->
-    <rzslider style="top: 0px; color: black
+
+        <rzslider style="top: 90px; color: black;position: absolute;margin-left: 50px;margin-right: 50px;
             background: #333;
             border-radius: 10px;
             font-weight: bold;
             font-size: 30px;
             bottom: 20px;" rz-slider-model="slider.value"
-              rz-slider-options="slider.options"></rzslider>
+                  rz-slider-options="slider.options"></rzslider>
+
+
 
 
     <div id="pano"></div>
     <!--************************************** TIPS *******************************-->
     <!-- Tips filter -->
-    <div style="position: absolute; right: 30px; top: 125px;">
+    <div style="position: absolute; right: 30px; top: 135px;">
         <div class="btn-group" role="group" aria-label="...">
             <button type="button" ng-click="filterTipsOnClick('all')" class="btn btn-secondary">All</button>
             <button type="button" ng-click="filterTipsOnClick('tips')" class="btn btn-primary">Tips</button>
@@ -108,23 +111,26 @@
     </div>
 
 <!-- List of map items -->
-    <ol class="rounded-list">
-        <li><a href="">Markers</a>
-            <ol>
-                <li ng-repeat="marker in markers"><a href="">{{marker.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteItemFromMap(marker.get('type'),marker.get('id'))"> </span> </a></li>
-            </ol>
-        </li>
-        <li><a href="">Polylines</a>
-            <ol>
-                <li ng-repeat="polyline in polylines"><a href="">{{polyline.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteItemFromMap(polyline.get('type'),polyline.get('id'))"> </span> </a></li>
-            </ol>
-        </li>
-        <li><a href="">Circles</a>
-            <ol>
-                <li ng-repeat="circle in circles"><a href="">{{circle.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteItemFromMap(circle.get('type'),circle.get('id'))"> </span> </a></li>
-            </ol>
-        </li>
-    </ol>
+    <div style="position: absolute;left: 30px;top: 135px;overflow: auto;height: 600px;width: 280px ">
+        <ol class="rounded-list">
+            <li><a href="">Markers</a>
+                <ol>
+                    <li ng-repeat="marker in markers"><a href="">{{marker.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteItemFromMap(marker.get('type'),marker.get('id'))"> </span> </a></li>
+                </ol>
+            </li>
+            <li><a href="">Polylines</a>
+                <ol>
+                    <li ng-repeat="polyline in polylines"><a href="">{{polyline.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteItemFromMap(polyline.get('type'),polyline.get('id'))"> </span> </a></li>
+                </ol>
+            </li>
+            <li><a href="">Circles</a>
+                <ol>
+                    <li ng-repeat="circle in circles"><a href="">{{circle.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteItemFromMap(circle.get('type'),circle.get('id'))"> </span> </a></li>
+                </ol>
+            </li>
+        </ol>
+    </div>
+
 <!-- End of list of map items -->
 
 
@@ -228,7 +234,7 @@ The markup will have a list with images and the titles-->
     <!-- ######################################################################### -->
     <!-- Edit Mode -->
     <!-- ######################################################################### -->
-    <div id="mySidenav" class="sidenav" style="margin-top: 60px; color: white">
+    <div id="mySidenav" class="sidenav" style="margin-top: 60px; color: white;z-index: 10">
         <a href="javascript:void(0)" class="closebtn" ng-click="editModeSwitch()">&times;</a>
         <a style="padding-left: 2px">Settings</a>
         <ul class="tab">
@@ -373,7 +379,7 @@ The markup will have a list with images and the titles-->
     }
 
     </style>
-    <div class="navbar navbar-default navbar-fixed-bottom" style="bottom: 50px; overflow: scroll; background-color: inherit;">
+    <div class="navbar navbar-default navbar-fixed-bottom" style="bottom: 50px; overflow: scroll; background-color: inherit;right: 50px;left: 50px">
         <ul class="demo">
             <li lightgallery ng-repeat="photo in photos" data-src="{{photo.fullres}}">
                 <img ng-src="{{photo.thumbnail}}" ng-mouseover="photoMouseOver($event)"/>
