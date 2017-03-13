@@ -726,7 +726,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                 });
 
                 firebase_drawing_circles.once("value", function (snapshot) {
-                    console.log('reading circles from firebase to load it to map');
+                    //console.log('reading circles from firebase to load it to map');
                     snapshot.forEach(function (childSnapshot) {
                         var circle = new google.maps.Circle({
                             strokeWeight: childSnapshot.val().strokeWeight,
@@ -735,7 +735,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                             map: $scope.map,
                             center: childSnapshot.val().center,
                             radius: childSnapshot.val().radius,
-                            id: childSnapshot.key()
+                            id: childSnapshot.key(),
+                            type: 'circle'
                         });
                         //push to scope: 1. manage items 2. show as a list 3. delete item 4. update item
                         $scope.circles.push(circle);
@@ -760,13 +761,14 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
 
                 firebase_drawing_markers.once("value", function (snapshot) {
                     snapshot.forEach(function (childSnapshot) {
-                        console.log('reading markers from firebase to load it to map');
+                        //console.log('reading markers from firebase to load it to map');
                         //console.log(childSnapshot.val()); // childData = location and message and time
                         var marker = new google.maps.Marker({
                             map: $scope.map,
                             position: childSnapshot.val().position,
                             icon: childSnapshot.val().icon,
-                            id: childSnapshot.key()
+                            id: childSnapshot.key(),
+                            type: 'marker'
                         });
                         //$scope.markers.push({key: childSnapshot.key() , val: childSnapshot.val() });
                         //push to scope: 1. manage items 2. show as a list 3. delete item 4. update item
@@ -796,7 +798,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
 
                 firebase_drawing_polyline.once("value", function (snapshot) {
                     snapshot.forEach(function (childSnapshot) {
-                        console.log('reading polylines from firebase to load it to map');
+                        //console.log('reading polylines from firebase to load it to map');
                         //console.log(childSnapshot.val()); // childData = location and message and time
 
                         var polyline_path = childSnapshot.val();
@@ -807,7 +809,8 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                             strokeColor: '#FF0000',
                             strokeOpacity: 1.0,
                             strokeWeight: 2,
-                            id: childSnapshot.key()
+                            id: childSnapshot.key(),
+                            type: 'polyline'
                         });
                         //$scope.polylines.push({key: childSnapshot.key(), val:childSnapshot.val()});
                         //push to scope: 1. manage items 2. show as a list 3. delete item 4. update item
@@ -820,6 +823,38 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
 
 
                 /////// polyline END
+
+                //Delete items from map
+                $scope.deleteItemFromMap = function (type, key) {
+
+                    if(type == 'marker'){
+                        for(var i = 0 ; i < $scope.markers.length ; i++){
+                             if($scope.markers[i].get("id") == key){
+                                $scope.markers[i].setMap(null);
+                                $scope.markers.splice(i, 1);
+                                console.log('delete item from map, type: '+ type+' key: '+key+' done');
+                            }
+                        }
+                    }
+                     if(type == 'circle'){
+                           for(var i = 0 ; i < $scope.circles.length ; i++){
+                             if($scope.circles[i].get("id") == key){
+                                $scope.circles[i].setMap(null);
+                                $scope.circles.splice(i, 1);
+                                console.log('delete item from map, type: '+ type+' key: '+key+' done');
+                            }
+                        }
+                    }
+                     if(type == 'polyline'){
+                           for(var i = 0 ; i < $scope.polylines.length ; i++){
+                             if($scope.polylines[i].get("id") == key){
+                                $scope.polylines[i].setMap(null);
+                                $scope.polylines.splice(i, 1);
+                                console.log('delete item from map, type: '+ type+' key: '+key+' done');
+                            }
+                        }
+                    }
+                }
                 // ****************************** Drawing events end *******************************
 
                 drawingManager.setMap($scope.map);
