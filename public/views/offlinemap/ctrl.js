@@ -785,14 +785,12 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                 google.maps.event.addDomListener(drawingManager, 'polylinecomplete', function (polyline) {
                     console.log('new polyline added to firebase');
                     //console.log(polyline.getPath());
+
                     var polyline_path = [];
                     polyline.getPath().forEach(function(element) {
-                        console.log(element.lat());
-                        console.log(element.lng());
-
                         polyline_path.push({lat: element.lat(), lng: element.lng()});
                     });
-
+                    //save into firebase
                     firebase_drawing_polyline.push(polyline_path);
                 });
 
@@ -821,7 +819,6 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                     console.log("Read polylines from Firebase failed: " + errorObject.code);
                 });
 
-
                 /////// polyline END
 
                 //Delete items from map
@@ -830,8 +827,11 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                     if(type == 'marker'){
                         for(var i = 0 ; i < $scope.markers.length ; i++){
                              if($scope.markers[i].get("id") == key){
+                                 //remove item from view
                                 $scope.markers[i].setMap(null);
                                 $scope.markers.splice(i, 1);
+                                 //remove item from firebase
+                                 firebase_drawing_markers.child(key).remove();
                                 console.log('delete item from map, type: '+ type+' key: '+key+' done');
                             }
                         }
@@ -839,8 +839,11 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                      if(type == 'circle'){
                            for(var i = 0 ; i < $scope.circles.length ; i++){
                              if($scope.circles[i].get("id") == key){
+                                 //remove item from view
                                 $scope.circles[i].setMap(null);
                                 $scope.circles.splice(i, 1);
+                                 //remove item from firebase
+                                 firebase_drawing_circles.child(key).remove();
                                 console.log('delete item from map, type: '+ type+' key: '+key+' done');
                             }
                         }
@@ -848,8 +851,11 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                      if(type == 'polyline'){
                            for(var i = 0 ; i < $scope.polylines.length ; i++){
                              if($scope.polylines[i].get("id") == key){
+                                 //remove from view
                                 $scope.polylines[i].setMap(null);
                                 $scope.polylines.splice(i, 1);
+                                 //remove from firebase
+                                 firebase_drawing_polyline.child(key).remove();
                                 console.log('delete item from map, type: '+ type+' key: '+key+' done');
                             }
                         }
