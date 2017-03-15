@@ -196,6 +196,7 @@ default width = 800/5 = 160px;
     font-size: 16px;
 }
 
+/*Google maps*/
 /* General CSS*/
 #map {
     box-shadow: 3px 3px 10px gray;
@@ -213,6 +214,19 @@ default width = 800/5 = 160px;
     font-size: 0; /* Remember to change it back to normal font size if have captions */
     list-style: none;
     background-color: #000;
+}
+
+#pac-input {
+    margin-top: 10px;
+    background-color: #fff;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+    margin-left: 12px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width: 400px;
+    height: 30px;
 }
 
 #pano {
