@@ -116,17 +116,17 @@
         <ol class="rounded-list">
             <li><a href="">Markers</a>
                 <ol>
-                    <li ng-repeat="marker in markers"><a href="">{{marker.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteItemFromMap(marker.get('type'),marker.get('id'))"> </span> </a></li>
+                    <li ng-repeat="marker in markers" ng-click="highLightItem(marker.get('type'),marker.get('id'))"><a href="">{{marker.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteItemFromMap(marker.get('type'),marker.get('id'))"> </span> </a></li>
                 </ol>
             </li>
             <li><a href="">Polylines</a>
                 <ol>
-                    <li ng-repeat="polyline in polylines"><a href="">{{polyline.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteItemFromMap(polyline.get('type'),polyline.get('id'))"> </span> </a></li>
+                    <li ng-repeat="polyline in polylines" ng-click="highLightItem(polyline.get('type'),polyline.get('id'))"><a href="">{{polyline.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteItemFromMap(polyline.get('type'),polyline.get('id'))"> </span> </a></li>
                 </ol>
             </li>
             <li><a href="">Circles</a>
                 <ol>
-                    <li ng-repeat="circle in circles"><a href="">{{circle.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteItemFromMap(circle.get('type'),circle.get('id'))"> </span> </a></li>
+                    <li ng-repeat="circle in circles" ><a ng-click="highLightItem(circle.get('type'),circle.get('id'))" >{{circle.get('id')}} <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteItemFromMap(circle.get('type'),circle.get('id'))"> </span> </a></li>
                 </ol>
             </li>
         </ol>

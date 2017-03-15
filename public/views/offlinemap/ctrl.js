@@ -927,6 +927,44 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                         }
                     }
                 }
+
+                $scope.highLightItem = function (type, key) {
+                    if(type == 'marker'){
+                        for(var i = 0 ; i < $scope.markers.length ; i++){
+                            if($scope.markers[i].get("id") == key){
+
+                                console.log('highlight item in map, type: '+ type+' key: '+key+' done');
+                            }
+                        }
+                    }
+                    if(type == 'circle'){
+                        for(var i = 0 ; i < $scope.circles.length ; i++){
+                            if($scope.circles[i].get("id") == key){
+
+                                console.log('highlight item in map, type: '+ type+' key: '+key+' done');
+                            }
+                        }
+                    }
+                    if(type == 'polyline'){
+                        for(var i = 0 ; i < $scope.polylines.length ; i++){
+                            if($scope.polylines[i].get("id") == key){
+                                //change color
+                                var current_color = $scope.polylines[i].get("strokeColor");
+                                $scope.polylines[i].set("strokeColor","51fe0d");
+
+                                //zoom on item
+                                //get polyline path
+                                var poly_path = $scope.polylines[i].getPath();
+
+                                //get 1 point from path
+                                var location = poly_path.pop();
+
+                                $scope.map.setCenter(location);
+                                console.log('highlight item in map, type: '+ type+' key: '+key+' done');
+                            }
+                        }
+                    }
+                }
                 // ****************************** Drawing events end *******************************
 
                 drawingManager.setMap($scope.map);
