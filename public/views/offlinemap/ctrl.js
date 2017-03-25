@@ -783,6 +783,11 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                         radius: circle.radius,
                         center: {lat: circle.center.lat(), lng: circle.center.lng()}
                     });
+
+                    //draw the circle directlly (no need to read again all items from firebase)
+                    circle.set("id","New circle");
+                    $scope.circles.push(circle);
+                    $scope.$apply();
                 });
 
                 firebase_drawing_circles.once("value", function (snapshot) {
@@ -817,6 +822,11 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                         icon: marker.icon,
                         position: {lat: marker.position.lat(), lng: marker.position.lng()}
                     });
+
+                    //draw the marker directlly (no need to read again all items from firebase)
+                    marker.set("id","New marker");
+                    $scope.markers.push(marker);
+                    $scope.$apply();
                 });
 
                 firebase_drawing_markers.once("value", function (snapshot) {
@@ -846,7 +856,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                     console.log('new polyline added to firebase');
                     //console.log(polyline.getPath());
 
-                    polyline.set("id","444");
+                    polyline.set("id","New polyline");
                     polyline.set("key","e444");
 
                     $scope.polylines.push(polyline);
@@ -858,6 +868,10 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                     });
                     //save into firebase
                     firebase_drawing_polyline.push(polyline_path);
+
+                    //draw the polyline directlly (no need to read again all items from firebase)
+                    $scope.polylines.push(polyline);
+                    $scope.$apply();
                 });
 
                 firebase_drawing_polyline.once("value", function (snapshot) {

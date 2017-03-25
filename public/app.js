@@ -36,7 +36,7 @@ var trackerApp = angular.module('myApp', [
         //$urlRouterProvider.otherwise("/welcome");
         //
 
-        $urlRouterProvider.when('', '/welcome');
+        //$urlRouterProvider.when('', '/welcome');
 
         // Now set up the states
         $stateProvider
