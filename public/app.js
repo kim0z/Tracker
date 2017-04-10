@@ -26,7 +26,8 @@ var trackerApp = angular.module('myApp', [
         'firebase',
         'timer',
         'angular-flexslider',
-        'angularjs-dropdown-multiselect'
+        'angularjs-dropdown-multiselect',
+        'mgo-angular-wizard'
     ])
     .config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
 
@@ -49,6 +50,11 @@ var trackerApp = angular.module('myApp', [
                 url: "/welcome",
                 templateUrl: "views/index/welcome.html",
                 controller: 'welcomeCtrl'
+            })
+            .state('wizard', {
+                url: "/wizard",
+                templateUrl: "views/wizard/wizard.html",
+                controller: 'wizard'
             })
             .state('view0', {
                 url: "/view0",
