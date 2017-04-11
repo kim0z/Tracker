@@ -1,13 +1,46 @@
 <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-93092605-1', 'auto');
     ga('send', 'pageview');
 
 </script>
+
+<style>
+    /* upload section */
+    .button {
+        -moz-appearance: button;
+        /* Firefox */
+        -webkit-appearance: button;
+        /* Safari and Chrome */
+        padding: 10px;
+        margin: 10px;
+        width: 70px;
+    }
+
+    .drop-box {
+        background: #F8F8F8;
+        border: 5px dashed #DDD;
+        height: 65px;
+        text-align: center;
+        padding-top: 25px;
+        margin: 10px;
+    }
+
+    .dragover {
+        border: 5px dashed blue;
+    }
+</style>
 
 <div id="tripDerailsSection" style="margin-right: 150px; margin-left: 150px">
 
@@ -16,95 +49,102 @@
         <wz-step wz-title="Trip details">
             <h1>Enter trip details</h1>
 
-            <div class="form-group">
-                <label for="tripNameLabel">Trip name</label>
-                <textarea class="form-control" id="tripNameLabel" rows="1"></textarea>
-            </div>
+            <div style="height: 70%">
 
-            <div>
-                <label>Start date</label>
-                <datepicker date-format="MMMM d, y" datepicker-append-to-body=true>
-                    <input name="inputStartDate" ng-model="dateStart" class="form-control"
-                           type="text"
-                    />
-                </datepicker>
-            </div>
-
-            <div>
-                <label>End date</label>
-                <datepicker date-format="MMMM d, y">
-                    <!--    style="position: absolute; width: 100px; height: 150px;"> -->
-                    <input name="inputEndDate" ng-model="dateEnd" type="text" class="form-control"
-                           ng-blur="onBlur($event)"/>
-                </datepicker>
-            </div>
-
-            <form>
-                <div class="form-group">
-                    <label for="continentSelect">Choose continent</label>
-                    <select class="form-control" id="continentSelect">
-                        ["Africa", "Europe", "Asia", "North America", "South America", "Antarctica", "Australia"];
-                        <option>Africa</option>
-                        <option>Europe</option>
-                        <option>Asia</option>
-                        <option>Middle East</option>
-                        <option>North America</option>
-                        <option>South America</option>
-                        <option>Antarctica</option>
-                        <option>Australia</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="tripTypeSelect">Trip type</label>
-                    <select class="form-control" id="tripTypeSelect">
-                        ["Africa", "Europe", "Asia", "North America", "South America", "Antarctica", "Australia"];
-                        <option>Family</option>
-                        <option>Solo</option>
-                        <option>Friends</option>
-                        <option>Group Tour</option>
-                        <option>Caravan</option>
-                        <option>Event Travel</option>
-                        <option>Business Travel</option>
-                        <option>Holiday</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="descriptionTextArea">Trip description</label>
-                    <textarea class="form-control" id="descriptionTextArea" rows="3"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="coverPhotoInput">Cover photo</label>
-                    <input type="file" class="form-control-file" id="coverPhotoInput" aria-describedby="fileHelp">
-                    <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for
-                        the above input. It's a bit lighter and easily wraps to a new line.
-                    </small>
-                </div>
-
-
-                <fieldset class="form-group">
-                    <legend>Options</legend>
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1"
-                                   value="option1" checked>
-                            Private
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2"
-                                   value="option2">
-                            Public
-                        </label>
+                <form>
+                    <div class="form-group">
+                        <label for="tripNameLabel">Trip name</label>
+                        <textarea class="form-control" id="tripNameLabel" rows="1"></textarea>
                     </div>
 
-                </fieldset>
+                    <div>
+                        <label>Start date</label>
+                        <datepicker date-format="MMMM d, y" datepicker-append-to-body=true>
+                            <input name="inputStartDate" ng-model="dateStart" class="form-control"
+                                   type="text"
+                            />
+                        </datepicker>
+                    </div>
 
-                <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
-            </form>
+                    <div>
+                        <label>End date</label>
+                        <datepicker date-format="MMMM d, y">
+                            <!--    style="position: absolute; width: 100px; height: 150px;"> -->
+                            <input name="inputEndDate" ng-model="dateEnd" type="text" class="form-control"
+                                   ng-blur="onBlur($event)"/>
+                        </datepicker>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="continentSelect">Choose continent</label>
+                        <select class="form-control" id="continentSelect">
+                            ["Africa", "Europe", "Asia", "North America", "South America", "Antarctica", "Australia"];
+                            <option>Africa</option>
+                            <option>Europe</option>
+                            <option>Asia</option>
+                            <option>Middle East</option>
+                            <option>North America</option>
+                            <option>South America</option>
+                            <option>Antarctica</option>
+                            <option>Australia</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tripTypeSelect">Trip type</label>
+                        <select class="form-control" id="tripTypeSelect">
+                            ["Africa", "Europe", "Asia", "North America", "South America", "Antarctica", "Australia"];
+                            <option>Family</option>
+                            <option>Solo</option>
+                            <option>Friends</option>
+                            <option>Group Tour</option>
+                            <option>Caravan</option>
+                            <option>Event Travel</option>
+                            <option>Business Travel</option>
+                            <option>Holiday</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descriptionTextArea">Trip description</label>
+                        <textarea class="form-control" id="descriptionTextArea" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="coverPhotoInput">Cover photo</label>
+                        <input type="file" class="form-control-file" id="coverPhotoInput" aria-describedby="fileHelp">
+                        <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text
+                            for
+                            the above input. It's a bit lighter and easily wraps to a new line.
+                        </small>
+                    </div>
+
+
+                    <fieldset class="form-group">
+                        <legend>Options</legend>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1"
+                                       value="option1" checked>
+                                Private
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2"
+                                       value="option2">
+                                Public
+                            </label>
+                        </div>
+
+                    </fieldset>
+
+                    <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+                </form>
+
+            </div>
+
 
             <input type="submit" wz-next value="Next" class="btn btn-primary"/>
         </wz-step>
@@ -112,6 +152,24 @@
 
         <wz-step wz-title="Trip photos">
             <h1>Upload your trip photos</h1>
+
+            <div style="height: 70%" ngf-drop ngf-select ng-model="files" class="drop-box"
+                 ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true">
+                <div>Drop File:</div>
+                <div>No Drop File Div</div>
+                <div ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="dragover"
+                     ngf-multiple="true" ngf-allow-dir="true" accept="image/*,application/pdf">Drop pdfs or images here
+                    or click to upload
+                </div>
+                <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+                Files:
+                <ul>
+                    <li ng-repeat="f in files" style="font:smaller">{{f.name}}</li>
+                </ul>
+                Upload Log:
+                <pre>{{log}}</pre>
+
+            </div>
 
 
             <input type="submit" wz-next value="Next"/>

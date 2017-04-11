@@ -27,7 +27,8 @@ var trackerApp = angular.module('myApp', [
         'timer',
         'angular-flexslider',
         'angularjs-dropdown-multiselect',
-        'mgo-angular-wizard'
+        'mgo-angular-wizard',
+        'ngFileUpload'
     ])
     .config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
 
