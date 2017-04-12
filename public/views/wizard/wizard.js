@@ -5,7 +5,9 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams
 
     console.log('wizard started with trip id: ' , $stateParams);
 
-    $scope.tripId = $stateParams;
+    $scope.trip = {};
+
+    $scope.trip.id = $stateParams.tripId;
     $scope.profile = localStorageService.get('profile');
     $scope.facebookId = $scope.profile.identities[0].user_id;
 
@@ -15,16 +17,16 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams
         //save all the general information about the trip
         var jsonTripGeneralInfo = {
             email: $scope.profile.email,
-            trip_id: $scope.tripId,
-            trip_name: $scope.tripName,
-            trip_description: $scope.tripDescription,
-            start_date: $scope.dateStart,
-            end_date: $scope.dateEnd,
-            continent: $scope.selectedContinents,
+            trip_id: $scope.trip.id,
+            trip_name: $scope.trip.name,
+            trip_description: $scope.trip.description,
+            start_date: $scope.trip.dateStart,
+            end_date: $scope.trip.dateEnd,
+            continent: $scope.trip.continents,
             profile_picture: $scope.profile.picture,
             facebook_id: $scope.facebookId,
-            trip_type: $scope.tripType,
-            options: {trip_public: $scope.trip_public}
+            trip_type: $scope.trip.type,
+            options: {trip_public: $scope.trip.public}
 
         };
 

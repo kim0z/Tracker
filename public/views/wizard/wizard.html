@@ -45,7 +45,7 @@
 
 <div id="tripDerailsSection" style="margin-right: 150px; margin-left: 150px">
 
-    <wizard on-finish="finishedWizard()">
+    <wizard name="karim" on-finish="finishedWizard()">
 
         <wz-step wz-title="Trip details">
             <h1>Enter trip details</h1>
@@ -55,13 +55,13 @@
                 <form>
                     <div class="form-group">
                         <label for="tripNameLabel">Trip name</label>
-                        <textarea ng-model="tripName" class="form-control" id="tripNameLabel" rows="1"></textarea>
+                        <textarea ng-model="trip.name" class="form-control" id="tripNameLabel" rows="1"></textarea>
                     </div>
 
                     <div>
                         <label>Start date</label>
                         <datepicker date-format="MMMM d, y" datepicker-append-to-body=true>
-                            <input name="inputStartDate" ng-model="dateStart" class="form-control"
+                            <input name="inputStartDate" ng-model="trip.dateStart" class="form-control"
                                    type="text"
                             />
                         </datepicker>
@@ -71,7 +71,7 @@
                         <label>End date</label>
                         <datepicker date-format="MMMM d, y">
                             <!--    style="position: absolute; width: 100px; height: 150px;"> -->
-                            <input name="inputEndDate" ng-model="dateEnd" type="text" class="form-control"
+                            <input name="inputEndDate" ng-model="trip.dateEnd" type="text" class="form-control"
                                    ng-blur="onBlur($event)"/>
                         </datepicker>
                     </div>
@@ -79,7 +79,7 @@
 
                     <div class="form-group">
                         <label for="continentSelect">Choose continent</label>
-                        <select ng-model="selectedContinents" class="form-control" id="continentSelect">
+                        <select ng-model="trip.continents" class="form-control" id="continentSelect">
                             <option>Africa</option>
                             <option>Europe</option>
                             <option>Asia</option>
@@ -93,7 +93,7 @@
 
                     <div class="form-group">
                         <label for="tripTypeSelect">Trip type</label>
-                        <select ng-model="tripType" class="form-control" id="tripTypeSelect">
+                        <select ng-model="trip.type" class="form-control" id="tripTypeSelect">
                             <option>Family</option>
                             <option>Solo</option>
                             <option>Friends</option>
@@ -107,7 +107,7 @@
 
                     <div class="form-group">
                         <label for="descriptionTextArea">Trip description</label>
-                        <textarea ng-model="tripDescription" class="form-control" id="descriptionTextArea" rows="3"></textarea>
+                        <textarea ng-model="trip.description" class="form-control" id="descriptionTextArea" rows="3"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -124,15 +124,15 @@
                         <legend>Options</legend>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input ng-model="trip_private" type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1"
-                                       value="option1" checked>
+                                <input ng-model="trip.private" type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1"
+                                       value="private" checked>
                                 Private
                             </label>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input ng-model="trip_public" type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2"
-                                       value="option2">
+                                <input ng-model="trip.public" type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2"
+                                       value="public">
                                 Public
                             </label>
                         </div>
