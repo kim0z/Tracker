@@ -12,7 +12,7 @@ trackerApp.controller('newTripCtrl', function ($scope, $http, $state,  ngDialog,
     $scope.continents = ["Africa", "Europe", "Asia", "North America", "South America", "Antarctica", "Australia"];
 
     if ($scope.trip_id == '') {
-        console.log('error:: Client :: View3 :: Trips :: no trip id');
+        console.log('error:: Client :: myTrips :: Trips :: no trip id');
         window.open('#/viewError', '_self', false);
     }
 

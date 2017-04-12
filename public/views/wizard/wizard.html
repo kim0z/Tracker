@@ -18,16 +18,6 @@
 
 <style>
     /* upload section */
-    .button {
-        -moz-appearance: button;
-        /* Firefox */
-        -webkit-appearance: button;
-        /* Safari and Chrome */
-        padding: 10px;
-        margin: 10px;
-        width: 70px;
-    }
-
     .drop-box {
         background: #F8F8F8;
         border: 5px dashed #DDD;
@@ -37,9 +27,20 @@
         margin: 10px;
     }
 
-    .dragover {
-        border: 5px dashed blue;
+    /* Google maps search */
+    #pac-input #pac-input_tips {
+        margin-top: 10px;
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 400px;
+        height: 30px;
     }
+
 </style>
 
 <div id="tripDerailsSection" style="margin-right: 150px; margin-left: 150px">
@@ -54,7 +55,7 @@
                 <form>
                     <div class="form-group">
                         <label for="tripNameLabel">Trip name</label>
-                        <textarea class="form-control" id="tripNameLabel" rows="1"></textarea>
+                        <textarea ng-model="tripName" class="form-control" id="tripNameLabel" rows="1"></textarea>
                     </div>
 
                     <div>
@@ -78,8 +79,7 @@
 
                     <div class="form-group">
                         <label for="continentSelect">Choose continent</label>
-                        <select class="form-control" id="continentSelect">
-                            ["Africa", "Europe", "Asia", "North America", "South America", "Antarctica", "Australia"];
+                        <select ng-model="selectedContinents" class="form-control" id="continentSelect">
                             <option>Africa</option>
                             <option>Europe</option>
                             <option>Asia</option>
@@ -93,8 +93,7 @@
 
                     <div class="form-group">
                         <label for="tripTypeSelect">Trip type</label>
-                        <select class="form-control" id="tripTypeSelect">
-                            ["Africa", "Europe", "Asia", "North America", "South America", "Antarctica", "Australia"];
+                        <select ng-model="tripType" class="form-control" id="tripTypeSelect">
                             <option>Family</option>
                             <option>Solo</option>
                             <option>Friends</option>
@@ -108,7 +107,7 @@
 
                     <div class="form-group">
                         <label for="descriptionTextArea">Trip description</label>
-                        <textarea class="form-control" id="descriptionTextArea" rows="3"></textarea>
+                        <textarea ng-model="tripDescription" class="form-control" id="descriptionTextArea" rows="3"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -125,14 +124,14 @@
                         <legend>Options</legend>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1"
+                                <input ng-model="trip_private" type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1"
                                        value="option1" checked>
                                 Private
                             </label>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2"
+                                <input ng-model="trip_public" type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2"
                                        value="option2">
                                 Public
                             </label>
@@ -146,7 +145,7 @@
             </div>
 
 
-            <input type="submit" wz-next value="Next" class="btn btn-primary"/>
+            <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="addTrip()"/>
         </wz-step>
 
 
@@ -172,28 +171,34 @@
             </div>
 
 
-            <input type="submit" wz-next value="Next"/>
+            <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="startMapDrawing()"/>
         </wz-step>
 
 
         <wz-step wz-title="Trip tracks">
             <h1>Draw your trip tracks on map</h1>
 
-            <input type="submit" wz-next value="Next"/>
+            <div id="map" style="height: 70%;"></div>
+            <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+
+            <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="startMapTips()" />
         </wz-step>
 
 
         <wz-step wz-title="Trip tips">
             <h1>Add your trip tips on the map</h1>
 
-            <input type="submit" wz-next value="Next"/>
+            <div id="map_tips" style="height: 70%;"></div>
+            <input id="pac-input_tips" class="controls" type="text" placeholder="Search Box">
+
+            <input type="submit" wz-next value="Next" class="btn btn-primary"/>
         </wz-step>
 
 
         <wz-step wz-title="Trip expense">
             <h1>Add your expense</h1>
 
-            <input type="submit" wz-next value="Next"/>
+            <input type="submit" wz-next value="Finish" class="btn btn-success"/>
         </wz-step>
     </wizard>
 </div>

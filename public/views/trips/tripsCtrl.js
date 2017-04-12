@@ -23,9 +23,9 @@ trackerApp.controller('tripsCtrl', function ($scope,$rootScope, $location, $anch
         //create new empty trup, in this phase the id returned as a result
         dataBaseService.createNewTripRecord().then(function (results) {
             //$scope.message = data; //handle data back from server - not needed meanwhile
-            console.log('Client:: View3:: Fun:: openTripPlanPage :: new empty trip record created with id:: ' + results.data);
+            console.log('Client:: myTrips:: Fun:: openTripPlanPage :: new empty trip record created with id:: ' + results.data);
             messages.saveTripID(results.data);
-            ngDialog.open( {template: 'views/view3/newTrip.html', controller: 'newTripCtrl', scope: $scope,showClose: false,closeByDocument: false, closeByEscape: false,  width: 800, height: 800});
+            ngDialog.open( {template: 'views/mytrips/newTrip.html', controller: 'newTripCtrl', scope: $scope,showClose: false,closeByDocument: false, closeByEscape: false,  width: 800, height: 800});
             //now all the work should move to ctrlNewTrip.js
         })
     };
@@ -163,7 +163,7 @@ trackerApp.controller('tripsCtrl', function ($scope,$rootScope, $location, $anch
         dataTripId = {trip_id: trip_id};
         dataBaseService.deleteTripById(dataTripId).then(function (results) {
             //$scope.message = data; //handle data back from server - not needed meanwhile
-            console.log('Client:: View3:: Fun:: openTripPlanPage :: Delete trip id:: ' + trip_id);
+            console.log('Client:: myTrips:: Fun:: openTripPlanPage :: Delete trip id:: ' + trip_id);
             $window.location.reload();
             //$route.reload();
         })
@@ -180,7 +180,7 @@ trackerApp.controller('tripsCtrl', function ($scope,$rootScope, $location, $anch
         //callback
         dataBaseService.createNewTripRecord().then(function (results) {
             //$scope.message = data; //handle data back from server - not needed meanwhile
-            console.log('Client:: View3:: Fun:: openTripPlanPage :: new empty trip record created with id:: ' + results.data);
+            console.log('Client:: MyTrips:: Fun:: openTripPlanPage :: new empty trip record created with id:: ' + results.data);
 
 
             messages.saveTripID(results.data);
@@ -216,7 +216,7 @@ trackerApp.controller('tripsCtrl', function ($scope,$rootScope, $location, $anch
 
     dataBaseService.getPublicTrips({email: ''}).then(function (results) {
         $scope.trips = results.data;
-        console.log('Client:: View3:: Fun run when load page :: list of trips: ' + $scope.trips.length);
+        console.log('Client:: myTrips:: Fun run when load page :: list of trips: ' + $scope.trips.length);
 
 
         $scope.chunks = [];

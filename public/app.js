@@ -55,7 +55,10 @@ var trackerApp = angular.module('myApp', [
             .state('wizard', {
                 url: "/wizard",
                 templateUrl: "views/wizard/wizard.html",
-                controller: 'wizard'
+                controller: 'wizard',
+                params: {
+                    tripId: null
+                }
             })
             .state('view0', {
                 url: "/view0",
@@ -78,10 +81,10 @@ var trackerApp = angular.module('myApp', [
                     requiresLogin: true
                 }
             })
-            .state('view3', {
-                url: "/view3",
-                templateUrl: "views/view3/view3.html",
-                controller: 'view3Ctrl',
+            .state('mytrips', {
+                url: "/mytrips",
+                templateUrl: "views/mytrips/mytrips.html",
+                controller: 'myTripsCtrl',
                 data: {
                     requiresLogin: true
                 }
@@ -291,7 +294,7 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorag
                 window.open('#/view0', '_self', false);
                 break;
             case 'My Trips':
-                window.open('#/view3', '_self', false);
+                window.open('#/mytrips', '_self', false);
                 break;
             case 'Trips':
                 window.open('#/trips', '_self', false);

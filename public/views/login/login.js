@@ -11,7 +11,7 @@ trackerApp.controller('Login', function ($scope, $location, $state, $http, auth,
         closable: true,
         gravatar: false,
         primaryColor: '#3f51b5',
-        icon: 'assets/icons/paw-xxl.png',
+        icon: 'assets/icons/TRACKER1-01_karim_crop.png',
         socialBigButtons: true,
         disableSignupAction: true,
 

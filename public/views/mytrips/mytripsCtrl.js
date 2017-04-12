@@ -1,4 +1,4 @@
-trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, $state,  googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages, localStorageService, ngDialog) {
+trackerApp.controller('myTripsCtrl', function ($scope,$rootScope, $http, $window, $state,  googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages, localStorageService, ngDialog) {
 
     $rootScope.$on('ngDialog.closed', function (e, $dialog) {
         console.log('ngDialog closed: New trip' );
@@ -13,16 +13,32 @@ trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, 
         { key: "emailAddress", name: "E-Mail", placeholder: "E-Mail...", allowMultiple: true }
     ];
 
-    $scope.clickToOpen = function () {
+    //Create new trip using wizard
+    $scope.startWizard = function () {
         //create new empty trup, in this phase the id returned as a result
         dataBaseService.createNewTripRecord().then(function (results) {
             //$scope.message = data; //handle data back from server - not needed meanwhile
-            console.log('Client:: View3:: Fun:: openTripPlanPage :: new empty trip record created with id:: ' + results.data);
+            console.log('Client:: myTrips:: Fun:: openTripPlanPage :: new empty trip record created with id:: ' + results.data);
             messages.saveTripID(results.data);
-            ngDialog.open( {template: 'views/view3/newTrip.html', controller: 'newTripCtrl', scope: $scope,showClose: false,closeByDocument: false, closeByEscape: false,  width: 800, height: 800});
+            //ngDialog.open( {template: 'views/mytrips/newTrip.html', controller: 'newTripCtrl', scope: $scope,showClose: false,closeByDocument: false, closeByEscape: false,  width: 800, height: 800});
+
+            $state.go('wizard', {tripId: results.data});
+        })
+
+
+    }
+/*
+    $scope.clickToOpen = function () {
+        //create new empty trip, in this phase the id returned as a result
+        dataBaseService.createNewTripRecord().then(function (results) {
+            //$scope.message = data; //handle data back from server - not needed meanwhile
+            console.log('Client:: myTrips:: Fun:: openTripPlanPage :: new empty trip record created with id:: ' + results.data);
+            messages.saveTripID(results.data);
+            ngDialog.open( {template: 'views/mytrips/newTrip.html', controller: 'newTripCtrl', scope: $scope,showClose: false,closeByDocument: false, closeByEscape: false,  width: 800, height: 800});
             //now all the work should move to ctrlNewTrip.js
         })
     };
+    */
 
     $scope.profile = localStorageService.get('profile');
 
@@ -148,7 +164,7 @@ trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, 
             //$window.alert('Going to delete the user');
             dataBaseService.deleteTripById(dataTripId).then(function (results) {
                 //$scope.message = data; //handle data back from server - not needed meanwhile
-                console.log('Client:: View3:: Fun:: openTripPlanPage :: Delete trip id:: ' + trip_id);
+                console.log('Client:: myTrips:: Fun:: openTripPlanPage :: Delete trip id:: ' + trip_id);
                 $window.location.reload();
                 //$route.reload();
             })
@@ -166,7 +182,7 @@ trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, 
         //callback
         dataBaseService.createNewTripRecord().then(function (results) {
             //$scope.message = data; //handle data back from server - not needed meanwhile
-            console.log('Client:: View3:: Fun:: openTripPlanPage :: new empty trip record created with id:: ' + results.data);
+            console.log('Client:: myTrips:: Fun:: openTripPlanPage :: new empty trip record created with id:: ' + results.data);
 
 
             messages.saveTripID(results.data);
@@ -202,7 +218,7 @@ trackerApp.controller('view3Ctrl', function ($scope,$rootScope, $http, $window, 
 
     dataBaseService.getTrips({email: $scope.profile.email}).then(function (results) {
         $scope.trips = results.data;
-        console.log('Client:: View3:: Fun run when load page :: list of trips: ' + $scope.trips.length);
+        console.log('Client:: myTrips:: Fun run when load page :: list of trips: ' + $scope.trips.length);
 
 
         $scope.chunks = [];
