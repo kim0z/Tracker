@@ -137,7 +137,7 @@ trackerApp.controller('myTripsCtrl', function ($scope,$rootScope, $http, $window
     $scope.showActualMap = function(trip_id) {
         console.log('Client:: Click Shoe actual map - trip :: id:: ' + trip_id);
         messages.saveTripID(trip_id); //save trip id into message
-        window.open('#/offlinemap', '_self', false);
+        window.open('#/trip', '_self', false);
     };
     /*
  should be deleted added by wrong

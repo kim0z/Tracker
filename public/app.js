@@ -110,10 +110,10 @@ var trackerApp = angular.module('myApp', [
                 templateUrl: "views/login/login.html",
                 controller: 'Login'
             })
-            .state('offlinemap', {
-                url: "/offlinemap",
-                templateUrl: "views/offlinemap/offlinemap.html",
-                controller: 'offlinemapCtrl',
+            .state('trip', {
+                url: "/trip",
+                templateUrl: "views/trip/trip.html",
+                controller: 'tripCtrl',
                 data: {
                     requiresLogin: false
                 }

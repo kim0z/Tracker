@@ -12,6 +12,8 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams
     $scope.profile = localStorageService.get('profile');
     $scope.facebookId = $scope.profile.identities[0].user_id;
 
+    $scope.trip.public = false;
+
     // ************************** Trip details *************************
     $scope.addTrip = function () {
 
@@ -570,11 +572,11 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams
             $scope.message = {lat: e.latLng.lat(), lng: e.latLng.lng(), time: new Date()};
             //$scope.$apply(); I don't know what will be the behave after disable this
         });
-        
+
         //**********************  load Tips from Firebase ******************
         //******************************************************************
         //******************************************************************
-        var firebase_ref_readTips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/messages');
+        var firebase_ref_readTips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/messages');
 
         firebase_ref_readTips.on("value", function (snapshot) {
             $scope.messages = [];
@@ -594,7 +596,7 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams
             // add a new note to firebase
             var message_json = {};
 
-            var firebase_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/messages');
+            var firebase_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/messages');
 
             //var usersRef = firebase_ref.child('history');
 

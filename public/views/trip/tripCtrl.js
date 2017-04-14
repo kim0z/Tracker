@@ -1,4 +1,4 @@
-trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $timeout, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory) {
+trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory) {
 
 
         $scope.loading = true;
@@ -8,7 +8,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
 
 
         if (!$scope.profile) {
-            console.log('offline:: auth :: no data about the user, profile is emppty');
+            console.log('Trip:: auth :: no data about the user, profile is emppty');
         }
 
         //var facebookIdNotClean = $scope.profile.user_id; //"facebook|"
@@ -199,7 +199,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                         if ($scope.startDateSlider != null && $scope.slider != null) {
                             $scope.startDateSlider = new Date($scope.startDateSlider.setDate($scope.startDateSlider.getDate() + $scope.slider.value));
                         } else {
-                            console.log('Client :: Offline page :: issue with dates while filtering by slider');
+                            console.log('Client :: Trip page :: issue with dates while filtering by slider');
                         }
 
 
@@ -1541,7 +1541,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                             if ($scope.startDateSliderForPath != null && $scope.slider != null) {
                                 $scope.startDateSliderForPath = new Date($scope.startDateSliderForPath.setDate($scope.startDateSliderForPath.getDate() + $scope.slider.value - 1));
                             } else {
-                                console.log('Client :: Offline page :: issue with dates while in the watcher of the slider');
+                                console.log('Client :: Trip page :: issue with dates while in the watcher of the slider');
                             }
 
 
@@ -1659,7 +1659,7 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                 // ##################################################################
 
                 $scope.addDay = function () {
-                    console.log('Offline page:: add day');
+                    console.log('Trip page:: add day');
                     console.log($scope.day);
 
                     var firebase_table = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + "/" + $scope.tripID + "/table/" + $scope.day.dayNumber);

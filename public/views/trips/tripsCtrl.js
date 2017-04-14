@@ -141,7 +141,7 @@ trackerApp.controller('tripsCtrl', function ($scope,$rootScope, $location, $anch
         console.log('Client:: Click Shoe actual map - trip :: id:: ' + trip_id);
         messages.saveTripID(trip_id); //save trip id into message, NOT needed any more, now using localstorage instead
         localStorageService.set('tripId', trip_id);
-        window.open('#/offlinemap', '_self', false);
+        window.open('#/trip', '_self', false);
     }
     /*
      should be deleted added by wrong

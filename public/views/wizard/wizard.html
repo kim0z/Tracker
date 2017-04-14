@@ -137,6 +137,65 @@
         height: 70%;
     }
 
+    /* Slider button */
+    /* The switch - the box around the slider */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {display:none;}
+
+    /* The slider */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
 
 </style>
 
@@ -218,34 +277,25 @@
                     </div>
 
 
-                    <fieldset class="form-group">
+
                         <legend>Options</legend>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input ng-model="trip.private" type="radio" class="form-check-input"
-                                       name="optionsRadios" id="optionsRadios1"
-                                       value="false" checked>
-                                Private
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input ng-model="trip.public" type="radio" class="form-check-input" name="optionsRadios"
-                                       id="optionsRadios2"
-                                       value="true">
-                                Public
+
+                        <!-- Rounded switch -->
+                        <div><label>Public</label></div>
+                        <div>
+                            <label class="switch">
+                                    <input type="checkbox" ng-model="trip.public" value="false">
+                                    <div class="slider round"></div>
                             </label>
                         </div>
 
-                    </fieldset>
+
 
                     <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
                 </form>
+</div>
 
-            </div>
-
-
-            <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="addTrip()"/>
+                <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="addTrip()"/>
         </wz-step>
 
 
@@ -330,93 +380,108 @@
 
             <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="startMapTips()"/>
 
-</wz-step>
+        </wz-step>
 
 
-<wz-step wz-title="Trip tips">
-    <h1>Add your trip tips on the map</h1>
+        <wz-step wz-title="Trip tips">
+            <h1>Add your trip tips on the map</h1>
 
 
+            <div class="container">
 
-    <div class="container">
+                <div class="left_map">
 
-        <div class="left_map">
+                    <!--************************************** TIPS *******************************-->
+                    <!-- Tips filter -->
+                    <div>
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button type="button" ng-click="filterTipsOnClick('all')" class="btn btn-secondary">All
+                            </button>
+                            <button type="button" ng-click="filterTipsOnClick('tips')" class="btn btn-primary">Tips
+                            </button>
+                            <button type="button" ng-click="filterTipsOnClick('risks')" class="btn btn-danger">Risks
+                            </button>
+                            <button type="button" ng-click="filterTipsOnClick('expense')" class="btn btn-warning">
+                                Expense
+                            </button>
+                            <button type="button" ng-click="filterTipsOnClick('invite')" class="btn btn-info">Invite
+                            </button>
+                        </div>
+                        <div style="overflow: auto;height: 600px; width: 320px; ">
+                            <div class="scroll" id="messages" class="list-group"
+                                 ng-repeat="message in messages | filter:filterTips()"
+                                 ng-show="showAllTips || showTips && message.message.tip || showRisks && message.message.risk || showExpense && message.message.price">
+                                <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
+                                    <md-icon md-svg-src="assets/icons/ic_message_black_48px.svg"
+                                             ng-if="message.message.tip"></md-icon>
+                                    <md-icon md-svg-src="assets/icons/ic_warning_black_48px.svg"
+                                             ng-if="message.message.risk"></md-icon>
+                                    <md-icon md-svg-src="assets/icons/ic_attach_money_black_48px.svg"
+                                             ng-if="message.message.price"></md-icon>
+                                    <md-icon md-svg-src="assets/icons/ic_face_black_48px.svg"
+                                             ng-if="message.message.invite"></md-icon>
+                                    <!-- show the right data according to what is not empty, should be only 1 data avaliabale -->
+                                    <h4 class="list-group-item-heading" ng-if="message.message.tip">
+                                        {{message.message.tip}}</h4>
+                                    <h4 class="list-group-item-heading" ng-if="message.message.risk">
+                                        {{message.message.risk}}</h4>
+                                    <h4 class="list-group-item-heading" ng-if="message.message.price">
+                                        {{message.message.price}}</h4>
+                                    <h4 class="list-group-item-heading" ng-if="message.message.invite">Invitation to
+                                        join me..</h4>
+                                    <!--
+                                    <p class="list-group-item-text">{{message.email}}</p>
+                                    <p> {{message.location.coords.latitude}}</p>
+                                    <p> {{message.location.coords.longitude}}</p>
+                                    -->
+                                    <p class="list-group-item-text">{{message.time | date:'medium'}}</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
-            <!--************************************** TIPS *******************************-->
-            <!-- Tips filter -->
-            <div>
-                <div class="btn-group" role="group" aria-label="...">
-                    <button type="button" ng-click="filterTipsOnClick('all')" class="btn btn-secondary">All</button>
-                    <button type="button" ng-click="filterTipsOnClick('tips')" class="btn btn-primary">Tips</button>
-                    <button type="button" ng-click="filterTipsOnClick('risks')" class="btn btn-danger">Risks</button>
-                    <button type="button" ng-click="filterTipsOnClick('expense')" class="btn btn-warning">Expense</button>
-                    <button type="button" ng-click="filterTipsOnClick('invite')" class="btn btn-info">Invite</button>
+
                 </div>
-                <div style="overflow: auto;height: 600px; width: 320px; ">
-                    <div class="scroll" id="messages" class="list-group" ng-repeat="message in messages | filter:filterTips()" ng-show="showAllTips || showTips && message.message.tip || showRisks && message.message.risk || showExpense && message.message.price">
-                        <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
-                            <md-icon md-svg-src="assets/icons/ic_message_black_48px.svg" ng-if="message.message.tip"></md-icon>
-                            <md-icon md-svg-src="assets/icons/ic_warning_black_48px.svg" ng-if="message.message.risk"></md-icon>
-                            <md-icon md-svg-src="assets/icons/ic_attach_money_black_48px.svg" ng-if="message.message.price"></md-icon>
-                            <md-icon md-svg-src="assets/icons/ic_face_black_48px.svg" ng-if="message.message.invite"></md-icon>
-                            <!-- show the right data according to what is not empty, should be only 1 data avaliabale -->
-                            <h4 class="list-group-item-heading" ng-if="message.message.tip">{{message.message.tip}}</h4>
-                            <h4 class="list-group-item-heading" ng-if="message.message.risk">{{message.message.risk}}</h4>
-                            <h4 class="list-group-item-heading" ng-if="message.message.price">{{message.message.price}}</h4>
-                            <h4 class="list-group-item-heading" ng-if="message.message.invite">Invitation to join me..</h4>
-                            <!--
-                            <p class="list-group-item-text">{{message.email}}</p>
-                            <p> {{message.location.coords.latitude}}</p>
-                            <p> {{message.location.coords.longitude}}</p>
-                            -->
-                            <p class="list-group-item-text">{{message.time | date:'medium'}}</p>
-                        </a>
+
+                <div class="map_right">
+                    <div id="map_tips" style="height: 100%; height: 100%"></div>
+                    <input id="pac-input_tips" class="controls" type="text" placeholder="Search Box">
+                </div>
+
+
+                <div class="fruits">
+                    <div>
+                        <h3>Tips</h3>
+                        <p>Add new tip, manually by with GPS location</p>
+                        <p>Add message</p>
+                        <ul>
+                            <p> Message:
+                                <input type="text" ng-model="message.text" style="width: 300px; float: right"/>
+                            </p>
+                            <p> lat:
+                                <input type="text" ng-model="message.lat" style="width: 300px; float: right"/>
+                            </p>
+                            <p> lng:
+                                <input type="text" ng-model="message.lng" style="width: 300px; float: right"/>
+                            </p>
+                            <p> time:
+                                <input type="datetime" ng-model="message.time" style="width: 300px; float: right"/>
+                            </p>
+                            <button type="button" class="btn btn-success" ng-click="addMessage()">add</button>
+                        </ul>
                     </div>
                 </div>
+
             </div>
 
-
-        </div>
-
-        <div class="map_right">
-            <div id="map_tips" style="height: 100%; height: 100%"></div>
-            <input id="pac-input_tips" class="controls" type="text" placeholder="Search Box">
-        </div>
+            <input type="submit" wz-next value="Next" class="btn btn-primary"/>
+        </wz-step>
 
 
-        <div class="fruits">
-            <div>
-                <h3>Tips</h3>
-                <p>Add new tip, manually by with GPS location</p>
-                <p>Add message</p>
-                <ul >
-                    <p> Message:
-                        <input type="text" ng-model="message.text" style="width: 300px; float: right" />
-                    </p>
-                    <p> lat:
-                        <input type="text" ng-model="message.lat" style="width: 300px; float: right" />
-                    </p>
-                    <p> lng:
-                        <input type="text" ng-model="message.lng" style="width: 300px; float: right" />
-                    </p>
-                    <p> time:
-                        <input type="datetime" ng-model="message.time" style="width: 300px; float: right" />
-                    </p>
-                    <button type="button" class="btn btn-success" ng-click="addMessage()">add</button>
-                </ul>
-            </div>
-        </div>
+        <wz-step wz-title="Trip expense">
+            <h1>Add your expense</h1>
 
-    </div>
-
-    <input type="submit" wz-next value="Next" class="btn btn-primary"/>
-</wz-step>
-
-
-<wz-step wz-title="Trip expense">
-    <h1>Add your expense</h1>
-
-    <input type="submit" wz-next value="Finish" class="btn btn-success"/>
-</wz-step>
-</wizard>
+            <input type="submit" wz-next value="Finish" class="btn btn-success"/>
+        </wz-step>
+    </wizard>
 </div>
