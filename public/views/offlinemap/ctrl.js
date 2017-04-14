@@ -1169,8 +1169,6 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                         }
                     }
                 }
-
-
                 var addGPStoPhoto = function (img) {
                     //get gps point from map and then
 
@@ -1178,8 +1176,6 @@ trackerApp.controller('offlinemapCtrl', function ($rootScope, $scope, $sce, $tim
                     $scope.image = {
                         path: img.currentSrc
                     }
-
-
                 }
 
                 $scope.saveGPStoThisPhoto = function () {

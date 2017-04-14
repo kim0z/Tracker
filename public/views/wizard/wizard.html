@@ -28,7 +28,7 @@
     }
 
     /* Google maps search */
-    #pac-input #pac-input_tips {
+    #pac-input #pac-input_tips #pac-input_tracks {
         margin-top: 10px;
         background-color: #fff;
         font-family: Roboto;
@@ -127,12 +127,12 @@
         flex: 0 0 calc(50% - 10px);
     }
 
-    .markers {
+    .left_map {
         background: #f970bd;
         height: 70%;
     }
 
-    .map_draw {
+    .map_right {
         background: #049500;
         height: 70%;
     }
@@ -224,7 +224,7 @@
                             <label class="form-check-label">
                                 <input ng-model="trip.private" type="radio" class="form-check-input"
                                        name="optionsRadios" id="optionsRadios1"
-                                       value="private" checked>
+                                       value="false" checked>
                                 Private
                             </label>
                         </div>
@@ -232,7 +232,7 @@
                             <label class="form-check-label">
                                 <input ng-model="trip.public" type="radio" class="form-check-input" name="optionsRadios"
                                        id="optionsRadios2"
-                                       value="public">
+                                       value="true">
                                 Public
                             </label>
                         </div>
@@ -267,9 +267,12 @@
                 </ul>
                 Upload Log:
                 <pre>{{log}}</pre>
-                <input type="submit" value="Upload" class="btn btn-primary" ng-click="upload()"/>
+
             </div>
 
+            <div>
+                <input type="submit" value="Upload" class="btn btn-primary" ng-click="upload()"/>
+            </div>
 
             <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="startMapDrawing()"/>
         </wz-step>
@@ -281,10 +284,9 @@
 
             <div>
 
-
                 <div class="container">
 
-                    <div class="markers">
+                    <div class="left_map">
                         <ol class="rounded-list">
                             <li><a href="">Markers</a>
                                 <ol>
@@ -316,13 +318,12 @@
                         </ol>
                     </div>
 
-                    <div class="map_draw">
-                        <div id="map" style="height: 100%; width: 100%"></div>
-                        <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+                    <div class="map_right">
+                        <div id="map_tracks" style="height: 100%; width: 100%"></div>
+                        <input id="pac-input_tracks" class="controls" type="text" placeholder="Search Box">
                     </div>
 
                 </div>
-
 
             </div>
 
@@ -335,8 +336,78 @@
 <wz-step wz-title="Trip tips">
     <h1>Add your trip tips on the map</h1>
 
-    <div id="map_tips" style="height: 70%;"></div>
-    <input id="pac-input_tips" class="controls" type="text" placeholder="Search Box">
+
+
+    <div class="container">
+
+        <div class="left_map">
+
+            <!--************************************** TIPS *******************************-->
+            <!-- Tips filter -->
+            <div>
+                <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" ng-click="filterTipsOnClick('all')" class="btn btn-secondary">All</button>
+                    <button type="button" ng-click="filterTipsOnClick('tips')" class="btn btn-primary">Tips</button>
+                    <button type="button" ng-click="filterTipsOnClick('risks')" class="btn btn-danger">Risks</button>
+                    <button type="button" ng-click="filterTipsOnClick('expense')" class="btn btn-warning">Expense</button>
+                    <button type="button" ng-click="filterTipsOnClick('invite')" class="btn btn-info">Invite</button>
+                </div>
+                <div style="overflow: auto;height: 600px; width: 320px; ">
+                    <div class="scroll" id="messages" class="list-group" ng-repeat="message in messages | filter:filterTips()" ng-show="showAllTips || showTips && message.message.tip || showRisks && message.message.risk || showExpense && message.message.price">
+                        <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
+                            <md-icon md-svg-src="assets/icons/ic_message_black_48px.svg" ng-if="message.message.tip"></md-icon>
+                            <md-icon md-svg-src="assets/icons/ic_warning_black_48px.svg" ng-if="message.message.risk"></md-icon>
+                            <md-icon md-svg-src="assets/icons/ic_attach_money_black_48px.svg" ng-if="message.message.price"></md-icon>
+                            <md-icon md-svg-src="assets/icons/ic_face_black_48px.svg" ng-if="message.message.invite"></md-icon>
+                            <!-- show the right data according to what is not empty, should be only 1 data avaliabale -->
+                            <h4 class="list-group-item-heading" ng-if="message.message.tip">{{message.message.tip}}</h4>
+                            <h4 class="list-group-item-heading" ng-if="message.message.risk">{{message.message.risk}}</h4>
+                            <h4 class="list-group-item-heading" ng-if="message.message.price">{{message.message.price}}</h4>
+                            <h4 class="list-group-item-heading" ng-if="message.message.invite">Invitation to join me..</h4>
+                            <!--
+                            <p class="list-group-item-text">{{message.email}}</p>
+                            <p> {{message.location.coords.latitude}}</p>
+                            <p> {{message.location.coords.longitude}}</p>
+                            -->
+                            <p class="list-group-item-text">{{message.time | date:'medium'}}</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="map_right">
+            <div id="map_tips" style="height: 100%; height: 100%"></div>
+            <input id="pac-input_tips" class="controls" type="text" placeholder="Search Box">
+        </div>
+
+
+        <div class="fruits">
+            <div>
+                <h3>Tips</h3>
+                <p>Add new tip, manually by with GPS location</p>
+                <p>Add message</p>
+                <ul >
+                    <p> Message:
+                        <input type="text" ng-model="message.text" style="width: 300px; float: right" />
+                    </p>
+                    <p> lat:
+                        <input type="text" ng-model="message.lat" style="width: 300px; float: right" />
+                    </p>
+                    <p> lng:
+                        <input type="text" ng-model="message.lng" style="width: 300px; float: right" />
+                    </p>
+                    <p> time:
+                        <input type="datetime" ng-model="message.time" style="width: 300px; float: right" />
+                    </p>
+                    <button type="button" class="btn btn-success" ng-click="addMessage()">add</button>
+                </ul>
+            </div>
+        </div>
+
+    </div>
 
     <input type="submit" wz-next value="Next" class="btn btn-primary"/>
 </wz-step>

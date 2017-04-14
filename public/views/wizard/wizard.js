@@ -107,7 +107,7 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams
     // ***************************** Map drawing tracks *******************************
     $scope.startMapDrawing = function () {
         //Map configuration
-        $scope.map = new google.maps.Map(document.getElementById('map'), {
+        $scope.map = new google.maps.Map(document.getElementById('map_tracks'), {
             //center: {lat: 34.397, lng: 40.644},
             center: {lat: 0, lng: 0},
             zoom: 4,
@@ -129,7 +129,7 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams
         });
 
         // Create the search box and link it to the UI element.
-        var input = document.getElementById('pac-input');
+        var input = document.getElementById('pac-input_tracks');
         var searchBox = new google.maps.places.SearchBox(input);
         $scope.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
@@ -455,13 +455,13 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams
         });
 
         // Create the search box and link it to the UI element.
-        var input = document.getElementById('pac-input');
+        var input = document.getElementById('pac-input_tips');
         var searchBox = new google.maps.places.SearchBox(input);
         $scope.map_tips.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
         // Bias the SearchBox results towards current map's viewport.
         $scope.map_tips.addListener('bounds_changed', function () {
-            searchBox.setBounds($scope.map.getBounds());
+            searchBox.setBounds($scope.map_tips.getBounds());
         });
 
         var markers_searh = [];
@@ -512,7 +512,119 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams
             });
             $scope.map_tips.fitBounds(bounds);
         });
+
+
+        //Filter tips
+        $scope.filterTipsOnClick = function (filterStr) {
+            switch (filterStr) {
+                case 'all':
+                {
+                    $scope.showAllTips = true;
+                    $scope.showTips = false;
+                    $scope.showRisks = false;
+                    $scope.filterExpense = false;
+                    $scope.showInvite = false;
+                    break;
+                }
+                case 'tips':
+                {
+                    $scope.showAllTips = false;
+                    $scope.showTips = true;
+                    $scope.showRisks = false;
+                    $scope.showExpense = false;
+                    $scope.showInvite = false;
+                    break;
+                }
+                case 'risks':
+                {
+                    $scope.showAllTips = false;
+                    $scope.showTips = false;
+                    $scope.showRisks = true;
+                    $scope.showExpense = false;
+                    $scope.showInvite = false;
+                    break;
+                }
+                case 'expense':
+                {
+                    $scope.showAllTips = false;
+                    $scope.showTips = false;
+                    $scope.showRisks = false;
+                    $scope.showExpense = true;
+                    $scope.showInvite = false;
+                    break;
+                }
+                case 'invite':
+                {
+                    $scope.showAllTips = false;
+                    $scope.showTips = false;
+                    $scope.showRisks = false;
+                    $scope.showExpense = false;
+                    $scope.showInvite = true;
+                    break;
+                }
+            }
+        }
+
+        //Listener to click on map to get GPS
+        $scope.map_tips.addListener('click', function (e) {
+            $scope.message = {lat: e.latLng.lat(), lng: e.latLng.lng(), time: new Date()};
+            //$scope.$apply(); I don't know what will be the behave after disable this
+        });
+
+
+        //**********************  load Tips from Firebase ******************
+        //******************************************************************
+        //******************************************************************
+        var firebase_ref_readTips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/messages');
+
+        firebase_ref_readTips.on("value", function (snapshot) {
+            $scope.messages = [];
+
+            snapshot.forEach(function (childSnapshot) {
+                //var key = childSnapshot.key();
+                var childData = childSnapshot.val(); // childData = location and message and time
+                //$scope.messages.unshift(childData['message']);
+                $scope.messages.unshift(childData);
+            });
+        }, function (errorObject) {
+            console.log("Read Tips from Firebase failed: " + errorObject.code);
+        });
+
+
+
+
+        //Add new tip
+        $scope.addMessage = function () {
+            // add a new note to firebase
+            var message_json = {};
+
+            var firebase_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/messages');
+
+            //var usersRef = firebase_ref.child('history');
+
+            var location = {coords: {latitude: $scope.message.lat, longitude: $scope.message.lng}};
+            message_json = {
+                location: location,
+                time: $scope.message.time,
+                email: '',
+                message: {tip: $scope.message.text, invite: '', risk: '', price: ''}
+            };
+
+            firebase_tips.push(message_json);
+        }
+
+
+
+
+
+
+
+
+
+
     }
+
+
 
 
 });
