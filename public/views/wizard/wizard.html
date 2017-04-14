@@ -41,6 +41,103 @@
         height: 30px;
     }
 
+    /* List of map drawing items */
+    ol {
+        counter-reset: li; /* Initiate a counter */
+        list-style: none; /* Remove default numbering */
+        *list-style: decimal; /* Keep using default numbering for IE6/7 */
+        font: 15px 'trebuchet MS', 'lucida sans';
+        padding: 0;
+        margin-bottom: 4em;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+    }
+
+    ol ol {
+        margin: 0 0 0 2em; /* Add some left margin for inner lists */
+    }
+
+    .rounded-list a {
+        width: 240px;
+        position: relative;
+        display: block;
+        padding: .4em .4em .4em 2em;
+        *padding: .4em;
+        margin: .5em 0;
+        background: #ddd;
+        color: #444;
+        text-decoration: none;
+        border-radius: .3em;
+        transition: all .3s ease-out;
+    }
+
+    .rounded-list a:hover {
+        background: #eee;
+    }
+
+    .rounded-list a:hover:before {
+        transform: rotate(360deg);
+    }
+
+    .rounded-list a:before {
+        content: counter(li);
+        counter-increment: li;
+        position: absolute;
+        left: -1.3em;
+        top: 50%;
+        margin-top: -1.3em;
+        background: #87ceeb;
+        height: 2em;
+        width: 2em;
+        line-height: 2em;
+        border: .3em solid #fff;
+        text-align: center;
+        font-weight: bold;
+        border-radius: 2em;
+        transition: all .3s ease-out;
+    }
+
+    /* End of map drawing items */
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .container > div {
+        padding: 20px;
+        color: #fff;
+        margin: 5px;
+        flex: 0 0 calc(100% - 10px);
+        text-align: center;
+        font-size: 30px;
+    }
+
+    /* Tracks section */
+    .fruits {
+        order: 2;
+        background: #ff5423;
+    }
+
+    .container div:not(.fruits) {
+        order: 1;
+        flex: 0 0 calc(50% - 10px);
+    }
+
+    .markers {
+        background: #f970bd;
+        height: 70%;
+    }
+
+    .map_draw {
+        background: #049500;
+        height: 70%;
+    }
+
+
 </style>
 
 <div id="tripDerailsSection" style="margin-right: 150px; margin-left: 150px">
@@ -107,7 +204,8 @@
 
                     <div class="form-group">
                         <label for="descriptionTextArea">Trip description</label>
-                        <textarea ng-model="trip.description" class="form-control" id="descriptionTextArea" rows="3"></textarea>
+                        <textarea ng-model="trip.description" class="form-control" id="descriptionTextArea"
+                                  rows="3"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -124,14 +222,16 @@
                         <legend>Options</legend>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input ng-model="trip.private" type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1"
+                                <input ng-model="trip.private" type="radio" class="form-check-input"
+                                       name="optionsRadios" id="optionsRadios1"
                                        value="private" checked>
                                 Private
                             </label>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input ng-model="trip.public" type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2"
+                                <input ng-model="trip.public" type="radio" class="form-check-input" name="optionsRadios"
+                                       id="optionsRadios2"
                                        value="public">
                                 Public
                             </label>
@@ -154,20 +254,20 @@
 
             <div style="height: 70%" ngf-drop ngf-select ng-model="files" class="drop-box"
                  ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true">
-                <div>Drop File:</div>
-                <div>No Drop File Div</div>
-                <div ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="dragover"
-                     ngf-multiple="true" ngf-allow-dir="true" accept="image/*,application/pdf">Drop pdfs or images here
+
+                <div style="height: 70%" ngf-drop ngf-select ng-model="files.files" class="drop-box"
+                     ngf-drag-over-class="dragover"
+                     ngf-multiple="true" ngf-allow-dir="true" accept="image/*">Drop images here
                     or click to upload
                 </div>
                 <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
                 Files:
                 <ul>
-                    <li ng-repeat="f in files" style="font:smaller">{{f.name}}</li>
+                    <li ng-repeat="f in files.files" style="font:smaller">{{f.name}}</li>
                 </ul>
                 Upload Log:
                 <pre>{{log}}</pre>
-
+                <input type="submit" value="Upload" class="btn btn-primary" ng-click="upload()"/>
             </div>
 
 
@@ -176,29 +276,76 @@
 
 
         <wz-step wz-title="Trip tracks">
+
             <h1>Draw your trip tracks on map</h1>
 
-            <div id="map" style="height: 70%;"></div>
-            <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-
-            <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="startMapTips()" />
-        </wz-step>
+            <div>
 
 
-        <wz-step wz-title="Trip tips">
-            <h1>Add your trip tips on the map</h1>
+                <div class="container">
 
-            <div id="map_tips" style="height: 70%;"></div>
-            <input id="pac-input_tips" class="controls" type="text" placeholder="Search Box">
+                    <div class="markers">
+                        <ol class="rounded-list">
+                            <li><a href="">Markers</a>
+                                <ol>
+                                    <li ng-repeat="marker in markers"
+                                        ng-click="highLightItem(marker.get('type'),marker.get('id'))"><a href="">{{marker.get('id')}}
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"
+                                          ng-click="deleteItemFromMap(marker.get('type'),marker.get('id'))"> </span>
+                                    </a></li>
+                                </ol>
+                            </li>
+                            <li><a href="">Polylines</a>
+                                <ol>
+                                    <li ng-repeat="polyline in polylines"
+                                        ng-click="highLightItem(polyline.get('type'),polyline.get('id'))"><a href="">{{polyline.get('id')}}
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"
+                                          ng-click="deleteItemFromMap(polyline.get('type'),polyline.get('id'))"> </span>
+                                    </a></li>
+                                </ol>
+                            </li>
+                            <li><a href="">Circles</a>
+                                <ol>
+                                    <li ng-repeat="circle in circles"><a
+                                            ng-click="highLightItem(circle.get('type'),circle.get('id'))">{{circle.get('id')}}
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"
+                                          ng-click="deleteItemFromMap(circle.get('type'),circle.get('id'))"> </span>
+                                    </a></li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </div>
 
-            <input type="submit" wz-next value="Next" class="btn btn-primary"/>
-        </wz-step>
+                    <div class="map_draw">
+                        <div id="map" style="height: 100%; width: 100%"></div>
+                        <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+                    </div>
+
+                </div>
 
 
-        <wz-step wz-title="Trip expense">
-            <h1>Add your expense</h1>
+            </div>
 
-            <input type="submit" wz-next value="Finish" class="btn btn-success"/>
-        </wz-step>
-    </wizard>
+
+            <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="startMapTips()"/>
+
+</wz-step>
+
+
+<wz-step wz-title="Trip tips">
+    <h1>Add your trip tips on the map</h1>
+
+    <div id="map_tips" style="height: 70%;"></div>
+    <input id="pac-input_tips" class="controls" type="text" placeholder="Search Box">
+
+    <input type="submit" wz-next value="Next" class="btn btn-primary"/>
+</wz-step>
+
+
+<wz-step wz-title="Trip expense">
+    <h1>Add your expense</h1>
+
+    <input type="submit" wz-next value="Finish" class="btn btn-success"/>
+</wz-step>
+</wizard>
 </div>
