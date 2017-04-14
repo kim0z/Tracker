@@ -570,8 +570,7 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams
             $scope.message = {lat: e.latLng.lat(), lng: e.latLng.lng(), time: new Date()};
             //$scope.$apply(); I don't know what will be the behave after disable this
         });
-
-
+        
         //**********************  load Tips from Firebase ******************
         //******************************************************************
         //******************************************************************
@@ -589,9 +588,6 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams
         }, function (errorObject) {
             console.log("Read Tips from Firebase failed: " + errorObject.code);
         });
-
-
-
 
         //Add new tip
         $scope.addMessage = function () {
@@ -612,19 +608,6 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams
 
             firebase_tips.push(message_json);
         }
-
-
-
-
-
-
-
-
-
-
     }
-
-
-
 
 });

@@ -414,7 +414,7 @@ app.post('/updateTripGeneralInfo', function(request, response) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3), trip_description = ($4), email = ($5), picture = ($6), continent = ($7), facebook_id = ($8) WHERE id = ($9)", [jsonTrip.trip_name, jsonTrip.start_date, jsonTrip.end_date, jsonTrip.trip_description, jsonTrip.email, jsonTrip.profile_picture, '{' + jsonTrip.continent + '}', jsonTrip.facebook_id, jsonTrip.trip_id], function(err, result) {
+        client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3), trip_description = ($4), email = ($5), picture = ($6), continent = ($7), facebook_id = ($8), public = ($9) WHERE id = ($10)", [jsonTrip.trip_name, jsonTrip.start_date, jsonTrip.end_date, jsonTrip.trip_description, jsonTrip.email, jsonTrip.profile_picture, '{' + jsonTrip.continent + '}', jsonTrip.facebook_id, jsonTrip.options.trip_public, jsonTrip.trip_id], function(err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -426,7 +426,6 @@ app.post('/updateTripGeneralInfo', function(request, response) {
         });
     });
     response.status(200).end();
-
 });
 
 //below used to update trip from planning page
