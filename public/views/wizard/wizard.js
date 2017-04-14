@@ -1,7 +1,7 @@
 /**
  * Created by karim on 10/04/2017.
  */
-trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams, dataBaseService, localStorageService) {
+trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $stateParams, dataBaseService, localStorageService) {
 
     console.log('wizard started with trip id: ', $stateParams);
 
@@ -13,6 +13,11 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams
     $scope.facebookId = $scope.profile.identities[0].user_id;
 
     $scope.trip.public = false;
+
+
+    $scope.finishWizard = function () {
+        $state.go('mytrips');
+    }
 
     // ************************** Trip details *************************
     $scope.addTrip = function () {
@@ -587,6 +592,7 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $stateParams
                 //$scope.messages.unshift(childData['message']);
                 $scope.messages.unshift(childData);
             });
+            //$scope.$apply();
         }, function (errorObject) {
             console.log("Read Tips from Firebase failed: " + errorObject.code);
         });
