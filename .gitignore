@@ -2,6 +2,6 @@ bower_components
 node_modules
 orion
 .DS_Store
-config
+config/*
 
 .idea/workspace.xml
