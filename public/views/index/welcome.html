@@ -18,7 +18,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<title>Tracker - Document, Track and Share your trip</title>
+<title>GreatBear.io - Document, Track and Share your trip</title>
 <link media="all" rel="stylesheet" href="assets/css/welcome.css">
 <link media="all" rel="stylesheet" href="assets/css/crew.css">
 <meta name="keywords"
@@ -59,12 +59,16 @@
                 <a ng-click="openApp()" id="video-preview" style="padding-left: 30px;"
                    class="btn btn-default btn-lg lightbox fancybox.iframe btn-ios">Find a Trip</a>
                 <a style="padding-left: 30px" class="lightbox-overlay btn btn-default btn-ios">Get the app</a>
+                <div>
+                    <a ng-click="startWizard()" style="padding-left: 30px; margin-top: 5px" class="lightbox-overlay btn btn-default btn-ios">Document your trips</a>
+                </div>
+
             </div>
             <a href="index.html#container" class="anchor visible-xs">arrow</a>
         </div>
         <a href="" class="lightbox-overlay">
             <div class="banners announcement">
-                <p class="announcement-text">TRACKER is now available for Alpha users! <strong>Learn more</strong></p>
+                <p class="announcement-text">GreatBear is now available for Alpha users! <strong>Learn more</strong></p>
             </div>
         </a>
         <div class="container" id="container">
@@ -95,6 +99,12 @@
                         family, friends, and public for all travellers around the globe.</p>
                 </div>
             </div>
+
+
+            <ng-include src="'views/index/interactiveMap.html'"></ng-include>
+
+
+            <!--
             <section class="section">
                 <h1 class="text-center">Choose your destination</h1>
                 <div class="flex-grid">
@@ -159,6 +169,7 @@
                     </div>
                 </div>
             </section>
+            -->
 
             <!-- crew -->
             <section class="section" style="padding: 20px">

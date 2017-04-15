@@ -1,7 +1,5 @@
-trackerApp.controller('welcomeCtrl', function ($scope, $rootScope, $location, $state, $http, auth, localStorageService, serverSvc) {
+trackerApp.controller('welcomeCtrl', function ($scope, $state, dataBaseService) {
 
-
-    //$rootScope.hideToolBar = true;
 
     $scope.openApp = function(){
 
@@ -37,8 +35,14 @@ trackerApp.controller('welcomeCtrl', function ($scope, $rootScope, $location, $s
     }
 
 
-
-
+    //Create new trip using wizard
+    $scope.startWizard = function () {
+        //create new empty trup, in this phase the id returned as a result
+        dataBaseService.createNewTripRecord().then(function (results) {
+            console.log('Client:: Welcome page:: Fun:: start wizard :: new empty trip record created with id:: ' + results.data);
+            $state.go('wizard', {tripId: results.data});
+        })
+    }
 
 });
 

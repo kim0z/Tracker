@@ -58,6 +58,9 @@ var trackerApp = angular.module('myApp', [
                 controller: 'wizard',
                 params: {
                     tripId: null
+                },
+                data: {
+                    requiresLogin: true
                 }
             })
             .state('view0', {
