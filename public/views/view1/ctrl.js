@@ -33,6 +33,7 @@ $scope.continents = ["Africa", "Europe", "Asia", "North America", "South America
     if ($scope.trip_id == '') {
         window.open('#/viewError', '_self', false);
     }
+
     else {
 
         dataTripId = {trip_id: $scope.trip_id};

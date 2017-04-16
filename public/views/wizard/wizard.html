@@ -147,7 +147,9 @@
     }
 
     /* Hide default HTML checkbox */
-    .switch input {display:none;}
+    .switch input {
+        display: none;
+    }
 
     /* The slider */
     .slider {
@@ -199,43 +201,47 @@
 
 </style>
 
-<div id="tripDerailsSection" style="margin-right: 150px; margin-left: 150px">
+<div id="tripDetailsSection" style="margin-right: 150px; margin-left: 150px">
 
-    <wizard name="karim" on-finish="finishedWizard()">
+    <wizard on-finish="finishedWizard()">
 
         <wz-step wz-title="Trip details">
             <h1>Enter trip details</h1>
 
             <div style="height: 70%">
 
-                <form>
+                <!--
+                <p>The input's valid state is:</p>
+                <h1>{{form.inputStartDate.$valid}}</h1>
+                -->
+                <form name="form">
                     <div class="form-group">
                         <label for="tripNameLabel">Trip name</label>
-                        <textarea ng-model="trip.name" class="form-control" id="tripNameLabel" rows="1"></textarea>
+                        <textarea name="name" ng-model="trip.name" class="form-control" id="tripNameLabel" rows="1"
+                                  required></textarea>
                     </div>
 
                     <div>
                         <label>Start date</label>
-                        <datepicker date-format="MMMM d, y" datepicker-append-to-body=true>
+                        <!-- MMMM d, y' -->
+                        <datepicker date-format="yyyy-MM-dd" datepicker-append-to-body=true>
                             <input name="inputStartDate" ng-model="trip.dateStart" class="form-control"
-                                   type="text"
-                            />
+                                   type="date" required/>
                         </datepicker>
                     </div>
 
                     <div>
                         <label>End date</label>
-                        <datepicker date-format="MMMM d, y">
+                        <datepicker date-format="yyyy-MM-dd">
                             <!--    style="position: absolute; width: 100px; height: 150px;"> -->
-                            <input name="inputEndDate" ng-model="trip.dateEnd" type="text" class="form-control"
-                                   ng-blur="onBlur($event)"/>
+                            <input name="inputEndDate" ng-model="trip.dateEnd" type="date" class="form-control"
+                                   ng-blur="onBlur($event)" required/>
                         </datepicker>
                     </div>
 
-
                     <div class="form-group">
                         <label for="continentSelect">Choose continent</label>
-                        <select ng-model="trip.continents" class="form-control" id="continentSelect">
+                        <select name="continent" ng-model="trip.continents" class="form-control" id="continentSelect">
                             <option>Africa</option>
                             <option>Europe</option>
                             <option>Asia</option>
@@ -249,7 +255,7 @@
 
                     <div class="form-group">
                         <label for="tripTypeSelect">Trip type</label>
-                        <select ng-model="trip.type" class="form-control" id="tripTypeSelect">
+                        <select name="type" ng-model="trip.type" class="form-control" id="tripTypeSelect">
                             <option>Family</option>
                             <option>Solo</option>
                             <option>Friends</option>
@@ -263,7 +269,8 @@
 
                     <div class="form-group">
                         <label for="descriptionTextArea">Trip description</label>
-                        <textarea ng-model="trip.description" class="form-control" id="descriptionTextArea"
+                        <textarea name="description" ng-model="trip.description" class="form-control"
+                                  id="descriptionTextArea"
                                   rows="3"></textarea>
                     </div>
 
@@ -276,33 +283,31 @@
                         </small>
                     </div>
 
+                    <legend>Options</legend>
 
-
-                        <legend>Options</legend>
-
-                        <!-- Rounded switch -->
-                        <div><label>Public</label></div>
-                        <div>
-                            <label class="switch">
-                                    <input type="checkbox" ng-model="trip.public" value="false">
-                                    <div class="slider round"></div>
-                            </label>
-                        </div>
-
-
+                    <!-- Rounded switch -->
+                    <div><label>Public</label></div>
+                    <div>
+                        <label class="switch">
+                            <input type="checkbox" ng-model="trip.public" value="false">
+                            <div class="slider round"></div>
+                        </label>
+                    </div>
 
                     <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
                 </form>
-</div>
+            </div>
 
-                <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="addTrip()"/>
+            <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="addTrip()"/>
+            <button value="Cancel" class="btn btn-danger" confirmed-click="cancel()"
+                   ng-confirm-click="Would you like to say hi?">Cancel</button>
         </wz-step>
 
 
         <wz-step wz-title="Trip photos">
             <h1>Upload your trip photos</h1>
 
-            <div style="height: 70%" ngf-drop ngf-select ng-model="files" class="drop-box"
+            <div style="height: 65%" ngf-drop ngf-select ng-model="files" class="drop-box"
                  ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true">
 
                 <div style="height: 70%" ngf-drop ngf-select ng-model="files.files" class="drop-box"
@@ -320,11 +325,12 @@
 
             </div>
 
-            <div>
+            <div style="text-align:center;">
                 <input type="submit" value="Upload" class="btn btn-primary" ng-click="upload()"/>
             </div>
 
             <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="startMapDrawing()"/>
+            <input type="submit" value="Cancel" class="btn btn-danger" ng-click="cancel()"/>
         </wz-step>
 
 
@@ -379,7 +385,7 @@
 
 
             <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="startMapTips()"/>
-
+            <input type="submit" value="Cancel" class="btn btn-danger" ng-click="cancel()"/>
         </wz-step>
 
 
@@ -407,7 +413,7 @@
                             <button type="button" ng-click="filterTipsOnClick('invite')" class="btn btn-info">Invite
                             </button>
                         </div>
-                        <div style="overflow: auto;height: 600px; width: 320px; ">
+                        <div style="overflow: auto">
                             <div class="scroll" id="messages" class="list-group"
                                  ng-repeat="message in messages | filter:filterTips()"
                                  ng-show="showAllTips || showTips && message.message.tip || showRisks && message.message.risk || showExpense && message.message.price">
@@ -474,14 +480,76 @@
 
             </div>
 
-            <input type="submit" wz-next value="Next" class="btn btn-primary"/>
+            <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="startExpense()"/>
+            <input type="submit" value="Cancel" class="btn btn-danger" ng-click="cancel()"/>
         </wz-step>
 
 
         <wz-step wz-title="Trip expense">
             <h1>Add your expense</h1>
 
+
+            <table ng-table="usersTable" class="table table-striped"
+                   style="text-align: center; overflow:scroll; height:200px; width: 1000px" border="0">
+                <tr>
+                    <td>Date</td>
+                    <td ng-repeat="i in getNumber(tripDays) track by $index">{{getDateAfter($index + 1) | date:
+                        'longDate'}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Day</td>
+                    <td ng-repeat="i in getNumber(tripDays) track by $index">{{$index + 1}}</td>
+                </tr>
+
+                <tr>
+                    <td>City</td>
+                    <td ng-repeat="i in getNumber(tripDays) track by $index">
+                        <input>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Flight</td>
+                    <td ng-repeat="i in getNumber(tripDays) track by $index">
+                        <input>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Hotel</td>
+                    <td ng-repeat="i in getNumber(tripDays) track by $index">
+                        <input>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Car</td>
+                    <td ng-repeat="i in getNumber(tripDays) track by $index">
+                        <input>
+                    </td>
+                </tr>
+                </tr>
+
+                <tr>
+                    <td>Action1</td>
+                    <td ng-repeat="i in getNumber(tripDays) track by $index">
+                        <input>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Expense</td>
+                    <td ng-repeat="i in getNumber(tripDays) track by $index">
+                        <input>
+                    </td>
+                </tr>
+            </table>
+
+
             <input type="submit" wz-next value="Finish" class="btn btn-success" ng-click="finishWizard()"/>
+            <input type="submit" value="Cancel" class="btn btn-danger" ng-click="cancel()"/>
         </wz-step>
     </wizard>
 </div>

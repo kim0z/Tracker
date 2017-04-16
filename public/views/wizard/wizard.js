@@ -14,9 +14,70 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
 
     $scope.trip.public = false;
 
+    //**** config - should be removed
+    AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
+
+    // Configure your region
+    AWS.config.region = 'us-west-2';
+
+    var bucket = new AWS.S3({params: {Bucket: 'tracker.photos'}});
+
+
+    //***** config end
 
     $scope.finishWizard = function () {
         $state.go('mytrips');
+    }
+
+    $scope.cancel = function () {
+        //delete trip details and assets
+        if ($scope.trip.id == '') {
+            console.log('error:: Client:: New Trip Dialog:: Cancel trip creation, no trip id');
+        } else {
+
+            var dataTripId = {trip_id: $scope.trip.id};
+            dataBaseService.deleteTripById(dataTripId).then(function (results) {
+
+                console.log('Client:: Wizard:: Cancel trip creation :: Delete trip id:: ' + $scope.trip.id);
+                $state.go('mytrips');
+            })
+
+
+
+            function emptyBucket(callback) {
+                //photos S3
+                var params = {
+                   // Bucket: 'tracker.photos',
+                    Prefix: $scope.facebookId + '/' + $scope.trip.id + '/'
+                }
+
+                bucket.listObjects(params, function (err, data) {
+                    if (err) return callback(err);
+
+                    if (data.Contents.length == 0) return;
+
+                    params = {Bucket: 'tracker.photos'};
+                    params.Delete = {Objects: []};
+
+                    data.Contents.forEach(function (content) {
+                        params.Delete.Objects.push({Key: content.Key});
+                    });
+
+                    bucket.deleteObjects(params, function (err, data) {
+                        if (err) return callback(err);
+                        if (data.Deleted.length > 0)emptyBucket(callback);
+                        else callback();
+                    });
+                });
+            }
+
+            emptyBucket();
+
+            //tips and paths
+            //Delete Firebase
+            var firebase_trip_assets = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id);
+            firebase_trip_assets.remove();
+        }
     }
 
     // ************************** Trip details *************************
@@ -35,7 +96,6 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
             facebook_id: $scope.facebookId,
             trip_type: $scope.trip.type,
             options: {trip_public: $scope.trip.public}
-
         };
 
         //save updated trip into DB
@@ -61,12 +121,6 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
     $scope.log = '';
 
 
-    AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
-
-    // Configure your region
-    AWS.config.region = 'us-west-2';
-
-    var bucket_upload = new AWS.S3({params: {Bucket: 'tracker.photos'}});
 
     $scope.upload = function () {
         if ($scope.files.files && $scope.files.files.length) {
@@ -79,10 +133,9 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
                     Body: file
                 };
 
-                bucket_upload.upload(params, function (err, data) {
+                bucket.upload(params, function (err, data) {
                     console.log( err ? 'ERROR!' : 'UPLOADED.');
                 });
-
 
            /*     Upload.upload({
                     url: 'https://s3-us-west-2.amazonaws.com/tracker.photos/', //S3 upload url including bucket name
@@ -616,6 +669,52 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
 
             firebase_tips.push(message_json);
         }
+    }
+
+    // ************************** Start expense view *********************************
+    $scope.startExpense = function () {
+
+        //trip days
+        var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+        var firstDate = new Date($scope.trip.dateStart);
+        var secondDate = new Date($scope.trip.dateEnd);
+
+        $scope.tripDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+
+
+        $scope.getDateAfter = function (days) {
+
+
+                //convert date to object to allow me do action on it like increase the date in the table
+                //var startDate = date;
+                var dateInNumberFormat = new Date(firstDate).getTime();
+                //create array for the dates to show it on table, each cell will have 1 extra day
+                //var day = 1000 * 3600 * 24; //day in miliseconds 1000 * 3600 = hour
+                var month = new Date(dateInNumberFormat).getUTCMonth() + 1; //months from 1-12
+                var day = new Date(dateInNumberFormat).getUTCDate();
+                var year = new Date(dateInNumberFormat).getUTCFullYear();
+                //$scope.dates[0] = month + '/' + day + '/' + year;
+
+                //  for (var i = 1; i < daysSum; i++) {
+                var anotherDay = 1000 * 3600 * (days * 24);
+                //$scope.dates[i] = new Date(dateInNumberFormat + day).toString("MMMM yyyy");
+
+                var month = new Date(dateInNumberFormat + anotherDay).getUTCMonth() + 1; //months from 1-12
+                var day = new Date(dateInNumberFormat + anotherDay).getUTCDate();
+                var year = new Date(dateInNumberFormat + anotherDay).getUTCFullYear();
+                var nextDate = month + '/' + day + '/' + year;
+                return nextDate;
+
+        }
+
+
+
+
+        $scope.getNumber = function(num) {
+            return new Array(num);
+        }
+
+
     }
 
 });
