@@ -216,13 +216,13 @@
                 -->
                 <form name="form">
                     <div class="form-group">
-                        <label for="tripNameLabel">Trip name</label>
+                        <label for="tripNameLabel">Trip name *</label>
                         <textarea name="name" ng-model="trip.name" class="form-control" id="tripNameLabel" rows="1"
                                   required></textarea>
                     </div>
 
                     <div>
-                        <label>Start date</label>
+                        <label>Start date *</label>
                         <!-- MMMM d, y' -->
                         <datepicker date-format="yyyy-MM-dd" datepicker-append-to-body=true>
                             <input name="inputStartDate" ng-model="trip.dateStart" class="form-control"
@@ -231,7 +231,7 @@
                     </div>
 
                     <div>
-                        <label>End date</label>
+                        <label>End date *</label>
                         <datepicker date-format="yyyy-MM-dd">
                             <!--    style="position: absolute; width: 100px; height: 150px;"> -->
                             <input name="inputEndDate" ng-model="trip.dateEnd" type="date" class="form-control"
@@ -240,7 +240,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="continentSelect">Choose continent</label>
+                        <label for="continentSelect">Choose continent *</label>
                         <select name="continent" ng-model="trip.continents" class="form-control" id="continentSelect">
                             <option>Africa</option>
                             <option>Europe</option>
@@ -254,7 +254,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="tripTypeSelect">Trip type</label>
+                        <label for="tripTypeSelect">Trip type *</label>
                         <select name="type" ng-model="trip.type" class="form-control" id="tripTypeSelect">
                             <option>Family</option>
                             <option>Solo</option>
@@ -276,7 +276,7 @@
 
                     <div class="form-group">
                         <label for="coverPhotoInput">Cover photo</label>
-                        <input type="file" class="form-control-file" id="coverPhotoInput" aria-describedby="fileHelp">
+                        <input type="file" class="form-control-file" id="coverPhotoInput"  aria-describedby="fileHelp">
                         <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text
                             for
                             the above input. It's a bit lighter and easily wraps to a new line.
@@ -298,7 +298,7 @@
                 </form>
             </div>
 
-            <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="addTrip()"/>
+            <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="addTrip()" ng-disabled="trip.buttonDisabled"/>
             <input type="submit" value="Cancel" class="btn btn-danger" ng-click="showConfirm($event)"/>
         </wz-step>
 

@@ -8,17 +8,21 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
     $scope.trip = {};
     $scope.files = {};
 
-    $scope.trip.id = $stateParams.tripId;
     $scope.profile = localStorageService.get('profile');
     $scope.facebookId = $scope.profile.identities[0].user_id;
 
+    $scope.trip = {id: $stateParams.tripId, name: '',dateStart: '',dateEnd: '', description: '', type: '', continents: '', options: {trip_public: false} };
+
     $scope.trip.public = false;
+
+    $scope.trip.buttonDisabled  = true;
 
     //**** config - should be removed
     AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
 
     // Configure your region
     AWS.config.region = 'us-west-2';
+
 
     var bucket = new AWS.S3({params: {Bucket: 'tracker.photos'}});
 
@@ -62,8 +66,6 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
                 $state.go('mytrips');
             })
 
-
-
             function emptyBucket(callback) {
                 //photos S3
                 var params = {
@@ -100,6 +102,19 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
         }
     }
 
+
+
+    //watch any change in input fields of details form, then check if all fields are not empty to enable Next button
+    $scope.$watch('trip', function() {
+        if($scope.trip.name && $scope.trip.dateStart && $scope.trip.dateEnd && $scope.trip.continents && $scope.trip.type){
+            $scope.trip.buttonDisabled  = false;
+            console.log('Wizard: Trip details form is valid, Next button enabled')
+        }else{
+            $scope.trip.buttonDisabled = true;
+        }
+    }, true);
+
+
     // ************************** Trip details *************************
     $scope.addTrip = function () {
 
@@ -127,6 +142,22 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
             .error(function (data, status, headers, config) {
                 console.log("failure message: " + JSON.stringify({data: data}));
             });
+
+        //upload cover photo to S3
+
+        var fileChooser = document.getElementById('coverPhotoInput')
+        var file = fileChooser.files[0];
+
+                    var params = {
+                        Key: $scope.facebookId + '/' + $scope.trip.id + '/cover',
+                        ContentType: file.type,
+                        Body: file
+                    };
+
+                    bucket.upload(params, function (err, data) {
+                        console.log( err ? 'ERROR!' : 'Cover photo UPLOADED.');
+                    });
+
     };
 
     // ************************** Upload *******************************
@@ -727,14 +758,9 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
 
         }
 
-
-
-
         $scope.getNumber = function(num) {
             return new Array(num);
         }
-
-
     }
-
 });
+
