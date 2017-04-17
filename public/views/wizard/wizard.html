@@ -299,8 +299,7 @@
             </div>
 
             <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="addTrip()"/>
-            <button value="Cancel" class="btn btn-danger" confirmed-click="cancel()"
-                   ng-confirm-click="Would you like to say hi?">Cancel</button>
+            <input type="submit" value="Cancel" class="btn btn-danger" ng-click="showConfirm($event)"/>
         </wz-step>
 
 
@@ -330,7 +329,7 @@
             </div>
 
             <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="startMapDrawing()"/>
-            <input type="submit" value="Cancel" class="btn btn-danger" ng-click="cancel()"/>
+            <input type="submit" value="Cancel" class="btn btn-danger" ng-click="showConfirm($event)"/>
         </wz-step>
 
 
@@ -385,7 +384,7 @@
 
 
             <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="startMapTips()"/>
-            <input type="submit" value="Cancel" class="btn btn-danger" ng-click="cancel()"/>
+            <input type="submit" value="Cancel" class="btn btn-danger" ng-click="showConfirm($event)"/>
         </wz-step>
 
 
@@ -481,7 +480,7 @@
             </div>
 
             <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="startExpense()"/>
-            <input type="submit" value="Cancel" class="btn btn-danger" ng-click="cancel()"/>
+            <input type="submit" value="Cancel" class="btn btn-danger" ng-click="showConfirm($event)"/>
         </wz-step>
 
 
@@ -549,7 +548,7 @@
 
 
             <input type="submit" wz-next value="Finish" class="btn btn-success" ng-click="finishWizard()"/>
-            <input type="submit" value="Cancel" class="btn btn-danger" ng-click="cancel()"/>
+            <input type="submit" value="Cancel" class="btn btn-danger" ng-click="showConfirm($event)"/>
         </wz-step>
     </wizard>
 </div>

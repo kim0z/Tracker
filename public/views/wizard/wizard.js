@@ -1,7 +1,7 @@
 /**
  * Created by karim on 10/04/2017.
  */
-trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $stateParams, dataBaseService, localStorageService) {
+trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $stateParams, $window, $mdDialog, dataBaseService, localStorageService) {
 
     console.log('wizard started with trip id: ', $stateParams);
 
@@ -29,7 +29,27 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
         $state.go('mytrips');
     }
 
+
+    $scope.showConfirm = function(ev) {
+        // Appending dialog to document.body to cover sidenav in docs app
+        var confirm = $mdDialog.confirm()
+            .title('Would you like to cancel your trip?')
+            .content('All the trip assets will be deleted.')
+            .ariaLabel('Lucky day')
+            .targetEvent(ev)
+            .ok('Please do it!')
+            .cancel('No, continue');
+
+        $mdDialog.show(confirm).then(function() {
+            $scope.cancel();
+        }, function() {
+            //do nothing
+        });
+    };
+
+
     $scope.cancel = function () {
+
         //delete trip details and assets
         if ($scope.trip.id == '') {
             console.log('error:: Client:: New Trip Dialog:: Cancel trip creation, no trip id');
