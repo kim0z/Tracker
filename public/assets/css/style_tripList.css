@@ -51,7 +51,7 @@ md-card {
     position: fixed;
     right: 2%;
     bottom: 24px;
-    background-color: #db4437;
+    background-color: blue;
 }
 
 #mainFab svg {

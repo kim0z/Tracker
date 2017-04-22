@@ -102,40 +102,62 @@
         box-sizing: border-box;
     }
 
-    .container {
+    .container{
         display: flex;
-        flex-wrap: wrap;
+        width: auto;
+        justify-content: space-between;
     }
 
-    .container > div {
-        padding: 20px;
-        color: #fff;
-        margin: 5px;
-        flex: 0 0 calc(100% - 10px);
-        text-align: center;
-        font-size: 30px;
+    .left-map-drawing {
+        /* background: #f970bd; */
+        height: 70%;
+        flex: 1;
+        padding: 25px;
+        margin-right: 10px;
+    }
+
+    .map-right-drawing {
+        /* background: #049500; */
+        height: 70%;
+        flex: 5;
+        flex-basis: 70%;
+
+    }
+
+    .left-map-tips {
+        /* background: #f970bd; */
+        height: 70%;
+        flex: 1;
+        padding: 25px;
+        margin-right: 10px;
+    }
+
+    .map-center-tips {
+       /*  background: #049500; */
+        height: 70%;
+        flex: 5;
+        padding: 25px;
+        margin-right: 10px;
+    }
+
+    .map-right-tips {
+        order: 1;
+        /* background: #ff5423; */
+        padding: 25px;
+        margin-right: 10px;
     }
 
     /* Tracks section */
-    .fruits {
-        order: 2;
-        background: #ff5423;
-    }
 
-    .container div:not(.fruits) {
+
+ /*   .container div:not(.map_right) { !* not(.fruits)
         order: 1;
-        flex: 0 0 calc(50% - 10px);
-    }
+        !* flex: 0 0 calc(50% - 10px); *!
+        flex: 0 0 350px;
+    }*/
 
-    .left_map {
-        background: #f970bd;
-        height: 70%;
-    }
 
-    .map_right {
-        background: #049500;
-        height: 70%;
-    }
+
 
     /* Slider button */
     /* The switch - the box around the slider */
@@ -206,97 +228,101 @@
     <wizard on-finish="finishedWizard()">
 
         <wz-step wz-title="Trip details">
-            <h1>Enter trip details</h1>
+            <div style="margin-right: 400px; margin-left: 400px">
+                <h1>Enter trip details</h1>
 
-            <div style="height: 70%">
+                <div style="height: 70%">
 
-                <!--
-                <p>The input's valid state is:</p>
-                <h1>{{form.inputStartDate.$valid}}</h1>
-                -->
-                <form name="form">
-                    <div class="form-group">
-                        <label for="tripNameLabel">Trip name *</label>
+                    <!--
+                    <p>The input's valid state is:</p>
+                    <h1>{{form.inputStartDate.$valid}}</h1>
+                    -->
+                    <form name="form">
+                        <div class="form-group">
+                            <label for="tripNameLabel">Trip name *</label>
                         <textarea name="name" ng-model="trip.name" class="form-control" id="tripNameLabel" rows="1"
                                   required></textarea>
-                    </div>
+                        </div>
 
-                    <div>
-                        <label>Start date *</label>
-                        <!-- MMMM d, y' -->
-                        <datepicker date-format="yyyy-MM-dd" datepicker-append-to-body=true>
-                            <input name="inputStartDate" ng-model="trip.dateStart" class="form-control"
-                                   type="date" required/>
-                        </datepicker>
-                    </div>
+                        <div>
+                            <label>Start date *</label>
+                            <!-- MMMM d, y' -->
+                            <datepicker date-format="yyyy-MM-dd" datepicker-append-to-body=true>
+                                <input name="inputStartDate" ng-model="trip.dateStart" class="form-control"
+                                       type="date" required/>
+                            </datepicker>
+                        </div>
 
-                    <div>
-                        <label>End date *</label>
-                        <datepicker date-format="yyyy-MM-dd">
-                            <!--    style="position: absolute; width: 100px; height: 150px;"> -->
-                            <input name="inputEndDate" ng-model="trip.dateEnd" type="date" class="form-control"
-                                   ng-blur="onBlur($event)" required/>
-                        </datepicker>
-                    </div>
+                        <div>
+                            <label>End date *</label>
+                            <datepicker date-format="yyyy-MM-dd">
+                                <!--    style="position: absolute; width: 100px; height: 150px;"> -->
+                                <input name="inputEndDate" ng-model="trip.dateEnd" type="date" class="form-control"
+                                       ng-blur="onBlur($event)" required/>
+                            </datepicker>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="continentSelect">Choose continent *</label>
-                        <select name="continent" ng-model="trip.continents" class="form-control" id="continentSelect">
-                            <option>Africa</option>
-                            <option>Europe</option>
-                            <option>Asia</option>
-                            <option>Middle East</option>
-                            <option>North America</option>
-                            <option>South America</option>
-                            <option>Antarctica</option>
-                            <option>Australia</option>
-                        </select>
-                    </div>
+                        <div class="form-group">
+                            <label for="continentSelect">Choose continent *</label>
+                            <select name="continent" ng-model="trip.continents" class="form-control" id="continentSelect">
+                                <option>Africa</option>
+                                <option>Europe</option>
+                                <option>Asia</option>
+                                <option>Middle East</option>
+                                <option>North America</option>
+                                <option>South America</option>
+                                <option>Antarctica</option>
+                                <option>Australia</option>
+                            </select>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="tripTypeSelect">Trip type *</label>
-                        <select name="type" ng-model="trip.type" class="form-control" id="tripTypeSelect">
-                            <option>Family</option>
-                            <option>Solo</option>
-                            <option>Friends</option>
-                            <option>Group Tour</option>
-                            <option>Caravan</option>
-                            <option>Event Travel</option>
-                            <option>Business Travel</option>
-                            <option>Holiday</option>
-                        </select>
-                    </div>
+                        <div class="form-group">
+                            <label for="tripTypeSelect">Trip type *</label>
+                            <select name="type" ng-model="trip.type" class="form-control" id="tripTypeSelect">
+                                <option>Family</option>
+                                <option>Solo</option>
+                                <option>Friends</option>
+                                <option>Group Tour</option>
+                                <option>Caravan</option>
+                                <option>Event Travel</option>
+                                <option>Business Travel</option>
+                                <option>Holiday</option>
+                            </select>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="descriptionTextArea">Trip description</label>
+                        <div class="form-group">
+                            <label for="descriptionTextArea">Trip description</label>
                         <textarea name="description" ng-model="trip.description" class="form-control"
                                   id="descriptionTextArea"
                                   rows="3"></textarea>
-                    </div>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="coverPhotoInput">Cover photo</label>
-                        <input type="file" class="form-control-file" id="coverPhotoInput"  aria-describedby="fileHelp">
-                        <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text
-                            for
-                            the above input. It's a bit lighter and easily wraps to a new line.
-                        </small>
-                    </div>
+                        <div class="form-group">
+                            <label for="coverPhotoInput">Cover photo</label>
+                            <input type="file" class="form-control-file" id="coverPhotoInput"  aria-describedby="fileHelp">
+                            <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text
+                                for
+                                the above input. It's a bit lighter and easily wraps to a new line.
+                            </small>
+                        </div>
 
-                    <legend>Options</legend>
+                        <legend>Options</legend>
 
-                    <!-- Rounded switch -->
-                    <div><label>Public</label></div>
-                    <div>
-                        <label class="switch">
-                            <input type="checkbox" ng-model="trip.public" value="false">
-                            <div class="slider round"></div>
-                        </label>
-                    </div>
+                        <!-- Rounded switch -->
+                        <div><label>Public</label></div>
+                        <div>
+                            <label class="switch">
+                                <input type="checkbox" ng-model="trip.public" value="false">
+                                <div class="slider round"></div>
+                            </label>
+                        </div>
 
-                    <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
-                </form>
+                        <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+                    </form>
+                </div>
+
             </div>
+
 
             <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="addTrip()" ng-disabled="trip.buttonDisabled"/>
             <input type="submit" value="Cancel" class="btn btn-danger" ng-click="showConfirm($event)"/>
@@ -341,7 +367,7 @@
 
                 <div class="container">
 
-                    <div class="left_map">
+                    <div class="left-map-drawing" >
                         <ol class="rounded-list">
                             <li><a href="">Markers</a>
                                 <ol>
@@ -373,7 +399,7 @@
                         </ol>
                     </div>
 
-                    <div class="map_right">
+                    <div class="map-right-drawing">
                         <div id="map_tracks" style="height: 100%; width: 100%"></div>
                         <input id="pac-input_tracks" class="controls" type="text" placeholder="Search Box">
                     </div>
@@ -394,8 +420,8 @@
 
             <div class="container">
 
-                <div class="left_map">
-
+                <div class="left-map-tips">
+                    <p style=" color: white; ">kjhsjdhakjshfdkjhasdasdaassdfssfsdasddfsdas</p>
                     <!--************************************** TIPS *******************************-->
                     <!-- Tips filter -->
                     <div>
@@ -416,7 +442,7 @@
                             <div class="scroll" id="messages" class="list-group"
                                  ng-repeat="message in messages | filter:filterTips()"
                                  ng-show="showAllTips || showTips && message.message.tip || showRisks && message.message.risk || showExpense && message.message.price">
-                                <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)">
+                                <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)" style="margin: 5px;">
                                     <md-icon md-svg-src="assets/icons/ic_message_black_48px.svg"
                                              ng-if="message.message.tip"></md-icon>
                                     <md-icon md-svg-src="assets/icons/ic_warning_black_48px.svg"
@@ -448,29 +474,26 @@
 
                 </div>
 
-                <div class="map_right">
+                <div class="map-center-tips">
                     <div id="map_tips" style="height: 100%; height: 100%"></div>
                     <input id="pac-input_tips" class="controls" type="text" placeholder="Search Box">
                 </div>
 
 
-                <div class="fruits">
+                <div class="map-right-tips">
                     <div>
-                        <h3>Tips</h3>
-                        <p>Add new tip, manually by with GPS location</p>
-                        <p>Add message</p>
+                        <p>Add new tip</p>
                         <ul>
-                            <p> Message:
-                                <input type="text" ng-model="message.text" style="width: 300px; float: right"/>
+                            <p> Message
+                                <input type="text" ng-model="message.text" style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
+                            <p> Latitude
+                                <input type="text" ng-model="message.lat" style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
                             </p>
-                            <p> lat:
-                                <input type="text" ng-model="message.lat" style="width: 300px; float: right"/>
+                            <p> Longitude
+                                <input type="text" ng-model="message.lng" style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
                             </p>
-                            <p> lng:
-                                <input type="text" ng-model="message.lng" style="width: 300px; float: right"/>
-                            </p>
-                            <p> time:
-                                <input type="datetime" ng-model="message.time" style="width: 300px; float: right"/>
+                            <p> Time
+                                <input type="datetime" ng-model="message.time" style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
                             </p>
                             <button type="button" class="btn btn-success" ng-click="addMessage()">add</button>
                         </ul>

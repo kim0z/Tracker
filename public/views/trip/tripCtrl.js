@@ -1251,18 +1251,10 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
 
                 firebase_ref_readTips.on("value", function (snapshot) {
                     $scope.messages = [];
-
-                    //$scope.progressbar = ngProgressFactory.createInstance();
-                    //$scope.progressbar.start();
-
                     snapshot.forEach(function (childSnapshot) {
-                        //var key = childSnapshot.key();
-                        var childData = childSnapshot.val(); // childData = location and message and time
-                        //$scope.messages.unshift(childData['message']);
+                        var childData = childSnapshot.val(); // childData = location, message and time
                         $scope.messages.unshift(childData);
                     });
-                    //$scope.$apply();
-                    //$scope.progressbar.stop();
                 }, function (errorObject) {
                     console.log("Read Tips from Firebase failed: " + errorObject.code);
                 });

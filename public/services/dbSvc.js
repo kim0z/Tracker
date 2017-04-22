@@ -31,7 +31,7 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
 
     //get trip by id
     this.getTripById = function (dataTripId) { // in use
-        console.log('Client::dataBaseService:: get trip by id::'+dataTripId);
+        console.log('Client::dataBaseService:: get trip by id::', dataTripId);
         return $http.post('/getTripById', dataTripId);
     };
 

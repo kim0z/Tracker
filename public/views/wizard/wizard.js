@@ -625,6 +625,14 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
         });
 
 
+
+        //Filter for the tips
+        $scope.showAllTips = true;
+        $scope.showTips = false;
+        $scope.showRisks = false;
+        $scope.showExpense = false;
+        $scope.showInvite = false;
+
         //Filter tips
         $scope.filterTipsOnClick = function (filterStr) {
             switch (filterStr) {
@@ -679,7 +687,7 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
         //Listener to click on map to get GPS
         $scope.map_tips.addListener('click', function (e) {
             $scope.message = {lat: e.latLng.lat(), lng: e.latLng.lng(), time: new Date()};
-            //$scope.$apply(); I don't know what will be the behave after disable this
+            $scope.$apply(); //used to update 'add tips right side of the map', but why it doesn't update without it ????
         });
 
         //**********************  load Tips from Firebase ******************
@@ -719,6 +727,15 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
             };
 
             firebase_tips.push(message_json);
+
+
+            $scope.message.lat = '';
+            $scope.message.lng = '';
+            $scope.message.time = '';
+            $scope.message.text = '';
+
+
+
         }
     }
 
