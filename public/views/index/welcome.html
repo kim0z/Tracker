@@ -57,17 +57,24 @@
                 <h1>"It’s opener there in the wide open air"</h1>
                 <h3>- Dr Suess</h3>
                 <a ng-click="openApp()" id="video-preview" style="padding-left: 30px;"
-                   class="btn btn-default btn-lg lightbox fancybox.iframe btn-ios">Find a Trip</a>
-                <a style="padding-left: 30px" class="lightbox-overlay btn btn-default btn-ios">Get the app</a>
+                   class="btn btn-default btn-lg lightbox fancybox.iframe btn-ios">Find a Trip
+                    <md-tooltip md-direction="left">Get inspired by travellers trips from around the world</md-tooltip>
+                </a>
+                <a ng-click="showAlert($event)" style="padding-left: 30px" class="lightbox-overlay btn btn-default btn-ios">Get the app
+                    <md-tooltip md-direction="right">Soon: Download iOS APP to help you document your trip in real-time</md-tooltip>
+                </a>
+
                 <div>
-                    <a ng-click="startWizard()" style="padding-left: 30px; margin-top: 5px" class="lightbox-overlay btn btn-default btn-ios">Document your trips</a>
+                    <a ng-click="startWizard()" style="padding-left: 30px; margin-top: 5px" class="lightbox-overlay btn btn-default btn-ios">Document your trips
+                        <md-tooltip md-direction="bottom">Document your trip in 5 steps</md-tooltip>
+                    </a>
                 </div>
 
             </div>
             <a href="index.html#container" class="anchor visible-xs">arrow</a>
         </div>
         <a href="" class="lightbox-overlay">
-            <div class="banners announcement">
+            <div class="banners announcement" ng-click="goToAgreement()">
                 <p class="announcement-text">GreatBear is now available for Alpha users! <strong>Learn more</strong></p>
             </div>
         </a>

@@ -1,7 +1,7 @@
 trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anchorScroll, $http, $window, $filter, $state, googleMapsAPIService, $mdDialog, $mdSidenav, dataBaseService, messages, localStorageService, ngDialog) {
 
     $scope.profile = localStorageService.get('profile');
-    $scope.facebookId = $scope.profile.identities[0].user_id;
+    // $scope.facebookId = $scope.profile.identities[0].user_id; not needed
 
     $rootScope.$on('ngDialog.closed', function (e, $dialog) {
         console.log('ngDialog closed: New trip');
@@ -60,7 +60,7 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
         $anchorScroll();
     };
 
-    function getCoverPhoto(chunk) {
+/*    function getCoverPhoto(chunk) {
         //get cover photo named profile in AWS S3 under the user folder - BLOCKED, instead using config from Firebase (Facebook album cover)
         //AWS Config
         AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
@@ -98,7 +98,7 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
             }
         });
 
-    }
+    }*/
 
 
     //below relevant for MyTrips and not for public, should be deleted

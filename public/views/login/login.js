@@ -35,7 +35,11 @@ trackerApp.controller('Login', function ($scope, $location, $state, $http, auth,
             if(results == null || results ==''){
                 console.log('Login:: could not get token from server');
             }else{
-                localStorageService.set('providerToken', results.data.identities[0].access_token);
+                if(results.data.identities!= null || results.data.identities == '') {
+                    localStorageService.set('providerToken', results.data.identities[0].access_token);
+                }else{
+                    console.log('Login ERROR: '+results.data.error +' message: '+ results.data.message)
+                }
             }
 
         });

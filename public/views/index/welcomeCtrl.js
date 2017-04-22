@@ -1,10 +1,30 @@
-trackerApp.controller('welcomeCtrl', function ($scope, $state, dataBaseService) {
+trackerApp.controller('welcomeCtrl', function ($scope, $state, $mdDialog, dataBaseService) {
 
 
     $scope.openApp = function(){
 
         window.open('#/trips', '_self', false);
 
+    };
+
+    $scope.goToAgreement = function () {
+        $state.go('agreement');
+    }
+
+    $scope.showAlert = function(ev) {
+        // Appending dialog to document.body to cover sidenav in docs app
+        // Modal dialogs should fully cover application
+        // to prevent interaction outside of dialog
+        $mdDialog.show(
+            $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+                .title('Coming soon')
+                .content('iOS and Android app will be available in the market very soon to help you in recording your trips in real-time.')
+                .ariaLabel('GreatBear')
+                .ok('Got it!')
+                .targetEvent(ev)
+        );
     };
 
 
@@ -43,6 +63,17 @@ trackerApp.controller('welcomeCtrl', function ($scope, $state, dataBaseService) 
             $state.go('wizard', {tripId: results.data});
         })
     }
+
+    //Tooltips
+    $scope.demo = {
+        showTooltip: false,
+        tipDirection: 'bottom'
+    };
+
+    $scope.demo.delayTooltip = undefined;
+    $scope.$watch('demo.delayTooltip', function(val) {
+        $scope.demo.delayTooltip = parseInt(val, 10) || 0;
+    });
 
 });
 

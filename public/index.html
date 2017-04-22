@@ -270,16 +270,24 @@
             <img src="assets/icons/TRACKER1-01_karim_crop.png"
                  style="height: auto; width: auto; max-width: 55px; max-height: 55px;">
 
-            <md-button ng-click="menuClick('Trips')">Trips</md-button>
-            <md-button ng-click="menuClick('My Trips')">My Trips</md-button>
-            <md-button ng-click="menuClick('Real-Time Travelers')" ng-disabled="true">Real-Time Travelers</md-button>
+            <md-button ng-click="menuClick('Trips')">Trips
+                <md-tooltip md-direction="bottom">Get inspired by travellers trips from around the world</md-tooltip>
+            </md-button>
+            <md-button ng-click="menuClick('My Trips')">My Trips
+                <md-tooltip md-direction="bottom">Your trips</md-tooltip>
+            </md-button>
+            <md-button ng-click="showAlert($event)" >Real-Time Travelers
+                <md-tooltip md-direction="bottom">Watch travellers in real-time, location, photos, chat ...</md-tooltip>
+            </md-button>
             <span flex></span>
             <img ng-src="{{profilePic}}" style="
                     width: 48px;
                     margin: 2px;
                     border-radius: 48px;
                     border: 0px solid #ddd;">
-            <md-button ng-click="authUser()" ng-class="expressionAuth">{{authButton}}</md-button>
+            <md-button ng-click="authUser()" ng-class="expressionAuth">{{authButton}}
+                <md-tooltip md-direction="bottom">Login by Facebook</md-tooltip>
+            </md-button>
             <md-button class="md-icon-button" aria-label="More" ng-disabled="true">
                 <md-icon md-svg-icon="assets/icons/ic_menu_black_48px.svg"></md-icon>
             </md-button>

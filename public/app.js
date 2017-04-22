@@ -113,6 +113,11 @@ var trackerApp = angular.module('myApp', [
                 templateUrl: "views/login/login.html",
                 controller: 'Login'
             })
+            .state('agreement', {
+                url: "/agreement",
+                templateUrl: "views/agreement/terms.html",
+                controller: ''
+            })
             .state('trip', {
                 url: "/trip",
                 templateUrl: "views/trip/trip.html",
@@ -120,7 +125,8 @@ var trackerApp = angular.module('myApp', [
                 data: {
                     requiresLogin: false
                 }
-            });
+
+            })
     })
     .config(function (authProvider) {
 
@@ -217,7 +223,24 @@ var trackerApp = angular.module('myApp', [
     });
 
 
-trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, localStorageService, $localStorage, auth, $state, messages) {
+trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, $mdDialog, localStorageService, $localStorage, auth, $state, messages) {
+
+
+    $scope.showAlert = function(ev) {
+        // Appending dialog to document.body to cover sidenav in docs app
+        // Modal dialogs should fully cover application
+        // to prevent interaction outside of dialog
+        $mdDialog.show(
+            $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+                .title('Coming soon')
+                .content('Watch travellers in real-time, you can find location, photos, adventures and more.')
+                .ariaLabel('GreatBear')
+                .ok('Got it!')
+                .targetEvent(ev)
+        );
+    };
 
     //debug ui router changes
     $rootScope.$on('$stateChangeStart', function (e, toState, toParams, fromState, fromParams) {
