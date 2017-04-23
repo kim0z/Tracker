@@ -119,7 +119,7 @@ var trackerApp = angular.module('myApp', [
                 controller: ''
             })
             .state('trip', {
-                url: "/trip",
+                url: "/trip/:id",
                 templateUrl: "views/trip/trip.html",
                 controller: 'tripCtrl',
                 data: {

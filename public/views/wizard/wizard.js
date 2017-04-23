@@ -30,7 +30,8 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
     //***** config end
 
     $scope.finishWizard = function () {
-        $state.go('mytrips');
+        //$state.go('mytrips');
+        window.open('#/trip/'+$stateParams.tripId, '_self', false);
     }
 
 

@@ -369,7 +369,7 @@
 
                     <div class="left-map-drawing" >
                         <ol class="rounded-list">
-                            <li><a href="">Markers</a>
+                            <li><a href="javascript:void(0)">Markers</a>
                                 <ol>
                                     <li ng-repeat="marker in markers track by $index"
                                         ng-click="highLightItem(marker.get('type'),marker.get('id'))"><a href="">{{marker.get('id')}}
@@ -378,7 +378,7 @@
                                     </a></li>
                                 </ol>
                             </li>
-                            <li><a href="">Polylines</a>
+                            <li><a href="javascript:void(0)">Polylines</a>
                                 <ol>
                                     <li ng-repeat="polyline in polylines track by $index"
                                         ng-click="highLightItem(polyline.get('type'),polyline.get('id'))"><a href="">{{polyline.get('id')}}
@@ -387,7 +387,7 @@
                                     </a></li>
                                 </ol>
                             </li>
-                            <li><a href="">Circles</a>
+                            <li><a href="javascript:void(0)">Circles</a>
                                 <ol>
                                     <li ng-repeat="circle in circles track by $index"><a
                                             ng-click="highLightItem(circle.get('type'),circle.get('id'))">{{circle.get('id')}}
@@ -442,7 +442,7 @@
                             <div class="scroll" id="messages" class="list-group"
                                  ng-repeat="message in messages | filter:filterTips()"
                                  ng-show="showAllTips || showTips && message.message.tip || showRisks && message.message.risk || showExpense && message.message.price">
-                                <a href="#" class="list-group-item active" ng-click="showMessageOnMap(message)" style="margin: 5px;">
+                                <a href="javascript:void(0)" class="list-group-item active" ng-click="showMessageOnMap(message)" style="margin: 5px;">
                                     <md-icon md-svg-src="assets/icons/ic_message_black_48px.svg"
                                              ng-if="message.message.tip"></md-icon>
                                     <md-icon md-svg-src="assets/icons/ic_warning_black_48px.svg"
@@ -484,7 +484,7 @@
                     <div>
                         <p>Add new tip</p>
                         <ul>
-                            <p> Message
+                            <p> Tip
                                 <input type="text" ng-model="message.text" style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
                             <p> Latitude
                                 <input type="text" ng-model="message.lat" style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>

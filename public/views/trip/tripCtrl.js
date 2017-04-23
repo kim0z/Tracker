@@ -1,14 +1,14 @@
-trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory) {
+trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, $stateParams, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory) {
 
 
         $scope.loading = true;
-        $scope.tripID = localStorageService.get('tripId');
+        $scope.tripID = $stateParams.id;//localStorageService.get('tripId');
         $scope.profile = localStorageService.get('profile');
         $scope.userAccessToken = localStorageService.get('providerToken');
 
 
         if (!$scope.profile) {
-            console.log('Trip:: auth :: no data about the user, profile is emppty');
+            console.log('Trip:: auth :: no data about the user, profile is empty');
         }
 
         //var facebookIdNotClean = $scope.profile.user_id; //"facebook|"
