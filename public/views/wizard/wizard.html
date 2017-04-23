@@ -492,9 +492,19 @@
                             <p> Longitude
                                 <input type="text" ng-model="message.lng" style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
                             </p>
+                            <!--
                             <p> Time
                                 <input type="datetime" ng-model="message.time" style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
                             </p>
+                            -->
+                            <p> Date
+                                <!-- MMMM d, y' -->
+                                <datepicker date-min-limit="{{trip.dateStart.toString()}}" date-max-limit="{{trip.dateEnd.toString()}}" date-format="yyyy-MM-dd" datepicker-append-to-body=true>
+                                    <input name="tipDate" ng-model="message.time" class="form-control"
+                                           type="date" required/>
+                                </datepicker>
+                            </p>
+
                             <button type="button" class="btn btn-success" ng-click="addMessage()">add</button>
                         </ul>
                     </div>

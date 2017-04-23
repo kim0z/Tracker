@@ -109,12 +109,15 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
     $scope.$watch('trip', function() {
         if($scope.trip.name && $scope.trip.dateStart && $scope.trip.dateEnd && $scope.trip.continents && $scope.trip.type){
             $scope.trip.buttonDisabled  = false;
-            console.log('Wizard: Trip details form is valid, Next button enabled')
+            console.log('Wizard: Trip details form is valid, Next button enabled');
+
+            $scope.d = {d:''}
+            $scope.d.d = new Date($scope.trip.dateStart).toString();
+
         }else{
             $scope.trip.buttonDisabled = true;
         }
     }, true);
-
 
     // ************************** Trip details *************************
     $scope.addTrip = function () {
