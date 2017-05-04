@@ -1386,12 +1386,44 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                     $scope.loading = false;
                     $scope.$apply();
 
+                    $scope.places = [];
+                    //Get location where user stop for more than 10 min
+                    for(var index = 0 ; index < $scope.pathSaved.length - 1; index++){
+                        //console.log(new Date($scope.pathSaved[index + 1]['timestamp']))
+                        //console.log(new Date($scope.pathSaved[index]['timestamp']))
+                        //console.log(((new Date($scope.pathSaved[index + 1]['timestamp']).getTime() - new Date($scope.pathSaved[index]['timestamp']).getTime()) / 1000) / 60 )
+                        if((((new Date($scope.pathSaved[index + 1]['timestamp']).getTime() - new Date($scope.pathSaved[index]['timestamp']).getTime()) / 1000) / 60)  > 20 ){
+                            console.log('more than 10 min')
+                            console.log($scope.pathSaved[index + 1]);
+
+                            var LatLng = {lat: $scope.pathSaved[index].coords.latitude, lng: $scope.pathSaved[index].coords.longitude};
+
+                            var marker = new google.maps.Marker({
+                                position: LatLng,
+                                map: $scope.map,
+                                title: 'Hello World!'
+                            });
+
+                            $scope.places.push(marker);
+
+
+                        }
+                    }
+
+
                     //sort saved path to be used for select days filter and console
                     $scope.pathSaved.sort(function (a, b) {
                         // Turn your strings into dates, and then subtract them
                         // to get a value that is either negative, positive, or zero.
                         return new Date(b.timestamp) - new Date(a.timestamp);
                     });
+
+
+
+
+
+
+
 
                     //### Console ###
                     messages.addSteps($scope.pathSaved);
