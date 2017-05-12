@@ -262,7 +262,7 @@
 
 <div ng-hide="hideToolBar" layout="column" layout-fill style="background: white">
 
-    <md-toolbar style="position: fixed">
+    <md-toolbar style="position: fixed; flex: 0 0 auto;">
         <div class="md-toolbar-tools" ng-controller="mainIndexCtrl" scroll-shrink>
 
             <md-button ng-click="menuClick('Welcome')" style="font-size: 20px; text-transform: none">GreatBear</md-button>
@@ -296,7 +296,7 @@
     </md-toolbar>
 
 
-    <div ui-view style="margin-top: 60px"></div>
+    <div ui-view style="margin-top: 60px; flex: 1 1 auto; position: relative; overflow-y: auto;"></div>
 
 </div>
 

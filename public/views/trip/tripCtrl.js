@@ -1,10 +1,14 @@
 trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, $stateParams, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory) {
 
 
+
+
+
         $scope.loading = true;
         $scope.tripID = $stateParams.id;//localStorageService.get('tripId');
         $scope.profile = localStorageService.get('profile');
         $scope.userAccessToken = localStorageService.get('providerToken');
+
 
 
         if (!$scope.profile) {
@@ -154,6 +158,183 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                 $scope.test = new Date($scope.trip[0].start_date);
 
                 $scope.tripDays = Math.abs(Math.floor((Date.parse($scope.dateStart) - Date.parse($scope.dateEnd)) / 86400000));
+
+
+                $scope.days = [];
+                //Select day to filter trip
+                for(var i = 0 ; i < $scope.tripDays ; i++){
+                    $scope.days.push(i);
+                }
+                console.log($scope.days);
+
+                $scope.selectedItem;
+                $scope.filterTripByDay = function() {
+                    console.log('Selected day : ' + $scope.selectedItem )
+                    if ($scope.selectedItem !== undefined) {
+                        //return "You have selected: Item " + $scope.selectedItem;
+
+                        if (!$scope.pathLoaded) {
+                            $timeout(function () {
+                                $scope.pathLoaded = true;
+                            });
+                        } else {
+
+                            console.log('Filter map');
+                            var filteredPath = [];
+
+                            var tempDate = new Date($scope.startDateSliderForPath); //first day of the trip
+
+                            //if slider value = 0 then start date will not changed, but we can't say 0 for day number 1 in the trip
+                            //therefore I will add +1 for each slider value
+                            //for the 0 I will use it to bring all trip up with all the data
+
+                            if ($scope.selectedItem == 0) {
+                                for (var i = 0; i < $scope.pathSaved.length; i++) {
+                                    filteredPath.push({
+                                        lat: JSON.parse($scope.pathSaved[i]['coords'].latitude),
+                                        lng: JSON.parse($scope.pathSaved[i]['coords'].longitude)
+                                    });
+                                }
+
+                                var lineSymbol = {
+                                    //path: 'M 0,-1 0,1',
+                                    path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                                    strokeOpacity: 1,
+                                    scale: 2
+                                };
+
+                                //Hash table for all users path
+
+                                //delete current path
+                                if (polys[$scope.facebookId]) {
+                                    polys[$scope.facebookId].setMap(null);
+                                }
+
+                                //save path after was sliced from full path for further use
+                                if ($scope.selectedItem ) {
+                                    $scope.pathHash[$scope.selectedItem] = filteredPath;
+                                }
+
+                                polys[$scope.facebookId] = new google.maps.Polyline({
+                                    //map: $scope.map,
+                                    path: filteredPath,
+                                    geodesic: true,
+                                    strokeColor: '#000000', //getRandomColor(),
+                                    strokeOpacity: 0,
+                                    strokeWeight: 2,
+                                    icons: [{
+                                        icon: lineSymbol,
+                                        offset: '0',
+                                        repeat: '20px'
+                                    }]
+                                });
+
+                                polys[$scope.facebookId].setMap($scope.map);
+                                $scope.map.setCenter(filteredPath.pop());
+                                //$scope.map.setCenter(filteredPath[filteredPath.length / 2]);
+                                $scope.map.setZoom(12);
+
+                            } else {
+                                //if slider value not 0 then calculate the required date by adding slider value to start date
+
+                                if ($scope.startDateSliderForPath != null && $scope.selectedItem != null) {
+                                    $scope.startDateSliderForPath = new Date($scope.startDateSliderForPath.setDate($scope.startDateSliderForPath.getDate() + $scope.selectedItem  - 1));
+                                } else {
+                                    console.log('Client :: Trip page :: issue with dates while in the watcher of the slider');
+                                }
+
+
+                                //I should read from path, that already set and ready, but meanwhile I saved only lat, lang in path instaed of all the point
+                                /*  var ref_read_path_filter = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + facebookId + '/' + $scope.tripID + '/path');
+
+                                 ref_read_path_filter.once("value", function (path) {
+                                 path.forEach(function (point) {
+
+                                 //console.log(point.val());
+                                 var pointTime = $filter('date')(point.val()['timestamp'], 'MMM d, y');
+                                 var selectedDatePath = $filter('date')($scope.startDateSliderForPath, 'MMM d, y');
+
+                                 if (pointTime == selectedDatePath) {
+                                 filteredPath.push({
+                                 lat: JSON.parse(point.val()['coords'].latitude),
+                                 lng: JSON.parse(point.val()['coords'].longitude)
+                                 });
+                                 }
+
+                                 });*/
+
+
+                                for (var i = 0; i < $scope.pathSaved.length; i++) {
+                                    var pointTime = $filter('date')($scope.pathSaved[i]['timestamp'], 'MMM d, y');
+                                    var selectedDatePath = $filter('date')($scope.startDateSliderForPath, 'MMM d, y');
+
+                                    if (pointTime == selectedDatePath) {
+                                        filteredPath.push({
+                                            lat: JSON.parse($scope.pathSaved[i]['coords'].latitude),
+                                            lng: JSON.parse($scope.pathSaved[i]['coords'].longitude)
+                                        });
+                                    }
+                                }
+
+
+                                $scope.startDateSliderForPath = tempDate;
+
+                                //update map with filtered path
+                                //set the path for the first load, for the real time load, I added the same code into the listener of Firebase above
+                                //dashed line
+                                var lineSymbol = {
+                                    //path: 'M 0,-1 0,1',
+                                    path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                                    strokeOpacity: 1,
+                                    scale: 2
+                                };
+
+                                //Hash table for all users path
+
+                                //delete current path
+                                if (polys[$scope.facebookId]) {
+                                    polys[$scope.facebookId].setMap(null);
+                                }
+
+                                if ($scope.selectedItem) {
+                                    $scope.pathHash[$scope.selectedItem] = filteredPath;
+                                }
+
+
+                                polys[$scope.facebookId] = new google.maps.Polyline({
+                                    path: filteredPath,
+                                    geodesic: true,
+                                    strokeColor: '#000000', //getRandomColor(),
+                                    strokeOpacity: 0,
+                                    strokeWeight: 2,
+                                    icons: [{
+                                        icon: lineSymbol,
+                                        offset: '0',
+                                        repeat: '20px'
+                                    }]
+                                });
+
+                                polys[$scope.facebookId].setMap($scope.map);
+                                $scope.map.setCenter(filteredPath.pop());
+                                //console.log(filteredPath.length/2);
+                                //console.log(filteredPath[filteredPath.length/2]);
+                                //$scope.map.setCenter(new google.maps.LatLng(JSON.parse(filteredPath[filteredPath.length/2].lat), JSON.parse(filteredPath[filteredPath.length/2].lng)));
+                                $scope.map.setZoom(12);
+
+
+                            }
+
+
+                        }
+
+                    } else {
+                        return "Please select an item";
+                    }
+                };
+
+
+
+
 
                 $scope.sliderChangeListener = function () {
                     //console.log($scope.slider.value);
@@ -591,7 +772,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                 var fileChooser = document.getElementById('file-chooser');
                 var button = document.getElementById('upload-button');
                 var results = document.getElementById('results');
-                button.addEventListener('click', function () {
+      /*          button.addEventListener('click', function () {
 
                     //if it's a KML file then override the exists one, save it in the same name
                     var file = fileChooser.files[0];
@@ -622,11 +803,11 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                             if (file) {
                                 //resizeImage(file);
                                 results.innerHTML = '';
-                                /*  var params = {
+                                /!*  var params = {
                                  Key: $scope.profile.email + '/' + $scope.tripID + '/' + file.name,
                                  ContentType: file.type,
                                  Body: file
-                                 };*/
+                                 };*!/
                                 var params = {
                                     Key: $scope.facebookId + '/' + $scope.tripID + '/' + file.name,
                                     ContentType: file.type,
@@ -643,7 +824,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                         }
                     }
 
-                }, false);
+                }, false);*/
 
 
                 var users_hash = {};
@@ -1392,20 +1573,22 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                         //console.log(new Date($scope.pathSaved[index + 1]['timestamp']))
                         //console.log(new Date($scope.pathSaved[index]['timestamp']))
                         //console.log(((new Date($scope.pathSaved[index + 1]['timestamp']).getTime() - new Date($scope.pathSaved[index]['timestamp']).getTime()) / 1000) / 60 )
-                        if((((new Date($scope.pathSaved[index + 1]['timestamp']).getTime() - new Date($scope.pathSaved[index]['timestamp']).getTime()) / 1000) / 60)  > 20 ){
+                        var placeStayingTime = (((new Date($scope.pathSaved[index + 1]['timestamp']).getTime() - new Date($scope.pathSaved[index]['timestamp']).getTime()) / 1000) / 60);
+                        if( placeStayingTime > 20 ){
                             console.log('more than 10 min')
                             console.log($scope.pathSaved[index + 1]);
 
                             var LatLng = {lat: $scope.pathSaved[index].coords.latitude, lng: $scope.pathSaved[index].coords.longitude};
 
+                            //maps_icon_place.png
+
                             var marker = new google.maps.Marker({
                                 position: LatLng,
                                 map: $scope.map,
-                                title: 'Hello World!'
+                                title: 'Hours: '+placeStayingTime
                             });
 
                             $scope.places.push(marker);
-
 
                         }
                     }
@@ -1417,11 +1600,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                         // to get a value that is either negative, positive, or zero.
                         return new Date(b.timestamp) - new Date(a.timestamp);
                     });
-
-
-
-
-
 
 
 
@@ -1496,6 +1674,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
 
                 //Filter map according to the selected day in the
                 //each time $scope.slider.value changes then filter map and then apply
+
                 $scope.$watch('slider.value', function () {
 
                     if (!$scope.pathLoaded) {
