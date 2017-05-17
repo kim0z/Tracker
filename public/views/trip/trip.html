@@ -192,7 +192,7 @@
         <div id="map"></div>
         <input id="pac-input" class="controls" type="text" placeholder="Search Box">
 
-        <div class="md-padding" ng-cloak style="position: absolute; top: 20px">
+        <div class="md-padding" ng-cloak style="position: absolute; top: 50px; background: white; padding: 5px">
             <div>
                 <h1 class="md-title">Pick an day</h1>
                 <div layout="row">
@@ -435,18 +435,17 @@
 
     <div class="right-side" style="overflow: auto">
 
-
+<!-- Tips -->
         <div ng-cloak layout-gt-sm="row" layout="column">
             <div flex-gt-sm="50" flex>
-
-                <md-toolbar layout="row" class="md-hue-3">
+                <md-toolbar layout="row" class="md-hue-3" style="position: fixed;">
                     <div class="md-toolbar-tools">
-                        <md-button class="md-raised">Tips</md-button>
-                        <md-button class="md-raised">Places</md-button>
+                        <md-button class="md-raised" ng-click="tips_button = true; places_button = false">Tips</md-button>
+                        <md-button class="md-raised" ng-click="tips_button = false; places_button = true ">Places</md-button>
                     </div>
                 </md-toolbar>
 
-                <md-content>
+                <md-content ng-show = "tips_button">
                     <md-list flex>
                         <!-- <md-subheader class="md-no-sticky">Trip tips</md-subheader> -->
                         <md-list-item class="md-3-line" ng-repeat="message in messages"
@@ -462,12 +461,32 @@
                             </div>
                             <md-divider></md-divider>
                         </md-list-item>
-
                     </md-list>
                 </md-content>
             </div>
         </div>
 
+
+<!-- Places -->
+        <div ng-cloak layout-gt-sm="row" layout="column" >
+            <div flex-gt-sm="50" flex>
+                <md-content ng-show="places_button">
+                    <md-list flex>
+                        <!-- <md-subheader class="md-no-sticky">Trip tips</md-subheader> -->
+                        <md-list-item class="md-3-line" ng-repeat="place in places"
+                                      ng-click="">
+                            <img ng-src="assets/icons/ic_message_black_48px.svg" class="md-avatar"/>
+                            <div class="md-list-item-text" layout="column">
+                                <h3>{{ place.places.place_details }}</h3>
+                                <h4>{{ place.places.place_details }} </h4>
+                                <!-- <p>{{ item.notes }}</p> -->
+                            </div>
+                            <md-divider></md-divider>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+            </div>
+        </div>
 
         <!--        <div > &lt;!&ndash; style="position: absolute; right: 30px; top: 135px;" &ndash;&gt;
                     <div class="btn-group" role="group" aria-label="...">

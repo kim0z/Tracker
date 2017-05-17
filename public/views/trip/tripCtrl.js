@@ -1,14 +1,10 @@
 trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, $stateParams, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory) {
 
 
-
-
-
         $scope.loading = true;
         $scope.tripID = $stateParams.id;//localStorageService.get('tripId');
         $scope.profile = localStorageService.get('profile');
         $scope.userAccessToken = localStorageService.get('providerToken');
-
 
 
         if (!$scope.profile) {
@@ -39,6 +35,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
         //var email_no_shtrodel = $scope.profile.email.replace('@', 'u0040');
         //var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
 
+    $scope.tips_button = true ;
+    $scope.places_button = false;
 
         //$scope.tripID = messages.getTripID(); in this way user can't refresh, I moved to get trip id from local storage
 
@@ -162,14 +160,13 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
 
                 $scope.days = [];
                 //Select day to filter trip
-                for(var i = 0 ; i < $scope.tripDays ; i++){
+                for (var i = 0; i < $scope.tripDays; i++) {
                     $scope.days.push(i);
                 }
-                console.log($scope.days);
 
                 $scope.selectedItem;
-                $scope.filterTripByDay = function() {
-                    console.log('Selected day : ' + $scope.selectedItem )
+                $scope.filterTripByDay = function () {
+                    console.log('Selected day : ' + $scope.selectedItem)
                     if ($scope.selectedItem !== undefined) {
                         //return "You have selected: Item " + $scope.selectedItem;
 
@@ -211,7 +208,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                                 }
 
                                 //save path after was sliced from full path for further use
-                                if ($scope.selectedItem ) {
+                                if ($scope.selectedItem) {
                                     $scope.pathHash[$scope.selectedItem] = filteredPath;
                                 }
 
@@ -238,7 +235,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                                 //if slider value not 0 then calculate the required date by adding slider value to start date
 
                                 if ($scope.startDateSliderForPath != null && $scope.selectedItem != null) {
-                                    $scope.startDateSliderForPath = new Date($scope.startDateSliderForPath.setDate($scope.startDateSliderForPath.getDate() + $scope.selectedItem  - 1));
+                                    $scope.startDateSliderForPath = new Date($scope.startDateSliderForPath.setDate($scope.startDateSliderForPath.getDate() + $scope.selectedItem - 1));
                                 } else {
                                     console.log('Client :: Trip page :: issue with dates while in the watcher of the slider');
                                 }
@@ -331,9 +328,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                         return "Please select an item";
                     }
                 };
-
-
-
 
 
                 $scope.sliderChangeListener = function () {
@@ -772,59 +766,59 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                 var fileChooser = document.getElementById('file-chooser');
                 var button = document.getElementById('upload-button');
                 var results = document.getElementById('results');
-      /*          button.addEventListener('click', function () {
+                /*          button.addEventListener('click', function () {
 
-                    //if it's a KML file then override the exists one, save it in the same name
-                    var file = fileChooser.files[0];
-                    var file_extenstion = file.name.split('.').pop();
-                    if (file_extenstion == 'kml' || file_extenstion == 'KML') {
+                 //if it's a KML file then override the exists one, save it in the same name
+                 var file = fileChooser.files[0];
+                 var file_extenstion = file.name.split('.').pop();
+                 if (file_extenstion == 'kml' || file_extenstion == 'KML') {
 
-                        if (file) {
-                            results.innerHTML = '';
+                 if (file) {
+                 results.innerHTML = '';
 
-                            var params = {
-                                Key: $scope.facebookId + '/' + $scope.tripID + '/' + 'map_kml.kml',
-                                ContentType: file.type,
-                                Body: file
-                            };
-                            bucket_upload.upload(params, function (err, data) {
-                                results.innerHTML = err ? 'ERROR!' : 'UPLOADED.';
-                            });
-                        } else {
-                            results.innerHTML = 'Nothing to upload.';
-                        }
-                    }
+                 var params = {
+                 Key: $scope.facebookId + '/' + $scope.tripID + '/' + 'map_kml.kml',
+                 ContentType: file.type,
+                 Body: file
+                 };
+                 bucket_upload.upload(params, function (err, data) {
+                 results.innerHTML = err ? 'ERROR!' : 'UPLOADED.';
+                 });
+                 } else {
+                 results.innerHTML = 'Nothing to upload.';
+                 }
+                 }
 
-                    for (var i = 0; fileChooser.files.length > 0; i++) {
-                        var file = fileChooser.files[i];
-                        var file_extenstion = file.name.split('.').pop();
+                 for (var i = 0; fileChooser.files.length > 0; i++) {
+                 var file = fileChooser.files[i];
+                 var file_extenstion = file.name.split('.').pop();
 
-                        if (file_extenstion == "gif" || file_extenstion == "png" || file_extenstion == "bmp" || file_extenstion == "jpeg" || file_extenstion == "jpg" || file_extenstion == "GIF" || file_extenstion == "PNG" || file_extenstion == "BMP" || file_extenstion == "GPEG" || file_extenstion == "JPG") {
-                            if (file) {
-                                //resizeImage(file);
-                                results.innerHTML = '';
-                                /!*  var params = {
-                                 Key: $scope.profile.email + '/' + $scope.tripID + '/' + file.name,
-                                 ContentType: file.type,
-                                 Body: file
-                                 };*!/
-                                var params = {
-                                    Key: $scope.facebookId + '/' + $scope.tripID + '/' + file.name,
-                                    ContentType: file.type,
-                                    Body: file
-                                };
-                                bucket_upload.upload(params, function (err, data) {
-                                    results.innerHTML = err ? 'ERROR!' : 'UPLOADED.';
-                                });
-                            } else {
-                                results.innerHTML = 'Nothing to upload.';
-                            }
-                        } else {
-                            alert('file not supported')
-                        }
-                    }
+                 if (file_extenstion == "gif" || file_extenstion == "png" || file_extenstion == "bmp" || file_extenstion == "jpeg" || file_extenstion == "jpg" || file_extenstion == "GIF" || file_extenstion == "PNG" || file_extenstion == "BMP" || file_extenstion == "GPEG" || file_extenstion == "JPG") {
+                 if (file) {
+                 //resizeImage(file);
+                 results.innerHTML = '';
+                 /!*  var params = {
+                 Key: $scope.profile.email + '/' + $scope.tripID + '/' + file.name,
+                 ContentType: file.type,
+                 Body: file
+                 };*!/
+                 var params = {
+                 Key: $scope.facebookId + '/' + $scope.tripID + '/' + file.name,
+                 ContentType: file.type,
+                 Body: file
+                 };
+                 bucket_upload.upload(params, function (err, data) {
+                 results.innerHTML = err ? 'ERROR!' : 'UPLOADED.';
+                 });
+                 } else {
+                 results.innerHTML = 'Nothing to upload.';
+                 }
+                 } else {
+                 alert('file not supported')
+                 }
+                 }
 
-                }, false);*/
+                 }, false);*/
 
 
                 var users_hash = {};
@@ -875,14 +869,14 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                 $scope.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
                 // Bias the SearchBox results towards current map's viewport.
-                $scope.map.addListener('bounds_changed', function() {
+                $scope.map.addListener('bounds_changed', function () {
                     searchBox.setBounds($scope.map.getBounds());
                 });
 
                 var markers_searh = [];
                 // Listen for the event fired when the user selects a prediction and retrieve
                 // more details for that place.
-                searchBox.addListener('places_changed', function() {
+                searchBox.addListener('places_changed', function () {
                     var places = searchBox.getPlaces();
 
                     if (places.length == 0) {
@@ -890,14 +884,14 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                     }
 
                     // Clear out the old markers.
-                    markers_searh.forEach(function(marker) {
+                    markers_searh.forEach(function (marker) {
                         marker.setMap(null);
                     });
                     markers_searh = [];
 
                     // For each place, get the icon, name and location.
                     var bounds = new google.maps.LatLngBounds();
-                    places.forEach(function(place) {
+                    places.forEach(function (place) {
                         if (!place.geometry) {
                             console.log("Returned place contains no geometry");
                             return;
@@ -966,7 +960,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                     });
 
                     //draw the circle directlly (no need to read again all items from firebase)
-                    circle.set("id","New circle");
+                    circle.set("id", "New circle");
                     $scope.circles.push(circle);
                     $scope.$apply();
                 });
@@ -1005,7 +999,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                     });
 
                     //draw the marker directlly (no need to read again all items from firebase)
-                    marker.set("id","New marker");
+                    marker.set("id", "New marker");
                     $scope.markers.push(marker);
                     $scope.$apply();
                 });
@@ -1037,14 +1031,14 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                     console.log('new polyline added to firebase');
                     //console.log(polyline.getPath());
 
-                    polyline.set("id","New polyline");
-                    polyline.set("key","e444");
+                    polyline.set("id", "New polyline");
+                    polyline.set("key", "e444");
 
                     $scope.polylines.push(polyline);
                     $scope.$digest();
 
                     var polyline_path = [];
-                    polyline.getPath().forEach(function(element) {
+                    polyline.getPath().forEach(function (element) {
                         polyline_path.push({lat: element.lat(), lng: element.lng()});
                     });
                     //save into firebase
@@ -1085,67 +1079,67 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                 //Delete items from map
                 $scope.deleteItemFromMap = function (type, key) {
 
-                    if(type == 'marker'){
-                        for(var i = 0 ; i < $scope.markers.length ; i++){
-                             if($scope.markers[i].get("id") == key){
-                                 //remove item from view
+                    if (type == 'marker') {
+                        for (var i = 0; i < $scope.markers.length; i++) {
+                            if ($scope.markers[i].get("id") == key) {
+                                //remove item from view
                                 $scope.markers[i].setMap(null);
                                 $scope.markers.splice(i, 1);
-                                 //remove item from firebase
-                                 firebase_drawing_markers.child(key).remove();
-                                console.log('delete item from map, type: '+ type+' key: '+key+' done');
+                                //remove item from firebase
+                                firebase_drawing_markers.child(key).remove();
+                                console.log('delete item from map, type: ' + type + ' key: ' + key + ' done');
                             }
                         }
                     }
-                     if(type == 'circle'){
-                           for(var i = 0 ; i < $scope.circles.length ; i++){
-                             if($scope.circles[i].get("id") == key){
-                                 //remove item from view
+                    if (type == 'circle') {
+                        for (var i = 0; i < $scope.circles.length; i++) {
+                            if ($scope.circles[i].get("id") == key) {
+                                //remove item from view
                                 $scope.circles[i].setMap(null);
                                 $scope.circles.splice(i, 1);
-                                 //remove item from firebase
-                                 firebase_drawing_circles.child(key).remove();
-                                console.log('delete item from map, type: '+ type+' key: '+key+' done');
+                                //remove item from firebase
+                                firebase_drawing_circles.child(key).remove();
+                                console.log('delete item from map, type: ' + type + ' key: ' + key + ' done');
                             }
                         }
                     }
-                     if(type == 'polyline'){
-                           for(var i = 0 ; i < $scope.polylines.length ; i++){
-                             if($scope.polylines[i].get("id") == key){
-                                 //remove from view
+                    if (type == 'polyline') {
+                        for (var i = 0; i < $scope.polylines.length; i++) {
+                            if ($scope.polylines[i].get("id") == key) {
+                                //remove from view
                                 $scope.polylines[i].setMap(null);
                                 $scope.polylines.splice(i, 1);
-                                 //remove from firebase
-                                 firebase_drawing_polyline.child(key).remove();
-                                console.log('delete item from map, type: '+ type+' key: '+key+' done');
+                                //remove from firebase
+                                firebase_drawing_polyline.child(key).remove();
+                                console.log('delete item from map, type: ' + type + ' key: ' + key + ' done');
                             }
                         }
                     }
                 }
 
                 $scope.highLightItem = function (type, key) {
-                    if(type == 'marker'){
-                        for(var i = 0 ; i < $scope.markers.length ; i++){
-                            if($scope.markers[i].get("id") == key){
+                    if (type == 'marker') {
+                        for (var i = 0; i < $scope.markers.length; i++) {
+                            if ($scope.markers[i].get("id") == key) {
 
-                                console.log('highlight item in map, type: '+ type+' key: '+key+' done');
+                                console.log('highlight item in map, type: ' + type + ' key: ' + key + ' done');
                             }
                         }
                     }
-                    if(type == 'circle'){
-                        for(var i = 0 ; i < $scope.circles.length ; i++){
-                            if($scope.circles[i].get("id") == key){
+                    if (type == 'circle') {
+                        for (var i = 0; i < $scope.circles.length; i++) {
+                            if ($scope.circles[i].get("id") == key) {
 
-                                console.log('highlight item in map, type: '+ type+' key: '+key+' done');
+                                console.log('highlight item in map, type: ' + type + ' key: ' + key + ' done');
                             }
                         }
                     }
-                    if(type == 'polyline'){
-                        for(var i = 0 ; i < $scope.polylines.length ; i++){
-                            if($scope.polylines[i].get("id") == key){
+                    if (type == 'polyline') {
+                        for (var i = 0; i < $scope.polylines.length; i++) {
+                            if ($scope.polylines[i].get("id") == key) {
                                 //change color
                                 var current_color = $scope.polylines[i].get("strokeColor");
-                                $scope.polylines[i].set("strokeColor","51fe0d");
+                                $scope.polylines[i].set("strokeColor", "51fe0d");
 
                                 //zoom on item
                                 //get polyline path
@@ -1155,7 +1149,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                                 var location = poly_path.pop();
 
                                 $scope.map.setCenter(location);
-                                console.log('highlight item in map, type: '+ type+' key: '+key+' done');
+                                console.log('highlight item in map, type: ' + type + ' key: ' + key + ' done');
                             }
                         }
                     }
@@ -1567,30 +1561,81 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                     $scope.loading = false;
                     $scope.$apply();
 
-                    $scope.places = [];
+                    $scope.places = {"path_point" : [], "places": { "place" : [], "place_details" : []} }; //hash
                     //Get location where user stop for more than 10 min
-                    for(var index = 0 ; index < $scope.pathSaved.length - 1; index++){
+                    for (var index = 0; index < $scope.pathSaved.length - 1; index++) {
                         //console.log(new Date($scope.pathSaved[index + 1]['timestamp']))
                         //console.log(new Date($scope.pathSaved[index]['timestamp']))
                         //console.log(((new Date($scope.pathSaved[index + 1]['timestamp']).getTime() - new Date($scope.pathSaved[index]['timestamp']).getTime()) / 1000) / 60 )
                         var placeStayingTime = (((new Date($scope.pathSaved[index + 1]['timestamp']).getTime() - new Date($scope.pathSaved[index]['timestamp']).getTime()) / 1000) / 60);
-                        if( placeStayingTime > 20 ){
-                            console.log('more than 10 min')
-                            console.log($scope.pathSaved[index + 1]);
+                        if (placeStayingTime > 20) {
+                            //console.log('more than 10 min')
+                            //console.log($scope.pathSaved[index + 1]);
 
-                            var LatLng = {lat: $scope.pathSaved[index].coords.latitude, lng: $scope.pathSaved[index].coords.longitude};
+                            $scope.places["path_point"].push($scope.pathSaved[index]); //Save point from path in HashTable
 
-                            //maps_icon_place.png
+                            var LatLng = {
+                                lat: $scope.pathSaved[index].coords.latitude,
+                                lng: $scope.pathSaved[index].coords.longitude
+                            };
+
+
 
                             var marker = new google.maps.Marker({
                                 position: LatLng,
                                 map: $scope.map,
-                                title: 'Hours: '+placeStayingTime
+                                title: 'Hours: ' + placeStayingTime
                             });
 
-                            $scope.places.push(marker);
+                            // Specify location, radius and place types for your Places API search.
+                            var request = {
+                                location: LatLng,
+                                radius: '1',
+                                //types: ['store']
+                            };
+
+                            // Create the PlaceService and send the request.
+                            // Handle the callback with an anonymous function.
+                            var service = new google.maps.places.PlacesService($scope.map);
+                            service.nearbySearch(request, function (results, status) {
+                                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                                    console.log('Place results length:');
+                                    console.log(results.length);
+                                    for (var i = 0; i < results.length; i++) {
+                                        var place = results[i];
+
+                                        $scope.places["places"]["place"].push(place); //Save places in HashTable
+
+                                        // If the request succeeds, draw the place location on
+                                        // the map as a marker, and register an event to handle a
+                                        // click on the marker.
+                                        //console.log(LatLng);
+                                        console.log(place);
+                                        //place.geometry.location.toJSON()
+
+                                        var request_details = {
+                                            placeId: place.place_id
+                                        };
+
+                                        service.getDetails(request_details, callback);
+
+                                        function callback(place_details, status) {
+                                            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                                                $scope.places["places"]["place_details"].push(place_details); //Save places in HashTable
+
+                                                console.log('Place Details:')
+                                                console.log(place_details);
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+
+
+                            //$scope.places.push(marker);
 
                         }
+                        //$scope.$apply();
                     }
 
 
@@ -1600,7 +1645,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                         // to get a value that is either negative, positive, or zero.
                         return new Date(b.timestamp) - new Date(a.timestamp);
                     });
-
 
 
                     //### Console ###
