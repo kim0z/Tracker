@@ -1563,6 +1563,9 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
 
                     $scope.places = {"path_point" : [], "places": { "place" : [], "place_details" : []} }; //hash
                     //Get location where user stop for more than 10 min
+
+                    var service = new google.maps.places.PlacesService($scope.map);
+
                     for (var index = 0; index < $scope.pathSaved.length - 1; index++) {
                         //console.log(new Date($scope.pathSaved[index + 1]['timestamp']))
                         //console.log(new Date($scope.pathSaved[index]['timestamp']))
@@ -1579,8 +1582,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                                 lng: $scope.pathSaved[index].coords.longitude
                             };
 
-
-
                             var marker = new google.maps.Marker({
                                 position: LatLng,
                                 map: $scope.map,
@@ -1596,7 +1597,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
 
                             // Create the PlaceService and send the request.
                             // Handle the callback with an anonymous function.
-                            var service = new google.maps.places.PlacesService($scope.map);
                             service.nearbySearch(request, function (results, status) {
                                 if (status == google.maps.places.PlacesServiceStatus.OK) {
                                     console.log('Place results length:');
@@ -1637,6 +1637,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                         }
                         //$scope.$apply();
                     }
+
+                    console.log($scope.places);
 
 
                     //sort saved path to be used for select days filter and console
