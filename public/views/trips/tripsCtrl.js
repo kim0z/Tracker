@@ -47,7 +47,7 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
     $scope.toggleChunkExpand = function (chunk) {
         chunk.expanded = !chunk.expanded;
         if (chunk.expanded) {
-            getCoverPhoto(chunk);
+            //getCoverPhoto(chunk);
         }
     };
 
@@ -60,7 +60,8 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
         $anchorScroll();
     };
 
-/*    function getCoverPhoto(chunk) {
+    /* no need to loop all trips and photos, now I do a direct url call from chunk section below
+    function getCoverPhoto(facebookId, tripId) {
         //get cover photo named profile in AWS S3 under the user folder - BLOCKED, instead using config from Firebase (Facebook album cover)
         //AWS Config
         AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
@@ -73,7 +74,7 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
                 Bucket: 'tracker.photos',
                 //Marker: localStorageService.get('email') + '/' + chunk.id
                 Delimiter: '/',
-                Prefix: $scope.facebookId + '/' + chunk.id + '/'
+                Prefix: facebookId + '/' + tripId + '/'
             }
         });
 
@@ -87,18 +88,23 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
                     var substring = "cover";
                     // console.log(S3URL + 'tracker.photos/' + data.Contents[i].Key)
                     if (data.Contents[i].Key.indexOf(substring) > -1) {
-                        break;
+
                         // return S3URL + 'tracker.photos/' + data.Contents[i].Key;
+
+                        var S3URL_RESIZE = 'http://tracker.photos.s3-website-us-west-2.amazonaws.com/';
+                        return S3URL_RESIZE + '400x400/' + data.Contents[i].Key;
+                    }else{
+                        break;
                     }
                 }
                 //chunk.coverPhotoUrl = i < data.Contents.length ? S3URL + 'tracker.photos/' + data.Contents[i].Key : '';
                 //Resize images
-                var S3URL_RESIZE = 'http://tracker.photos.s3-website-us-west-2.amazonaws.com/'
-                chunk.coverPhotoUrl = S3URL_RESIZE + '400x400/' + data.Contents[i].Key;
+
             }
         });
 
-    }*/
+    }
+    */
 
 
     //below relevant for MyTrips and not for public, should be deleted
@@ -239,6 +245,7 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
 
         $scope.chunks = [];
         $scope.chunks_future = [
+            /*
             {
                 title: "Future",
                 divider: true
@@ -251,6 +258,7 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
                     quotes: ["A year after spending $24.9 billion taking his computer company private", " Mr. Dell will try to persuade people that his company is about far more than the personal computers and computer servers it has been known for, with products intended for things as varied as the cloud computing networks of global enterprises and handy personal devices.", " a transformation(...)he actually started six years ago, spending $18 billion on 40 acquisitions", "The new Dell has software, equipment for data storage and computer networking, services and sensors. It is developing software that measures facial expressions, voice tone, even how we individually swipe key cards. There is a device that can make a hotel room’s digital television into a secure corporate computer. A Dell tablet is the world’s thinnest and lightest,(...)And, of course, there are lots of new personal computers.", " The question is: Can Dell ignite sales enough to become less reliant on the same old business?", "As a private firm, its deals move faster — exactly what Mr. Dell wanted. Last March, Dell bought Statsoft, a(...)maker of predictive analytic software.(...)it took two meetings with Mr. Dell lasting a total of two hours and 15 minutes. “In a public company, there would be at least one board meeting about this, maybe two, so that would be two quarters", "Dell had about 110,000 employees(...) and(...)now(...)90,000. It is unclear how many more cuts there will be.", " his three-quarter stake in Dell is a significant amount of his net worth, estimated at $16 billion"]
                 }
             }
+            */
 
             /*,{
              title: "Yesterday",
@@ -315,6 +323,9 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
 
         //create JSON list of trips in the Client
         for (var i = 0; i < $scope.trips.length; i++) {
+
+
+
             var continent = '';
             if ($scope.trips[i].continent != null) {
                 continent = $scope.trips[i].continent[0];
@@ -330,7 +341,11 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
                 active: $scope.trips[i].active,
                 public: $scope.trips[i].public,
                 continent: continent,
-                picture: $scope.trips[i].picture
+                picture: $scope.trips[i].picture,
+                //cover:  getCoverPhoto($scope.trips[i].facebook_id, $scope.trips[i].id)
+                //http://tracker.photos.s3-website-us-west-2.amazonaws.com/400x400/102211533498839/417/cover
+                //cover: 'http://tracker.photos.s3-website-us-west-2.amazonaws.com/400x400/'+ $scope.trips[i].facebook_id +'/'+ $scope.trips[i].id +'/cover'
+                cover: 'http://tracker.photos.s3-website-us-west-2.amazonaws.com/370x235/102211533498839/417/cover'
             };
 
             //if (new Date($scope.trips[i].end_date) > new Date()) {

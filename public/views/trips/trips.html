@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
 
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -92,7 +89,7 @@
            /*  border: 2px solid #CCCCCC;*/
             /* max-width: 900px; */
             margin: 0 auto;
-            height: 100%;
+            height: 300%;
             width: 90%;
             display: flex;
             flex-flow: row wrap; /* Shorthand – you could use ‘flex-direction: column’ and ‘flex-wrap: wrap’ instead */
@@ -229,6 +226,7 @@
             position: absolute;
             left: 0;
             padding: 26px;
+            width: 100%;
             background-color: #FFF;
             -webkit-transition: all .3s ease-in-out;
             -moz-transition: all .3s ease-in-out;
@@ -307,10 +305,11 @@
             background: url(../../assets/images/icon-comment.png) no-repeat;
         }
 
+        .x[ng-click] { cursor: default; }
 
     </style>
 </head>
-<body layout="vertical" md-theme="blue" layout-fill>
+
 
 <nit-advanced-searchbox
         ng-model="searchParams"
@@ -391,26 +390,26 @@
 
 <div class="container">
 
-    <div class="item">
+    <div class="item x" ng-repeat="chunk in chunks" >
         <div class="wrapperr">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header" ng-style="{'background-image':'url( {{ chunk.cover }} )'}" ng-click="showActualMap(chunk.id)">
                     <div class="card-header-mask">
-                        <div class="card-header-date">
+                        <div class="card-header-date" ng-style="{'background-image':'url( {{ chunk.picture }} )'}">
                             <div class="card-header-date-day">12</div>
                             <div class="card-header-date-month">Days</div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="card-body-header">
-                        <div class="card-body-header-category">Trip</div>
-                        <h1>True Paradise on Earth: Unknown Place</h1>
+                    <div class="card-body-header" ng-click="showActualMap(chunk.id)">
+                        <div class="card-body-header-category">{{ chunk.continent }}</div>
+                        <h1>{{ chunk.title }}</h1>
                         <p class="card-body-header-sentence">
                             They call it <span>"</span>God's Own Country.<span>"</span>
                         </p>
                     </div>
-                    <p class="card-body-description">
+                    <p class="card-body-description" ng-click="showActualMap(chunk.id)">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                         Molestias autem aliquid, recusandae maiores iste fuga,
                         explicabo dolor vitae magnam!
@@ -455,70 +454,7 @@
             </div>
         </div>
     </div>
-    <div class="item">
-        <div class="wrapperr">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-header-mask">
-                        <div class="card-header-date">
-                            <div class="card-header-date-day">12</div>
-                            <div class="card-header-date-month">Days</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="card-body-header">
-                        <div class="card-body-header-category">Trip</div>
-                        <h1>True Paradise on Earth: Unknown Place</h1>
-                        <p class="card-body-header-sentence">
-                            They call it <span>"</span>God's Own Country.<span>"</span>
-                        </p>
-                    </div>
-                    <p class="card-body-description">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                        Molestias autem aliquid, recusandae maiores iste fuga,
-                        explicabo dolor vitae magnam!
-                    </p>
-                    <div class="card-body-footer">
-                        <i class="icon icon-time"></i> 6min. read
-                        <i class="icon icon-comment"></i> 39 comments
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="item">
-        <div class="wrapperr">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-header-mask">
-                        <div class="card-header-date">
-                            <div class="card-header-date-day">12</div>
-                            <div class="card-header-date-month">Days</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="card-body-header">
-                        <div class="card-body-header-category">Trip</div>
-                        <h1>True Paradise on Earth: Unknown Place</h1>
-                        <p class="card-body-header-sentence">
-                            They call it <span>"</span>God's Own Country.<span>"</span>
-                        </p>
-                    </div>
-                    <p class="card-body-description">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                        Molestias autem aliquid, recusandae maiores iste fuga,
-                        explicabo dolor vitae magnam!
-                    </p>
-                    <div class="card-body-footer">
-                        <i class="icon icon-time"></i> 6min. read
-                        <i class="icon icon-comment"></i> 39 comments
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
 <!--
     <div class="item">1</div>
@@ -534,8 +470,9 @@
 
 
 
-<div id="trips" layout="column" layout-fill>
-    <!-- This menu is popup menu important for study
+
+<!--<div id="trips" layout="column" layout-fill>
+    &lt;!&ndash; This menu is popup menu important for study
     <md-toolbar scroll-shrink layout="row">
         <div class="md-toolbar-tools">
             <md-button ng-click="toggleMenu()">Menu</md-button>
@@ -544,9 +481,9 @@
             </h3>
         </div>
     </md-toolbar>
--->
+&ndash;&gt;
     <md-content layout="vertical" flex>
-        <!-- LEFT SIDEBAR -->
+        &lt;!&ndash; LEFT SIDEBAR &ndash;&gt;
         <md-sidenav class="md-sidenav-left" md-component-id="left">
             <md-toolbar class="md-theme-indigo">
                 <h1 class="md-toolbar-tools">Options</h1>
@@ -569,7 +506,7 @@
         </md-sidenav>
 
 
-        <!-- MAIN CONTENT -->
+        &lt;!&ndash; MAIN CONTENT &ndash;&gt;
         <md-content id="main" layout="horizontal" layout-align="center" style="padding: 0px;">
             <md-list>
                 <div id="content" style="padding-top: 0px">
@@ -608,10 +545,10 @@
                                         <md-button ng-click="show_quotes = !show_quotes; $event.stopPropagation();">Show
                                             {{chunk.content.quotes.length}} more details
                                         </md-button>
-                                    <!--    <md-button
+                                    &lt;!&ndash;    <md-button
                                                 ng-click="edit_mode = !edit_mode; editTrip(chunk.id);$event.stopPropagation();">
                                             Edit Trip Plan
-                                        </md-button>-->
+                                        </md-button>&ndash;&gt;
                                         <md-button
                                                 ng-click="edit_mode = !edit_mode; showActualMap(chunk.id);$event.stopPropagation();">
                                             Open trip
@@ -621,14 +558,14 @@
                                             Share
                                         </md-button>
 
-                                      <!--  <md-button ng-click="activateTrip(chunk)">
+                                      &lt;!&ndash;  <md-button ng-click="activateTrip(chunk)">
                                             Active
                                         </md-button>
 
                                         <md-button class="md-warn"
                                                    ng-click="edit_mode = !edit_mode; deleteTrip(chunk.id);$event.stopPropagation();">
                                             Delete
-                                        </md-button>-->
+                                        </md-button>&ndash;&gt;
 
                                         <div ng-if="show_quotes" ng-repeat="quote in ::chunk.content.quotes">
                                             <md-whiteframe class="md-whiteframe-z1">
@@ -639,7 +576,7 @@
 
                                 </md-card-content>
 
-                  <!--              <div style="z-index: 100">
+                  &lt;!&ndash;              <div style="z-index: 100">
                                     <fieldset class="standard">
                                         <legend>Options:</legend>
                                         <div layout-wrap layout-gt-sm="row">
@@ -664,7 +601,7 @@
                                             </div>
                                         </div>
                                     </fieldset>
-                                </div>-->
+                                </div>&ndash;&gt;
                             </div>
                         </md-card>
                     </div>
@@ -672,7 +609,8 @@
             </md-list>
         </md-content>
     </md-content>
-</div>
+</div>-->
+
 
 <!-- FAB POPUP -->
 <div id="fab-popup" layout="column" layout-align="space-between" ng-if="showAddButtons"
@@ -742,6 +680,3 @@
 <script src="/bower_components/angular-material/angular-material.js"></script>
 <script src="/controllers/controllers.js"></script>
 -->
-
-</body>
-</html>
