@@ -344,7 +344,7 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
                 picture: $scope.trips[i].picture,
                 //cover:  getCoverPhoto($scope.trips[i].facebook_id, $scope.trips[i].id)
                 //http://tracker.photos.s3-website-us-west-2.amazonaws.com/400x400/102211533498839/417/cover
-                cover: 'http://tracker.photos.s3-website-us-west-2.amazonaws.com/400x400/'+ $scope.trips[i].facebook_id +'/'+ $scope.trips[i].id +'/cover'
+                cover: 'https://tracker.photos.s3-website-us-west-2.amazonaws.com/400x400/'+ $scope.trips[i].facebook_id +'/'+ $scope.trips[i].id +'/cover.jpg'
                 //cover: 'http://tracker.photos.s3-website-us-west-2.amazonaws.com/370x235/102211533498839/417/cover'
             };
 
