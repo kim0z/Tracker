@@ -1,4 +1,4 @@
-trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, $stateParams, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory) {
+trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeout, $stateParams, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory, nearbyPlacesFactory) {
 
 
         $scope.loading = true;
@@ -35,8 +35,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
         //var email_no_shtrodel = $scope.profile.email.replace('@', 'u0040');
         //var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
 
-    $scope.tips_button = true ;
-    $scope.places_button = false;
+        $scope.tips_button = true;
+        $scope.places_button = false;
 
         //$scope.tripID = messages.getTripID(); in this way user can't refresh, I moved to get trip id from local storage
 
@@ -1561,85 +1561,33 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $timeout, 
                     $scope.loading = false;
                     $scope.$apply();
 
-                    $scope.places = {"path_point" : [], "places": { "place" : [], "place_details" : []} }; //hash
+
+
+                    // load nearby places:
+                    $scope.nearbyPlaces = {};
+                    $scope.nearbyPlacesReady = false;
+                    $scope.iterateOverPathProgress = 0;
+                    $scope.iterateOverNearbyPlacesProgress = 0;
+                    var nearbyPlaces = new nearbyPlacesFactory($scope.map, $scope.pathSaved);
+                    nearbyPlaces.on('error', function (event, error) {
+                        console.log(error);
+                    });
+                    nearbyPlaces.on('ready', function () {
+                        $scope.nearbyPlaces = nearbyPlaces.nearbyPlaces();
+                        $scope.nearbyPlacesReady = true;
+                    });
+                    nearbyPlaces.on('iterateOverPathProgress', function (event, value) {
+                        $scope.iterateOverPathProgress = value;
+                    });
+                    nearbyPlaces.on('iterateOverNearbyPlacesProgress', function (event, value) {
+                        $scope.iterateOverNearbyPlacesProgress = value;
+                    });
+                    nearbyPlaces.init();
+                    //////////////////////
+
+
+                    $scope.places = {"path_point": [], "places": {"place": [], "place_details": []}}; //hash
                     //Get location where user stop for more than 10 min
-
-                    var service = new google.maps.places.PlacesService($scope.map);
-
-                    for (var index = 0; index < $scope.pathSaved.length - 1; index++) {
-                        //console.log(new Date($scope.pathSaved[index + 1]['timestamp']))
-                        //console.log(new Date($scope.pathSaved[index]['timestamp']))
-                        //console.log(((new Date($scope.pathSaved[index + 1]['timestamp']).getTime() - new Date($scope.pathSaved[index]['timestamp']).getTime()) / 1000) / 60 )
-                        var placeStayingTime = (((new Date($scope.pathSaved[index + 1]['timestamp']).getTime() - new Date($scope.pathSaved[index]['timestamp']).getTime()) / 1000) / 60);
-                        if (placeStayingTime > 20) {
-                            //console.log('more than 10 min')
-                            //console.log($scope.pathSaved[index + 1]);
-
-                            $scope.places["path_point"].push($scope.pathSaved[index]); //Save point from path in HashTable
-
-                            var LatLng = {
-                                lat: $scope.pathSaved[index].coords.latitude,
-                                lng: $scope.pathSaved[index].coords.longitude
-                            };
-
-                            var marker = new google.maps.Marker({
-                                position: LatLng,
-                                map: $scope.map,
-                                title: 'Hours: ' + placeStayingTime
-                            });
-
-                            // Specify location, radius and place types for your Places API search.
-                            var request = {
-                                location: LatLng,
-                                radius: '1',
-                                //types: ['store']
-                            };
-
-                            // Create the PlaceService and send the request.
-                            // Handle the callback with an anonymous function.
-                            service.nearbySearch(request, function (results, status) {
-                                if (status == google.maps.places.PlacesServiceStatus.OK) {
-                                    console.log('Place results length:');
-                                    console.log(results.length);
-                                    for (var i = 0; i < results.length; i++) {
-                                        var place = results[i];
-
-                                        $scope.places["places"]["place"].push(place); //Save places in HashTable
-
-                                        // If the request succeeds, draw the place location on
-                                        // the map as a marker, and register an event to handle a
-                                        // click on the marker.
-                                        //console.log(LatLng);
-                                        console.log(place);
-                                        //place.geometry.location.toJSON()
-
-                                        var request_details = {
-                                            placeId: place.place_id
-                                        };
-
-                                        service.getDetails(request_details, callback);
-
-                                        function callback(place_details, status) {
-                                            if (status == google.maps.places.PlacesServiceStatus.OK) {
-                                                $scope.places["places"]["place_details"].push(place_details); //Save places in HashTable
-
-                                                console.log('Place Details:')
-                                                console.log(place_details);
-                                            }
-                                        }
-                                    }
-                                }
-                            });
-
-
-                            //$scope.places.push(marker);
-
-                        }
-                        //$scope.$apply();
-                    }
-
-                    console.log($scope.places);
-
 
                     //sort saved path to be used for select days filter and console
                     $scope.pathSaved.sort(function (a, b) {
