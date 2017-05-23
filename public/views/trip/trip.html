@@ -478,6 +478,12 @@
                         <md-list-item class="md-3-line">
                             {{iterateOverNearbyPlacesProgress || 0}}% get interesting places data...
                         </md-list-item>
+                        <md-list-item>
+                            <div layout="row" layout-sm="column" layout-align="space-around">
+                                <md-progress-circular md-mode="determinate" value="{{iterateOverPathProgress/2 + iterateOverNearbyPlacesProgress/2}}"></md-progress-circular>
+                            </div>
+                            <h5>Loading places from path</h5>
+                        </md-list-item>
                     </md-list>
                 </md-content>
             </div>

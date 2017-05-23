@@ -128,7 +128,7 @@ trackerApp.factory('nearbyPlacesFactory', [
             var placeStayingTime, interestPoints = [];
             for (var i = 0; i < pathData.length - 1; i++) {
                 placeStayingTime = (((new Date(pathData[i + 1]['timestamp']).getTime() - new Date(pathData[i]['timestamp']).getTime()) / 1000) / 60);
-                if (placeStayingTime > 20) {
+                if (placeStayingTime > 10) {
                     var request = {
                         location: {
                             lat: pathData[i].coords.latitude,
