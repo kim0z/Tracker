@@ -11,6 +11,16 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
             console.log('Trip:: auth :: no data about the user, profile is empty');
         }
 
+        $scope.drawing_panel = true;
+        $scope.information_panel = true;
+
+        $scope.openDrawingPanel = function () {
+            $scope.drawing_panel = true;
+        }
+        $scope.openInformationPanel = function () {
+            $scope.information_panel = true;
+        }
+
         //var facebookIdNotClean = $scope.profile.user_id; //"facebook|"
         //var facebookId = facebookIdNotClean.replace(/^\D+/g, '');
 
@@ -1559,7 +1569,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     //enable page after path is ready on the map
                     $scope.loading = false;
                     $scope.$apply();
-
 
 
                     // load nearby places:
