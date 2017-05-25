@@ -141,6 +141,26 @@ trackerApp.factory('nearbyPlacesFactory', [
             }
             return interestPoints;
         }
+/*
+
+        function checkIfPlacesAlreadySaved() {
+            //check if places saved
+            var ref_places = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + $scope.facebookId + '/' + $scope.tripID);
+            ref_places.once('value', function (snapshot) {
+                if (snapshot.hasChild('places')) {
+                    console.log('Places exists');
+                    //read from Firebase
+                    var ref_places = rootRef.child("places");
+                    ref_places.once("value", function (snapshot) {
+                        snapshot.forEach(function (child) {
+                            console.log(child.val());
+                        });
+                    });
+                }else{
+                }
+            });
+        }
+*/
 
         return nearbyPlacesFactory;
 

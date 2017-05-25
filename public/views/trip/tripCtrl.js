@@ -1571,30 +1571,36 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     $scope.$apply();
 
 
-                    // load nearby places:
-                    $scope.nearbyPlaces = {};
-                    $scope.nearbyPlacesReady = false;
-                    $scope.iterateOverPathProgress = 0;
-                    $scope.iterateOverNearbyPlacesProgress = 0;
-                    var nearbyPlaces = new nearbyPlacesFactory($scope.map, $scope.pathSaved);
-                    nearbyPlaces.on('error', function (event, error) {
-                        console.log(error);
-                    });
-                    nearbyPlaces.on('ready', function () {
-                        $scope.nearbyPlaces = nearbyPlaces.nearbyPlaces();
-                        $scope.nearbyPlacesReady = true;
-                    });
-                    nearbyPlaces.on('iterateOverPathProgress', function (event, value) {
-                        $scope.iterateOverPathProgress = value;
-                    });
-                    nearbyPlaces.on('iterateOverNearbyPlacesProgress', function (event, value) {
-                        $scope.iterateOverNearbyPlacesProgress = value;
-                    });
-                    nearbyPlaces.init();
-                    //////////////////////
+                    $scope.loadNearByPlaces = function () {
+                        // load nearby places:
+                        $scope.nearbyPlaces = {};
+                        $scope.nearbyPlacesReady = false;
+                        $scope.iterateOverPathProgress = 0;
+                        $scope.iterateOverNearbyPlacesProgress = 0;
+                        var nearbyPlaces = new nearbyPlacesFactory($scope.map, $scope.pathSaved);
+                        nearbyPlaces.on('error', function (event, error) {
+                            console.log(error);
+                        });
+                        nearbyPlaces.on('ready', function () {
+                            $scope.nearbyPlaces = nearbyPlaces.nearbyPlaces();
+                            $scope.nearbyPlacesReady = true;
+                            //push to Firebase for further load
+                            //var ref_places_push = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + $scope.facebookId + '/' + $scope.tripID + '/places');
+                            //ref_places_push.set($scope.nearbyPlaces);
+                        });
+                        nearbyPlaces.on('iterateOverPathProgress', function (event, value) {
+                            $scope.iterateOverPathProgress = value;
+                        });
+                        nearbyPlaces.on('iterateOverNearbyPlacesProgress', function (event, value) {
+                            $scope.iterateOverNearbyPlacesProgress = value;
+                        });
+                        nearbyPlaces.init();
+                        //////////////////////
+                    }
+                    $scope.loadNearByPlaces();
 
 
-                    $scope.places = {"path_point": [], "places": {"place": [], "place_details": []}}; //hash
+                    //$scope.places = {"path_point": [], "places": {"place": [], "place_details": []}}; //hash
                     //Get location where user stop for more than 10 min
 
                     //sort saved path to be used for select days filter and console
