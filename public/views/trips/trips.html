@@ -120,15 +120,11 @@
             height: 220px;
         }
         */
-
-
-
         .wrapperr {
             /* position: absolute; */
             width: 370px;
-            height: 100%;
-            padding-top: 200px;
-
+            height: 500px;
+            margin: 10px;
             /*
             background: -webkit-linear-gradient(#A5B5BD 0, #7B847B 100%);
             background: -moz-linear-gradient(#A5B5BD 0, #7B847B 100%);
@@ -391,8 +387,7 @@
 
 <div class="container">
 
-    <div class="item x" ng-repeat="chunk in chunks" >
-        <div class="wrapperr">
+        <div class="wrapperr" ng-repeat="chunk in chunks">
             <div class="card">
                 <div class="card-header" ng-style="{'background-image':'url( {{ chunk.cover }} )'}" ng-click="showActualMap(chunk.id)">
                     <div class="card-header-mask">
@@ -422,7 +417,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    <!--
     <div class="item">
         <div class="wrapperr">
             <div class="card">
@@ -455,7 +450,7 @@
             </div>
         </div>
     </div>
-
+-->
 
 <!--
     <div class="item">1</div>
