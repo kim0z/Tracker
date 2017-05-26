@@ -160,18 +160,16 @@
 
 <div class="container">
 
-    <div class="left-side" style="overflow: auto;" ng-show="drawing_panel">
+    <div class="left-side" style="overflow: auto; height: 65%" ng-show="drawing_panel">
 
         <md-toolbar layout="row" class="md-hue-3">
             <div class="md-toolbar-tools">
                 <md-button class="md-raised">Drawing</md-button>
-                <md-button class="md-raised">Places</md-button>
                 <a ng-click="drawing_panel = false;" style="float: right;" type="button" class="btn btn-default btn-sm">
                     <span class="glyphicon glyphicon-menu-left"></span>
                 </a>
             </div>
         </md-toolbar>
-
 
 
         <!-- List of map items -->
@@ -235,19 +233,63 @@
         </div>
 
         <!-- Drawing panel -->
-        <md-button ng-show="!drawing_panel" class="md-fab md-primary" style="position: absolute; top: 200px" ng-click="openDrawingPanel()">
-            <image src="assets/icons/ic_format_paint_white_48dp_1x.png" style="color: greenyellow;"></image>
+        <md-button ng-show="!drawing_panel" class="md-fab md-primary" style="position: absolute; top: 25%"
+                   ng-click="openDrawingPanel()">
+            <image src="assets/icons/ic_format_paint_white_48dp_1x.png"
+                   style="color: greenyellow; margin-left: -2px"></image>
         </md-button>
 
         <!-- Information panel -->
-        <md-button ng-show="!information_panel" class="md-fab md-primary" style="position: absolute; top: 300px" ng-click="openInformationPanel()">
-            <image src="assets/icons/ic_info_white_48dp_1x.png" style="color: greenyellow;"></image>
+        <md-button ng-show="!information_panel" class="md-fab md-primary"
+                   style="position: absolute; top: 25%; right: 0px" ng-click="openInformationPanel()">
+            <image src="assets/icons/ic_info_white_48dp_1x.png" style="color: greenyellow; margin-left: -2px"></image>
         </md-button>
 
+        <!-- Play path -->
+        <md-button ng-show="!drawing_panel" class="md-fab md-primary" style="position: absolute; top: 40%;"
+                   ng-click="runPathAnimation()">
+            <image src="assets/icons/ic_play_circle_outline_white_48dp_1x.png"
+                   style="color: greenyellow; margin-left: -2px"></image>
+        </md-button>
+
+        <!-- Pano view -->
+        <md-button ng-show="!drawing_panel" class="md-fab md-primary" style="position: absolute; top: 47%;"
+                   ng-click="panoView()">
+            <image src="assets/icons/ic_directions_walk_white_48dp_1x.png"
+                   style="color: greenyellow; margin-left: -2px"></image>
+        </md-button>
+
+        <!-- Edit view -->
+        <md-button ng-show="!drawing_panel" class="md-fab md-primary" style="position: absolute; top: 54%;"
+                   ng-click="editModeSwitch()">
+            <image src="assets/icons/ic_settings_white_48dp_1x.png"
+                   style="color: greenyellow; margin-left: -2px"></image>
+        </md-button>
+
+        <!-- Photos view -->
+        <md-button class="md-fab md-primary" style="position: absolute; top: 82%;"
+                   ng-click="photosSlider = !photosSlider">
+            <image src="assets/icons/ic_camera_alt_white_48dp_1x.png"
+                   style="color: greenyellow; margin-left: -2px"></image>
+        </md-button>
+
+        <!-- Show trip information-->
+        <!-- ng-click="inforSlide = !inforSlide" -->
         <!--
-        <md-progress-circular ng-disabled="!vm.activated" md-diameter="96" class="centered" ng-show="loading"></md-progress-circular>
-        <div class="fluid"></div>
+            <div id="hp-ctn-howItWorks-information" ng-hide="editMode" >
+                <img src="../../assets/images/information.png" width="40" height="40" style="margin-left:8px"/>
+            </div>
         -->
+        <!-- Show table-->
+        <!-- ng-click="tableSlider = !tableSlider" ->
+        <div id="hp-ctn-howItWorks-table"  ng-hide="editMode" ng-disabled="true">
+            <img src="../../assets/images/table_icon2.svg" width="40" height="40" style="margin-left:8px"/>
+        </div>
+
+    <!--
+    <md-progress-circular ng-disabled="!vm.activated" md-diameter="96" class="centered" ng-show="loading"></md-progress-circular>
+    <div class="fluid"></div>
+    -->
 
         <div id="main" ng-class="{fade :loading}">
 
@@ -264,10 +306,6 @@
 
 -->
             <div id="pano"></div>
-
-
-            <!--************************************** TIPS *******************************-->
-            <!-- Tips filter -->
 
             <!-- Load photos from AWS S3 - disabled, instead sync with Facebook photos
             <td>
@@ -287,50 +325,43 @@
             <!-- id status used for AWS S3 status -->
             <!-- <div id="status"></div> -->
             <!-- side button photos-->
-            <!--**************************** Buttons in main view ******************************* -->
-            <div style="position: absolute; bottom: 40%">
+            <!--**************************** Photos *************************************-->
+            <!-- Footer photos -->
+            <div ng-show="photosSlider">
+                <style>
+                    .demo {
+                        list-style: none outside none;
+                        padding-left: 0;
+                    }
 
-                <div id="pano-button" ng-click="panoView()">
-                    <img src="assets/icons/ic_directions_walk_black_48dp_2x.png" style="height: 50px; width: 50px">
+                    .demo li {
+                        display: block;
+                        float: left;
+                        height: 65px;
+                        margin-bottom: 6px;
+                        margin-right: 6px;
+                        width: 100px;
+                    }
+
+                    .demo img {
+                        max-width: 100%;
+                        height: auto;
+                    }
+
+                </style>
+                <div class="navbar navbar-default navbar-fixed-bottom"
+                     style="bottom: 50px; overflow: scroll; background-color: inherit;right: 10%;left: 10%; width: 75%">
+                    <ul class="demo">
+                        <li style="cursor: pointer;" lightgallery ng-repeat="photo in photos"
+                            data-src="{{photo.fullres}}">
+                            <img ng-src="{{photo.thumbnail}}" ng-mouseover="photoMouseOver($event)"/>
+                        </li>
+                    </ul>
                 </div>
-
-                <div id="play-button" ng-click="runPathAnimation()">
-                    <img src="assets/icons/ic_play_circle_outline_black_48dp_1x.png" style="height: 50px; width: 50px">
-                </div>
-
-                <div id="hp-ctn-howItWorks-photos" ng-click="photosSlider = !photosSlider" ng-hide="editMode">
-                    <img src="../../assets/icons/ic_add_a_photo_black_48dp_2x.png" width="40" height="40"
-                         style="margin-left:8px"/>
-                </div>
-
-                <div id="edit" ng-click="editModeSwitch()">
-                    <img src="../../assets/icons/ic_settings_black_24dp_2x.png" width="40" height="40"
-                         style="margin-left:8px"/>
-                </div>
-
             </div>
-
-
-            <!-- Show trip information-->
-            <!-- ng-click="inforSlide = !inforSlide" -->
-            <!--
-                <div id="hp-ctn-howItWorks-information" ng-hide="editMode" >
-                    <img src="../../assets/images/information.png" width="40" height="40" style="margin-left:8px"/>
-                </div>
-            -->
-            <!-- Show table-->
-            <!-- ng-click="tableSlider = !tableSlider" ->
-            <div id="hp-ctn-howItWorks-table"  ng-hide="editMode" ng-disabled="true">
-                <img src="../../assets/images/table_icon2.svg" width="40" height="40" style="margin-left:8px"/>
-            </div>
-
-
-
-
-            <!--**************************** Photos slider *************************************-->
             <!-- We will make a simple accordian with hover effects
         The markup will have a list with images and the titles-->
-            <div class="footer accordian" ng-show="photosSlider && facebookProvider"
+            <div class="footer accordian" ng-show="photosSlider"
                  style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
                 <ul>
                     <li ng-repeat="item in items">
@@ -428,61 +459,29 @@
             <!-- ######################################################################### -->
             <!-- Edit Mode -->
             <!-- ######################################################################### -->
-
-            <!-- Footer photos -->
-            <div>
-                <style>
-                    .demo {
-                        list-style: none outside none;
-                        padding-left: 0;
-                    }
-
-                    .demo li {
-                        display: block;
-                        float: left;
-                        height: 65px;
-                        margin-bottom: 6px;
-                        margin-right: 6px;
-                        width: 100px;
-                    }
-
-                    .demo img {
-                        max-width: 100%;
-                        height: auto;
-                    }
-
-                </style>
-                <div class="navbar navbar-default navbar-fixed-bottom"
-                     style="bottom: 50px; overflow: scroll; background-color: inherit;right: 50px;left: 50px">
-                    <ul class="demo">
-                        <li lightgallery ng-repeat="photo in photos" data-src="{{photo.fullres}}">
-                            <img ng-src="{{photo.thumbnail}}" ng-mouseover="photoMouseOver($event)"/>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
-
-
     </div>
 
-
+    <!-- Information panel includes Tips + Places-->
     <div class="right-side" style="overflow: auto" ng-show="information_panel">
-
-<!-- Tips -->
+        <!-- Tips -->
         <div ng-cloak layout-gt-sm="row" layout="column">
             <div flex-gt-sm="50" flex>
                 <md-toolbar layout="row" class="md-hue-3" style="position: fixed;">
                     <div class="md-toolbar-tools">
-                        <a ng-click="information_panel = false;" style="float: left;" type="button" class="btn btn-default btn-sm">
+                        <!--
+                        <a ng-click="information_panel = false;" style="float: left;" type="button"
+                           class="btn btn-default btn-sm">
                             <span class="glyphicon glyphicon-menu-right"></span>
                         </a>
-                        <md-button class="md-raised" ng-click="tips_button = true; places_button = false">Tips</md-button>
-                        <md-button class="md-raised" ng-click="tips_button = false; places_button = true ">Places</md-button>
+                        -->
+                        <md-button class="md-raised" ng-click="tips_button = true; places_button = false">Tips
+                        </md-button>
+                        <md-button class="md-raised" ng-click="tips_button = false; places_button = true ">Places
+                        </md-button>
                     </div>
                 </md-toolbar>
-
-                <md-content ng-show = "tips_button" style="top: 60px">
+                <md-content ng-show="tips_button" style="top: 60px">
                     <md-list flex>
                         <!-- <md-subheader class="md-no-sticky">Trip tips</md-subheader> -->
                         <md-list-item class="md-3-line" ng-repeat="message in messages"
@@ -502,10 +501,8 @@
                 </md-content>
             </div>
         </div>
-
-
-<!-- Places -->
-        <div ng-cloak layout-gt-sm="row" layout="column" ng-show="places_button" >
+        <!-- Places -->
+        <div ng-cloak layout-gt-sm="row" layout="column" ng-show="places_button">
             <div flex-gt-sm="50" flex ng-hide="nearbyPlacesReady">
                 <md-content style="top: 60px">
                     <md-list flex>
@@ -517,7 +514,8 @@
                         </md-list-item>
                         <md-list-item>
                             <div layout="row" layout-sm="column" layout-align="space-around">
-                                <md-progress-circular md-mode="determinate" value="{{iterateOverPathProgress/2 + iterateOverNearbyPlacesProgress/2}}"></md-progress-circular>
+                                <md-progress-circular md-mode="determinate"
+                                                      value="{{iterateOverPathProgress/2 + iterateOverNearbyPlacesProgress/2}}"></md-progress-circular>
                             </div>
                             <h5>Loading places from path</h5>
                         </md-list-item>
@@ -534,9 +532,9 @@
                             <div class="md-list-item-text" layout="column">
                                 <h3>{{ place.name}}</h3>
                                 <h4>{{ place.formatted_address }} </h4>
-                                 <p>
-                                     <a ng-href="{{place.url}}" target="_blank">Read more...</a>
-                                 </p>
+                                <p>
+                                    <a ng-href="{{place.url}}" target="_blank">Read more...</a>
+                                </p>
                             </div>
                             <md-divider></md-divider>
                         </md-list-item>
@@ -544,42 +542,9 @@
                 </md-content>
             </div>
         </div>
-
-        <!--        <div > &lt;!&ndash; style="position: absolute; right: 30px; top: 135px;" &ndash;&gt;
-                    <div class="btn-group" role="group" aria-label="...">
-                        <button type="button" ng-click="filterTipsOnClick('all')" class="btn btn-secondary">All</button>
-                        <button type="button" ng-click="filterTipsOnClick('tips')" class="btn btn-primary">Tips</button>
-                        <button type="button" ng-click="filterTipsOnClick('risks')" class="btn btn-danger">Risks</button>
-                        <button type="button" ng-click="filterTipsOnClick('expense')" class="btn btn-warning">Expense</button>
-                        <button type="button" ng-click="filterTipsOnClick('invite')" class="btn btn-info">Invite</button>
-                    </div>
-                    <div style="overflow: auto;height: 600px; width: 320px; ">
-                        <div class="scroll" id="messages" class="list-group" ng-repeat="message in messages | filter:filterTips()" ng-show="showAllTips || showTips && message.message.tip || showRisks && message.message.risk || showExpense && message.message.price">
-                            <a class="list-group-item active" ng-click="showMessageOnMap(message)">
-                                <md-icon md-svg-src="assets/icons/ic_message_black_48px.svg" ng-if="message.message.tip"></md-icon>
-                                <md-icon md-svg-src="assets/icons/ic_warning_black_48px.svg" ng-if="message.message.risk"></md-icon>
-                                <md-icon md-svg-src="assets/icons/ic_attach_money_black_48px.svg" ng-if="message.message.price"></md-icon>
-                                <md-icon md-svg-src="assets/icons/ic_face_black_48px.svg" ng-if="message.message.invite"></md-icon>
-                                &lt;!&ndash; show the right data according to what is not empty, should be only 1 data avaliabale &ndash;&gt;
-                                <h4 class="list-group-item-heading" ng-if="message.message.tip">{{message.message.tip}}</h4>
-                                <h4 class="list-group-item-heading" ng-if="message.message.risk">{{message.message.risk}}</h4>
-                                <h4 class="list-group-item-heading" ng-if="message.message.price">{{message.message.price}}</h4>
-                                <h4 class="list-group-item-heading" ng-if="message.message.invite">Invitation to join me..</h4>
-                                &lt;!&ndash;
-                                <p class="list-group-item-text">{{message.email}}</p>
-                                <p> {{message.location.coords.latitude}}</p>
-                                <p> {{message.location.coords.longitude}}</p>
-                                &ndash;&gt;
-                                <p class="list-group-item-text">{{message.time | date:'medium'}}</p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>-->
-
-
     </div>
+
+    <!-- /////////////////////////////// End Information panel ///////////////////////////////-->
 </div>
 
 

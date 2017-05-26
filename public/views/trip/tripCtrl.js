@@ -11,15 +11,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
             console.log('Trip:: auth :: no data about the user, profile is empty');
         }
 
-        $scope.drawing_panel = true;
-        $scope.information_panel = true;
 
-        $scope.openDrawingPanel = function () {
-            $scope.drawing_panel = true;
-        }
-        $scope.openInformationPanel = function () {
-            $scope.information_panel = true;
-        }
 
         //var facebookIdNotClean = $scope.profile.user_id; //"facebook|"
         //var facebookId = facebookIdNotClean.replace(/^\D+/g, '');
@@ -71,9 +63,21 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.showExpense = false;
         $scope.showInvite = false;
 
-        $scope.photosSlider = false;
+    //Buttons
+        $scope.photosSlider = true;
         $scope.tableSlider = true;
         $scope.inforSlide = true;
+        $scope.drawing_panel = false;
+        $scope.information_panel = true;
+
+        $scope.openDrawingPanel = function () {
+            $scope.drawing_panel = true;
+        }
+        $scope.openInformationPanel = function () {
+            $scope.information_panel = true;
+        }
+
+    //////////
 
         $scope.noTripId = false;
 
