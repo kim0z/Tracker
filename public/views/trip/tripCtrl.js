@@ -6,6 +6,9 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.profile = localStorageService.get('profile');
         $scope.userAccessToken = localStorageService.get('providerToken');
 
+        $scope.$on('$viewContentLoaded', function(){
+            console.log('loaded')
+        });
 
         if (!$scope.profile) {
             console.log('Trip:: auth :: no data about the user, profile is empty');
@@ -1601,7 +1604,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         nearbyPlaces.init();
                         //////////////////////
                     }
-                    $scope.loadNearByPlaces();
+                    //$scope.loadNearByPlaces();
 
 
                     //$scope.places = {"path_point": [], "places": {"place": [], "place_details": []}}; //hash
@@ -1659,6 +1662,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     $scope.map.setCenter(path.pop());
                     $scope.map.setZoom(12);
 
+                    $scope.$apply();
 
                     //Keep listening to new GPS point added by users
                     ref_read_path.limitToLast(1).on("value", function (tripPath) {
@@ -1686,24 +1690,18 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                 //Filter map according to the selected day in the
                 //each time $scope.slider.value changes then filter map and then apply
-
                 $scope.$watch('slider.value', function () {
-
                     if (!$scope.pathLoaded) {
                         $timeout(function () {
-                            $scope.pathLoaded = true;
+                            //$scope.pathLoaded = true;
                         });
                     } else {
-
                         console.log('Filter map');
                         var filteredPath = [];
-
                         var tempDate = new Date($scope.startDateSliderForPath); //first day of the trip
-
                         //if slider value = 0 then start date will not changed, but we can't say 0 for day number 1 in the trip
                         //therefore I will add +1 for each slider value
                         //for the 0 I will use it to bring all trip up with all the data
-
                         if ($scope.slider.value == 0) {
                             for (var i = 0; i < $scope.pathSaved.length; i++) {
                                 filteredPath.push({
@@ -1711,26 +1709,21 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                     lng: JSON.parse($scope.pathSaved[i]['coords'].longitude)
                                 });
                             }
-
                             var lineSymbol = {
                                 //path: 'M 0,-1 0,1',
                                 path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
                                 strokeOpacity: 1,
                                 scale: 2
                             };
-
                             //Hash table for all users path
-
                             //delete current path
                             if (polys[$scope.facebookId]) {
                                 polys[$scope.facebookId].setMap(null);
                             }
-
                             //save path after was sliced from full path for further use
                             if ($scope.slider.value) {
                                 $scope.pathHash[$scope.slider.value] = filteredPath;
                             }
-
                             polys[$scope.facebookId] = new google.maps.Polyline({
                                 //map: $scope.map,
                                 path: filteredPath,
@@ -1744,22 +1737,17 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                     repeat: '20px'
                                 }]
                             });
-
                             polys[$scope.facebookId].setMap($scope.map);
                             $scope.map.setCenter(filteredPath.pop());
                             //$scope.map.setCenter(filteredPath[filteredPath.length / 2]);
                             $scope.map.setZoom(12);
-
                         } else {
                             //if slider value not 0 then calculate the required date by adding slider value to start date
-
                             if ($scope.startDateSliderForPath != null && $scope.slider != null) {
                                 $scope.startDateSliderForPath = new Date($scope.startDateSliderForPath.setDate($scope.startDateSliderForPath.getDate() + $scope.slider.value - 1));
                             } else {
                                 console.log('Client :: Trip page :: issue with dates while in the watcher of the slider');
                             }
-
-
                             //I should read from path, that already set and ready, but meanwhile I saved only lat, lang in path instaed of all the point
                             /*  var ref_read_path_filter = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + facebookId + '/' + $scope.tripID + '/path');
 
@@ -1779,11 +1767,9 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                              });*/
 
-
                             for (var i = 0; i < $scope.pathSaved.length; i++) {
                                 var pointTime = $filter('date')($scope.pathSaved[i]['timestamp'], 'MMM d, y');
                                 var selectedDatePath = $filter('date')($scope.startDateSliderForPath, 'MMM d, y');
-
                                 if (pointTime == selectedDatePath) {
                                     filteredPath.push({
                                         lat: JSON.parse($scope.pathSaved[i]['coords'].latitude),
@@ -1791,10 +1777,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                     });
                                 }
                             }
-
-
                             $scope.startDateSliderForPath = tempDate;
-
                             //update map with filtered path
                             //set the path for the first load, for the real time load, I added the same code into the listener of Firebase above
                             //dashed line
@@ -1804,19 +1787,14 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                 strokeOpacity: 1,
                                 scale: 2
                             };
-
                             //Hash table for all users path
-
                             //delete current path
                             if (polys[$scope.facebookId]) {
                                 polys[$scope.facebookId].setMap(null);
                             }
-
                             if ($scope.slider.value) {
                                 $scope.pathHash[$scope.slider.value] = filteredPath;
                             }
-
-
                             polys[$scope.facebookId] = new google.maps.Polyline({
                                 path: filteredPath,
                                 geodesic: true,
@@ -1829,21 +1807,14 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                     repeat: '20px'
                                 }]
                             });
-
                             polys[$scope.facebookId].setMap($scope.map);
                             $scope.map.setCenter(filteredPath.pop());
                             //console.log(filteredPath.length/2);
                             //console.log(filteredPath[filteredPath.length/2]);
                             //$scope.map.setCenter(new google.maps.LatLng(JSON.parse(filteredPath[filteredPath.length/2].lat), JSON.parse(filteredPath[filteredPath.length/2].lng)));
                             $scope.map.setZoom(12);
-
-
                         }
-
-
                     }
-
-
                 });
 
 

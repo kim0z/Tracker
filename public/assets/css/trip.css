@@ -1,0 +1,133 @@
+.image_over {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+/* Flex Box */
+* {
+    box-sizing: border-box;
+}
+.container {
+    display: flex;
+    width: auto;
+    justify-content: space-between;
+    padding: 0px;
+}
+.right-side {
+    background: white;
+    height: 90%;
+    flex: 2;
+    padding-top: 4px;
+    /*remove below to back to flex*/
+    position: fixed;
+    z-index: 1;
+    right: 0px;
+    width: 18%;
+}
+.center-side {
+    /* background: #049500; */
+    height: 90%;
+    flex: 1;
+    flex-basis: 60%;
+}
+.left-side {
+    background: white;
+    height: 90%;
+    flex: 2;
+    /* padding: 15px; */
+    padding-right: 0px;
+    /*remove below to back to flex*/
+    position: fixed;
+    z-index: 1;
+    width: 18%;
+}
+/* Map */
+#map {
+    box-shadow: 3px 3px 10px gray;
+    /* make Google map -> background*/
+    height: 100%;
+    width: 100%;
+    /* position: absolute; */
+    position: relative;
+    top: 0px;
+    /*top: 100px;*/
+    left: 0;
+    z-index: 0;
+    padding: 0;
+    font-size: 0; /* Remember to change it back to normal font size if have captions */
+    list-style: none;
+    background-color: #000;
+}
+/* List of map drawing items */
+ol {
+    counter-reset: li; /* Initiate a counter */
+    list-style: none; /* Remove default numbering */
+    *list-style: decimal; /* Keep using default numbering for IE6/7 */
+    font: 15px 'trebuchet MS', 'lucida sans';
+    padding: 0;
+    margin-bottom: 4em;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+}
+
+ol ol {
+    margin: 0 0 0 2em; /* Add some left margin for inner lists */
+}
+
+.rounded-list a {
+    width: 220px;
+    position: relative;
+    display: block;
+    padding: .4em .4em .4em 2em;
+    *padding: .4em;
+    margin: .5em 0;
+    /* background: #ddd; */
+    background: aliceblue;
+    color: #444;
+    text-decoration: none;
+    border-radius: .3em;
+    transition: all .3s ease-out;
+}
+
+.rounded-list a:hover {
+    background: #eee;
+}
+
+.rounded-list a:hover:before {
+    transform: rotate(360deg);
+}
+
+.rounded-list a:before {
+    content: counter(li);
+    counter-increment: li;
+    position: absolute;
+    left: -1.3em;
+    top: 50%;
+    margin-top: -1.3em;
+    background: #87ceeb;
+    height: 2em;
+    width: 2em;
+    line-height: 2em;
+    border: .3em solid #fff;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 2em;
+    transition: all .3s ease-out;
+}
+
+/* End of map drawing items */
+
+/* Panorama view */
+#pano {
+    box-shadow: 3px 3px 10px gray;
+    /* make Google map -> background*/
+    height: 100%;
+    width: 0%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    padding: 0;
+    font-size: 0; /* Remember to change it back to normal font size if have captions */
+    list-style: none;
+    background-color: #000;
+}
