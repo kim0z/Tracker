@@ -17,8 +17,21 @@
 </script>
 
 <link rel="stylesheet" href="/assets/css/trip.css">
+<div>{{trip.load_progress}}% Loading</div>
 
-<div class="container" ng-class="pathLoaded == false ? 'fade' : ''" style="background-image: url('https://gibraltarfootballtalk.com/wp-content/uploads/2016/06/Gib-Phoenix-Logo-128x128.png'); background-position: right top;">
+<div ng-show="!pathLoaded" style="position: absolute; top: 25%; right: 40%;">
+    <img src="../../assets/icons/TRACKER1-01_karim_crop.png" style="width: 250px; height: 150px; ">
+    <md-progress-linear md-mode="determinate" value="{{getTripLoadProgress()}}"></md-progress-linear>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped" role="progressbar" ng-style="{width: getTripLoadProgress() + '%'}" aria-valuenow={{getTripLoadProgress()}} aria-valuemin="0" aria-valuemax="100"></div>
+        <span class="sr-only">{{getTripLoadProgress()}}% Loading</span>
+    </div>
+</div>
+
+<div class="container" ng-class="pathLoaded == false ? 'fade' : ''">
+
+
+
     <div class="left-side" style="overflow: auto; height: 65%" ng-show="drawing_panel">
 
         <md-toolbar layout="row" class="md-hue-3">

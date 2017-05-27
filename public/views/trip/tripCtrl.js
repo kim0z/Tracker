@@ -6,14 +6,22 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.profile = localStorageService.get('profile');
         $scope.userAccessToken = localStorageService.get('providerToken');
 
-        $scope.$on('$viewContentLoaded', function(){
-            console.log('loaded')
-        });
-
         if (!$scope.profile) {
             console.log('Trip:: auth :: no data about the user, profile is empty');
         }
 
+        $scope.trip = {};
+        $scope.trip.load_progress =  1;
+        $scope.$on('trip_loading_progress', function (event, val) {
+            console.log('event:::::' + val)
+            $scope.trip.load_progress = val;
+        });
+
+
+
+        $scope.getTripLoadProgress = function () {
+            return $scope.trip_load_progress;
+        }
 
 
         //var facebookIdNotClean = $scope.profile.user_id; //"facebook|"
@@ -66,7 +74,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.showExpense = false;
         $scope.showInvite = false;
 
-    //Buttons
+        //Buttons
         $scope.photosSlider = true;
         $scope.tableSlider = true;
         $scope.inforSlide = true;
@@ -79,8 +87,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.openInformationPanel = function () {
             $scope.information_panel = true;
         }
+        //////////
 
-    //////////
 
         $scope.noTripId = false;
 
@@ -1506,14 +1514,32 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                 //read path for user 'users.key()' trip 'trip.key()' that have active trip
                 var firstLoad_paths = true;
                 var i = 0;
+                //loading progress %
+
                 //   var prevPoint = '';
                 //  var anomalyDetected = false;
                 // var lastNormalPoint = '';
                 //.limitToFirst(250)
                 ref_read_path.once("value", function (tripPath) {
-                    var pathLen = tripPath.length;
+                    var loading_progress = messages.getTripProgress(); //init with number 1
+                    var pathLen = tripPath.numChildren();
+                    console.log('path Len:' + pathLen)
                     tripPath.forEach(function (point) {
                         i++;
+                        console.log(i);
+
+                        var percentage = Math.round(pathLen / 100);
+                        console.log(percentage);
+                        if (i == percentage * loading_progress) {
+                            loading_progress = loading_progress + 1;
+                           // $scope.trip.load_progress = loading_progress;
+                            $rootScope.$broadcast('trip_loading_progress', loading_progress);
+                            //messages.setTripProgress(loading_progress);
+                          /*  messages.on('loadTripProgress', function (event, value) {
+                                $scope.trip.load_progress = value;
+                            });*/
+                            console.log(loading_progress + '%');
+                        }
                         //console.log(i);
                         //console.log(point.val());
                         //console.log(point.val()['timestamp']);

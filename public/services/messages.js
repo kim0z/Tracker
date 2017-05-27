@@ -1,4 +1,4 @@
-trackerApp.service('messages', function () {
+trackerApp.service('messages', function ($rootScope) {
 
     var trip_id ='';
     var user='';
@@ -6,6 +6,7 @@ trackerApp.service('messages', function () {
     var prevSatate = 'welcome';
     var lastState = '';
     var steps = []; // for debug
+    var trip_loading_progress = 1;
 
     this.saveTripID = function (id) {
         console.log('Messages service - save trip id');
@@ -58,4 +59,16 @@ trackerApp.service('messages', function () {
         return steps;
     };
 
+    //Trip progressbar Set
+    this.setTripProgress = function (val) {
+        //console.log('Messages service - save all steps (for debugging - console) : ', allSteps);
+        trip_loading_progress = val;
+        $rootScope.$broadcast('trip_loading_progress', trip_loading_progress);
+    };
+
+    //Trip progressbar Get
+    this.getTripProgress = function () {
+        //console.log('Messages service - get steps (for debugging - console) : ', steps);
+        return trip_loading_progress;
+    };
 });
