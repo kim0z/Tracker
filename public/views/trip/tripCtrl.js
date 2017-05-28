@@ -1,4 +1,4 @@
-trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeout, $stateParams, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory, nearbyPlacesFactory) {
+trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeout, $stateParams, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory, nearbyPlacesFactory, firebaseSvc) {
 
 
         $scope.loading = true;
@@ -11,12 +11,20 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         }
 
         $scope.trip = {};
-        $scope.trip.load_progress =  1;
+        $scope.trip.load_progress = 1;
+
+        var ref_trip_load_progress = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + $scope.facebookId + '/' + $scope.tripID + '/_trip');
+
+        ref_trip_load_progress.on("value", function (snapshot) {
+            $scope.trip.load_progress = snapshot.val();
+            console.log('FFFFFFFFF');
+
+        });
+
         $scope.$on('trip_loading_progress', function (event, val) {
             console.log('event:::::' + val)
             $scope.trip.load_progress = val;
         });
-
 
 
         $scope.getTripLoadProgress = function () {
@@ -1510,35 +1518,52 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                 //path for each user
                 var path = [];
                 var ref_read_path = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + $scope.facebookId + '/' + $scope.tripID + '/path');
-
+                var ref_trip_load_progress = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + $scope.facebookId + '/' + $scope.tripID + '/_trip');
                 //read path for user 'users.key()' trip 'trip.key()' that have active trip
                 var firstLoad_paths = true;
                 var i = 0;
-                //loading progress %
 
-                //   var prevPoint = '';
-                //  var anomalyDetected = false;
-                // var lastNormalPoint = '';
-                //.limitToFirst(250)
+                //test
+                $scope.syncArray = $firebaseArray(ref_read_path);
+                $scope.trip = {};
+                $scope.trip.load_progress = 1;
+                $scope.syncArray.$loaded().then(function(items) {
+                        for(var z = 0 ; z < items.length ; z++) {
+                            var percentage = Math.round(items.length / 100);
+                            if (z == percentage * $scope.trip.load_progress) {
+                                    $scope.trip.load_progress = $scope.trip.load_progress  + 1;
+                            }
+                        }
+                })
+                /// end test
+
+                //Loop path
                 ref_read_path.once("value", function (tripPath) {
                     var loading_progress = messages.getTripProgress(); //init with number 1
                     var pathLen = tripPath.numChildren();
                     console.log('path Len:' + pathLen)
                     tripPath.forEach(function (point) {
                         i++;
-                        console.log(i);
-
+                        //console.log(i);
                         var percentage = Math.round(pathLen / 100);
-                        console.log(percentage);
+                        //console.log(percentage);
                         if (i == percentage * loading_progress) {
                             loading_progress = loading_progress + 1;
-                           // $scope.trip.load_progress = loading_progress;
-                            $rootScope.$broadcast('trip_loading_progress', loading_progress);
-                            //messages.setTripProgress(loading_progress);
-                          /*  messages.on('loadTripProgress', function (event, value) {
-                                $scope.trip.load_progress = value;
+
+                           /* ref_trip_load_progress.set({
+                                load_progress: loading_progress
                             });*/
-                            console.log(loading_progress + '%');
+
+                            // $scope.trip.load_progress = loading_progress;
+                            //$rootScope.$broadcast('trip_loading_progress', loading_progress);
+                            //messages.setTripProgress(loading_progress);
+                            /*  messages.on('loadTripProgress', function (event, value) {
+                            */
+                            $scope.trip.load_progress = loading_progress;
+                            /*
+                             $scope.trip.load_progress = value;
+                             });*/
+                            //console.log(loading_progress + '%');
                         }
                         //console.log(i);
                         //console.log(point.val());
@@ -1601,7 +1626,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     $scope.pathHash[0] = path;
                     //enable page after path is ready on the map
                     $scope.loading = false;
-                    $scope.$apply();
+                    //$scope.$apply();
 
 
                     $scope.loadNearByPlaces = function () {
