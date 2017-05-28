@@ -86,7 +86,7 @@
         <input id="pac-input" class="controls" type="text" placeholder="Search Box">
 
         <!-- Filter by day -->
-        <div class="md-padding" ng-cloak style="position: absolute; top: 70px; background: white; padding: 5px">
+        <div class="md-padding" ng-cloak style="position: absolute; top: 70px; background: white; margin: 5px">
             <div>
                 <h1 class="md-title">Pick an day</h1>
                 <div layout="row">
@@ -222,11 +222,12 @@
 
                 </style>
                 <div class="navbar navbar-default navbar-fixed-bottom"
-                     style="bottom: 50px; overflow: scroll; background-color: inherit;right: 10%;left: 10%; width: 75%">
+                     style="bottom: 50px; overflow: scroll; background-color: inherit;right: 10%;left: 10%; width: 70%">
                     <ul class="demo">
                         <li style="cursor: pointer;" lightgallery ng-repeat="photo in photos"
                             data-src="{{photo.fullres}}">
-                            <img ng-src="{{photo.thumbnail}}" ng-mouseover="photoMouseOver($event)"/>
+                            <img ng-src="{{photo.thumbnail}}" ng-mouseover=""/>
+                            <!-- ng-mouseover="photoMouseOver($event)" -->
                         </li>
                     </ul>
                 </div>
