@@ -18,13 +18,13 @@
 
 <link rel="stylesheet" href="/assets/css/trip.css">
 
-<!-- <div>{{trip.load_progress}}% Loading</div> -->
+<!-- <div>{{load_progress}}% Loading</div> -->
 
 <div ng-show="!pathLoaded" style="position: absolute; top: 25%; right: 40%; margin-left: auto; margin-right: auto">
     <img src="../../assets/icons/TRACKER1-01_karim_crop.png" style="width: 250px; height: 150px; margin-left: 15px">
     <div class="progress">
-        <div class="progress-bar progress-bar-striped" role="progressbar" style='width: 100%' aria-valuenow=100 aria-valuemin="0" aria-valuemax="100"></div>
-       <div class="progress-bar progress-bar-striped" role="progressbar" ng-style="{width: trip.load_progress + '%'}" aria-valuenow={{getTripLoadProgress()}} aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="progress-bar progress-bar-striped" role="progressbar" ng-style="{width: load_progress + '%'}" aria-valuenow={{load_progress}} aria-valuemin="0" aria-valuemax="100"></div>
+       <div class="progress-bar progress-bar-striped" role="progressbar" ng-style="{width: load_progress + '%'}" aria-valuenow={{load_progress}} aria-valuemin="0" aria-valuemax="100"></div>
         <div class="sr-only">{{trip.load_progress}}% Loading</div>
     </div>
 </div>

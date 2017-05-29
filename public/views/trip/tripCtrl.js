@@ -10,27 +10,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
             console.log('Trip:: auth :: no data about the user, profile is empty');
         }
 
-        $scope.trip = {};
-        $scope.trip.load_progress = 1;
-
-        var ref_trip_load_progress = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + $scope.facebookId + '/' + $scope.tripID + '/_trip');
-
-        ref_trip_load_progress.on("value", function (snapshot) {
-            $scope.trip.load_progress = snapshot.val();
-            console.log('FFFFFFFFF');
-
-        });
-
-        $scope.$on('trip_loading_progress', function (event, val) {
-            console.log('event:::::' + val)
-            $scope.trip.load_progress = val;
-        });
-
-
-        $scope.getTripLoadProgress = function () {
-            return $scope.trip_load_progress;
-        }
-
+        $scope.load_progress = 1;
 
         //var facebookIdNotClean = $scope.profile.user_id; //"facebook|"
         //var facebookId = facebookIdNotClean.replace(/^\D+/g, '');
@@ -1456,26 +1436,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     //path for each user
                     var path = [];
                     var ref_read_path = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + $scope.facebookId + '/' + $scope.tripID + '/path');
-                    var ref_trip_load_progress = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + $scope.facebookId + '/' + $scope.tripID + '/_trip');
-                    //read path for user 'users.key()' trip 'trip.key()' that have active trip
-                    var firstLoad_paths = true;
-                    var i = 0;
-
-                    //test
-                    $scope.syncArray = $firebaseArray(ref_read_path);
-                    $scope.syncArray.$loaded().then(function (items) {
-                        $timeout(function () {
-                            for (var z = 0; z < items.length; z++) {
-                                var percentage = Math.round(items.length / 100);
-                                if (z == percentage * $scope.trip.load_progress) {
-                                    $scope.trip.load_progress = $scope.trip.load_progress + 1;
-                                }
-                            }
-                        }, 1000);
-                    })
-                    /// end test
-
-
 ////////////////////////////////////////////////////////////////////////////////////////
                     ////// Check GPS point accuracy
                     $scope.checkAccuracy = function (GPS_Point, accuracy) {
@@ -1493,6 +1453,11 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         $scope.trip_full_path = items;
                     });
 
+                    $scope.load_progress = 40;
+                    $timeout(function () {
+                        $scope.load_progress = 90;
+                    }, 2000);
+
                     $scope.$on('path_ready', function (event, val) {
                         console.log('Trip path loaded');
                         console.log('Trip path length : ' + val.length);
@@ -1503,31 +1468,41 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         });
                         //when path sorted, save it into hash table for easy use
                         //$scope.trip_path_hash [0] = $scope.trip_path; //day zero is all the trip
+                        var path_firast_date = '';
+                        for(var trip_first_day_index = 0 ; trip_first_day_index < $scope.trip_path.length ; trip_first_day_index++){
+                            if($scope.trip_path[trip_first_day_index].timestamp != null) {
+                                path_firast_date = $scope.trip_path[trip_first_day_index].timestamp; //know what is the first date
+                                break;
+                            }
+                        }
+                        console.log('first date: '+ path_firast_date)
 
-                        var path_firast_date = $scope.trip_path[0].timestamp; //know what is the first date
-                        //console.log('first date: '+ path_firast_date)
                         var day = 0;
                         var path_last_index = 0;
-                        $scope.trip_path_hash[0] = [];
+                        //$scope.trip_path_hash = new Array($scope.tripDays + 1);
                         for (var hash_index = 0; hash_index < $scope.tripDays + 1; hash_index++) { //init hashtable with extra 10 cells
                             $scope.trip_path_hash[hash_index] = [];
                         }
                         for (var i = 0; i < $scope.tripDays; i++) {
                             for (var j = path_last_index; j < $scope.trip_path.length; j++) { //each day should be saved into new cel
-                                if ($scope.trip_path[j].timestamp.substring(0, 10) == path_firast_date.substring(0, 10)) {
-                                    if ($scope.checkAccuracy($scope.trip_path[j], 1000)) { //check accuracy
-                                        $scope.trip_path_hash[day].push({
-                                                lat: JSON.parse($scope.trip_path[j]['coords'].latitude),
-                                                lng: JSON.parse($scope.trip_path[j]['coords'].longitude),
-                                                timestamp: $scope.trip_path[j]['timestamp']
-                                            }
-                                        );
+                                if ($scope.trip_path[j]['timestamp'] && path_firast_date ) {
+                                    if ($scope.trip_path[j].timestamp.substring(0, 10) == path_firast_date.substring(0, 10)) {
+                                        if ($scope.checkAccuracy($scope.trip_path[j], 1000)) { //check accuracy
+                                            $scope.trip_path_hash[day].push({
+                                                    lat: JSON.parse($scope.trip_path[j]['coords'].latitude),
+                                                    lng: JSON.parse($scope.trip_path[j]['coords'].longitude),
+                                                    timestamp: $scope.trip_path[j]['timestamp']
+                                                }
+                                            );
+                                        }
+                                    } else {
+                                        //if date changed it means new day started, updated day and path index
+                                        day++;
+                                        path_last_index = j;
+                                        path_firast_date = $scope.trip_path[j].timestamp;
                                     }
-                                } else {
-                                    //if date changed it means new day started, updated day and path index
-                                    day++;
-                                    path_last_index = j;
-                                    path_firast_date = $scope.trip_path[j].timestamp;
+                                }else{
+                                    console.log('Trip path not sliced into hash because of date issue')
                                 }
                             }
                         }
@@ -1565,7 +1540,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         $scope.pathLoaded = true;
                         $scope.map.setCenter($scope.trip_path_hash[1].pop());
                         $scope.map.setZoom(7);
-                        // $scope.$apply();
                     });
 
                     ///////// **** Maps Trip Path Helper function ****** /////////
