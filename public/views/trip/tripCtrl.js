@@ -1538,7 +1538,9 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         console.log($scope.polys_per_day);
                         $scope.polys_per_day_temp = $scope.polys_per_day; // to be used as backup when filter
                         $scope.pathLoaded = true;
-                        $scope.map.setCenter($scope.trip_path_hash[1].pop());
+                        if($scope.polys_per_day.length > 0){
+                            $scope.map.setCenter($scope.trip_path_hash[0].pop());
+                        }
                         $scope.map.setZoom(7);
                     });
 
