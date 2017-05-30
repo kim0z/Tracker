@@ -1433,6 +1433,50 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     //************************
                     //*******************************handle paths
                     //*******************************************************************
+                //SERVER SIDE CPU
+                //getTripPathHash
+                var data = {userId: $scope.facebookId , tripId: $scope.tripID ,tripDays: $scope.tripDays };
+                dataBaseService.getTripPathHash(data).then(function (results) {
+                    $scope.trip_path_hash = results.data;
+
+
+                    //create polyline for each day
+                    var lineSymbol = {
+                        //path: 'M 0,-1 0,1',
+                        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                        strokeOpacity: 1,
+                        scale: 2,
+                    };
+
+                    $scope.polys_per_day = new Array($scope.trip_path_hash.length);
+                    for (var poly_index = 0; poly_index < $scope.trip_path_hash.length; poly_index++) {
+                        //Hash table for all users path
+                        $scope.polys_per_day[poly_index] = new google.maps.Polyline({
+                            map: $scope.map,
+                            path: $scope.trip_path_hash[poly_index],
+                            geodesic: true,
+                            //strokeColor: '#000000', //getRandomColor(), #E38C2D
+                            strokeColor: '#000000',
+                            strokeOpacity: 0,
+                            strokeWeight: 2,
+                            icons: [{
+                                icon: lineSymbol,
+                                offset: '0',
+                                repeat: '20px'
+                            }]
+                        });
+                    }
+                    console.log($scope.polys_per_day);
+                    $scope.polys_per_day_temp = $scope.polys_per_day; // to be used as backup when filter
+                    $scope.pathLoaded = true;
+                    if($scope.polys_per_day.length > 0){
+                        $scope.map.setCenter($scope.trip_path_hash[0].pop());
+                    }
+                    $scope.map.setZoom(7);
+                });
+
+
+
                     //path for each user
                     var path = [];
                     var ref_read_path = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + $scope.facebookId + '/' + $scope.tripID + '/path');
@@ -1458,7 +1502,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         $scope.load_progress = 90;
                     }, 2000);
 
-                    $scope.$on('path_ready', function (event, val) {
+                /*    $scope.$on('path_ready', function (event, val) {
                         console.log('Trip path loaded');
                         console.log('Trip path length : ' + val.length);
                         $scope.trip_path = val;
@@ -1509,6 +1553,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         console.log('HASH');
                         console.log($scope.trip_path_hash);
 
+
+
                         //create polyline for each day
                         var lineSymbol = {
                             //path: 'M 0,-1 0,1',
@@ -1542,7 +1588,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             $scope.map.setCenter($scope.trip_path_hash[0].pop());
                         }
                         $scope.map.setZoom(7);
-                    });
+                    });*/
 
                     ///////// **** Maps Trip Path Helper function ****** /////////
                     //Filter polylines by day

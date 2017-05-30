@@ -34,8 +34,6 @@ var pg = require('pg');
 var conString = '';
 
 
-
-
 switch (process.argv[2]) {
     case 'production':
         console.log('production mode')
@@ -101,14 +99,14 @@ app.use(passport.session());
 
 app.use(express.static(__dirname + '/public')); // set static path
 app.use(morgan('dev')); // log every request to the console
-app.use(bodyParser.urlencoded({ 'extended': 'true' })); // parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({'extended': 'true'})); // parse application/x-www-form-urlencoded
 app.use(bodyParser.json()); // parse application/json
-app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
+app.use(bodyParser.json({type: 'application/vnd.api+json'})); // parse application/vnd.api+json as json
 app.use(methodOverride());
 
 
 //CROSS SITE SCRIPT
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
@@ -152,11 +150,11 @@ var auth0ApiToken = '';
 var options = {
     method: 'POST',
     url: 'https://exploreauth.auth0.com/oauth/token',
-    headers: { 'content-type': 'application/json' },
+    headers: {'content-type': 'application/json'},
     body: '{"client_id":"yt6jXOEvG4IMyCmBHK4tFQM3y0J0CLk5","client_secret":"jMH6KWIMXkRGUeJWZQMkkFT7hqtTr2amnw49TxZDDxAmzt5ALhHiP_pRTmZFiGaJ","audience":"https://exploreauth.auth0.com/api/v2/","grant_type":"client_credentials"}'
 };
 
-request(options, function(error, response, body) {
+request(options, function (error, response, body) {
     if (error) throw new Error(error);
     auth0ApiToken = body;
     console.log(body);
@@ -165,7 +163,7 @@ request(options, function(error, response, body) {
 });
 
 
-app.post('/getProviderToken', function(request, res) {
+app.post('/getProviderToken', function (request, res) {
 
     var requestHttp = require("request");
     console.log('SERVER:: Auth0::  get provider token');
@@ -174,36 +172,30 @@ app.post('/getProviderToken', function(request, res) {
     var options = {
         method: 'GET',
         url: 'https://exploreauth.auth0.com/api/v2/users/' + request.body.user_id,
-        headers: { authorization: 'Bearer ' + auth0ApiToken.access_token }
+        headers: {authorization: 'Bearer ' + auth0ApiToken.access_token}
     };
-
-    requestHttp(options, function(error, response, body) {
+    requestHttp(options, function (error, response, body) {
         if (error) //throw new Error(error);
             console.log('error :: server :: getProviderToken :: no token, server shold be restart, bug: re ask for the token')
-
         console.log(body);
         res.end(body);
-
-
     });
 });
-
-
 // ########################
 // #### EXIF ##############
 // ########################
-app.post('/getPhotoMetadata', function(request, response) {
+app.post('/getPhotoMetadata', function (request, response) {
 
     console.log('SERVER:: extract metadata from photo');
     console.log(request.body);
     console.log(request.body.img);
     var img = request.body.img;
 
-    var request = require('request').defaults({ encoding: null });
-    request.get(img, function(err, res, body) {
+    var request = require('request').defaults({encoding: null});
+    request.get(img, function (err, res, body) {
         console.log(body);
         try {
-            new ExifImage({ image: body }, function(error, exifData) {
+            new ExifImage({image: body}, function (error, exifData) {
                 if (error) {
                     console.log('Error: ' + error.message);
                     response.status(500).end()
@@ -217,17 +209,8 @@ app.post('/getPhotoMetadata', function(request, response) {
             response.status(500).end()
         }
     });
-
-
-
-
-
-
 });
 // ############ END EXIF ###############
-
-
-
 ////################# Sabre Services Config ended #############################
 // General variables
 var tripById = '';
@@ -239,12 +222,11 @@ var sockets = [];
 //####################################################
 //REST calls for Postgres DB
 
-
 //Auth0
 //Auth0 callback handler
 app.get('/callback',
-    passport.authenticate('auth0', { failureRedirect: '/url-if-something-fails' }),
-    function(req, res) {
+    passport.authenticate('auth0', {failureRedirect: '/url-if-something-fails'}),
+    function (req, res) {
         console.log('inside callback auth0');
         if (!req.user) {
             throw new Error('user null');
@@ -252,32 +234,117 @@ app.get('/callback',
         res.redirect("/view0");
     });
 
-/*
- app.get('/user', function (req, res) {
- res.render('user', {
- user: req.user
- });
- });
- */
-
-
 //////////// User Auth DB  ///////////////////////
 
+
+////////// Get Trip Path from Firebase ///////////
 //Postgres :: Check if user exists
-app.post('/checkUserExistsByEmail', function(request, response) {
+
+////// Check GPS point accuracy
+var checkAccuracy = function (GPS_Point, accuracy) {
+    //console.log(GPS_Point['coords'].accuracy);
+    if (GPS_Point['coords'].accuracy < accuracy) {
+        return true;
+    }
+}
+
+
+
+app.post('/getTripPath', function (request, response) {
+    console.log('SERVER:: Firebase::  Get Trip Path');
+    //10207022211887806
+    //216
+    var tripDays = request.body.tripDays;
+    console.log(request.body.tripDays);
+    console.log(request.body.userId);
+    console.log(request.body.tripId);
+    var firebase_trip_path = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + request.body.userId + "/" + request.body.tripId + "/path");
+    //var firebase_trip_path = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/10207022211887806/216/path");
+
+    firebase_trip_path.once("value", function (snapshot) {
+        //console.log(snapshot.val());
+
+        var trip_path = [];
+        snapshot.forEach(function (item) {
+            trip_path.push(item.val());
+        });
+
+        console.log(trip_path);
+        console.log('Trip path loaded');
+        console.log('Trip path length : ' + trip_path.length);
+
+        //When path loaded, sort it by timestamp - the path could be sorted by default ????????????
+        trip_path.sort(function (a, b) {
+            return new Date(a.timestamp) - new Date(b.timestamp);
+        });
+
+        //when path sorted, save it into hash table for easy use
+        //$scope.trip_path_hash [0] = $scope.trip_path; //day zero is all the trip
+        var path_firast_date = '';
+        for (var trip_first_day_index = 0; trip_first_day_index < trip_path.length; trip_first_day_index++) {
+            if (trip_path[trip_first_day_index].timestamp != null) {
+                path_firast_date = trip_path[trip_first_day_index].timestamp; //know what is the first date
+                break;
+            }
+        }
+        console.log('first date: '+ path_firast_date);
+
+        var day = 0;
+        var path_last_index = 0;
+        var trip_path_hash = [];
+        //$scope.trip_path_hash = new Array($scope.tripDays + 1);
+        for (var hash_index = 0; hash_index < tripDays + 10; hash_index++) { //init hashtable with extra 10 cells
+            trip_path_hash[hash_index] = [];
+        }
+
+        for (var i = 0; i < tripDays; i++) {
+            for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new cel
+                if (trip_path[j]['timestamp'] && path_firast_date ) {
+                    if (trip_path[j].timestamp.substring(0, 10) == path_firast_date.substring(0, 10)) {
+                        if (checkAccuracy(trip_path[j], 1000)) { //check accuracy
+                            trip_path_hash[day].push({
+                                    lat: JSON.parse(trip_path[j]['coords'].latitude),
+                                    lng: JSON.parse(trip_path[j]['coords'].longitude),
+                                    timestamp: trip_path[j]['timestamp']
+                                }
+                            );
+                        }
+                    } else {
+                        //if date changed it means new day started, updated day and path index
+                        day++;
+                        path_last_index = j;
+                        path_firast_date = trip_path[j].timestamp;
+                    }
+                }else{
+                    console.log('Trip path not sliced into hash because of date issue')
+                }
+            }
+        }
+        //console.log('HASH');
+        //console.log(trip_path_hash);
+
+        response.send(trip_path_hash);
+    }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+    });
+});
+
+
+//Postgres :: Check if user exists
+app.post('/checkUserExistsByEmail', function (request, response) {
 
     console.log('SERVER:: Postgres::  Check if user exists by email');
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         // Handle connection errors
         if (err) {
             done();
             console.log(err);
-            return response.status(500).json({ success: false, data: err });
+            return response.status(500).json({success: false, data: err});
         }
 
         console.log(request.body.email);
         // SQL Query > Select Data
-        var query = client.query("SELECT EXISTS (SELECT * FROM users WHERE email = \'" + request.body.email + "\');", function(err, result) {
+        var query = client.query("SELECT EXISTS (SELECT * FROM users WHERE email = \'" + request.body.email + "\');", function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -292,17 +359,17 @@ app.post('/checkUserExistsByEmail', function(request, response) {
 });
 
 //Postgres :: add new user
-app.post('/addNewUser', function(request, response) {
+app.post('/addNewUser', function (request, response) {
 
     console.log('SERVER:: Postgres::  Add new user');
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         // Handle connection errors
         if (err) {
             done();
             console.log(err);
-            return res.status(500).json({ success: false, data: err });
+            return res.status(500).json({success: false, data: err});
         }
-        var query = client.query("INSERT INTO users(email, name, provider, provider_id, cell_number, active_trip) values($1, $2, $3, $4, $5, $6)", [request.body.email, request.body.name, 'facebook', request.body.id, '0500000000', true], function(err, result) {
+        var query = client.query("INSERT INTO users(email, name, provider, provider_id, cell_number, active_trip) values($1, $2, $3, $4, $5, $6)", [request.body.email, request.body.name, 'facebook', request.body.id, '0500000000', true], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -316,17 +383,17 @@ app.post('/addNewUser', function(request, response) {
 });
 
 //Postgres :: add new user
-app.post('/getUsersList', function(request, response) {
+app.post('/getUsersList', function (request, response) {
 
     console.log('SERVER:: Postgres::  get users list');
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         // Handle connection errors
         if (err) {
             done();
             console.log(err);
-            return res.status(500).json({ success: false, data: err });
+            return res.status(500).json({success: false, data: err});
         }
-        var query = client.query("SELECT * FROM users WHERE active_trip = " + true + ";", function(err, result) {
+        var query = client.query("SELECT * FROM users WHERE active_trip = " + true + ";", function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -344,7 +411,7 @@ app.post('/getUsersList', function(request, response) {
 
 
 //Postgres :: Insert new trip to the table of trips with data
-app.post('/insertTrip', function(request, response) {
+app.post('/insertTrip', function (request, response) {
 
     console.log('SERVER:: Postgres:: insert new record to trips table with data');
     var jsonTrip = request.body;
@@ -356,11 +423,11 @@ app.post('/insertTrip', function(request, response) {
     console.log(tripGeneral.start_date);
     console.log(tripGeneral.end_date);
 
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("INSERT INTO trips(trip_name, start_date, end_date, continent, cities, trip_description) values($1, $2, $3, $4, $5, $6)", [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent, cities, tripGeneral.trip_description, false], function(err, result) {
+        client.query("INSERT INTO trips(trip_name, start_date, end_date, continent, cities, trip_description) values($1, $2, $3, $4, $5, $6)", [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent, cities, tripGeneral.trip_description, false], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -377,17 +444,17 @@ app.post('/insertTrip', function(request, response) {
 
 
 //Postgres :: Insert new empty trip record to trips table
-app.post('/insertNewEmptyTrip', function(request, response) {
+app.post('/insertNewEmptyTrip', function (request, response) {
 
     console.log('SERVER:: Postgres:: insert new empty record to trips table');
 
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
         client.query("INSERT INTO trips(trip_name) values($1) RETURNING id", //generate auto name
             [''],
-            function(err, result) {
+            function (err, result) {
                 //call `done()` to release the client back to the pool
                 done();
 
@@ -405,16 +472,16 @@ app.post('/insertNewEmptyTrip', function(request, response) {
 });
 
 //below used to create sample trip, for the new flow
-app.post('/updateTripGeneralInfo', function(request, response) {
+app.post('/updateTripGeneralInfo', function (request, response) {
 
     console.log('SERVER:: Postgres:: update trip with General info' + request.body);
 
     var jsonTrip = request.body;
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3), trip_description = ($4), email = ($5), picture = ($6), continent = ($7), facebook_id = ($8), public = ($9) WHERE id = ($10)", [jsonTrip.trip_name, jsonTrip.start_date, jsonTrip.end_date, jsonTrip.trip_description, jsonTrip.email, jsonTrip.profile_picture, '{' + jsonTrip.continent + '}', jsonTrip.facebook_id, jsonTrip.options.trip_public, jsonTrip.trip_id], function(err, result) {
+        client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3), trip_description = ($4), email = ($5), picture = ($6), continent = ($7), facebook_id = ($8), public = ($9) WHERE id = ($10)", [jsonTrip.trip_name, jsonTrip.start_date, jsonTrip.end_date, jsonTrip.trip_description, jsonTrip.email, jsonTrip.profile_picture, '{' + jsonTrip.continent + '}', jsonTrip.facebook_id, jsonTrip.options.trip_public, jsonTrip.trip_id], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -430,7 +497,7 @@ app.post('/updateTripGeneralInfo', function(request, response) {
 
 //below used to update trip from planning page
 //Postgres :: update trip record to trips table
-app.post('/updateTrip', function(request, response) {
+app.post('/updateTrip', function (request, response) {
 
     //var id = request.body.trip_id;
     // console.log('kariiiim'+id);
@@ -450,11 +517,11 @@ app.post('/updateTrip', function(request, response) {
 
     //    client.query("UPDATE items SET text=($1), complete=($2) WHERE id=($3)", [data.text, data.complete, id]);
 
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3) , continent = ($4), table_plan = ($5), trip_description = ($6), email = ($7) WHERE id = ($8)", [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent, table_plan, tripGeneral.trip_description, tripGeneral.email, tripGeneral.trip_id], function(err, result) {
+        client.query("UPDATE trips SET trip_name = ($1), start_date = ($2), end_date =($3) , continent = ($4), table_plan = ($5), trip_description = ($6), email = ($7) WHERE id = ($8)", [tripGeneral.trip_name, tripGeneral.start_date, tripGeneral.end_date, tripGeneral.continent, table_plan, tripGeneral.trip_description, tripGeneral.email, tripGeneral.trip_id], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -470,18 +537,18 @@ app.post('/updateTrip', function(request, response) {
 });
 
 //Postgres :: update active trip
-app.post('/activateTrip', function(request, response) {
+app.post('/activateTrip', function (request, response) {
 
     console.log('SERVER:: Postgres:: update Trip if Active ' + request.body);
 
     var jsonTrip = request.body; // true or false
 
     //make sure all trips are not activated before active the trip (because only 1 trip should be activated at one time)
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("UPDATE trips SET active = ($1) WHERE email = ($2)", [false, request.body.email], function(err, result) {
+        client.query("UPDATE trips SET active = ($1) WHERE email = ($2)", [false, request.body.email], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -494,11 +561,11 @@ app.post('/activateTrip', function(request, response) {
     });
 
     //update the Trip to be active
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("UPDATE trips SET active = ($1) WHERE id = ($2)", [true, request.body.trip_id], function(err, result) {
+        client.query("UPDATE trips SET active = ($1) WHERE id = ($2)", [true, request.body.trip_id], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -514,16 +581,16 @@ app.post('/activateTrip', function(request, response) {
 });
 
 //postgres change track mode
-app.post('/trackConfig', function(request, response) {
+app.post('/trackConfig', function (request, response) {
 
     console.log('SERVER:: Postgres:: config track mode ' + request.body);
 
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
         //by default track mode is false, means not real time, user need to update manually by click update button from the app
-        client.query("UPDATE trips SET track_mode = ($1) WHERE id = ($2)", [request.body.track_mode, request.body.trip_id], function(err, result) {
+        client.query("UPDATE trips SET track_mode = ($1) WHERE id = ($2)", [request.body.track_mode, request.body.trip_id], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -539,16 +606,16 @@ app.post('/trackConfig', function(request, response) {
 });
 
 //postgres public
-app.post('/publicTrip', function(request, response) {
+app.post('/publicTrip', function (request, response) {
 
     console.log('SERVER:: Postgres:: public trip ' + request.body);
 
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
         //by default trip is not public
-        client.query("UPDATE trips SET public = ($1) WHERE id = ($2)", [request.body.public, request.body.trip_id], function(err, result) {
+        client.query("UPDATE trips SET public = ($1) WHERE id = ($2)", [request.body.public, request.body.trip_id], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -564,83 +631,9 @@ app.post('/publicTrip', function(request, response) {
 });
 
 //getPublicTrips
-app.post('/getPublicTrips', function(request, response) {
+app.post('/getPublicTrips', function (request, response) {
 
     console.log('SERVER:: Postgres:: get all public trips');
-    var results = [];
-
-    // Get a Postgres client from the connection pool
-    pg.connect(conString, function(err, client, done) {
-        // Handle connection errors
-        if (err) {
-            done();
-            console.log(err);
-            return response.status(500).json({ success: false, data: err });
-        }
-        //var email = "'" + request.body.email + "'";
-        // SQL Query > Select Data
-        var query = client.query("SELECT * FROM trips WHERE public = true ORDER BY id ASC  ;");
-
-        console.log(query);
-        // Stream results back one row at a time
-        query.on('row', function(row) {
-            console.log(row);
-            results.push(row);
-        });
-
-        // After all data is returned, close connection and return results
-        query.on('end', function() {
-            done();
-            return response.json(results);
-        });
-
-    });
-
-});
-
-
-//update trip photo provider in DB Postgres, by default it aws, could be Facebook, in the future will be also Instagram
-app.post('/updateTripPhotosProvider', function(request, response) {
-
-    console.log('SERVER:: Postgres:: update trip photos provider');
-    var results = [];
-
-    // Get a Postgres client from the connection pool
-    pg.connect(conString, function(err, client, done) {
-        // Handle connection errors
-        if (err) {
-            done();
-            console.log(err);
-            return response.status(500).json({ success: false, data: err });
-        }
-        var query = client.query("UPDATE trips SET photos_provider = ($1) WHERE id = ($2)", [request.body.photos_provider, request.body.trip_id]);
-
-        console.log(query);
-        // Stream results back one row at a time
-        query.on('row', function(row) {
-            console.log(row);
-            results.push(row);
-        });
-
-        // After all data is returned, close connection and return results
-        query.on('end', function() {
-            done();
-            return response.json(results);
-        });
-
-    });
-
-});
-
-
-
-
-
-
-//save facebook profile picture -- Not used, when create new trip I also update the profile picture in the same function
-/*app.post('/saveProfilePicture', function (request, response) {
-
-    console.log('SERVER:: Postgres:: save profile picture');
     var results = [];
 
     // Get a Postgres client from the connection pool
@@ -653,8 +646,7 @@ app.post('/updateTripPhotosProvider', function(request, response) {
         }
         //var email = "'" + request.body.email + "'";
         // SQL Query > Select Data
-        var query = client.query("UPDATE trips SET picture = ($1) WHERE id = ($2)",
-            [jsonTrip.picture, jsonTrip.trip_id]);
+        var query = client.query("SELECT * FROM trips WHERE public = true ORDER BY id ASC  ;");
 
         console.log(query);
         // Stream results back one row at a time
@@ -671,12 +663,83 @@ app.post('/updateTripPhotosProvider', function(request, response) {
 
     });
 
-});*/
+});
+
+
+//update trip photo provider in DB Postgres, by default it aws, could be Facebook, in the future will be also Instagram
+app.post('/updateTripPhotosProvider', function (request, response) {
+
+    console.log('SERVER:: Postgres:: update trip photos provider');
+    var results = [];
+
+    // Get a Postgres client from the connection pool
+    pg.connect(conString, function (err, client, done) {
+        // Handle connection errors
+        if (err) {
+            done();
+            console.log(err);
+            return response.status(500).json({success: false, data: err});
+        }
+        var query = client.query("UPDATE trips SET photos_provider = ($1) WHERE id = ($2)", [request.body.photos_provider, request.body.trip_id]);
+
+        console.log(query);
+        // Stream results back one row at a time
+        query.on('row', function (row) {
+            console.log(row);
+            results.push(row);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function () {
+            done();
+            return response.json(results);
+        });
+
+    });
+
+});
+
+
+//save facebook profile picture -- Not used, when create new trip I also update the profile picture in the same function
+/*app.post('/saveProfilePicture', function (request, response) {
+
+ console.log('SERVER:: Postgres:: save profile picture');
+ var results = [];
+
+ // Get a Postgres client from the connection pool
+ pg.connect(conString, function (err, client, done) {
+ // Handle connection errors
+ if (err) {
+ done();
+ console.log(err);
+ return response.status(500).json({success: false, data: err});
+ }
+ //var email = "'" + request.body.email + "'";
+ // SQL Query > Select Data
+ var query = client.query("UPDATE trips SET picture = ($1) WHERE id = ($2)",
+ [jsonTrip.picture, jsonTrip.trip_id]);
+
+ console.log(query);
+ // Stream results back one row at a time
+ query.on('row', function (row) {
+ console.log(row);
+ results.push(row);
+ });
+
+ // After all data is returned, close connection and return results
+ query.on('end', function () {
+ done();
+ return response.json(results);
+ });
+
+ });
+
+ });*/
 
 
 
 //Postgres read trips table
-app.post('/getTrips', function(request, response, next) {
+app.post('/getTrips', function (request, response, next) {
 
     // add validation to the email is valid - add function to do the validation
     //else return nothing
@@ -690,12 +753,12 @@ app.post('/getTrips', function(request, response, next) {
         var results = [];
 
         // Get a Postgres client from the connection pool
-        pg.connect(conString, function(err, client, done) {
+        pg.connect(conString, function (err, client, done) {
             // Handle connection errors
             if (err) {
                 done();
                 console.log(err);
-                return response.status(500).json({ success: false, data: err });
+                return response.status(500).json({success: false, data: err});
             }
             //var email = "'" + request.body.email + "'";
             // SQL Query > Select Data
@@ -703,13 +766,13 @@ app.post('/getTrips', function(request, response, next) {
 
             console.log(query);
             // Stream results back one row at a time
-            query.on('row', function(row) {
+            query.on('row', function (row) {
                 console.log(row);
                 results.push(row);
             });
 
             // After all data is returned, close connection and return results
-            query.on('end', function() {
+            query.on('end', function () {
                 done();
                 return response.json(results);
             });
@@ -720,7 +783,7 @@ app.post('/getTrips', function(request, response, next) {
 
 
 //Postgres get trip by id
-app.post('/getTripById', function(request, response) {
+app.post('/getTripById', function (request, response) {
 
     if (request.body.trip_id) {
         console.log('SERVER:: Postgres:: get trip by id :: trip id ::' + request.body.trip_id);
@@ -728,24 +791,24 @@ app.post('/getTripById', function(request, response) {
         var results = [];
 
         // Get a Postgres client from the connection pool
-        pg.connect(conString, function(err, client, done) {
+        pg.connect(conString, function (err, client, done) {
             // Handle connection errors
             if (err) {
                 done();
                 console.log(err);
-                return response.status(500).json({ success: false, data: err });
+                return response.status(500).json({success: false, data: err});
             }
 
             // SQL Query > Select Data
             var query = client.query("SELECT * FROM trips WHERE id = " + trip_id + ";");
 
             // Stream results back one row at a time
-            query.on('row', function(row) {
+            query.on('row', function (row) {
                 results.push(row);
             });
 
             // After all data is returned, close connection and return results
-            query.on('end', function() {
+            query.on('end', function () {
                 done();
                 console.log(results); // looks like : [{....}]
                 //tripById = results;
@@ -759,19 +822,19 @@ app.post('/getTripById', function(request, response) {
 });
 
 //Postgres Delete trip by id
-app.post('/deleteTripById', function(request, response) {
+app.post('/deleteTripById', function (request, response) {
 
     console.log('SERVER:: Postgres:: delete trip by id :: trip id ::' + request.body.trip_id);
     var trip_id = request.body.trip_id;
     var results = [];
 
     // Get a Postgres client from the connection pool
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         // Handle connection errors
         if (err) {
             done();
             console.log(err);
-            return response.status(500).json({ success: false, data: err });
+            return response.status(500).json({success: false, data: err});
         }
 
         // SQL Query > Select Data
@@ -783,7 +846,7 @@ app.post('/deleteTripById', function(request, response) {
         //  });
 
         // After all data is returned, close connection and return results
-        query.on('end', function() {
+        query.on('end', function () {
             done();
             console.log(results); // looks like : [{....}]
             //  tripById = results;
@@ -858,14 +921,14 @@ app.post('/deleteTripById', function(request, response) {
  */
 
 //get last trip id from the trips table
-app.post('/getLastTripId', function(request, response) {
+app.post('/getLastTripId', function (request, response) {
     console.log('SERVER: get last trip id from trips table');
 
-    pg.connect(conString, function(err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("SELECT * limit 1", function(err, result) {
+        client.query("SELECT * limit 1", function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -899,11 +962,11 @@ var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
 //////////////////////// DB /////////////////////////////////////////////////
 
 //receive country and city name, return GeoCode from Google Maps API
-app.post('/getGeoCode', function(request, response) {
+app.post('/getGeoCode', function (request, response) {
     // Using callback
     console.log('Server::: Get GeoCode for city::' + request.body); // print the city name from UI
     console.log('Server city name ' + request.body.city);
-    geocoder.geocode(request.body.city, function(err, res) {
+    geocoder.geocode(request.body.city, function (err, res) {
         //  console.log(err,res); //print the response from GeoLocation google API
         response.send(res);
     });
@@ -948,10 +1011,10 @@ app.post('/getGeoCode', function(request, response) {
 // Get GPS XML from DropBox -> Parse to JSON -> Send to client
 
 //get GPS from DropBox and send to client:
-app.post('/getGpsPoints', function(request, response) {
+app.post('/getGpsPoints', function (request, response) {
     console.log("Server: get GPS points");
 
-    client.readFile("20150904.gpx", function(error, data) {
+    client.readFile("20150904.gpx", function (error, data) {
         if (error) {
             console.log(error);
             //return showError(error);  // Something went wrong.
@@ -962,7 +1025,7 @@ app.post('/getGpsPoints', function(request, response) {
 
         var parseString = require('xml2js').parseString;
         var xml = data;
-        parseString(xml, function(err, result) {
+        parseString(xml, function (err, result) {
             //console.log(result);
             var gpsJson = result;
             //Ponts data : gpsJson.gpx.trk[0].trkseg[0].trkpt
@@ -971,12 +1034,12 @@ app.post('/getGpsPoints', function(request, response) {
 
             var points = gpsJson.gpx.trk[0].trkseg[0].trkpt;
 
-            var pointsJson = [{ id: 1, path: [] }];
+            var pointsJson = [{id: 1, path: []}];
 
             for (var i = 0; i < points.length; i++) {
                 //console.log(points[i]['$'].lat);
                 // console.log(points[i]['$'].lon);
-                pointsJson[0].path.push({ latitude: points[i]['$'].lat, longitude: points[i]['$'].lon });
+                pointsJson[0].path.push({latitude: points[i]['$'].lat, longitude: points[i]['$'].lon});
             }
 
             //   console.log(gpsJson.gpx.trk[0].trkseg[0]);
@@ -997,22 +1060,22 @@ app.post('/getGpsPoints', function(request, response) {
  // code to handle new child.
  });
  */
-app.post('/getGpsTrack', function(request, response) {
-    FirebaseRef.on("value", function(snapshot) {
+app.post('/getGpsTrack', function (request, response) {
+    FirebaseRef.on("value", function (snapshot) {
         //console.log(snapshot.val());
         response.send(snapshot.val());
-    }, function(errorObject) {
+    }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
     });
 });
 
-io.on('connection', function(socket) {
+io.on('connection', function (socket) {
     console.log('New socket id: ' + socket.id);
     sockets.push(socket);
 });
 
 //When new GPS point added - Listener
-FirebaseRef.endAt().limitToLast(1).on('child_added', function(childSnapshot, prevChildKey) {
+FirebaseRef.endAt().limitToLast(1).on('child_added', function (childSnapshot, prevChildKey) {
     console.log('new GPS point added ' + childSnapshot.val());
     //sendGpsPointToClient(childSnapshot.val());
 
@@ -1025,11 +1088,11 @@ FirebaseRef.endAt().limitToLast(1).on('child_added', function(childSnapshot, pre
 
 function sendGpsPointToClient(GpsPoint) {
     console.log('STAM');
-    io.on('connection', function(socket) {
+    io.on('connection', function (socket) {
         console.log('new GPS point added 2' + GpsPoint);
         socket.emit('GpsPoint', GpsPoint);
 
-        socket.on('my other event', function(data) {
+        socket.on('my other event', function (data) {
             console.log(data);
         });
     });
@@ -1047,7 +1110,7 @@ function sendGpsPointToClient(GpsPoint) {
 
 //by using this API I can find the X airports close to the lat, long point I will pass to the API.
 
-app.post('/getNearestAirports', function(request, response) {
+app.post('/getNearestAirports', function (request, response) {
     //curl -v  -X GET "https://airport.api.aero/airport/nearest/31.0461/34.8516?maxAirports=4&user_key=f1aeb34aba3d0613f7cbb81cfd4b9d09"
 
     var http = require('https'); // get it to the top
@@ -1056,25 +1119,25 @@ app.post('/getNearestAirports', function(request, response) {
     var options = {
         host: 'airport.api.aero',
         path: '/airport/nearest/' + request.body.lat + '/' + request.body.lng + '?maxAirports=' + request.body.maxAirports + '&user_key=f1aeb34aba3d0613f7cbb81cfd4b9d09',
-        headers: { 'accept': 'application/xml' }
+        headers: {'accept': 'application/xml'}
     };
 
-    callback = function(res) {
+    callback = function (res) {
         var str = '';
 
         //another chunk of data has been recieved, so append it to `str`
-        res.on('data', function(chunk) {
+        res.on('data', function (chunk) {
             str += chunk;
             console.log(str);
         });
 
         //the whole response has been recieved, so we just print it out here
-        res.on('end', function() {
+        res.on('end', function () {
 
 
             //convert the response from XML to JSON
             var parseString = require('xml2js').parseString;
-            parseString(str, function(err, result) {
+            parseString(str, function (err, result) {
                 console.log(JSON.stringify(result));
                 response.send(JSON.stringify(result));
             });
@@ -1094,7 +1157,7 @@ app.post('/getNearestAirports', function(request, response) {
 
 // ################### Google Flights ############################## //
 
-app.post('/getFlights', function(request, response) {
+app.post('/getFlights', function (request, response) {
     //Google flights API
     var flightParam = request.body; // {origin:"TLV", destination:"JFK", date:"2015-12-02", solutions: 10};
 
