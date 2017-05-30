@@ -490,12 +490,12 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         mapTypeId: google.maps.MapTypeId.TERRAIN,
                         zoomControl: true,
                         zoomControlOptions: {
-                            position: google.maps.ControlPosition.RIGHT_CENTER
+                            position: google.maps.ControlPosition.LEFT_BOTTOM
                         },
                         scaleControl: true,
                         streetViewControl: false,
                         streetViewControlOptions: {
-                            position: google.maps.ControlPosition.RIGHT_CENTER
+                            position: google.maps.ControlPosition.LEFT_CENTER
                         }
                     });
 
@@ -566,7 +566,14 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             position: google.maps.ControlPosition.TOP_CENTER,
                             drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
                         },
-                        markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
+                        markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+                        // This marker is 20 pixels wide by 32 pixels high.
+                        size: new google.maps.Size(200, 200),
+                        // The origin for this image is (0, 0).
+                        origin: new google.maps.Point(90, 70),
+                        // The anchor for this image is the base of the flagpole at (0, 32).
+                        anchor: new google.maps.Point(300, 302)},
+
                         circleOptions: {
                             fillColor: '#ffff00',
                             fillOpacity: 1,
