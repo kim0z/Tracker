@@ -1,6 +1,5 @@
 trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeout, $stateParams, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory, nearbyPlacesFactory, firebaseSvc) {
-
-
+        //Variables Init
         $scope.loading = true;
         $scope.tripID = $stateParams.id;//localStorageService.get('tripId');
         $scope.profile = localStorageService.get('profile');
@@ -11,36 +10,9 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         }
 
         $scope.load_progress = 1;
-
-        //var facebookIdNotClean = $scope.profile.user_id; //"facebook|"
-        //var facebookId = facebookIdNotClean.replace(/^\D+/g, '');
-
-        //var facebookId = $scope.profile.identities[0].user_id;
-
-        //NOTES:
-        //**** Should I move all AWS S3 to server? it is risky to be in the client?
-        //****
-        //****
-        //****
-        //****
-
-
         $scope.user = messages.getUser(); //replace with local service like next line
-
-        //Bug
-        //get the mail from storage is not the best way, because after refresh it is deleted, I should change way how to get mail - bug opened in Driver
-        //$scope.email = localStorageService.get('email');
-
-
-        //not relvant anymore belwo 2 lines
-        //var email_no_shtrodel = $scope.profile.email.replace('@', 'u0040');
-        //var email_no_shtrodel_dot = email_no_shtrodel.replace('.', 'u002E');
-
         $scope.tips_button = true;
         $scope.places_button = false;
-
-        //$scope.tripID = messages.getTripID(); in this way user can't refresh, I moved to get trip id from local storage
-
         $scope.travelersList = [];
         $scope.data = []; // Travellers from PG DB
         $scope.messages = []; // Tips from Firebase, based on GPS point
@@ -50,10 +22,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.panoPosition = '';
         $scope.editButtonText = 'Edit Mode';
         var showMessageOnMap_clicked = false;
-
         $scope.pathSaved = [];
         $scope.pathLoaded = false;
-
 
         //Filter for the tips
         $scope.showAllTips = true;
@@ -69,17 +39,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.drawing_panel = false;
         $scope.information_panel = true;
 
-        $scope.openDrawingPanel = function () {
-            $scope.drawing_panel = true;
-        }
-        $scope.openInformationPanel = function () {
-            $scope.information_panel = true;
-        }
-        //////////
-
-
         $scope.noTripId = false;
-
 
         $scope.facebookAlbums = {}; //when page loaded, a Facebook API triggered to get user albums in case new album was added
         //to show it in edit mode to allow users select the new albums
@@ -95,64 +55,49 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.prod.imagePaths = [];
         $scope.facebookImagesReady = false;
 
-        /* don't now what the below for, disable until error
-         $scope.value = undefined;
-         */
-        //items array used for facebook photos
         $scope.items = [];
 
         $scope.selectedFacebookAlbum = [];
         $scope.facebookAlbumsList = []; //Facebook albums from Firebase
-
         $scope.pathHash = [];
-        //read albums from Firebase config and then load photos
-        //read albums from Firebase for:
-        // 1. update edit mode list witht the enabled albums (not to update the list witht the albums list, only if it enabled, reason: could be that the list in facebook more updated)
-        // 2. show the photos in Gallery of the enabled photos
-
-        //var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + email_no_shtrodel_dot + "/offline/photos/facebook/trip/" + $scope.tripID);
-
-        //remove mouse over event, make it too much
-        $scope.photoMouseOver = function (event) {
-            //console.log(event.target);
-            $scope.showPhotoOnMap(event.target);
-        }
 
         $scope.columns = [
             {title: 'Name', field: 'name', visible: true, filter: {'name': 'text'}},
             {title: 'Age', field: 'age', visible: true},
             {title: 'country', field: 'add', visible: true, subfield: 'coun'}
         ];
-
         $rootScope.Utils = {
             keys: Object.keys
         }
-
+        //** small help functions **//
+        //remove mouse over event, make it too much
+        $scope.photoMouseOver = function (event) {
+            //console.log(event.target);
+            $scope.showPhotoOnMap(event.target);
+        }
+        $scope.openDrawingPanel = function () {
+            $scope.drawing_panel = true;
+        }
+        $scope.openInformationPanel = function () {
+            $scope.information_panel = true;
+        }
         $scope.openNav = function () {
             document.getElementById("mySidenav").style.width = "420px";
         }
-
         $scope.closeNav = function () {
             document.getElementById("mySidenav").style.width = "0";
         }
 
-        //get trip
+        //Get trip Id to start working on the trip
+        //############ Main closure ###################### //
         var dataTripId = {trip_id: $scope.tripID};
 
         if ($scope.tripID) { //if no trip id then nothing will work, show message in that case
 
             dataBaseService.getTripById(dataTripId).then(function (results) {
                     $scope.trip = results.data;
-
-                    //################################### Fill all fields of Trip definition #########################
-                    //console.log('end date: ' + $scope.trip[0].end_date);
-                    //console.log('start day: ' + $scope.trip[0].start_date);
-                    //console.log('trip desc: ' + $scope.trip[0].trip_description);
-
                     $scope.tripName = $scope.trip[0].trip_name;
                     $scope.tripDescription = $scope.trip[0].trip_description;
-                    //$scope.dateStart = $scope.tripById[0].start_date;
-                    //$scope.dateEnd = $scope.tripById[0].end_date;
 
                     $scope.dateStart = $filter('date')($scope.trip[0].start_date, 'MMM d, y');
                     $scope.dateEnd = $filter('date')($scope.trip[0].end_date, 'MMM d, y');
@@ -170,174 +115,12 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                     $scope.tripDays = Math.abs(Math.floor((Date.parse($scope.dateStart) - Date.parse($scope.dateEnd)) / 86400000));
 
-
+                    $scope.day = 0;
                     $scope.days = [];
                     //Select day to filter trip
                     for (var i = 0; i < $scope.tripDays; i++) {
                         $scope.days.push(i);
                     }
-
-                    $scope.selectedItem;
-                    $scope.filterTripByDay = function () {
-                        console.log('Selected day : ' + $scope.selectedItem)
-                        if ($scope.selectedItem !== undefined) {
-                            //return "You have selected: Item " + $scope.selectedItem;
-
-                            if (!$scope.pathLoaded) {
-                                $timeout(function () {
-                                    $scope.pathLoaded = true;
-                                });
-                            } else {
-
-                                console.log('Filter map');
-                                var filteredPath = [];
-
-                                var tempDate = new Date($scope.startDateSliderForPath); //first day of the trip
-
-                                //if slider value = 0 then start date will not changed, but we can't say 0 for day number 1 in the trip
-                                //therefore I will add +1 for each slider value
-                                //for the 0 I will use it to bring all trip up with all the data
-
-                                if ($scope.selectedItem == 0) {
-                                    for (var i = 0; i < $scope.pathSaved.length; i++) {
-                                        filteredPath.push({
-                                            lat: JSON.parse($scope.pathSaved[i]['coords'].latitude),
-                                            lng: JSON.parse($scope.pathSaved[i]['coords'].longitude)
-                                        });
-                                    }
-
-                                    var lineSymbol = {
-                                        //path: 'M 0,-1 0,1',
-                                        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-                                        strokeOpacity: 1,
-                                        scale: 2
-                                    };
-
-                                    //Hash table for all users path
-
-                                    //delete current path
-                                    if (polys[$scope.facebookId]) {
-                                        polys[$scope.facebookId].setMap(null);
-                                    }
-
-                                    //save path after was sliced from full path for further use
-                                    if ($scope.selectedItem) {
-                                        $scope.pathHash[$scope.selectedItem] = filteredPath;
-                                    }
-
-                                    polys[$scope.facebookId] = new google.maps.Polyline({
-                                        //map: $scope.map,
-                                        path: filteredPath,
-                                        geodesic: true,
-                                        strokeColor: '#000000', //getRandomColor(),
-                                        strokeOpacity: 0,
-                                        strokeWeight: 2,
-                                        icons: [{
-                                            icon: lineSymbol,
-                                            offset: '0',
-                                            repeat: '20px'
-                                        }]
-                                    });
-
-                                    polys[$scope.facebookId].setMap($scope.map);
-                                    $scope.map.setCenter(filteredPath.pop());
-                                    //$scope.map.setCenter(filteredPath[filteredPath.length / 2]);
-                                    $scope.map.setZoom(12);
-
-                                } else {
-                                    //if slider value not 0 then calculate the required date by adding slider value to start date
-
-                                    if ($scope.startDateSliderForPath != null && $scope.selectedItem != null) {
-                                        $scope.startDateSliderForPath = new Date($scope.startDateSliderForPath.setDate($scope.startDateSliderForPath.getDate() + $scope.selectedItem - 1));
-                                    } else {
-                                        console.log('Client :: Trip page :: issue with dates while in the watcher of the slider');
-                                    }
-
-                                    for (var i = 0; i < $scope.pathSaved.length; i++) {
-                                        var pointTime = $filter('date')($scope.pathSaved[i]['timestamp'], 'MMM d, y');
-                                        var selectedDatePath = $filter('date')($scope.startDateSliderForPath, 'MMM d, y');
-
-                                        if (pointTime == selectedDatePath) {
-                                            filteredPath.push({
-                                                lat: JSON.parse($scope.pathSaved[i]['coords'].latitude),
-                                                lng: JSON.parse($scope.pathSaved[i]['coords'].longitude)
-                                            });
-                                        }
-                                    }
-
-                                    $scope.startDateSliderForPath = tempDate;
-
-                                    //update map with filtered path
-                                    //set the path for the first load, for the real time load, I added the same code into the listener of Firebase above
-                                    //dashed line
-                                    var lineSymbol = {
-                                        //path: 'M 0,-1 0,1',
-                                        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-                                        strokeOpacity: 1,
-                                        scale: 2
-                                    };
-
-                                    //Hash table for all users path
-
-                                    //delete current path
-                                    if (polys[$scope.facebookId]) {
-                                        polys[$scope.facebookId].setMap(null);
-                                    }
-
-                                    if ($scope.selectedItem) {
-                                        $scope.pathHash[$scope.selectedItem] = filteredPath;
-                                    }
-
-
-                                    polys[$scope.facebookId] = new google.maps.Polyline({
-                                        path: filteredPath,
-                                        geodesic: true,
-                                        strokeColor: '#000000', //getRandomColor(),
-                                        strokeOpacity: 0,
-                                        strokeWeight: 2,
-                                        icons: [{
-                                            icon: lineSymbol,
-                                            offset: '0',
-                                            repeat: '20px'
-                                        }]
-                                    });
-
-                                    polys[$scope.facebookId].setMap($scope.map);
-                                    $scope.map.setCenter(filteredPath.pop());
-                                    //console.log(filteredPath.length/2);
-                                    //console.log(filteredPath[filteredPath.length/2]);
-                                    //$scope.map.setCenter(new google.maps.LatLng(JSON.parse(filteredPath[filteredPath.length/2].lat), JSON.parse(filteredPath[filteredPath.length/2].lng)));
-                                    $scope.map.setZoom(12);
-
-
-                                }
-
-
-                            }
-
-                        } else {
-                            return "Please select an item";
-                        }
-                    };
-
-
-                    $scope.sliderChangeListener = function () {
-                        //console.log($scope.slider.value);
-                    };
-
-                    //Slider
-                    $scope.slider = { //requires angular-bootstrap to display tooltips
-                        value: 0,
-                        options: {
-                            floor: 0,
-                            ceil: $scope.tripDays + 1,
-                            showTicksValues: true,
-                            ticksValuesTooltip: function (v) {
-                                return 'Tooltip for ' + v;
-                            },
-                            onChange: $scope.sliderChangeListener
-                        }
-                    };
 
                     $scope.photosSource = $scope.trip[0].photos_provider;
 
@@ -348,61 +131,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         $scope.awsProvider = false;
                         $scope.facebookProvider = true;
                     }
-
-                    //Filter - used to get value from slider to filter tips
-                    $scope.filterTips = function (day) {
-                        return function (message) {
-                            //console.log('Tips filter, for slider');
-                            //console.log($scope.slider);
-                            //example:
-                            //if day = 1 it means, start day, day = 2, it means start day + 1;
-
-                            //add days number to start date
-                            //$scope.selectedDate = new Date($scope.startDateSlider.getDate());
-
-                            var tempDate = new Date($scope.startDateSlider);
-
-                            if ($scope.startDateSlider != null && $scope.slider != null) {
-                                $scope.startDateSlider = new Date($scope.startDateSlider.setDate($scope.startDateSlider.getDate() + $scope.slider.value));
-                            } else {
-                                console.log('Client :: Trip page :: issue with dates while filtering by slider');
-                            }
-
-
-                            //check if item date is equal to the selected date (slider), if yes return true else false
-                            //get item date
-                            var messageDate = $filter('date')(message.time, 'MMM d, y');
-                            var sliderDate = $filter('date')($scope.startDateSlider, 'MMM d, y');
-
-                            if (messageDate == sliderDate) {
-                                $scope.startDateSlider = tempDate;
-                                return true;
-                            } else {
-                                $scope.startDateSlider = tempDate;
-                                return false;
-                            }
-
-
-                            //else
-                            //console.log('FALSE');
-                            // console.log(message.time);
-                            // console.log($filter('date')(message.time, 'MMM d, y'));
-                            // console.log($filter('date')($scope.selectedDate, 'MMM d, y'));
-
-                            // return true;
-                        }
-
-                    };
-
-                    //Filter - used to get value from slider to filter map
-                    /*      $scope.filterTips = function(car)
-                     {
-
-                     };
-                     */
-
-                    //$scope.tripID
-                    //value to update
                     $scope.enableFacebookProvider = function () {
                         $scope.awsProvider = false;
 
@@ -419,60 +147,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         });
                     };
 
-
-                    $scope.filterTipsOnClick = function (filterStr) {
-                        switch (filterStr) {
-                            case 'all':
-                            {
-                                $scope.showAllTips = true;
-                                $scope.showTips = false;
-                                $scope.showRisks = false;
-                                $scope.filterExpense = false;
-                                $scope.showInvite = false;
-                                break;
-                            }
-                            case 'tips':
-                            {
-                                $scope.showAllTips = false;
-                                $scope.showTips = true;
-                                $scope.showRisks = false;
-                                $scope.showExpense = false;
-                                $scope.showInvite = false;
-                                break;
-                            }
-                            case 'risks':
-                            {
-                                $scope.showAllTips = false;
-                                $scope.showTips = false;
-                                $scope.showRisks = true;
-                                $scope.showExpense = false;
-                                $scope.showInvite = false;
-                                break;
-                            }
-                            case 'expense':
-                            {
-                                $scope.showAllTips = false;
-                                $scope.showTips = false;
-                                $scope.showRisks = false;
-                                $scope.showExpense = true;
-                                $scope.showInvite = false;
-                                break;
-                            }
-                            case 'invite':
-                            {
-                                $scope.showAllTips = false;
-                                $scope.showTips = false;
-                                $scope.showRisks = false;
-                                $scope.showExpense = false;
-                                $scope.showInvite = true;
-                                break;
-                            }
-                        }
-                    }
-
-
                     var firebase_config_get_albums = new Firebase("https://trackerconfig.firebaseio.com/web/" + $scope.facebookId + "/offline/photos/facebook/trip/" + $scope.tripID);
-
 
                     firebase_config_get_albums.on("value", function (snapshot) {
                         //  var i = 0;
@@ -537,23 +212,9 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         console.log("The read failed: " + errorObject.code);
                     });
 
-
-                    /* for testing
-
-                     Facebook.api(
-                     "/"+facebookId+"/permissions?access_token="+$scope.userAccessToken,
-                     function (response) {
-                     if (response && !response.error) {
-
-                     }
-                     }
-                     );
-                     */
-
                     //get all facebook user albums
                     //read albums from Facebook for:
                     // 1. update edit mode list witht he enabled albums
-
                     Facebook.api(
                         "/" + $scope.facebookId + "/albums?access_token=" + $scope.userAccessToken,
                         function (response) {
@@ -566,10 +227,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                         albumID: response.data[i].id,
                                         albumName: response.data[i].name
                                     };
-                                    //$scope.facebookAlbumsList[i] = ({albumID: response.data[i].id, albumName: response.data[i].name, checkbox: false});
                                 }
                             }
-                            //$scope.$apply();
                         }
                     );
 
@@ -622,7 +281,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         }
                     }
 
-
                     // Get a Firebase database reference to our posts
                     var firebase_ref = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID);
 
@@ -647,9 +305,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             console.log('user is connected')
                         }
                     });
-
-                    //var facebookToken = localStorageService.get('facebookAuth').authResponse.accessToken;
-
 
                     //Sync Facebook albums
                     $scope.syncAlbums = function () {
@@ -703,8 +358,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         }
                     }
 
-                    //var bucket = new AWS.S3({params: {Bucket: 'tracker.photos', Marker: $scope.email + '/' + $scope.tripID}});
-
                     var bucket = new AWS.S3({
                         params: {
                             Bucket: 'tracker.photos',
@@ -725,8 +378,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                 var photo_extenstion = data.Contents[i].Key.split('.').pop();
 
                                 if (photo_extenstion == "gif" || photo_extenstion == "png" || photo_extenstion == "bmp" || photo_extenstion == "jpeg" || photo_extenstion == "jpg" || photo_extenstion == "GIF" || photo_extenstion == "PNG" || photo_extenstion == "BMP" || photo_extenstion == "GPEG" || photo_extenstion == "JPG") {
-
-
                                     //$scope.photos.push(S3URL + 'tracker.photos/' + data.Contents[i].Key);
                                     //$scope.photos[i].fullres = $sce.trustAsResourceUrl($scope.photos[i].fullres);
 
@@ -740,17 +391,13 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                         fullres: strict_escape_url,
                                         thumbnail: S3URL_RESIZE + '100x100/' + data.Contents[i].Key
                                     });
-
                                     //use resize Lambda API Example:
                                     //http://tracker.photos.s3-website-us-west-2.amazonaws.com/150x150/10207022211887806/216/IMG_3516.JPG
-
-
                                 }
                                 //$scope.$apply(); becaus of disableing this, AWS images for the will not be rendered directly after upload, only when refresh
                             }
                         }
                     });
-
                     //upload file to AWS S3
                     var bucket_upload = new AWS.S3({params: {Bucket: 'tracker.photos'}}); // should I use a new bucket variable?
 
@@ -811,10 +458,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                      }, false);*/
 
-
                     var users_hash = {};
                     var polys = []; // will hold poly for each user
-
 
                     //$scope.init = function () {
                     var trackCoordinates = []; // for new GPS points
@@ -916,6 +561,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     var drawingManager = new google.maps.drawing.DrawingManager({
                         drawingMode: google.maps.drawing.OverlayType.MARKER,
                         drawingControl: true,
+                        drawingMode: null,
                         drawingControlOptions: {
                             position: google.maps.ControlPosition.TOP_CENTER,
                             drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
@@ -1431,56 +1077,13 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
 
                     //************************
-                    //*******************************handle paths
+                    //******************************* handle paths
                     //*******************************************************************
-                //SERVER SIDE CPU
-                //getTripPathHash
-                var data = {userId: $scope.facebookId , tripId: $scope.tripID ,tripDays: $scope.tripDays };
-                dataBaseService.getTripPathHash(data).then(function (results) {
-                    $scope.trip_path_hash = results.data;
-
-
-                    //create polyline for each day
-                    var lineSymbol = {
-                        //path: 'M 0,-1 0,1',
-                        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-                        strokeOpacity: 1,
-                        scale: 2,
-                    };
-
-                    $scope.polys_per_day = new Array($scope.trip_path_hash.length);
-                    for (var poly_index = 0; poly_index < $scope.trip_path_hash.length; poly_index++) {
-                        //Hash table for all users path
-                        $scope.polys_per_day[poly_index] = new google.maps.Polyline({
-                            map: $scope.map,
-                            path: $scope.trip_path_hash[poly_index],
-                            geodesic: true,
-                            //strokeColor: '#000000', //getRandomColor(), #E38C2D
-                            strokeColor: '#000000',
-                            strokeOpacity: 0,
-                            strokeWeight: 2,
-                            icons: [{
-                                icon: lineSymbol,
-                                offset: '0',
-                                repeat: '20px'
-                            }]
-                        });
-                    }
-                    console.log($scope.polys_per_day);
-                    $scope.polys_per_day_temp = $scope.polys_per_day; // to be used as backup when filter
-                    $scope.pathLoaded = true;
-                    if($scope.polys_per_day.length > 0){
-                        $scope.map.setCenter($scope.trip_path_hash[0].pop());
-                    }
-                    $scope.map.setZoom(7);
-                });
-
-
-
-                    //path for each user
-                    var path = [];
-                    var ref_read_path = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + $scope.facebookId + '/' + $scope.tripID + '/path');
-////////////////////////////////////////////////////////////////////////////////////////
+                    //SERVER SIDE CPU - Faster
+                    $scope.load_progress = 40;
+                    $timeout(function () {
+                        $scope.load_progress = 90;
+                    }, 2000);
                     ////// Check GPS point accuracy
                     $scope.checkAccuracy = function (GPS_Point, accuracy) {
                         //console.log(GPS_Point['coords'].accuracy);
@@ -1488,77 +1091,16 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             return true;
                         }
                     }
-
-                    $scope.trip_path_hash = [];
-                    //get points array from Firebase
-                    $scope.syncArray = $firebaseArray(ref_read_path);
-                    $scope.syncArray.$loaded().then(function (items) {
-                        $scope.$broadcast('path_ready', items)
-                        $scope.trip_full_path = items;
-                    });
-
-                    $scope.load_progress = 40;
-                    $timeout(function () {
-                        $scope.load_progress = 90;
-                    }, 2000);
-
-                /*    $scope.$on('path_ready', function (event, val) {
-                        console.log('Trip path loaded');
-                        console.log('Trip path length : ' + val.length);
-                        $scope.trip_path = val;
-                        //When path loaded, sort it by timestamp - the path could be sorted by default ????????????
-                        $scope.trip_path.sort(function (a, b) {
-                            return new Date(a.timestamp) - new Date(b.timestamp);
-                        });
-                        //when path sorted, save it into hash table for easy use
-                        //$scope.trip_path_hash [0] = $scope.trip_path; //day zero is all the trip
-                        var path_firast_date = '';
-                        for(var trip_first_day_index = 0 ; trip_first_day_index < $scope.trip_path.length ; trip_first_day_index++){
-                            if($scope.trip_path[trip_first_day_index].timestamp != null) {
-                                path_firast_date = $scope.trip_path[trip_first_day_index].timestamp; //know what is the first date
-                                break;
-                            }
-                        }
-                        console.log('first date: '+ path_firast_date)
-
-                        var day = 0;
-                        var path_last_index = 0;
-                        //$scope.trip_path_hash = new Array($scope.tripDays + 1);
-                        for (var hash_index = 0; hash_index < $scope.tripDays + 1; hash_index++) { //init hashtable with extra 10 cells
-                            $scope.trip_path_hash[hash_index] = [];
-                        }
-                        for (var i = 0; i < $scope.tripDays; i++) {
-                            for (var j = path_last_index; j < $scope.trip_path.length; j++) { //each day should be saved into new cel
-                                if ($scope.trip_path[j]['timestamp'] && path_firast_date ) {
-                                    if ($scope.trip_path[j].timestamp.substring(0, 10) == path_firast_date.substring(0, 10)) {
-                                        if ($scope.checkAccuracy($scope.trip_path[j], 1000)) { //check accuracy
-                                            $scope.trip_path_hash[day].push({
-                                                    lat: JSON.parse($scope.trip_path[j]['coords'].latitude),
-                                                    lng: JSON.parse($scope.trip_path[j]['coords'].longitude),
-                                                    timestamp: $scope.trip_path[j]['timestamp']
-                                                }
-                                            );
-                                        }
-                                    } else {
-                                        //if date changed it means new day started, updated day and path index
-                                        day++;
-                                        path_last_index = j;
-                                        path_firast_date = $scope.trip_path[j].timestamp;
-                                    }
-                                }else{
-                                    console.log('Trip path not sliced into hash because of date issue')
-                                }
-                            }
-                        }
-                        console.log('HASH');
-                        console.log($scope.trip_path_hash);
-
+                    //Get Path in hash table from server
+                    var data = {userId: $scope.facebookId, tripId: $scope.tripID, tripDays: $scope.tripDays};
+                    dataBaseService.getTripPathHash(data).then(function (results) {
+                        $scope.trip_path_hash = results.data;
 
 
                         //create polyline for each day
                         var lineSymbol = {
                             //path: 'M 0,-1 0,1',
-                            path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
                             strokeOpacity: 1,
                             scale: 2,
                         };
@@ -1584,15 +1126,27 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         console.log($scope.polys_per_day);
                         $scope.polys_per_day_temp = $scope.polys_per_day; // to be used as backup when filter
                         $scope.pathLoaded = true;
-                        if($scope.polys_per_day.length > 0){
+                        if ($scope.polys_per_day.length > 0) {
                             $scope.map.setCenter($scope.trip_path_hash[0].pop());
                         }
                         $scope.map.setZoom(7);
-                    });*/
+
+                        //Get places for the current path
+                        //$scope.loadNearByPlaces($scope.trip_path_hash);
+                        //Get Places
+                        //dataBaseService.getTripPlaces({path: $scope.trip_path_hash}).then(function (results) {
+                        //});
+
+                    });
+
+
 
                     ///////// **** Maps Trip Path Helper function ****** /////////
                     //Filter polylines by day
                     $scope.filter_trip_paths_by_day = function (day) {
+                        //Stop animation in case it is running
+                        $scope.stop_path_animation();
+
                         $scope.selectedDay = day;
                         if (day == 0) { // enable all polys
                             for (var i = 0; i < $scope.polys_per_day.length; i++) {
@@ -1618,6 +1172,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         for (var i = 0; i < $scope.polys_per_day.length; i++) {
                             $scope.polys_per_day[i].setMap(null);
                         }
+                        //Stop animation if running
+                        $scope.stop_path_animation();
                     }
                     // enable all trip paths on map
                     $scope.trip_enable_all_paths = function () {
@@ -1625,7 +1181,21 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             $scope.polys_per_day[i].setMap($scope.map);
                         }
                     }
+                    //Stop path animation
+                    $scope.stop_path_animation = function () {
+                        if(poly_animation != null){
+                            poly_animation.setMap(null);
+                            poly_animation = null;
+                            $scope.path_animating = false;
+                            //update button icon
+                            $scope.animate_button_icon = 'assets/icons/ic_play_circle_outline_white_48dp_1x.png';
+                        }
+                    }
                     //************ animate path **************************
+                    var poly_animation = null;
+                    $scope.path_animating = false;
+                    $scope.animate_button_icon = 'assets/icons/ic_play_circle_outline_white_48dp_1x.png';
+
                     function animateCircle(line) {
                         var count = 0;
                         var pathArray = line.getPath().getArray();
@@ -1638,287 +1208,61 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         }, 300);
                     }
 
-                    var poly_animation = new Array(0);
                     $scope.runPathAnimation = function () {
                         //$scope.trip_disable_all_paths();
-                        var lineSymbolCircle = {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            scale: 8,
-                            strokeColor: '#393'
-                        };
-                        poly_animation[0] = new google.maps.Polyline({
-                            map: $scope.map,
-                            path: $scope.polys_per_day[$scope.selectedDay],
-                            icons: [{
-                                icon: lineSymbolCircle,
-                                offset: '100%'
-                            }]
-                        });
-                        animateCircle(poly_animation[0]);
-                    }
-///////////////////////////////////////////////////////////////////////////////////////
-                    //Loop path
-                    /*
-                     ref_read_path.once("value", function (tripPath) {
-                     var loading_progress = messages.getTripProgress(); //init with number 1
-                     var pathLen = tripPath.numChildren();
-                     console.log('path Len:' + pathLen)
-                     tripPath.forEach(function (point) {
-                     i++;
-                     //console.log(i);
-                     var percentage = Math.round(pathLen / 100);
-                     //console.log(percentage);
-                     if (i == percentage * loading_progress) {
-                     loading_progress = loading_progress + 1;
-                     //update progress variable ?
-                     }
-                     //remove points without timestamp
-                     if (point.val()['timestamp']) {
-                     if (point.val()['coords'].accuracy < 20) {
-                     path.push({
-                     lat: JSON.parse(point.val()['coords'].latitude),
-                     lng: JSON.parse(point.val()['coords'].longitude),
-                     timestamp: point.val()['timestamp']
-                     })
-                     //all path saved to be used later for slider filter, instead of calling Firebase api again
-                     $scope.pathSaved.push(point.val());
-                     }
-                     }
-                     });
-                     //sort array by timestamp before show on map
-                     path.sort(function (a, b) {
-                     // Turn your strings into dates, and then subtract them
-                     // to get a value that is either negative, positive, or zero.
-                     return new Date(b.timestamp) - new Date(a.timestamp);
-                     });
-                     $scope.pathHash[0] = path;
-                     //enable page after path is ready on the map
-                     $scope.loading = false;
-                     //$scope.$apply();
-                     $scope.loadNearByPlaces = function () {
-                     // load nearby places:
-                     $scope.nearbyPlaces = {};
-                     $scope.nearbyPlacesReady = false;
-                     $scope.iterateOverPathProgress = 0;
-                     $scope.iterateOverNearbyPlacesProgress = 0;
-                     var nearbyPlaces = new nearbyPlacesFactory($scope.map, $scope.pathSaved);
-                     nearbyPlaces.on('error', function (event, error) {
-                     console.log(error);
-                     });
-                     nearbyPlaces.on('ready', function () {
-                     $scope.nearbyPlaces = nearbyPlaces.nearbyPlaces();
-                     $scope.nearbyPlacesReady = true;
-                     //push to Firebase for further load
-                     //var ref_places_push = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + $scope.facebookId + '/' + $scope.tripID + '/places');
-                     //ref_places_push.set($scope.nearbyPlaces);
-                     });
-                     nearbyPlaces.on('iterateOverPathProgress', function (event, value) {
-                     $scope.iterateOverPathProgress = value;
-                     });
-                     nearbyPlaces.on('iterateOverNearbyPlacesProgress', function (event, value) {
-                     $scope.iterateOverNearbyPlacesProgress = value;
-                     });
-                     nearbyPlaces.init();
-                     //////////////////////
-                     }
-                     //$scope.loadNearByPlaces();
-
-                     //sort saved path to be used for select days filter and console
-                     $scope.pathSaved.sort(function (a, b) {
-                     // Turn your strings into dates, and then subtract them
-                     // to get a value that is either negative, positive, or zero.
-                     return new Date(b.timestamp) - new Date(a.timestamp);
-                     });
-
-
-                     //### Console ###
-                     messages.addSteps($scope.pathSaved);
-                     //############################
-                     $scope.panoPosition = path.pop();
-
-                     var lineSymbol = {
-                     //path: 'M 0,-1 0,1',
-                     path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-                     strokeOpacity: 1,
-                     scale: 2,
-                     };
-
-                     //Hash table for all users path
-                     polys[$scope.facebookId] = new google.maps.Polyline({
-                     //map: $scope.map,
-                     path: path,
-                     geodesic: true,
-                     //strokeColor: '#000000', //getRandomColor(), #E38C2D
-                     strokeColor: '#000000',
-                     strokeOpacity: 0,
-                     strokeWeight: 2,
-                     icons: [{
-                     icon: lineSymbol,
-                     offset: '0',
-                     repeat: '20px'
-                     }]
-                     });
-
-                     polys[$scope.facebookId].setMap($scope.map);
-                     $scope.pathLoaded = true;
-                     $scope.map.setCenter(path.pop());
-                     $scope.map.setZoom(12);
-
-                     $scope.$apply();
-
-                     //Keep listening to new GPS point added by users
-                     ref_read_path.limitToLast(1).on("value", function (tripPath) {
-                     if (firstLoad_paths == false) {
-
-                     // get existing path
-                     var existsPath = polys[$scope.facebookId].getPath();
-
-                     tripPath.forEach(function (point) {
-
-                     // add new point
-                     existsPath.push(new google.maps.LatLng(JSON.parse(point.val()['coords'].latitude), JSON.parse(point.val()['coords'].longitude)));
-
-                     });
-
-                     polys[$scope.facebookId].setPath(existsPath);
-
-                     //$scope.$apply();
-                     }
-                     firstLoad_paths = false;
-                     })
-
-                     })
-                     */
-
-
-                    //Filter map according to the selected day in the
-                    //each time $scope.slider.value changes then filter map and then apply
-                    $scope.$watch('slider.value', function () {
-                        if (!$scope.pathLoaded) {
-                            $timeout(function () {
-                                //$scope.pathLoaded = true;
+                        if($scope.path_animating == false && $scope.selectedDay > 0){
+                            var lineSymbolCircle = {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                scale: 8,
+                                strokeColor: '#393'
+                            };
+                            poly_animation = new google.maps.Polyline({
+                                map: $scope.map,
+                                path: $scope.trip_path_hash[$scope.selectedDay],
+                                icons: [{
+                                    icon: lineSymbolCircle,
+                                    offset: '100%'
+                                }]
                             });
-                        } else {
-                            console.log('Filter map');
-                            var filteredPath = [];
-                            var tempDate = new Date($scope.startDateSliderForPath); //first day of the trip
-                            //if slider value = 0 then start date will not changed, but we can't say 0 for day number 1 in the trip
-                            //therefore I will add +1 for each slider value
-                            //for the 0 I will use it to bring all trip up with all the data
-                            if ($scope.slider.value == 0) {
-                                for (var i = 0; i < $scope.pathSaved.length; i++) {
-                                    filteredPath.push({
-                                        lat: JSON.parse($scope.pathSaved[i]['coords'].latitude),
-                                        lng: JSON.parse($scope.pathSaved[i]['coords'].longitude)
-                                    });
-                                }
-                                var lineSymbol = {
-                                    //path: 'M 0,-1 0,1',
-                                    path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-                                    strokeOpacity: 1,
-                                    scale: 2
-                                };
-                                //Hash table for all users path
-                                //delete current path
-                                if (polys[$scope.facebookId]) {
-                                    polys[$scope.facebookId].setMap(null);
-                                }
-                                //save path after was sliced from full path for further use
-                                if ($scope.slider.value) {
-                                    $scope.pathHash[$scope.slider.value] = filteredPath;
-                                }
-                                polys[$scope.facebookId] = new google.maps.Polyline({
-                                    //map: $scope.map,
-                                    path: filteredPath,
-                                    geodesic: true,
-                                    strokeColor: '#000000', //getRandomColor(),
-                                    strokeOpacity: 0,
-                                    strokeWeight: 2,
-                                    icons: [{
-                                        icon: lineSymbol,
-                                        offset: '0',
-                                        repeat: '20px'
-                                    }]
-                                });
-                                polys[$scope.facebookId].setMap($scope.map);
-                                $scope.map.setCenter(filteredPath.pop());
-                                //$scope.map.setCenter(filteredPath[filteredPath.length / 2]);
-                                $scope.map.setZoom(12);
-                            } else {
-                                //if slider value not 0 then calculate the required date by adding slider value to start date
-                                if ($scope.startDateSliderForPath != null && $scope.slider != null) {
-                                    $scope.startDateSliderForPath = new Date($scope.startDateSliderForPath.setDate($scope.startDateSliderForPath.getDate() + $scope.slider.value - 1));
-                                } else {
-                                    console.log('Client :: Trip page :: issue with dates while in the watcher of the slider');
-                                }
-                                //I should read from path, that already set and ready, but meanwhile I saved only lat, lang in path instaed of all the point
-                                /*  var ref_read_path_filter = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + facebookId + '/' + $scope.tripID + '/path');
-
-                                 ref_read_path_filter.once("value", function (path) {
-                                 path.forEach(function (point) {
-
-                                 //console.log(point.val());
-                                 var pointTime = $filter('date')(point.val()['timestamp'], 'MMM d, y');
-                                 var selectedDatePath = $filter('date')($scope.startDateSliderForPath, 'MMM d, y');
-
-                                 if (pointTime == selectedDatePath) {
-                                 filteredPath.push({
-                                 lat: JSON.parse(point.val()['coords'].latitude),
-                                 lng: JSON.parse(point.val()['coords'].longitude)
-                                 });
-                                 }
-
-                                 });*/
-
-                                for (var i = 0; i < $scope.pathSaved.length; i++) {
-                                    var pointTime = $filter('date')($scope.pathSaved[i]['timestamp'], 'MMM d, y');
-                                    var selectedDatePath = $filter('date')($scope.startDateSliderForPath, 'MMM d, y');
-                                    if (pointTime == selectedDatePath) {
-                                        filteredPath.push({
-                                            lat: JSON.parse($scope.pathSaved[i]['coords'].latitude),
-                                            lng: JSON.parse($scope.pathSaved[i]['coords'].longitude)
-                                        });
-                                    }
-                                }
-                                $scope.startDateSliderForPath = tempDate;
-                                //update map with filtered path
-                                //set the path for the first load, for the real time load, I added the same code into the listener of Firebase above
-                                //dashed line
-                                var lineSymbol = {
-                                    //path: 'M 0,-1 0,1',
-                                    path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-                                    strokeOpacity: 1,
-                                    scale: 2
-                                };
-                                //Hash table for all users path
-                                //delete current path
-                                if (polys[$scope.facebookId]) {
-                                    polys[$scope.facebookId].setMap(null);
-                                }
-                                if ($scope.slider.value) {
-                                    $scope.pathHash[$scope.slider.value] = filteredPath;
-                                }
-                                polys[$scope.facebookId] = new google.maps.Polyline({
-                                    path: filteredPath,
-                                    geodesic: true,
-                                    strokeColor: '#000000', //getRandomColor(),
-                                    strokeOpacity: 0,
-                                    strokeWeight: 2,
-                                    icons: [{
-                                        icon: lineSymbol,
-                                        offset: '0',
-                                        repeat: '20px'
-                                    }]
-                                });
-                                polys[$scope.facebookId].setMap($scope.map);
-                                $scope.map.setCenter(filteredPath.pop());
-                                //console.log(filteredPath.length/2);
-                                //console.log(filteredPath[filteredPath.length/2]);
-                                //$scope.map.setCenter(new google.maps.LatLng(JSON.parse(filteredPath[filteredPath.length/2].lat), JSON.parse(filteredPath[filteredPath.length/2].lng)));
-                                $scope.map.setZoom(12);
-                            }
+                            $scope.animate_button_icon = 'assets/icons/ic_stop_white_48dp_1x.png';
+                            $scope.path_animating = true;
+                            animateCircle(poly_animation);
+                        }else{
+                            //Stop animation
+                            $scope.stop_path_animation();
                         }
-                    });
+
+                    }
+
+                    $scope.loadNearByPlaces = function (path) {
+                        // load nearby places:
+                        $scope.nearbyPlaces = {};
+                        $scope.nearbyPlacesReady = false;
+                        $scope.iterateOverPathProgress = 0;
+                        $scope.iterateOverNearbyPlacesProgress = 0;
+                        var nearbyPlaces = new nearbyPlacesFactory($scope.map, path);
+                        nearbyPlaces.on('error', function (event, error) {
+                            console.log(error);
+                        });
+                        nearbyPlaces.on('ready', function () {
+                            $scope.nearbyPlaces = nearbyPlaces.nearbyPlaces();
+                            $scope.nearbyPlacesReady = true;
+                            //push to Firebase for further load
+                            //var ref_places_push = new Firebase('https://luminous-torch-9364.firebaseio.com/web/users/' + $scope.facebookId + '/' + $scope.tripID + '/places');
+                            //ref_places_push.set($scope.nearbyPlaces);
+                        });
+                        nearbyPlaces.on('iterateOverPathProgress', function (event, value) {
+                            $scope.iterateOverPathProgress = value;
+                        });
+                        nearbyPlaces.on('iterateOverNearbyPlacesProgress', function (event, value) {
+                            $scope.iterateOverNearbyPlacesProgress = value;
+                        });
+                        nearbyPlaces.init();
+                        //////////////////////
+                    }
+
+
+///////////////////////////////////////////////////////////////////////////////////////
 
 
                     //load Table from Firebase
@@ -2033,12 +1377,15 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
 
         } else {
-
+            //If no Trip Id from some reason then go back to Trips page
             $scope.noTripId = true;
             $state.go('trips');
         }
+        //############End Main closure ###################### //
 
-//####################### HELP Functions ##################
+//*********************************************
+//**************** Extra Help functions *******
+//*********************************************
         var resizeImage = function (file) {
             // from an input element
             /*        var filesToUpload = input.files;
@@ -2080,8 +1427,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
             var dataurl = canvas.toDataURL("image/png");
 
         }
-//###################### END HELP #########################
-
 
     })
     .
@@ -2099,31 +1444,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
             }
         };
     })
-
-/*
- .directive('infiniteScroll', function () {
- return {
- restrict: 'A',
- scope: {
- ajaxCall: '&'
- },
- link: function (scope, elem, attrs) {
- box = elem[0];
- elem.bind('scroll', function () {
- if ((box.scrollTop + box.offsetHeight) >= box.scrollHeight) {
- scope.$apply(scope.ajaxCall)
- }
- })
- }
- }
- })
- */
-
-//*********************************************
-//**************** Help functions *************
-//*********************************************
-
-//help function
 function getRandomColor() {
     var letters = '0123456789ABCDEF'.split('');
     var color = '#';
@@ -2132,3 +1452,6 @@ function getRandomColor() {
     }
     return color;
 }
+/////////////////////// End Extra Help Functions /////////////////////////////////
+
+////////////*************************** Code End Here ******************************//////////////////////

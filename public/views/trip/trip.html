@@ -85,7 +85,7 @@
     <div class="center-side">
 
         <div id="map"></div>
-        <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+        <input id="pac-input" class="form-control" type="text" placeholder="Search Location" style="width: 200px">
 
         <!-- Filter by day -->
         <div class="md-padding" ng-cloak style="position: absolute; top: 70px; background: white; margin: 5px">
@@ -121,7 +121,7 @@
         <!-- Play path -->
         <md-button ng-show="!drawing_panel" class="md-fab md-primary" aria-label="Play path" style="position: absolute; top: 40%;"
                    ng-click="runPathAnimation()">
-            <image src="assets/icons/ic_play_circle_outline_white_48dp_1x.png"
+            <image ng-src={{animate_button_icon}}
                    style="color: greenyellow; margin-left: -2px"></image>
         </md-button>
 

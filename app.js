@@ -26,6 +26,12 @@ var ExifImage = require('exif').ExifImage;
 //var database = require('./config/database');          // load the database config
 var Firebase = require("firebase"); //Firebase cloud Database No Sql
 
+var googleMapsClient = require('@google/maps').createClient({
+    key: 'AIzaSyAYmaDkXwJwOqSpgr2fODrjcr6gXdA3RCM',
+    Promise,
+    timeout: 60 * 10000 //(Default: 60 * 1000 ms)
+});
+
 var Dropbox = require("dropbox"); //dropbox - to get the files of GPS, XML format
 
 //PostgresSQL
@@ -100,6 +106,9 @@ app.use(passport.session());
 app.use(express.static(__dirname + '/public')); // set static path
 app.use(morgan('dev')); // log every request to the console
 app.use(bodyParser.urlencoded({'extended': 'true'})); // parse application/x-www-form-urlencoded
+var bodyParser = require('body-parser');
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(bodyParser.json()); // parse application/json
 app.use(bodyParser.json({type: 'application/vnd.api+json'})); // parse application/vnd.api+json as json
 app.use(methodOverride());
@@ -249,15 +258,13 @@ var checkAccuracy = function (GPS_Point, accuracy) {
 }
 
 
-
+//Get Path from Firebase
 app.post('/getTripPath', function (request, response) {
     console.log('SERVER:: Firebase::  Get Trip Path');
-    //10207022211887806
-    //216
     var tripDays = request.body.tripDays;
-    console.log(request.body.tripDays);
-    console.log(request.body.userId);
-    console.log(request.body.tripId);
+    console.log('Trip days: ' + request.body.tripDays);
+    console.log('User ID: ' + request.body.userId);
+    console.log('Trip Id: ' + request.body.tripId);
     var firebase_trip_path = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + request.body.userId + "/" + request.body.tripId + "/path");
     //var firebase_trip_path = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/10207022211887806/216/path");
 
@@ -269,7 +276,7 @@ app.post('/getTripPath', function (request, response) {
             trip_path.push(item.val());
         });
 
-        console.log(trip_path);
+        //console.log(trip_path);
         console.log('Trip path loaded');
         console.log('Trip path length : ' + trip_path.length);
 
@@ -287,7 +294,7 @@ app.post('/getTripPath', function (request, response) {
                 break;
             }
         }
-        console.log('first date: '+ path_firast_date);
+        console.log('first date: ' + path_firast_date);
 
         var day = 0;
         var path_last_index = 0;
@@ -299,7 +306,7 @@ app.post('/getTripPath', function (request, response) {
 
         for (var i = 0; i < tripDays; i++) {
             for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new cel
-                if (trip_path[j]['timestamp'] && path_firast_date ) {
+                if (trip_path[j]['timestamp'] && path_firast_date) {
                     if (trip_path[j].timestamp.substring(0, 10) == path_firast_date.substring(0, 10)) {
                         if (checkAccuracy(trip_path[j], 1000)) { //check accuracy
                             trip_path_hash[day].push({
@@ -315,20 +322,69 @@ app.post('/getTripPath', function (request, response) {
                         path_last_index = j;
                         path_firast_date = trip_path[j].timestamp;
                     }
-                }else{
+                } else {
                     console.log('Trip path not sliced into hash because of date issue')
                 }
             }
         }
         //console.log('HASH');
         //console.log(trip_path_hash);
-
         response.send(trip_path_hash);
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
     });
 });
 
+//get Trip Places
+app.post('/getTripPlaces', function (request, response) {
+    console.log('SERVER:: Firebase::  Get Trip Places');
+
+    var path = request.body.path;
+    //console.log(request.body.path);
+
+    var placeStayingTime, interestPoints = [];
+    for (var i = 0; i < path.length - 1; i++) {
+        for (var j = 0; j < path[i].length; j++) {
+            if (path[i + 1][j] && path[i + 1][j]['timestamp']) {
+                placeStayingTime = (((new Date(path[i + 1][j]['timestamp']).getTime() - new Date(path[i][j]['timestamp']).getTime()) / 1000) / 60);
+                if (placeStayingTime > 30) {
+                    var request = {
+                        location: {
+                            lat: path[i][j]['lat'],
+                            lng: path[i][j]['lng']
+                        },
+                        radius: '1'
+                    };
+                    interestPoints.push(request);
+                }
+            }
+        }
+    }
+
+    //start loop interest points to get places ids
+    console.log('SERVER:: start loop interest points to get places ids');
+    var nearbyPlaces = [];
+    var counter = 0;
+    for (var places_index = 0; places_index < interestPoints.length; places_index++) {
+        googleMapsClient.placesNearby({
+                location: [interestPoints[places_index].location.lat, interestPoints[places_index].location.lng],
+                radius: 1
+            })
+            .asPromise()
+            .then(function (result) {
+                counter++;
+                if (result.json.status == 'OK') {
+                    //console.log(result);
+                    nearbyPlaces.push(result);
+                }
+            })
+            .catch(function (err) {
+                // Throw the error outside the Promise, or log it, or something.
+                console.log(err);
+            });
+    }
+    response.send(nearbyPlaces)
+});
 
 //Postgres :: Check if user exists
 app.post('/checkUserExistsByEmail', function (request, response) {

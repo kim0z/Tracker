@@ -127,16 +127,21 @@ trackerApp.factory('nearbyPlacesFactory', [
         function getInterestPointsFromPath(pathData) {
             var placeStayingTime, interestPoints = [];
             for (var i = 0; i < pathData.length - 1; i++) {
-                placeStayingTime = (((new Date(pathData[i + 1]['timestamp']).getTime() - new Date(pathData[i]['timestamp']).getTime()) / 1000) / 60);
-                if (placeStayingTime > 10) {
-                    var request = {
-                        location: {
-                            lat: pathData[i].coords.latitude,
-                            lng: pathData[i].coords.longitude
-                        },
-                        radius: '1'
-                    };
-                    interestPoints.push(request);
+                for(var j = 0; j < pathData[i].length ; j++ ){
+                    if(pathData[i + 1][j] && pathData[i + 1][j]['timestamp']){
+                        placeStayingTime = (((new Date(pathData[i + 1][j]['timestamp']).getTime() - new Date(pathData[i][j]['timestamp']).getTime()) / 1000) / 60);
+                        if (placeStayingTime > 10) {
+                            console.log(pathData[i][j]['lat']);
+                            var request = {
+                                location: {
+                                    lat: pathData[i][j]['lat'],
+                                    lng: pathData[i][j]['lng']
+                                },
+                                radius: '1'
+                            };
+                            interestPoints.push(request);
+                        }
+                    }
                 }
             }
             return interestPoints;

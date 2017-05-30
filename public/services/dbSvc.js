@@ -6,6 +6,12 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
         return $http.post('/getTripPath', data);
     };
 
+    //get Places for Trip path
+    this.getTripPlaces = function (hashPath) { // in use
+        console.log('Client::dataBaseService:: get Trip Places');
+        return $http.post('/getTripPlaces', hashPath);
+    };
+
     this.createNewTripRecord = function () { //create empty trip record
         console.log('Client::dataBaseService:: create new trip record');
         return $http.post('/insertNewEmptyTrip');
