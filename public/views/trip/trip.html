@@ -78,14 +78,17 @@
                 </li>
             </ol>
         </div>
-
         <!-- End of list of map items -->
     </div>
 
     <div class="center-side">
 
-        <div id="map"></div>
-        <input id="pac-input" class="form-control" type="text" placeholder="Search Location" style="width: 200px">
+        <iframe id="iframe" style="height: 100%; width: 100%">
+            <!-- from Controller I write the 2 below elements -->
+           <!-- <div id="map"></div>
+            <input id="pac-input" class="form-control" type="text" placeholder="Search Location" style="width: 200px">-->
+        </iframe>
+
 
         <!-- Filter by day -->
         <div class="md-padding" ng-cloak style="position: absolute; top: 70px; background: white; margin: 5px">

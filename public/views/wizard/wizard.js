@@ -303,7 +303,7 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
         });
 
         var drawingManager = new google.maps.drawing.DrawingManager({
-            drawingMode: google.maps.drawing.OverlayType.MARKER,
+            drawingMode: null,
             drawingControl: true,
             drawingControlOptions: {
                 position: google.maps.ControlPosition.RIGHT_TOP,
@@ -549,7 +549,6 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
 
         //Map configuration
         $scope.map_tips = new google.maps.Map(document.getElementById('map_tips'), {
-            //center: {lat: 34.397, lng: 40.644},
             center: {lat: 0, lng: 0},
             zoom: 4,
             mapTypeControl: true,

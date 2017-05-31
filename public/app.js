@@ -8,7 +8,7 @@ var trackerApp = angular.module('myApp', [
         'ngAnimate',
         'ngDialog',
         'ngStorage',
-        'uiGmapgoogle-maps',
+     /*   'uiGmapgoogle-maps', */
         'ngAutocomplete',
         'ui.grid',
         'angularNumberPicker',
@@ -167,6 +167,7 @@ var trackerApp = angular.module('myApp', [
 
      }])
      */
+    /*
     .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApi) {
         GoogleMapApi.configure({
             //    key: 'your api key',
@@ -174,6 +175,7 @@ var trackerApp = angular.module('myApp', [
             libraries: 'weather,geometry,visualization'
         });
     }])
+    */
 
     .config(function ($mdThemingProvider) {
         $mdThemingProvider.theme('blue')

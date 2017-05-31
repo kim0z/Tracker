@@ -478,7 +478,15 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     }
 
                     //Map configuration
-                    $scope.map = new google.maps.Map(document.getElementById('map'), {
+                    var iframe = document.getElementById('iframe');
+                    iframe.contentWindow.document.open();
+                    iframe.contentWindow.document.write('<div id="map" style="width: 100%; height: 100%"></div>');
+                    iframe.contentWindow.document.write('<input id="pac-input" class="form-control" type="text" placeholder="Search Location" style="width: 200px">');
+
+                    iframe.contentWindow.document.close();
+
+                    var mapContainer = iframe.contentWindow.document.querySelector('#map');
+                    $scope.map = new google.maps.Map(mapContainer, {
                         //center: {lat: 34.397, lng: 40.644},
                         center: {lat: 0, lng: 0},
                         zoom: 4,
@@ -499,8 +507,36 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         }
                     });
 
+                    var drawingManager = new google.maps.drawing.DrawingManager({
+                        drawingMode: google.maps.drawing.OverlayType.MARKER,
+                        drawingControl: true,
+                        drawingMode: null,
+                        drawingControlOptions: {
+                            position: google.maps.ControlPosition.TOP_CENTER,
+                            drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
+                        },
+                        markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+                            // This marker is 20 pixels wide by 32 pixels high.
+                            size: new google.maps.Size(200, 200),
+                            // The origin for this image is (0, 0).
+                            origin: new google.maps.Point(90, 70),
+                            // The anchor for this image is the base of the flagpole at (0, 32).
+                            anchor: new google.maps.Point(300, 302)},
+
+                        circleOptions: {
+                            fillColor: '#ffff00',
+                            fillOpacity: 1,
+                            strokeWeight: 5,
+                            clickable: false,
+                            editable: true,
+                            zIndex: 1
+                        }
+                    });
+                    drawingManager.setMap($scope.map);
+
                     // Create the search box and link it to the UI element.
-                    var input = document.getElementById('pac-input');
+                    //var input = document.getElementById('pac-input');
+                    var input = iframe.contentWindow.document.querySelector('#pac-input');
                     var searchBox = new google.maps.places.SearchBox(input);
                     $scope.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
@@ -558,31 +594,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         $scope.map.fitBounds(bounds);
                     });
 
-                    var drawingManager = new google.maps.drawing.DrawingManager({
-                        drawingMode: google.maps.drawing.OverlayType.MARKER,
-                        drawingControl: true,
-                        drawingMode: null,
-                        drawingControlOptions: {
-                            position: google.maps.ControlPosition.TOP_CENTER,
-                            drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
-                        },
-                        markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-                        // This marker is 20 pixels wide by 32 pixels high.
-                        size: new google.maps.Size(200, 200),
-                        // The origin for this image is (0, 0).
-                        origin: new google.maps.Point(90, 70),
-                        // The anchor for this image is the base of the flagpole at (0, 32).
-                        anchor: new google.maps.Point(300, 302)},
-
-                        circleOptions: {
-                            fillColor: '#ffff00',
-                            fillOpacity: 1,
-                            strokeWeight: 5,
-                            clickable: false,
-                            editable: true,
-                            zIndex: 1
-                        }
-                    });
 
 
                     // %%%% Listeners to save drawing data to firebase %%%%
@@ -799,7 +810,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     }
                     // ****************************** Drawing events end *******************************
 
-                    drawingManager.setMap($scope.map);
+
 
 
                     $scope.map.addListener('click', function (e) {

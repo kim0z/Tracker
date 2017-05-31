@@ -27,6 +27,34 @@ trackerApp.controller('view2Ctrl', function ($scope, $firebaseObject, $http, $do
             mapTypeId: google.maps.MapTypeId.TERRAIN
         });
 
+        var drawingManager = new google.maps.drawing.DrawingManager({
+            drawingMode: google.maps.drawing.OverlayType.MARKER,
+            drawingControl: true,
+            drawingMode: null,
+            drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_CENTER,
+                drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
+            },
+            markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+                // This marker is 20 pixels wide by 32 pixels high.
+                size: new google.maps.Size(200, 200),
+                // The origin for this image is (0, 0).
+                origin: new google.maps.Point(90, 70),
+                // The anchor for this image is the base of the flagpole at (0, 32).
+                anchor: new google.maps.Point(300, 302)},
+
+            circleOptions: {
+                fillColor: '#ffff00',
+                fillOpacity: 1,
+                strokeWeight: 5,
+                clickable: false,
+                editable: true,
+                zIndex: 1
+            }
+        });
+        drawingManager.setMap($scope.map);
+
+
 
 /* ####################################### Old code, check what I should take from it ###############################
         /// Map configuration END
