@@ -482,7 +482,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     iframe.contentWindow.document.open();
                     iframe.contentWindow.document.write('<div id="map" style="width: 100%; height: 100%"></div>');
                     iframe.contentWindow.document.write('<input id="pac-input" class="form-control" type="text" placeholder="Search Location" style="width: 200px">');
-
                     iframe.contentWindow.document.close();
 
                     var mapContainer = iframe.contentWindow.document.querySelector('#map');

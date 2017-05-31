@@ -222,7 +222,15 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
     // ***************************** Map drawing tracks *******************************
     $scope.startMapDrawing = function () {
         //Map configuration
-        $scope.map = new google.maps.Map(document.getElementById('map_tracks'), {
+        var iframe = document.getElementById('iframe_drawing');
+        iframe.contentWindow.document.open();
+        iframe.contentWindow.document.write('<div id="map_drawing" style="width: 100%; height: 100%"></div>');
+        iframe.contentWindow.document.write('<input id="pac-input-drawing" class="form-control" type="text" placeholder="Search Location" style="width: 200px">');
+        iframe.contentWindow.document.close();
+
+        var mapContainer = iframe.contentWindow.document.querySelector('#map_drawing');
+
+        $scope.map = new google.maps.Map(mapContainer, {
             //center: {lat: 34.397, lng: 40.644},
             center: {lat: 0, lng: 0},
             zoom: 4,
@@ -244,7 +252,7 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
         });
 
         // Create the search box and link it to the UI element.
-        var input = document.getElementById('pac-input_tracks');
+        var input = iframe.contentWindow.document.querySelector('#pac-input-drawing');
         var searchBox = new google.maps.places.SearchBox(input);
         $scope.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
@@ -309,15 +317,7 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
                 position: google.maps.ControlPosition.RIGHT_TOP,
                 drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
             },
-            markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
-            circleOptions: {
-                fillColor: '#ffff00',
-                fillOpacity: 1,
-                strokeWeight: 5,
-                clickable: false,
-                editable: true,
-                zIndex: 1
-            }
+            markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'}
         });
 
         drawingManager.setMap($scope.map);
@@ -333,9 +333,9 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
         google.maps.event.addDomListener(drawingManager, 'circlecomplete', function (circle) {
             console.log('new circle added to firebase');
             firebase_drawing_circles.push({
-                strokeWeight: circle.strokeWeight,
-                fillColor: circle.fillColor,
-                fillOpacity: circle.fillOpacity,
+                //strokeWeight: circle.strokeWeight,
+                //fillColor: circle.fillColor,
+                //fillOpacity: circle.fillOpacity,
                 radius: circle.radius,
                 center: {lat: circle.center.lat(), lng: circle.center.lng()}
             });
@@ -350,9 +350,9 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
             //console.log('reading circles from firebase to load it to map');
             snapshot.forEach(function (childSnapshot) {
                 var circle = new google.maps.Circle({
-                    strokeWeight: childSnapshot.val().strokeWeight,
-                    fillColor: childSnapshot.val().fillColor,
-                    fillOpacity: childSnapshot.val().fillOpacity,
+                    //strokeWeight: childSnapshot.val().strokeWeight,
+                    //fillColor: childSnapshot.val().fillColor,
+                    //fillOpacity: childSnapshot.val().fillOpacity,
                     map: $scope.map,
                     center: childSnapshot.val().center,
                     radius: childSnapshot.val().radius,
@@ -548,7 +548,15 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
     $scope.startMapTips = function () {
 
         //Map configuration
-        $scope.map_tips = new google.maps.Map(document.getElementById('map_tips'), {
+        var iframe = document.getElementById('iframe_tips');
+        iframe.contentWindow.document.open();
+        iframe.contentWindow.document.write('<div id="map_tips" style="width: 100%; height: 100%"></div>');
+        iframe.contentWindow.document.write('<input id="pac-input-tips" class="form-control" type="text" placeholder="Search Location" style="width: 200px">');
+        iframe.contentWindow.document.close();
+
+        var mapContainer = iframe.contentWindow.document.querySelector('#map_tips');
+
+        $scope.map_tips = new google.maps.Map(mapContainer, {
             center: {lat: 0, lng: 0},
             zoom: 4,
             mapTypeControl: true,
@@ -569,7 +577,8 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
         });
 
         // Create the search box and link it to the UI element.
-        var input = document.getElementById('pac-input_tips');
+        //var input = document.getElementById('pac-input_tips');
+        var input = iframe.contentWindow.document.querySelector('#pac-input-tips');
         var searchBox = new google.maps.places.SearchBox(input);
         $scope.map_tips.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
@@ -627,66 +636,6 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
             $scope.map_tips.fitBounds(bounds);
         });
 
-
-
-        //Filter for the tips
-        $scope.showAllTips = true;
-        $scope.showTips = false;
-        $scope.showRisks = false;
-        $scope.showExpense = false;
-        $scope.showInvite = false;
-
-        //Filter tips
-        $scope.filterTipsOnClick = function (filterStr) {
-            switch (filterStr) {
-                case 'all':
-                {
-                    $scope.showAllTips = true;
-                    $scope.showTips = false;
-                    $scope.showRisks = false;
-                    $scope.filterExpense = false;
-                    $scope.showInvite = false;
-                    break;
-                }
-                case 'tips':
-                {
-                    $scope.showAllTips = false;
-                    $scope.showTips = true;
-                    $scope.showRisks = false;
-                    $scope.showExpense = false;
-                    $scope.showInvite = false;
-                    break;
-                }
-                case 'risks':
-                {
-                    $scope.showAllTips = false;
-                    $scope.showTips = false;
-                    $scope.showRisks = true;
-                    $scope.showExpense = false;
-                    $scope.showInvite = false;
-                    break;
-                }
-                case 'expense':
-                {
-                    $scope.showAllTips = false;
-                    $scope.showTips = false;
-                    $scope.showRisks = false;
-                    $scope.showExpense = true;
-                    $scope.showInvite = false;
-                    break;
-                }
-                case 'invite':
-                {
-                    $scope.showAllTips = false;
-                    $scope.showTips = false;
-                    $scope.showRisks = false;
-                    $scope.showExpense = false;
-                    $scope.showInvite = true;
-                    break;
-                }
-            }
-        }
-
         //Listener to click on map to get GPS
         $scope.map_tips.addListener('click', function (e) {
             $scope.message = {lat: e.latLng.lat(), lng: e.latLng.lng(), time: new Date()};
@@ -719,8 +668,6 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
 
             var firebase_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/messages');
 
-            //var usersRef = firebase_ref.child('history');
-
             var location = {coords: {latitude: $scope.message.lat, longitude: $scope.message.lng}};
             message_json = {
                 location: location,
@@ -730,14 +677,12 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
             };
 
             firebase_tips.push(message_json);
-
+            console.log('Tip saved in Firebase');
 
             $scope.message.lat = '';
             $scope.message.lng = '';
             $scope.message.time = '';
             $scope.message.text = '';
-
-
 
         }
     }
