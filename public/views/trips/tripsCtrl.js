@@ -329,7 +329,7 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
             var continent = '';
             if ($scope.trips[i].continent != null) {
                 continent = $scope.trips[i].continent[0];
-                console.log(continent);
+                //console.log(continent);
             }
             var jsonTrip = {
                 id: $scope.trips[i].id,

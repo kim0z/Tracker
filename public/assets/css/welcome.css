@@ -293,34 +293,43 @@
     overflow: hidden;
     text-indent: 101%;
     white-space: nowrap;
-    background: url("../images/") no-repeat;
+    /* background: url("../images/") no-repeat; */
     width: 158px;
     height: 40px; }
 @media (max-width: 767px) {
     #header .navbar-brand {
-        background: url("../images/") no-repeat;
+        /* background: url("../images/") no-repeat; */
         width: 21px;
         height: 21px;
         margin: 0 15px 0 -5px; } }
 .home #header .navbar-brand {
-    background: url("../images/") no-repeat; }
+    /* background: url("../images/") no-repeat; } */
+}
 @media (max-width: 767px) {
     .home #header .navbar-brand {
-        background: url("../images/") no-repeat; } }
+        /* background: url("../images/") no-repeat; } } */
+    }
+}
 .affix .home #header .navbar-brand {
-    background: url("../images/") no-repeat; }
+    /* background: url("../images/") no-repeat; } */
+}
 @media (max-width: 767px) {
     .affix .home #header .navbar-brand {
-        background: url("../images/") no-repeat; } }
+        /* background: url("../images/") no-repeat; } } */
+    }
+}
 .fixed #header .navbar-brand,
 .nav-active #header .navbar-brand,
 .toggle-active #header .navbar-brand {
-    background: url("../images/") no-repeat; }
+    /* background: url("../images/") no-repeat; } */
+}
 @media (max-width: 767px) {
     .fixed #header .navbar-brand,
     .nav-active #header .navbar-brand,
     .toggle-active #header .navbar-brand {
-        background: url("../images/") no-repeat; } }
+        /* background: url("../images/") no-repeat; } } */
+    }
+}
 .navbar-brand {
     padding: 0;
     margin: 0 22px 0 0;
@@ -692,7 +701,7 @@ div.lightbox-overlay p {
     margin-top: 20px;
     margin-bottom: 20px; }
 .jumbotron .btn.btn-ios:before {
-    background: url("../images/") no-repeat -2px 1px;
+   /* background: url("../images/") no-repeat -2px 1px; */
     background-size: 14px; }
 .jumbotron a.btn-ios {
     border: 2px solid #fff;
@@ -716,7 +725,7 @@ div.lightbox-overlay p {
 .jumbotron .btn-default:before {
     content: '';
     position: absolute;
-    background: url("../images/") no-repeat 0 -21px;
+    /* background: url("../images/") no-repeat 0 -21px; */
     width: 13px;
     height: 18px;
     top: 12px;
@@ -1839,7 +1848,7 @@ ul li:before {
 .promo-image .btn-success:before {
     content: '';
     position: absolute;
-    background: url("../images/") no-repeat 0 -21px;
+    /* background: url("../images/") no-repeat 0 -21px; */
     width: 13px;
     height: 18px;
     top: 12px;
@@ -1895,7 +1904,7 @@ ul li:before {
 .buttons-hold .btn-default.gift:before {
     content: '';
     position: absolute;
-    background: url("../images/") no-repeat 0 0;
+    /* background: url("../images/") no-repeat 0 0; */
     width: 18px;
     height: 16px;
     top: 10px;
@@ -1917,7 +1926,7 @@ ul li:before {
 .buttons-hold .btn-default.notify:before {
     content: '';
     position: absolute;
-    background: url("../images/") no-repeat 0 0;
+    /* background: url("../images/") no-repeat 0 0; */
     width: 22px;
     height: 16px;
     top: 10px;
@@ -4127,8 +4136,8 @@ div.mejs-speed-button {
 .fancybox-close,
 .fancybox-next span,
 .fancybox-prev span {
-    background-image: url("../images/"); }
-
+    /* background-image: url("../images/"); } */
+}
 #fancybox-loading {
     position: fixed;
     top: 50%;
@@ -4143,8 +4152,8 @@ div.mejs-speed-button {
 #fancybox-loading div {
     width: 44px;
     height: 44px;
-    background: url("../images/") center center no-repeat; }
-
+    /* background: url("../images/") center center no-repeat; } */
+}
 .fancybox-close {
     position: absolute;
     top: -18px;
@@ -4162,7 +4171,7 @@ div.mejs-speed-button {
     height: 100%;
     cursor: pointer;
     text-decoration: none;
-    background: transparent url("../images/");
+    /* background: transparent url("../images/"); */
     /* helps IE */
     -webkit-tap-highlight-color: transparent;
     z-index: 8040; }
@@ -4218,8 +4227,8 @@ div.mejs-speed-button {
     overflow: hidden;
     display: none;
     z-index: 8010;
-    background: url("../images/"); }
-
+    /* background: url("../images/"); } */
+}
 .fancybox-overlay-fixed {
     position: fixed;
     bottom: 0;
@@ -4330,14 +4339,16 @@ div.mejs-speed-button {
 
 .first-impression {
     display: none;
-    background-image: url("../images/");
+    /* background-image: url("../images/"); */
     background-size: cover;
     background-position: center center;
     padding: 0;
     margin: 0; }
 @media (max-width: 767px) {
     .first-impression {
-        background-image: url("../images/"); } }
+        /* background-image: url("../images/"); } } */
+    }
+}
 .first-impression .modal-close-btn {
     overflow: hidden; }
 .first-impression .modal-close-btn a > img {
@@ -4358,11 +4369,11 @@ div.mejs-speed-button {
     .fancybox-close,
     .fancybox-next span,
     .fancybox-prev span {
-        background-image: url("../images/");
+        /* background-image: url("../images/"); */
         background-size: 44px 152px;
         /*The size of the normal image, half the size of the hi-res image*/ }
     #fancybox-loading div {
-        background-image: url("../images/");
+        /* background-image: url("../images/"); */
         background-size: 24px 24px;
         /*The size of the normal image, half the size of the hi-res image*/ } }
 
@@ -4640,7 +4651,7 @@ div.mejs-speed-button {
     z-index: 9999 !important; }
 
 .download-top {
-    background-image: url("../images/");
+    /* background-image: url("../images/"); */
     background-size: cover;
     background-position: center center;
     padding: 0;
@@ -4648,7 +4659,9 @@ div.mejs-speed-button {
     height: 300px; }
 @media (max-width: 992px) {
     .download-top {
-        background-image: url("../images/"); } }
+        /* background-image: url("../images/"); } } */
+    }
+}
 @media only screen and (max-width: 480px) {
     .download-top {
         height: 250px; } }
@@ -4745,7 +4758,7 @@ div.mejs-speed-button {
     .download-page-container .download-page-inner-container {
         width: 100%; } }
 .download-page-container .download-page-inner-container .download-page-top {
-    background-image: url("../images/");
+    /* background-image: url("../images/"); */
     background-size: cover;
     background-position: center center;
     padding: 0;
@@ -4753,7 +4766,9 @@ div.mejs-speed-button {
     height: 380px; }
 @media (max-width: 992px) {
     .download-page-container .download-page-inner-container .download-page-top {
-        background-image: url("../images/"); } }
+        /* background-image: url("../images/"); } } */
+    }
+}
 @media only screen and (max-width: 480px) {
     .download-page-container .download-page-inner-container .download-page-top {
         height: 280px; } }
