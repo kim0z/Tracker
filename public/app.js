@@ -30,7 +30,7 @@ var trackerApp = angular.module('myApp', [
         'mgo-angular-wizard',
         'ngFileUpload'
     ])
-    .config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $locationProvider) {
 
         $urlMatcherFactoryProvider.strictMode(false);
 
