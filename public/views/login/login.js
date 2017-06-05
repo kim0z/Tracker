@@ -13,7 +13,8 @@ var params = {
         primaryColor: '#3f51b5',
         icon: 'assets/icons/TRACKER1-01_karim_crop.png',
         socialBigButtons: true,
-        disableSignupAction: true,
+        disableSignupAction: false,
+
 
         authParams: {
             // Specify the scopes you want to retrieve
@@ -43,7 +44,6 @@ var params = {
                     console.log('Login ERROR: '+results.data.error +' message: '+ results.data.message)
                 }
             }
-
         });
 
         //$state.go('welcome');
@@ -57,11 +57,6 @@ var params = {
     }, function (err) {
         console.log("Error :(", err);
     });
-
-
-
-    //auth.signup(params[, successCallback, errorCallback]);
-
 });
 
 
