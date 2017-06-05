@@ -132,7 +132,6 @@ var trackerApp = angular.module('myApp', [
 
         // routing configuration and other stuff
         // ...
-
         authProvider.init({
             domain: 'exploreauth.auth0.com',
             clientID: 'QqJgTRPIWyFTKdpkMD8ATmeSwvw6oBCA',
