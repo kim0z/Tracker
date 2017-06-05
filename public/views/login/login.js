@@ -4,10 +4,10 @@
 trackerApp.controller('Login', function ($scope, $location, $state, $http, auth, localStorageService, serverSvc, $localStorage) {
 //  $scope.signin = function() {
 
-    auth.signin({
+var params = {
         //popup: true,
         //connection: 'Username-Password-Authentication',
-        connections: ['facebook'],
+        connections: ['facebook', 'Username-Password-Authentication'],
         closable: true,
         gravatar: false,
         primaryColor: '#3f51b5',
@@ -19,7 +19,9 @@ trackerApp.controller('Login', function ($scope, $location, $state, $http, auth,
             // Specify the scopes you want to retrieve
             scope: 'openid name email' // Specify the scopes you want to retrieve
         }
-    }, function (profile, idToken, accessToken, state, refreshToken) {
+    };
+
+    auth.signin(params, function (profile, idToken, accessToken, state, refreshToken) {
         console.log(profile, idToken, accessToken, state, refreshToken);
         localStorageService.set('profile', profile);
         localStorageService.set('token', idToken);
@@ -55,6 +57,10 @@ trackerApp.controller('Login', function ($scope, $location, $state, $http, auth,
     }, function (err) {
         console.log("Error :(", err);
     });
+
+
+
+    //auth.signup(params[, successCallback, errorCallback]);
 
 });
 
