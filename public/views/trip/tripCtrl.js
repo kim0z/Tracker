@@ -1,4 +1,4 @@
-trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeout, $stateParams, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory, nearbyPlacesFactory, firebaseSvc) {
+trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeout, $stateParams, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory, nearbyPlacesFactory) {
         //Variables Init
         $scope.loading = true;
         $scope.tripID = $stateParams.id;//localStorageService.get('tripId');
@@ -60,6 +60,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.selectedFacebookAlbum = [];
         $scope.facebookAlbumsList = []; //Facebook albums from Firebase
         $scope.pathHash = [];
+        $scope.trip_created_manually = ''
+
 
         $scope.columns = [
             {title: 'Name', field: 'name', visible: true, filter: {'name': 'text'}},
@@ -1092,6 +1094,39 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                     //****************************************************
 
+                //***** ########### Handle Places ############### ************
+
+                // if Trip was created manually by user then load places from places_manually
+
+
+
+                    //Read places from Firebase (Manually added places - it's different from recorded path)
+                    var firebase_drawing_markers_routes = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/routes');
+                    //firebase_drawing_markers_routes.push(JSON.stringify(response));
+
+                    firebase_drawing_markers_routes.once("value", function (snapshot) {
+                        //create direction Service and Display
+                        var directionsService = new google.maps.DirectionsService;
+                        var directionsDisplay = []; //var directionsDisplay = new google.maps.DirectionsRenderer;
+
+                        snapshot.forEach(function (childSnapshot) {
+                            console.log('Trip:: Reading new route from firebase under /map/routes');
+                            var route = JSON.parse(childSnapshot.val()); //JSON.parse(childSnapshot);
+                            //console.log(route);
+                            directionsDisplay.push(new google.maps.DirectionsRenderer);
+                            directionsDisplay[directionsDisplay.length - 1].setMap($scope.map); //last added directionDisplay
+                            directionsDisplay[directionsDisplay.length - 1].setDirections(route);
+                        });
+                    }, function (errorObject) {
+                        console.log("Trip:: Read trip routes from Firebase failed: " + errorObject.code);
+                    });
+
+
+
+
+
+                //************************************************************
+
 
                     //************************
                     //******************************* handle paths
@@ -1278,6 +1313,49 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         //////////////////////
                     }
 
+                    //if Trip was created automatic using the APP then load from places
+                    //Get if trip was created manually, it means the trip was created manually by users and not using the recorder APP
+                    var firebase_update_manually = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/_trip/trip_created_manually');
+                    console.log('Wizard:: Firebase:: Reading trip meta data - Trip created manually?');
+                    firebase_update_manually.once("value", function(snapshot) {
+                        console.log('Trip:: Trip meta data:');
+                        console.log(snapshot.val());
+                        $scope.trip_created_manually = snapshot.val();
+
+                        if($scope.trip_created_manually){
+                            //load places from firebase, markers
+                            $scope.nearbyPlacesReady = true;
+                            $scope.nearbyPlaces = [];
+
+                            var firebase_drawing_markers = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/markers');
+                            firebase_drawing_markers.once("value", function (snapshot) {
+                                snapshot.forEach(function (childSnapshot) {
+                                    //console.log('reading markers from firebase to load it to map');
+                                    //console.log(childSnapshot.val()); // childData = location and message and time
+                                    /*    var marker = new google.maps.Marker({
+                                     map: $scope.map,
+                                     position: childSnapshot.val().position,
+                                     icon: childSnapshot.val().icon,
+                                     id: childSnapshot.key(),
+                                     type: 'marker'
+                                     });*/
+                                    //$scope.markers.push({key: childSnapshot.key() , val: childSnapshot.val() });
+                                    //push to scope: 1. manage items 2. show as a list 3. delete item 4. update item
+                                    //$scope.markers.push(marker);
+
+                                    $scope.nearbyPlaces.push({name: childSnapshot.val().position});
+
+                                });
+                            }, function (errorObject) {
+                                console.log("Read markers from Firebase failed: " + errorObject.code);
+                            });
+                        }else{
+                            //load places by scan recorded path and find places between 2 points with time > ~15 min
+                           // $scope.loadNearByPlaces($scope.trip_path_hash);
+                        }
+                    }, function (errorObject) {
+                        console.log("The read failed (Trip meta data): " + errorObject.code);
+                    });
 
 ///////////////////////////////////////////////////////////////////////////////////////
 

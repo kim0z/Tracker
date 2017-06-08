@@ -52,6 +52,10 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
         });
     };
 
+    //Update trip with Manual flag, it means the trip was created manually by users and not using the recorder APP
+    var firebase_update_manually = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/_trip');
+    console.log('Wizard:: Firebase:: update trip meta data - Trip created manually');
+    firebase_update_manually.set({trip_created_manually: true});
 
     $scope.cancel = function () {
 
@@ -217,16 +221,17 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
             }
         }
     }
-
-
-    // ***************************** Map drawing tracks *******************************
+    // ***************************** Places - Map drawing tracks *******************************
     $scope.startMapDrawing = function () {
-        //Map configuration
         var iframe = document.getElementById('iframe_drawing');
         iframe.contentWindow.document.open();
         iframe.contentWindow.document.write('<div id="map_drawing" style="width: 100%; height: 100%"></div>');
         iframe.contentWindow.document.write('<input id="pac-input-drawing" class="form-control" type="text" placeholder="Search Location" style="width: 200px">');
         iframe.contentWindow.document.close();
+
+        //Map configuration
+        var directionsService = new google.maps.DirectionsService;
+        var directionsDisplay = []; //var directionsDisplay = new google.maps.DirectionsRenderer;
 
         var mapContainer = iframe.contentWindow.document.querySelector('#map_drawing');
 
@@ -250,6 +255,32 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
                 position: google.maps.ControlPosition.RIGHT_CENTER
             }
         });
+
+        //directionsDisplay.setMap($scope.map);
+
+        function calculateAndDisplayRoute(directionsService, directionsDisplay, from, to) {
+            directionsService.route({
+                origin: from,
+                destination: to,
+                travelMode: 'DRIVING'
+            }, function(response, status) {
+                if (status === 'OK') {
+                    directionsDisplay.push(new google.maps.DirectionsRenderer);
+                    directionsDisplay[directionsDisplay.length - 1].setMap($scope.map); //last added directionDisplay
+                    directionsDisplay[directionsDisplay.length - 1].setDirections(response);
+
+                    //console.log(JSON.parse(JSON.serialize(response)));
+
+                    //save to Firebase under places (Manually added places - it's different from recorded path)
+                    var firebase_drawing_markers_routes = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/routes');
+                    console.log('new route added to firebase under /map/routes');
+                    firebase_drawing_markers_routes.push(JSON.stringify(response));
+
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+        }
 
         // Create the search box and link it to the UI element.
         var input = iframe.contentWindow.document.querySelector('#pac-input-drawing');
@@ -382,6 +413,14 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
             //draw the marker directlly (no need to read again all items from firebase)
             marker.set("id","New marker");
             $scope.markers.push(marker);
+
+            //get route
+            if($scope.markers.length > 1){ // wait to the second point to get thr route
+                calculateAndDisplayRoute(directionsService, directionsDisplay, $scope.markers[$scope.markers.length - 2].position, $scope.markers[$scope.markers.length - 1].position);
+            }
+
+
+
             $scope.$apply();
         });
 
