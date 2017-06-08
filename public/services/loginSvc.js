@@ -1,8 +1,7 @@
-/**
- * Created by karim on 23/01/2016.
- */
-trackerApp.controller('Login', function ($scope, $location, $state, $http, auth, localStorageService, serverSvc, $localStorage) {
-//  $scope.signin = function() {
+trackerApp.service('loginService', ['$http', 'auth', function ($scope, $location, $state, $http, auth, localStorageService, serverSvc, $localStorage) {
+
+ this.login = function (auth) {
+        console.log('Login Service');
 
 var params = {
         //popup: true,
@@ -15,13 +14,12 @@ var params = {
         socialBigButtons: true,
         disableSignupAction: false,
 
+
         authParams: {
             // Specify the scopes you want to retrieve
             scope: 'openid name email' // Specify the scopes you want to retrieve
         }
     };
-
-  console.log(auth);
 
     auth.signin(params, function (profile, idToken, accessToken, state, refreshToken) {
         console.log(profile, idToken, accessToken, state, refreshToken);
@@ -59,6 +57,8 @@ var params = {
         console.log("Error :(", err);
     });
 
-});
 
+    };
+
+}]);
 

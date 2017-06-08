@@ -224,7 +224,7 @@ var trackerApp = angular.module('myApp', [
     });
 
 
-trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, $mdDialog, localStorageService, $localStorage, auth, $state, messages) {
+trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, $mdDialog, localStorageService, $localStorage, auth, $state, messages, loginService) {
 
 
     $scope.showAlert = function(ev) {
@@ -353,7 +353,6 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, $mdDialog, 
 
 
     $scope.authUser = function () {
-
 
         if (!auth.isAuthenticated) {
             console.log('not auth');
