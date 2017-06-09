@@ -134,8 +134,8 @@ trackerApp.factory('nearbyPlacesFactory', [
                             console.log(pathData[i][j]['lat']);
                             var request = {
                                 location: {
-                                    lat: pathData[i][j]['lat'],
-                                    lng: pathData[i][j]['lng']
+                                    lat: pathData[i][j]['latitude'],
+                                    lng: pathData[i][j]['longitude']
                                 },
                                 radius: '1'
                             };

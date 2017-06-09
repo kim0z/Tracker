@@ -1,9 +1,23 @@
 /**
  * Created by karim on 10/04/2017.
  */
-trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $stateParams, $window, $mdDialog, dataBaseService, localStorageService) {
+trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload, $timeout, $state, $stateParams, $window, $mdDialog, dataBaseService, localStorageService) {
 
     console.log('wizard started with trip id: ', $stateParams);
+
+
+    $scope.$on('$stateChangeSuccess',
+        function(event, toState, toParams, fromState, fromParams){
+           //do nothing
+        })
+
+    $scope.$on('$stateChangeStart',
+        function(event, toState, toParams, fromState, fromParams){
+            if($location.path() != '/wizard'){
+                event.preventDefault();
+                $scope.showConfirm(toState);
+            }
+        })
 
     $scope.trip = {};
     $scope.files = {};
@@ -35,18 +49,17 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
     }
 
 
-    $scope.showConfirm = function(ev) {
+    $scope.showConfirm = function(toState) {
         // Appending dialog to document.body to cover sidenav in docs app
         var confirm = $mdDialog.confirm()
             .title('Would you like to cancel your trip?')
             .content('All the trip assets will be deleted.')
             .ariaLabel('Lucky day')
-            .targetEvent(ev)
             .ok('Please do it!')
             .cancel('No, continue');
 
         $mdDialog.show(confirm).then(function() {
-            $scope.cancel();
+            $scope.cancel(toState);
         }, function() {
             //do nothing
         });
@@ -57,7 +70,7 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
     console.log('Wizard:: Firebase:: update trip meta data - Trip created manually');
     firebase_update_manually.set({trip_created_manually: true});
 
-    $scope.cancel = function () {
+    $scope.cancel = function (toState) {
 
         //delete trip details and assets
         if ($scope.trip.id == '') {
@@ -68,7 +81,15 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
             dataBaseService.deleteTripById(dataTripId).then(function (results) {
 
                 console.log('Client:: Wizard:: Cancel trip creation :: Delete trip id:: ' + $scope.trip.id);
-                $state.go('mytrips');
+
+                //if the Cancel was by click cancel button then go to My Trips page
+                if(toState.data == null){
+                    $state.go('mytrips');
+                }else{
+                    $state.go(toState);
+                }
+
+                //if user clicked on any other pages then go to the toState after alert to the user about it
             })
 
             function emptyBucket(callback) {
@@ -256,7 +277,8 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
             }
         });
 
-        //directionsDisplay.setMap($scope.map);
+        //Prepare Google API nearbySearch
+        var _gmapService = new google.maps.places.PlacesService($scope.map);
 
         function calculateAndDisplayRoute(directionsService, directionsDisplay, from, to) {
             directionsService.route({
@@ -402,8 +424,12 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
 
         ////// Markers
         var firebase_drawing_markers = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/markers');
+        var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/places');
         google.maps.event.addDomListener(drawingManager, 'markercomplete', function (marker) {
             console.log('new marker added to firebase');
+            var _nearbyPlaces = [];
+            var _detailsPlaces = [];
+
             //console.log(marker);
             firebase_drawing_markers.push({
                 icon: marker.icon,
@@ -418,6 +444,145 @@ trackerApp.controller('wizard', function ($scope, Upload, $timeout, $state, $sta
             if($scope.markers.length > 1){ // wait to the second point to get thr route
                 calculateAndDisplayRoute(directionsService, directionsDisplay, $scope.markers[$scope.markers.length - 2].position, $scope.markers[$scope.markers.length - 1].position);
             }
+
+            //Get places name, first get nearByPlaces then Get details
+
+            //Help function
+            var getPlaceDetails = function() {
+                //Get Details for places
+                for(var i = 0 ; i < _nearbyPlaces.length ; i++ ){
+                    var request = {
+                        placeId: _nearbyPlaces[i].place_id
+                    };
+                    _gmapService.getDetails(request, function (place_details, status) {
+
+                        if (status == google.maps.places.PlacesServiceStatus.OK) {
+                            console.log('Wizard:: Places Details:');
+                            _detailsPlaces.push(place_details);
+                            console.log(place_details)
+                            firebase_places.push(JSON.stringify(place_details));
+                        } else {
+                            console.log('Wizard:: Places Details: 0, no details for the place');
+                        }
+                    });
+                }
+            }
+            var request = {
+                location: {
+                    lat: marker.position.lat(),
+                    lng: marker.position.lng()
+                },
+                radius: '5',
+                types: [
+                    'airport',
+                    'amusement_park',
+                    'aquarium',
+                    'art_gallery',
+                    'atm',
+                    'bakery',
+                    'bank',
+                    'bar',
+                    'beauty_salon',
+                    'bicycle_store',
+                    'book_store',
+                    'bowling_alley',
+                    'bus_station',
+                    'cafe',
+                    'campground',
+                    'car_dealer',
+                    'car_rental',
+                    'car_repair',
+                    'car_wash',
+                    'casino',
+                    'cemetery',
+                    'church',
+                    'city_hall',
+                    'clothing_store',
+                    'convenience_store',
+                    'courthouse',
+                    'dentist',
+                    'department_store',
+                    'doctor',
+                    'electrician',
+                    'electronics_store',
+                    'embassy',
+                    'fire_station',
+                    'florist',
+                    'funeral_home',
+                    'furniture_store',
+                    'gas_station',
+                    'gym',
+                    'hair_care',
+                    'hardware_store',
+                    'hindu_temple',
+                    'home_goods_store',
+                    'hospital',
+                    'insurance_agency',
+                    'jewelry_store',
+                    'laundry',
+                    'lawyer',
+                    'library',
+                    'liquor_store',
+                    'local_government_office',
+                    'locksmith',
+                    'lodging',
+                    'meal_delivery',
+                    'meal_takeaway',
+                    'mosque',
+                    'movie_rental',
+                    'movie_theater',
+                    'moving_company',
+                    'museum',
+                    'night_club',
+                    'painter',
+                    'park',
+                    'parking',
+                    'pet_store',
+                    'pharmacy',
+                    'physiotherapist',
+                    'plumber',
+                    'police',
+                    'post_office',
+                    'real_estate_agency',
+                    'restaurant',
+                    'roofing_contractor',
+                    'rv_park',
+                    'school',
+                    'shoe_store',
+                    'shopping_mall',
+                    'spa',
+                    'stadium',
+                    'storage',
+                    'store',
+                    'subway_station',
+                    'synagogue',
+                    'taxi_stand',
+                    'train_station',
+                    'transit_station',
+                    'travel_agency',
+                    'university',
+                    'veterinary_care',
+                    'zoo']
+            };
+
+            _gmapService.nearbySearch(request, function (results, status) {
+                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    for (var i = 0; i < results.length; i++) {
+                        var place = results[i];
+                        console.log('Wizard:: Places near by:')
+                        console.log(place);
+                        _nearbyPlaces.push(place);
+
+                        //Get Details
+                        getPlaceDetails();
+                    }
+                } else if (status == google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+                    console.log('Wizard:: Places near by: 0, no places')
+                }
+            });
+
+
+
 
 
 

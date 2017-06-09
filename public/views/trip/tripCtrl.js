@@ -1327,27 +1327,13 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             $scope.nearbyPlacesReady = true;
                             $scope.nearbyPlaces = [];
 
-                            var firebase_drawing_markers = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/markers');
-                            firebase_drawing_markers.once("value", function (snapshot) {
+                            var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/places');
+                            firebase_places.once("value", function (snapshot) {
                                 snapshot.forEach(function (childSnapshot) {
-                                    //console.log('reading markers from firebase to load it to map');
-                                    //console.log(childSnapshot.val()); // childData = location and message and time
-                                    /*    var marker = new google.maps.Marker({
-                                     map: $scope.map,
-                                     position: childSnapshot.val().position,
-                                     icon: childSnapshot.val().icon,
-                                     id: childSnapshot.key(),
-                                     type: 'marker'
-                                     });*/
-                                    //$scope.markers.push({key: childSnapshot.key() , val: childSnapshot.val() });
-                                    //push to scope: 1. manage items 2. show as a list 3. delete item 4. update item
-                                    //$scope.markers.push(marker);
-
-                                    $scope.nearbyPlaces.push({name: childSnapshot.val().position});
-
+                                    $scope.nearbyPlaces.push(JSON.parse(childSnapshot.val()));
                                 });
                             }, function (errorObject) {
-                                console.log("Read markers from Firebase failed: " + errorObject.code);
+                                console.log("Read Places from Firebase failed: " + errorObject.code);
                             });
                         }else{
                             //load places by scan recorded path and find places between 2 points with time > ~15 min
