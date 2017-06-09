@@ -224,7 +224,7 @@ var trackerApp = angular.module('myApp', [
     });
 
 
-trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, $mdDialog, localStorageService, $localStorage, auth, $state, messages, loginService) {
+trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, $location, $mdDialog, localStorageService, $localStorage, auth, $state, messages, loginService) {
 
 
     $scope.showAlert = function(ev) {
@@ -351,44 +351,43 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, $mdDialog, 
         $state.go('welcome');
     };
 
+    $scope.showConfirm = function() {
+        // Appending dialog to document.body to cover sidenav in docs app
+        var confirm = $mdDialog.confirm()
+            .title('Please cancel the Trip before logout?')
+            .content('All the trip assets will be deleted.')
+            .ariaLabel('Lucky day')
+            .ok('Please do it!')
+        $mdDialog.show(confirm).then(function() {
+        }, function() {
+            //do nothing
+        });
+    };
+
 
     $scope.authUser = function () {
+        console.log($location.path());
+        if($location.path() == '/wizard'){ //check if user trying to logout while the Wizard
+            $scope.showConfirm();
+        }else{
+            if (!auth.isAuthenticated) {
+                console.log('not auth');
+            } else {
+                console.log('auth');
+            }
 
-        if (!auth.isAuthenticated) {
-            console.log('not auth');
-        } else {
-            console.log('auth');
-        }
 
+            var profile = localStorageService.get('profile');
 
-        var profile = localStorageService.get('profile');
-
-        if (profile && $scope.authButton == 'Logout') { //if true then user logged in, and his profile saved in local storage
-            //if user clicked the button while user logged in it means he need to logout
-            $scope.authButton = 'Login';
-            $scope.expressionAuth = 'md-raised md-primary md-button md-default-theme';
-            $scope.logout(); // should make sure this action succeeded then change the button color and text
-            console.log('try to logout');
-            console.log($scope.profile);
-        }
-        if (!profile && $scope.authButton == 'Login') {
-            $scope.authButton = 'Logout';
-            $scope.expressionAuth = 'md-raised md-warn md-button md-default-theme';
-            console.log('+++++++++++++++++++++++++++++');
-            console.log($state);
-            console.log('+++++++++++++++++++++++++++++');
-            $state.go('login'); //the login will redirect to view0 when done
-            console.log('try to login');
-            $scope.profile = localStorageService.get('profile');
-            console.log($scope.profile);
-        } else {
-            //something wrong
-            //restart login system
-            //case 1: logged out but button is not updated
-            //case 2: logged in but button is not updated
-
-            if (profile == null) {
-                //it means use is not authenticated
+            if (profile && $scope.authButton == 'Logout') { //if true then user logged in, and his profile saved in local storage
+                //if user clicked the button while user logged in it means he need to logout
+                $scope.authButton = 'Login';
+                $scope.expressionAuth = 'md-raised md-primary md-button md-default-theme';
+                $scope.logout(); // should make sure this action succeeded then change the button color and text
+                console.log('try to logout');
+                console.log($scope.profile);
+            }
+            if (!profile && $scope.authButton == 'Login') {
                 $scope.authButton = 'Logout';
                 $scope.expressionAuth = 'md-raised md-warn md-button md-default-theme';
                 console.log('+++++++++++++++++++++++++++++');
@@ -398,8 +397,25 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, $mdDialog, 
                 console.log('try to login');
                 $scope.profile = localStorageService.get('profile');
                 console.log($scope.profile);
-            }
+            } else {
+                //something wrong
+                //restart login system
+                //case 1: logged out but button is not updated
+                //case 2: logged in but button is not updated
 
+                if (profile == null) {
+                    //it means use is not authenticated
+                    $scope.authButton = 'Logout';
+                    $scope.expressionAuth = 'md-raised md-warn md-button md-default-theme';
+                    console.log('+++++++++++++++++++++++++++++');
+                    console.log($state);
+                    console.log('+++++++++++++++++++++++++++++');
+                    $state.go('login'); //the login will redirect to view0 when done
+                    console.log('try to login');
+                    $scope.profile = localStorageService.get('profile');
+                    console.log($scope.profile);
+                }
+            }
         }
     }
 
