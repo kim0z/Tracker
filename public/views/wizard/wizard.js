@@ -83,10 +83,10 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                 console.log('Client:: Wizard:: Cancel trip creation :: Delete trip id:: ' + $scope.trip.id);
 
                 //if the Cancel was by click cancel button then go to My Trips page
-                if(toState.data == null){
-                    $state.go('mytrips');
-                }else{
+                if(toState.hasOwnProperty('url')){
                     $state.go(toState);
+                }else{
+                    $state.go('mytrips');
                 }
 
                 //if user clicked on any other pages then go to the toState after alert to the user about it
