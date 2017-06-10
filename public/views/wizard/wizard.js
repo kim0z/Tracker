@@ -5,6 +5,15 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
     console.log('wizard started with trip id: ', $stateParams);
 
+    $scope.profile = localStorageService.get('profile');
+    $scope.facebookId = $scope.profile.identities[0].user_id;
+
+    if(!$stateParams.tripId || !$scope.facebookId){ //if no trip Id or user id then return back to My Trips page (I should understand when this happened?)
+        console.log('Wizard:: exit because user id or trip id = null');
+        console.log('user id:'+ $scope.facebookId);
+        console.log('trip id:'+ $stateParams.tripId);
+        $state.go('mytrips');
+    }
 
     $scope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams){
@@ -25,9 +34,6 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
     $scope.trip = {};
     $scope.files = {};
-
-    $scope.profile = localStorageService.get('profile');
-    $scope.facebookId = $scope.profile.identities[0].user_id;
 
     $scope.trip = {id: $stateParams.tripId, name: '',dateStart: '',dateEnd: '', description: '', type: '', continents: '', options: {trip_public: false} };
 
@@ -131,18 +137,13 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             firebase_trip_assets.remove();
         }
     }
-
-
-
     //watch any change in input fields of details form, then check if all fields are not empty to enable Next button
     $scope.$watch('trip', function() {
         if($scope.trip.name && $scope.trip.dateStart && $scope.trip.dateEnd && $scope.trip.continents && $scope.trip.type){
             $scope.trip.buttonDisabled  = false;
             console.log('Wizard: Trip details form is valid, Next button enabled');
-
             $scope.d = {d:''}
             $scope.d.d = new Date($scope.trip.dateStart).toString();
-
         }else{
             $scope.trip.buttonDisabled = true;
         }
@@ -177,20 +178,18 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             });
 
         //upload cover photo to S3
-
         var fileChooser = document.getElementById('coverPhotoInput')
-        var file = fileChooser.files[0];
+        var file_cover = fileChooser.files[0];
 
                     var params = {
                         Key: $scope.facebookId + '/' + $scope.trip.id + '/cover',
-                        ContentType: file.type,
-                        Body: file
+                        ContentType: file_cover.type,
+                        Body: file_cover
                     };
 
                     bucket.upload(params, function (err, data) {
                         console.log( err ? 'ERROR!' : 'Cover photo UPLOADED.');
                     });
-
     };
 
     // ************************** Upload *******************************
@@ -202,6 +201,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             $scope.upload([$scope.file]);
         }
     });
+
     $scope.log = '';
 
 
