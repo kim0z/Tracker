@@ -102,7 +102,7 @@
         box-sizing: border-box;
     }
 
-    .container{
+    .container {
         display: flex;
         width: auto;
         justify-content: space-between;
@@ -124,6 +124,14 @@
 
     }
 
+    .left-map-places {
+        /* background: #f970bd; */
+        height: 70%;
+        flex: 1;
+        padding: 25px;
+        margin-right: 10px;
+    }
+
     .left-map-tips {
         /* background: #f970bd; */
         height: 70%;
@@ -133,7 +141,7 @@
     }
 
     .map-center-tips {
-       /*  background: #049500; */
+        /*  background: #049500; */
         height: 70%;
         flex: 5;
         padding: 25px;
@@ -149,15 +157,11 @@
 
     /* Tracks section */
 
-
- /*   .container div:not(.map_right) { !* not(.fruits)
-        order: 1;
-        !* flex: 0 0 calc(50% - 10px); *!
-        flex: 0 0 350px;
-    }*/
-
-
-
+    /*   .container div:not(.map_right) { !* not(.fruits)
+           order: 1;
+           !* flex: 0 0 calc(50% - 10px); *!
+           flex: 0 0 350px;
+       }*/
 
     /* Slider button */
     /* The switch - the box around the slider */
@@ -264,7 +268,8 @@
 
                         <div class="form-group">
                             <label for="continentSelect">Choose continent *</label>
-                            <select name="continent" ng-model="trip.continents" class="form-control" id="continentSelect">
+                            <select name="continent" ng-model="trip.continents" class="form-control"
+                                    id="continentSelect">
                                 <option>Africa</option>
                                 <option>Europe</option>
                                 <option>Asia</option>
@@ -299,8 +304,10 @@
 
                         <div class="form-group">
                             <label for="coverPhotoInput">Cover photo</label>
-                            <input type="file" class="form-control-file" id="coverPhotoInput"  aria-describedby="fileHelp">
-                            <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text
+                            <input type="file" class="form-control-file" id="coverPhotoInput"
+                                   aria-describedby="fileHelp">
+                            <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help
+                                text
                                 for
                                 the above input. It's a bit lighter and easily wraps to a new line.
                             </small>
@@ -324,7 +331,8 @@
             </div>
 
 
-            <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="addTrip()" ng-disabled="trip.buttonDisabled"/>
+            <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="addTrip()"
+                   ng-disabled="trip.buttonDisabled"/>
             <input type="submit" value="Cancel" class="btn btn-danger" ng-click="showConfirm($event)"/>
         </wz-step>
 
@@ -359,62 +367,85 @@
         </wz-step>
 
 
-        <wz-step wz-title="Trip tracks">
+        <wz-step wz-title="Trip Places and Routes">
 
-            <h1>Draw your trip tracks on map</h1>
+            <h1>Add the places you visited</h1>
 
-            <div>
+            <div class="container">
+                <!-- Places -->
 
-                <div class="container">
-                    <div class="left-map-drawing" >
-                        <ol class="rounded-list">
-                            <li><a href="javascript:void(0)">Markers</a>
-                                <ol>
-                                    <li ng-repeat="marker in markers track by $index"
-                                        ng-click="highLightItem(marker.get('type'),marker.get('id'))"><a href="">{{marker.get('id')}}
-                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"
-                                          ng-click="deleteItemFromMap(marker.get('type'),marker.get('id'))"> </span>
-                                    </a></li>
-                                </ol>
-                            </li>
-                            <li><a href="javascript:void(0)">Polylines</a>
-                                <ol>
-                                    <li ng-repeat="polyline in polylines track by $index"
-                                        ng-click="highLightItem(polyline.get('type'),polyline.get('id'))"><a href="">{{polyline.get('id')}}
-                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"
-                                          ng-click="deleteItemFromMap(polyline.get('type'),polyline.get('id'))"> </span>
-                                    </a></li>
-                                </ol>
-                            </li>
-                            <li><a href="javascript:void(0)">Circles</a>
-                                <ol>
-                                    <li ng-repeat="circle in circles track by $index"><a
-                                            ng-click="highLightItem(circle.get('type'),circle.get('id'))">{{circle.get('id')}}
-                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"
-                                          ng-click="deleteItemFromMap(circle.get('type'),circle.get('id'))"> </span>
-                                    </a></li>
-                                </ol>
-                            </li>
-                        </ol>
+                <div class="left-map-places">
+                    <div ng-cloak layout-gt-sm="row" layout="column">
+                        <div flex-gt-sm="100" flex>
+                            <md-toolbar layout="row" class="md-hue-3" >
+                                <div class="md-toolbar-tools">
+                                    <md-button class="md-raised">Places
+                                    </md-button>
+                                </div>
+                            </md-toolbar>
+
+                            <md-content  style="overflow: auto">
+                                <md-list flex>
+                                    <!-- <md-subheader class="md-no-sticky">Trip tips</md-subheader> -->
+                                    <md-list-item class="md-3-line" ng-repeat="place in nearbyPlaces"
+                                                  ng-click="">
+                                        <img ng-src="{{place.icon}}" class="md-avatar"/>
+                                        <div class="md-list-item-text" layout="column">
+                                            <h3>{{ place.name}}</h3>
+                                            <h4>{{ place.formatted_address }} </h4>
+                                            <p>
+                                                <a ng-href="{{place.url}}" target="_blank">Read more...</a>
+                                            </p>
+                                        </div>
+                                        <md-divider></md-divider>
+                                    </md-list-item>
+                                </md-list>
+                            </md-content>
+                        </div>
                     </div>
-
-                    <div class="map-right-drawing">
-                        <iframe id="iframe_drawing" style="width: 100%; height: 100%">
-                            <!-- map injected by code
-                            <div id="map_tracks" style="height: 100%; width: 100%"></div>
-                            <input id="pac-input_tracks" class="controls" type="text" placeholder="Search Box">
-                        -->
-                        </iframe>
-                    </div>
-
                 </div>
 
+                <div class="map-right-drawing">
+                    <iframe id="iframe_drawing" style="width: 100%; height: 100%">
+                        <!-- Map -->
+                    </iframe>
+                </div>
             </div>
-
 
             <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="startMapTips()"/>
             <input type="submit" value="Cancel" class="btn btn-danger" ng-click="showConfirm($event)"/>
         </wz-step>
+        <!--
+        <ol class="rounded-list">
+            <li><a href="javascript:void(0)">Markers</a>
+                <ol>
+                    <li ng-repeat="marker in markers track by $index"
+                        ng-click="highLightItem(marker.get('type'),marker.get('id'))"><a href="">{{marker.get('id')}}
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"
+                          ng-click="deleteItemFromMap(marker.get('type'),marker.get('id'))"> </span>
+                    </a></li>
+                </ol>
+            </li>
+            <li><a href="javascript:void(0)">Polylines</a>
+                <ol>
+                    <li ng-repeat="polyline in polylines track by $index"
+                        ng-click="highLightItem(polyline.get('type'),polyline.get('id'))"><a href="">{{polyline.get('id')}}
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"
+                          ng-click="deleteItemFromMap(polyline.get('type'),polyline.get('id'))"> </span>
+                    </a></li>
+                </ol>
+            </li>
+            <li><a href="javascript:void(0)">Circles</a>
+                <ol>
+                    <li ng-repeat="circle in circles track by $index"><a
+                            ng-click="highLightItem(circle.get('type'),circle.get('id'))">{{circle.get('id')}}
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"
+                          ng-click="deleteItemFromMap(circle.get('type'),circle.get('id'))"> </span>
+                    </a></li>
+                </ol>
+            </li>
+        </ol>
+        -->
 
 
         <wz-step wz-title="Trip tips">
@@ -445,7 +476,9 @@
                             <div class="scroll" id="messages" class="list-group"
                                  ng-repeat="message in messages | filter:filterTips()"
                                  ng-show="showAllTips || showTips && message.message.tip || showRisks && message.message.risk || showExpense && message.message.price">
-                                <a href="javascript:void(0)" class="list-group-item active" ng-click="showMessageOnMap(message)" style="margin: 5px;">
+                                <a href="javascript:void(0)" class="list-group-item active"
+                                   ng-click="showMessageOnMap(message)"
+                                   style="margin: 5px;">
                                     <md-icon md-svg-src="assets/icons/ic_message_black_48px.svg"
                                              ng-if="message.message.tip"></md-icon>
                                     <md-icon md-svg-src="assets/icons/ic_warning_black_48px.svg"
@@ -492,12 +525,15 @@
                         <p>Add new tip</p>
                         <ul>
                             <p> Tip
-                                <input type="text" ng-model="message.text" style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
+                                <input type="text" ng-model="message.text"
+                                       style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
                             <p> Latitude
-                                <input type="text" ng-model="message.lat" style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
+                                <input type="text" ng-model="message.lat"
+                                       style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
                             </p>
                             <p> Longitude
-                                <input type="text" ng-model="message.lng" style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
+                                <input type="text" ng-model="message.lng"
+                                       style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
                             </p>
                             <!--
                             <p> Time
@@ -506,7 +542,9 @@
                             -->
                             <p> Date
                                 <!-- MMMM d, y' -->
-                                <datepicker date-min-limit="{{trip.dateStart.toString()}}" date-max-limit="{{trip.dateEnd.toString()}}" date-format="yyyy-MM-dd" datepicker-append-to-body=true>
+                                <datepicker date-min-limit="{{trip.dateStart.toString()}}"
+                                            date-max-limit="{{trip.dateEnd.toString()}}" date-format="yyyy-MM-dd"
+                                            datepicker-append-to-body=true>
                                     <input name="tipDate" ng-model="message.time" class="form-control"
                                            type="date" required/>
                                 </datepicker>

@@ -13,9 +13,13 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
     $scope.$on('$stateChangeStart',
         function(event, toState, toParams, fromState, fromParams){
-            if($location.path() != '/wizard'){
-                event.preventDefault();
-                $scope.showConfirm(toState);
+            if(toState.url == '/trip/:id'){ //when user click finish and move to Trip page
+                //do nothing
+            }else{
+                if($location.path() != '/wizard'){
+                    event.preventDefault();
+                    $scope.showConfirm(toState);
+                }
             }
         })
 
@@ -422,7 +426,19 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         });
         ////// Circles END
 
-        ////// Markers
+        ////// Markers / Places
+
+        //Get places from Firebase to the list in HTML, keep listening to the new places added by user
+        $scope.nearbyPlaces = [];
+        var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/places');
+        firebase_places.on("value", function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                $scope.nearbyPlaces.push(JSON.parse(childSnapshot.val()));
+            });
+            $scope.$apply();
+        })
+
+        //Listen to user map event, when click to add marker then calculate route + get place details (could be more than 1 place)
         var firebase_drawing_markers = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/markers');
         var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/places');
         google.maps.event.addDomListener(drawingManager, 'markercomplete', function (marker) {
@@ -472,7 +488,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                     lat: marker.position.lat(),
                     lng: marker.position.lng()
                 },
-                radius: '5',
+                radius: '10',
                 types: [
                     'airport',
                     'amusement_park',
