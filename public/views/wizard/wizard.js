@@ -1,12 +1,14 @@
 /**
  * Created by karim on 10/04/2017.
  */
-trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload, $timeout, $state, $stateParams, $window, $mdDialog, dataBaseService, localStorageService) {
+trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload, $timeout, $state, $stateParams, $window, $mdDialog, dataBaseService, localStorageService, Facebook) {
 
     console.log('wizard started with trip id: ', $stateParams);
 
     $scope.profile = localStorageService.get('profile');
     $scope.facebookId = $scope.profile.identities[0].user_id;
+
+    $scope.userAccessToken = localStorageService.get('providerToken');
 
     if(!$stateParams.tripId || !$scope.facebookId){ //if no trip Id or user id then return back to My Trips page (I should understand when this happened?)
         console.log('Wizard:: exit because user id or trip id = null');
@@ -295,8 +297,6 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                     directionsDisplay[directionsDisplay.length - 1].setMap($scope.map); //last added directionDisplay
                     directionsDisplay[directionsDisplay.length - 1].setDirections(response);
 
-                    //console.log(JSON.parse(JSON.serialize(response)));
-
                     //save to Firebase under places (Manually added places - it's different from recorded path)
                     var firebase_drawing_markers_routes = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/routes');
                     console.log('new route added to firebase under /map/routes');
@@ -462,6 +462,20 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             }
 
             //Get places name, first get nearByPlaces then Get details
+
+
+            var getPlacesByFacebook = function(lat, lng) {
+                  Facebook.api(
+                                    "/search?q=&type=place&center="+lat+","+lng+"&distance="+10+"?access_token=" + $scope.userAccessToken,
+                                    function (place) {
+                                        if (place && !place.error) {
+                                            console.log(place);
+                                        }
+                                    });
+            }
+
+            getPlacesByFacebook(marker.position.lat(), marker.position.lng());
+
 
             //Help function
             var getPlaceDetails = function() {
