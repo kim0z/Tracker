@@ -512,7 +512,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             //////////////// Facebook API get places around ///////////////////////
             //Get places name, Facebook API, bring pages around
             var getPlacesByFacebook = function(lat, lng, distance, limit) {
-                if(lat != null && lng != null && distance != null && $scope.userAccessToken != null){
+                if(lat != null && lng != null && distance != null){
                     Facebook.api(
                         "search?access_token=942317529184852%7CXgVb4d3OEZDe9VM1ilqo-u53-4U&pretty=0&q&type=place&center="+lat+","+lng+"&distance="+distance+"&limit="+limit+"&after=MjQZD&fields=name,checkins,picture,link", //APP Token
                         function (places) {
@@ -526,7 +526,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                             }
                         });
                 }else{
-                    console.log('Wizard:: Error:: lat || lng || distance || $scope.userAccessToken == null');
+                    console.log('Wizard:: Error:: lat || lng || distance == null');
                 }
             }
             ///////////////////  Facebook Places API END /////////////////////////////
