@@ -430,11 +430,14 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
         //Get places from Firebase to the list in HTML, keep listening to the new places added by user
         $scope.nearbyPlaces = [];
+
+        //Read places from Firebase when a new place added to show it in the list / edit / delete
         var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/places');
-        firebase_places.on("value", function (snapshot) {
-            snapshot.forEach(function (childSnapshot) {
-                $scope.nearbyPlaces.push(JSON.parse(childSnapshot.val()));
-            });
+        firebase_places.on("child_added", function (snapshot) {
+            //snapshot.forEach(function (childSnapshot) {
+                $scope.nearbyPlaces.push(JSON.parse(snapshot.val()));
+                console.log('Wizard:: Reading place from Firebase');
+            //});
             $scope.$apply();
         })
 
@@ -442,7 +445,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         var firebase_drawing_markers = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/markers');
         var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/places');
         google.maps.event.addDomListener(drawingManager, 'markercomplete', function (marker) {
-            console.log('new marker added to firebase');
+            console.log('new marker / place added to firebase');
             var _nearbyPlaces = [];
             var _detailsPlaces = [];
 
@@ -461,23 +464,29 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                 calculateAndDisplayRoute(directionsService, directionsDisplay, $scope.markers[$scope.markers.length - 2].position, $scope.markers[$scope.markers.length - 1].position);
             }
 
-            //Get places name, first get nearByPlaces then Get details
-
-
-            var getPlacesByFacebook = function(lat, lng) {
-                  Facebook.api(
-                                    "/search?q=&type=place&center="+lat+","+lng+"&distance="+10+"?access_token=" + $scope.userAccessToken,
-                                    function (place) {
-                                        if (place && !place.error) {
-                                            console.log(place);
-                                        }
-                                    });
+            //////////////// Facebook API get places around ///////////////////////
+            //Get places name, Facebook API, bring pages around
+            var getPlacesByFacebook = function(lat, lng, distance, limit) {
+                if(lat != null && lng != null && distance != null && $scope.userAccessToken != null){
+                    Facebook.api(
+                        "search?access_token=942317529184852%7CXgVb4d3OEZDe9VM1ilqo-u53-4U&pretty=0&q&type=place&center="+lat+","+lng+"&distance="+distance+"&limit="+limit+"&after=MjQZD", //APP Token
+                        function (places) {
+                            if (places && !places.error) {
+                                console.log(places);
+                                for(var i = 0 ; i < places.data.length ; i++){
+                                    //_detailsPlaces.push(places.data[i]);
+                                    console.log(places.data[i])
+                                    firebase_places.push(JSON.stringify(places.data[i]));
+                                }
+                            }
+                        });
+                }else{
+                    console.log('Wizard:: Error:: lat || lng || distance || $scope.userAccessToken == null');
+                }
             }
+            ///////////////////  Facebook Places API END /////////////////////////////
 
-            getPlacesByFacebook(marker.position.lat(), marker.position.lng());
-
-
-            //Help function
+            ////////// Google API - Get places around /////////////////
             var getPlaceDetails = function() {
                 //Get Details for places
                 for(var i = 0 ; i < _nearbyPlaces.length ; i++ ){
@@ -503,120 +512,35 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                     lng: marker.position.lng()
                 },
                 radius: '10',
-                types: [
-                    'airport',
-                    'amusement_park',
-                    'aquarium',
-                    'art_gallery',
-                    'atm',
-                    'bakery',
-                    'bank',
-                    'bar',
-                    'beauty_salon',
-                    'bicycle_store',
-                    'book_store',
-                    'bowling_alley',
-                    'bus_station',
-                    'cafe',
-                    'campground',
-                    'car_dealer',
-                    'car_rental',
-                    'car_repair',
-                    'car_wash',
-                    'casino',
-                    'cemetery',
-                    'church',
-                    'city_hall',
-                    'clothing_store',
-                    'convenience_store',
-                    'courthouse',
-                    'dentist',
-                    'department_store',
-                    'doctor',
-                    'electrician',
-                    'electronics_store',
-                    'embassy',
-                    'fire_station',
-                    'florist',
-                    'funeral_home',
-                    'furniture_store',
-                    'gas_station',
-                    'gym',
-                    'hair_care',
-                    'hardware_store',
-                    'hindu_temple',
-                    'home_goods_store',
-                    'hospital',
-                    'insurance_agency',
-                    'jewelry_store',
-                    'laundry',
-                    'lawyer',
-                    'library',
-                    'liquor_store',
-                    'local_government_office',
-                    'locksmith',
-                    'lodging',
-                    'meal_delivery',
-                    'meal_takeaway',
-                    'mosque',
-                    'movie_rental',
-                    'movie_theater',
-                    'moving_company',
-                    'museum',
-                    'night_club',
-                    'painter',
-                    'park',
-                    'parking',
-                    'pet_store',
-                    'pharmacy',
-                    'physiotherapist',
-                    'plumber',
-                    'police',
-                    'post_office',
-                    'real_estate_agency',
-                    'restaurant',
-                    'roofing_contractor',
-                    'rv_park',
-                    'school',
-                    'shoe_store',
-                    'shopping_mall',
-                    'spa',
-                    'stadium',
-                    'storage',
-                    'store',
-                    'subway_station',
-                    'synagogue',
-                    'taxi_stand',
-                    'train_station',
-                    'transit_station',
-                    'travel_agency',
-                    'university',
-                    'veterinary_care',
-                    'zoo']
+                types: []
             };
 
-            _gmapService.nearbySearch(request, function (results, status) {
-                if (status == google.maps.places.PlacesServiceStatus.OK) {
-                    for (var i = 0; i < results.length; i++) {
-                        var place = results[i];
-                        console.log('Wizard:: Places near by:')
-                        console.log(place);
-                        _nearbyPlaces.push(place);
+            var getPlacesByGoogle = function () {
+                _gmapService.nearbySearch(request, function (results, status) {
+                    if (status == google.maps.places.PlacesServiceStatus.OK) {
+                        for (var i = 0; i < results.length; i++) {
+                            var place = results[i];
+                            console.log('Wizard:: Places near by:')
+                            console.log(place);
+                            _nearbyPlaces.push(place);
 
-                        //Get Details
-                        getPlaceDetails();
+                            //Get Details
+                            getPlaceDetails();
+                        }
+                    } else if (status == google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+                        console.log('Wizard:: Places near by: 0, no places')
                     }
-                } else if (status == google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
-                    console.log('Wizard:: Places near by: 0, no places')
-                }
-            });
+                });
+            }
+            /////////////////// Google places API End ///////////////////////////////////
+
+            //get places around
+            //getPlacesByFacebook(marker.position.lat(), marker.position.lng(), 100, 5);
+            getPlacesByGoogle();
 
 
 
-
-
-
-            $scope.$apply();
+            //$scope.$apply();
         });
 
         firebase_drawing_markers.once("value", function (snapshot) {
