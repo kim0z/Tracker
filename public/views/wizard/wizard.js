@@ -49,8 +49,10 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
     // Configure your region
     AWS.config.region = 'us-west-2';
 
-
     var bucket = new AWS.S3({params: {Bucket: 'tracker.photos'}});
+
+
+    $scope.map_center = {lat: 0, lng: 0};
 
 
     //***** config end
@@ -154,6 +156,34 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
     // ************************** Trip details *************************
     $scope.addTrip = function () {
 
+        var continents_lat_lng = {africa: {lat:'8.7832', lng:'34.5085'}, europe: {lat:'54.5260', lng:'15.2551'}, asia: {lat:'34.0479', lng:'100.6197'}, middleEast: {lat:'29.2985', lng:'42.5510'}, northAmerica: {lat:'54.5260', lng:'105.2551'}, southAmerica: {lat:'8.7832', lng:'55.4915'}, antarctica: {lat:'82.8628', lng:'135.0000'}, australia: {lat:'25.2744', lng:'133.7751'}};
+
+            switch ($scope.trip.continents) {
+                case 'Africa':
+                    $scope.map_center = continents_lat_lng.africa;
+                    break;
+                case 'Europe':
+                    $scope.map_center = continents_lat_lng.europe;
+                    break;
+                case 'Asia':
+                    $scope.map_center = continents_lat_lng.asia;
+                    break;
+                case 'Middle East':
+                    $scope.map_center = continents_lat_lng.middleEast;
+                    break;
+                case 'North America':
+                    $scope.map_center = continents_lat_lng.northAmerica;
+                    break;
+                case 'South America':
+                    $scope.map_center = continents_lat_lng.southAmerica;
+                    break;
+                case 'Antarctica':
+                    $scope.map_center = continents_lat_lng.antarctica;
+                    break;
+                case 'Australia':
+                    $scope.map_center = continents_lat_lng.australia;
+                    break;
+            }
         //save all the general information about the trip
         var jsonTripGeneralInfo = {
             email: $scope.profile.email,
@@ -168,6 +198,8 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             trip_type: $scope.trip.type,
             options: {trip_public: $scope.trip.public}
         };
+
+        //updateMapCenter($scope.trip.continents);
 
         //save updated trip into DB
         dataBaseService.updateTripGeneralInfo(jsonTripGeneralInfo)
@@ -264,7 +296,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
         $scope.map = new google.maps.Map(mapContainer, {
             //center: {lat: 34.397, lng: 40.644},
-            center: {lat: 0, lng: 0},
+            center: new google.maps.LatLng($scope.map_center.lat, $scope.map_center.lng),
             zoom: 4,
             mapTypeControl: true,
             mapTypeControlOptions: {
@@ -433,14 +465,27 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
         //Read places from Firebase when a new place added to show it in the list / edit / delete
         var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/places');
+        var firebase_places_remove = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/places');
         firebase_places.on("child_added", function (snapshot) {
             //snapshot.forEach(function (childSnapshot) {
-                $scope.nearbyPlaces.push(JSON.parse(snapshot.val()));
-                console.log('Wizard:: Reading place from Firebase');
+            var place = JSON.parse(snapshot.val());
+            place["firebase_key"] = snapshot.key();
+            $scope.nearbyPlaces.push(place);
+            console.log('Wizard:: Reading place from Firebase');
             //});
             $scope.$apply();
         })
 
+        $scope.removePlace = function (key) {
+            firebase_places_remove.child(key).remove();
+            for(var i = 0 ; i < $scope.nearbyPlaces.length ; i++){
+                if($scope.nearbyPlaces[i].firebase_key == key){
+                    $scope.nearbyPlaces.splice(i, 1);
+                    console.log('Wizard:: Place was removed');
+                    break;
+                }
+            }
+        }
         //Listen to user map event, when click to add marker then calculate route + get place details (could be more than 1 place)
         var firebase_drawing_markers = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/markers');
         var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/places');
@@ -469,7 +514,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             var getPlacesByFacebook = function(lat, lng, distance, limit) {
                 if(lat != null && lng != null && distance != null && $scope.userAccessToken != null){
                     Facebook.api(
-                        "search?access_token=942317529184852%7CXgVb4d3OEZDe9VM1ilqo-u53-4U&pretty=0&q&type=place&center="+lat+","+lng+"&distance="+distance+"&limit="+limit+"&after=MjQZD", //APP Token
+                        "search?access_token=942317529184852%7CXgVb4d3OEZDe9VM1ilqo-u53-4U&pretty=0&q&type=place&center="+lat+","+lng+"&distance="+distance+"&limit="+limit+"&after=MjQZD&fields=name,checkins,picture,link", //APP Token
                         function (places) {
                             if (places && !places.error) {
                                 console.log(places);
@@ -713,7 +758,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         var mapContainer = iframe.contentWindow.document.querySelector('#map_tips');
 
         $scope.map_tips = new google.maps.Map(mapContainer, {
-            center: {lat: 0, lng: 0},
+            center: new google.maps.LatLng($scope.map_center.lat, $scope.map_center.lng),
             zoom: 4,
             mapTypeControl: true,
             mapTypeControlOptions: {

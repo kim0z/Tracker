@@ -354,7 +354,7 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, $location, 
     $scope.showConfirm = function() {
         // Appending dialog to document.body to cover sidenav in docs app
         var confirm = $mdDialog.confirm()
-            .title('Please cancel the Trip before logout?')
+            .title('Please cancel the Trip before logout!')
             .content('All the trip assets will be deleted.')
             .ariaLabel('Lucky day')
             .ok('Please do it!')
