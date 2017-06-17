@@ -535,10 +535,8 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             /////////////////// Google places API End ///////////////////////////////////
 
             //get places around
-            //getPlacesByFacebook(marker.position.lat(), marker.position.lng(), 100, 5);
-            getPlacesByGoogle();
-
-
+            getPlacesByFacebook(marker.position.lat(), marker.position.lng(), 500, 10);
+            //getPlacesByGoogle(); //enable to allow Google places to work
 
             //$scope.$apply();
         });
