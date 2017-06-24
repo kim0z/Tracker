@@ -97,9 +97,12 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                 console.log('Client:: Wizard:: Cancel trip creation :: Delete trip id:: ' + $scope.trip.id);
 
                 //if the Cancel was by click cancel button then go to My Trips page
-                if(toState.hasOwnProperty('url')){
-                    $state.go(toState);
-                }else{
+                if(toState != null){
+                    if(toState.hasOwnProperty('url')) {
+                        $state.go(toState);
+                    }
+                }
+                else{
                     $state.go('mytrips');
                 }
 
@@ -586,6 +589,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             //$scope.$apply();
         });
 
+
         firebase_drawing_markers.once("value", function (snapshot) {
             snapshot.forEach(function (childSnapshot) {
                 //console.log('reading markers from firebase to load it to map');
@@ -737,15 +741,14 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             }
         }
         // ****************************** Drawing events end *******************************
-
-
-
-
-
     }
 
-    // *************************** Trip tips on map **************************
 
+
+
+
+
+    // *************************** Trip tips on map **************************
     $scope.startMapTips = function () {
 
         //Map configuration
@@ -843,17 +846,60 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             $scope.$apply(); //used to update 'add tips right side of the map', but why it doesn't update without it ????
         });
 
+        //********** Load places to allow user to see what places to add tips on *************
+        $scope.markers_tips = [];
+        var firebase_markers_for_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/markers');
+        firebase_markers_for_tips.once("value", function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                //console.log('reading markers from firebase to load it to map');
+                //console.log(childSnapshot.val()); // childData = location and message and time
+                var marker = new google.maps.Marker({
+                    map: $scope.map_tips,
+                    position: childSnapshot.val().position,
+                    icon: childSnapshot.val().icon,
+                    id: childSnapshot.key(),
+                    type: 'marker'
+                });
+                //$scope.markers.push({key: childSnapshot.key() , val: childSnapshot.val() });
+                //push to scope: 1. manage items 2. show as a list 3. delete item 4. update item
+                $scope.markers_tips.push(marker);
+            });
+        }, function (errorObject) {
+            console.log("Read markers from Firebase failed: " + errorObject.code);
+        });
+
+        // ******************** Load routes **********************
+        //Read places from Firebase (Manually added places - it's different from recorded path)
+        var firebase_routes_for_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/routes');
+        //firebase_drawing_markers_routes.push(JSON.stringify(response));
+
+        firebase_routes_for_tips.once("value", function (snapshot) {
+            //create direction Service and Display
+            var directionsService = new google.maps.DirectionsService;
+            var directionsDisplay = []; //var directionsDisplay = new google.maps.DirectionsRenderer;
+
+            snapshot.forEach(function (childSnapshot) {
+                console.log('Wizrad:: Tips sections :: Reading new route from firebase under /map/routes');
+                var route = JSON.parse(childSnapshot.val()); //JSON.parse(childSnapshot);
+                //console.log(route);
+                directionsDisplay.push(new google.maps.DirectionsRenderer);
+                directionsDisplay[directionsDisplay.length - 1].setMap($scope.map_tips); //last added directionDisplay
+                directionsDisplay[directionsDisplay.length - 1].setDirections(route);
+            });
+        }, function (errorObject) {
+            console.log("Trip:: Read trip routes from Firebase failed: " + errorObject.code);
+        });
+
         //**********************  load Tips from Firebase ******************
-        //******************************************************************
-        //******************************************************************
         var firebase_ref_readTips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/messages');
 
         firebase_ref_readTips.on("value", function (snapshot) {
             $scope.messages = [];
-
             snapshot.forEach(function (childSnapshot) {
                 //var key = childSnapshot.key();
                 var childData = childSnapshot.val(); // childData = location and message and time
+                console.log("Read Tips from Firebase to show on map: " + childData);
+
                 //$scope.messages.unshift(childData['message']);
                 $scope.messages.unshift(childData);
             });
@@ -878,7 +924,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             };
 
             firebase_tips.push(message_json);
-            console.log('Tip saved in Firebase');
+            console.log('New Tip saved in Firebase');
 
             $scope.message.lat = '';
             $scope.message.lng = '';
