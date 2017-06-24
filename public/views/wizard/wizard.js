@@ -581,10 +581,10 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                         "search?access_token=942317529184852%7CXgVb4d3OEZDe9VM1ilqo-u53-4U&pretty=0&q&type=place&center=" + lat + "," + lng + "&distance=" + distance + "&limit=" + limit + "&after=MjQZD&fields=name,checkins,picture,link", //APP Token
                         function (places) {
                             if (places && !places.error) {
-                                console.log(places);
+                                //console.log(places);
                                 for (var i = 0; i < places.data.length; i++) {
                                     //_detailsPlaces.push(places.data[i]);
-                                    console.log(places.data[i])
+                                    //console.log(places.data[i])
                                     firebase_places.push(JSON.stringify(places.data[i]));
                                 }
                             }
