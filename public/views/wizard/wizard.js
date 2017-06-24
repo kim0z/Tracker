@@ -10,24 +10,24 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
     $scope.userAccessToken = localStorageService.get('providerToken');
 
-    if(!$stateParams.tripId || !$scope.facebookId){ //if no trip Id or user id then return back to My Trips page (I should understand when this happened?)
+    if (!$stateParams.tripId || !$scope.facebookId) { //if no trip Id or user id then return back to My Trips page (I should understand when this happened?)
         console.log('Wizard:: exit because user id or trip id = null');
-        console.log('user id:'+ $scope.facebookId);
-        console.log('trip id:'+ $stateParams.tripId);
+        console.log('user id:' + $scope.facebookId);
+        console.log('trip id:' + $stateParams.tripId);
         $state.go('mytrips');
     }
 
     $scope.$on('$stateChangeSuccess',
-        function(event, toState, toParams, fromState, fromParams){
-           //do nothing
+        function (event, toState, toParams, fromState, fromParams) {
+            //do nothing
         })
 
     $scope.$on('$stateChangeStart',
-        function(event, toState, toParams, fromState, fromParams){
-            if(toState.url == '/trip/:id'){ //when user click finish and move to Trip page
+        function (event, toState, toParams, fromState, fromParams) {
+            if (toState.url == '/trip/:id') { //when user click finish and move to Trip page
                 //do nothing
-            }else{
-                if($location.path() != '/wizard'){
+            } else {
+                if ($location.path() != '/wizard') {
                     event.preventDefault();
                     $scope.showConfirm(toState);
                 }
@@ -37,11 +37,20 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
     $scope.trip = {};
     $scope.files = {};
 
-    $scope.trip = {id: $stateParams.tripId, name: '',dateStart: '',dateEnd: '', description: '', type: '', continents: '', options: {trip_public: false} };
+    $scope.trip = {
+        id: $stateParams.tripId,
+        name: '',
+        dateStart: '',
+        dateEnd: '',
+        description: '',
+        type: '',
+        continents: '',
+        options: {trip_public: false}
+    };
 
     $scope.trip.public = false;
 
-    $scope.trip.buttonDisabled  = true;
+    $scope.trip.buttonDisabled = true;
 
     //**** config - should be removed
     AWS.config.credentials = new AWS.Credentials('AKIAIGEOPTU4KRW6GK6Q', 'VERZVs+/nd56Z+/Qxy1mzEqqBwUS1l9D4YbqmPoO');
@@ -59,11 +68,11 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
     $scope.finishWizard = function () {
         //$state.go('mytrips');
-        window.open('#/trip/'+$stateParams.tripId, '_self', false);
+        window.open('#/trip/' + $stateParams.tripId, '_self', false);
     }
 
 
-    $scope.showConfirm = function(toState) {
+    $scope.showConfirm = function (toState) {
         // Appending dialog to document.body to cover sidenav in docs app
         var confirm = $mdDialog.confirm()
             .title('Would you like to cancel your trip?')
@@ -72,9 +81,9 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             .ok('Please do it!')
             .cancel('No, continue');
 
-        $mdDialog.show(confirm).then(function() {
+        $mdDialog.show(confirm).then(function () {
             $scope.cancel(toState);
-        }, function() {
+        }, function () {
             //do nothing
         });
     };
@@ -97,12 +106,12 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                 console.log('Client:: Wizard:: Cancel trip creation :: Delete trip id:: ' + $scope.trip.id);
 
                 //if the Cancel was by click cancel button then go to My Trips page
-                if(toState != null){
-                    if(toState.hasOwnProperty('url')) {
+                if (toState != null) {
+                    if (toState.hasOwnProperty('url')) {
                         $state.go(toState);
                     }
                 }
-                else{
+                else {
                     $state.go('mytrips');
                 }
 
@@ -112,7 +121,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             function emptyBucket(callback) {
                 //photos S3
                 var params = {
-                   // Bucket: 'tracker.photos',
+                    // Bucket: 'tracker.photos',
                     Prefix: $scope.facebookId + '/' + $scope.trip.id + '/'
                 }
 
@@ -145,13 +154,13 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         }
     }
     //watch any change in input fields of details form, then check if all fields are not empty to enable Next button
-    $scope.$watch('trip', function() {
-        if($scope.trip.name && $scope.trip.dateStart && $scope.trip.dateEnd && $scope.trip.continents && $scope.trip.type){
-            $scope.trip.buttonDisabled  = false;
+    $scope.$watch('trip', function () {
+        if ($scope.trip.name && $scope.trip.dateStart && $scope.trip.dateEnd && $scope.trip.continents && $scope.trip.type) {
+            $scope.trip.buttonDisabled = false;
             console.log('Wizard: Trip details form is valid, Next button enabled');
-            $scope.d = {d:''}
+            $scope.d = {d: ''}
             $scope.d.d = new Date($scope.trip.dateStart).toString();
-        }else{
+        } else {
             $scope.trip.buttonDisabled = true;
         }
     }, true);
@@ -159,34 +168,43 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
     // ************************** Trip details *************************
     $scope.addTrip = function () {
 
-        var continents_lat_lng = {africa: {lat:'8.7832', lng:'34.5085'}, europe: {lat:'54.5260', lng:'15.2551'}, asia: {lat:'34.0479', lng:'100.6197'}, middleEast: {lat:'29.2985', lng:'42.5510'}, northAmerica: {lat:'54.5260', lng:'105.2551'}, southAmerica: {lat:'8.7832', lng:'55.4915'}, antarctica: {lat:'82.8628', lng:'135.0000'}, australia: {lat:'25.2744', lng:'133.7751'}};
+        var continents_lat_lng = {
+            africa: {lat: '8.7832', lng: '34.5085'},
+            europe: {lat: '54.5260', lng: '15.2551'},
+            asia: {lat: '34.0479', lng: '100.6197'},
+            middleEast: {lat: '29.2985', lng: '42.5510'},
+            northAmerica: {lat: '54.5260', lng: '105.2551'},
+            southAmerica: {lat: '8.7832', lng: '55.4915'},
+            antarctica: {lat: '82.8628', lng: '135.0000'},
+            australia: {lat: '25.2744', lng: '133.7751'}
+        };
 
-            switch ($scope.trip.continents) {
-                case 'Africa':
-                    $scope.map_center = continents_lat_lng.africa;
-                    break;
-                case 'Europe':
-                    $scope.map_center = continents_lat_lng.europe;
-                    break;
-                case 'Asia':
-                    $scope.map_center = continents_lat_lng.asia;
-                    break;
-                case 'Middle East':
-                    $scope.map_center = continents_lat_lng.middleEast;
-                    break;
-                case 'North America':
-                    $scope.map_center = continents_lat_lng.northAmerica;
-                    break;
-                case 'South America':
-                    $scope.map_center = continents_lat_lng.southAmerica;
-                    break;
-                case 'Antarctica':
-                    $scope.map_center = continents_lat_lng.antarctica;
-                    break;
-                case 'Australia':
-                    $scope.map_center = continents_lat_lng.australia;
-                    break;
-            }
+        switch ($scope.trip.continents) {
+            case 'Africa':
+                $scope.map_center = continents_lat_lng.africa;
+                break;
+            case 'Europe':
+                $scope.map_center = continents_lat_lng.europe;
+                break;
+            case 'Asia':
+                $scope.map_center = continents_lat_lng.asia;
+                break;
+            case 'Middle East':
+                $scope.map_center = continents_lat_lng.middleEast;
+                break;
+            case 'North America':
+                $scope.map_center = continents_lat_lng.northAmerica;
+                break;
+            case 'South America':
+                $scope.map_center = continents_lat_lng.southAmerica;
+                break;
+            case 'Antarctica':
+                $scope.map_center = continents_lat_lng.antarctica;
+                break;
+            case 'Australia':
+                $scope.map_center = continents_lat_lng.australia;
+                break;
+        }
         //save all the general information about the trip
         var jsonTripGeneralInfo = {
             email: $scope.profile.email,
@@ -218,15 +236,15 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         var fileChooser = document.getElementById('coverPhotoInput')
         var file_cover = fileChooser.files[0];
 
-                    var params = {
-                        Key: $scope.facebookId + '/' + $scope.trip.id + '/cover',
-                        ContentType: file_cover.type,
-                        Body: file_cover
-                    };
+        var params = {
+            Key: $scope.facebookId + '/' + $scope.trip.id + '/cover',
+            ContentType: file_cover.type,
+            Body: file_cover
+        };
 
-                    bucket.upload(params, function (err, data) {
-                        console.log( err ? 'ERROR!' : 'Cover photo UPLOADED.');
-                    });
+        bucket.upload(params, function (err, data) {
+            console.log(err ? 'ERROR!' : 'Cover photo UPLOADED.');
+        });
     };
 
     // ************************** Upload *******************************
@@ -242,7 +260,6 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
     $scope.log = '';
 
 
-
     $scope.upload = function () {
         if ($scope.files.files && $scope.files.files.length) {
             for (var i = 0; i < $scope.files.files.length; i++) {
@@ -255,31 +272,31 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                 };
 
                 bucket.upload(params, function (err, data) {
-                    console.log( err ? 'ERROR!' : 'UPLOADED.');
+                    console.log(err ? 'ERROR!' : 'UPLOADED.');
                 });
 
-           /*     Upload.upload({
-                    url: 'https://s3-us-west-2.amazonaws.com/tracker.photos/', //S3 upload url including bucket name
-                    method: 'POST',
-                    data: {
-                        key: $scope.facebookId + '/' + $scope.trip.id + '/' + file.name, // the key to store the file on S3, could be file name or customized
-                        AWSAccessKeyId: 'AKIAIGEOPTU4KRW6GK6Q',
-                        //acl: 'private', // sets the access to the uploaded file in the bucket: private, public-read, ...
-                        //policy: $scope.policy, // base64-encoded json policy (see article below)
-                        //signature: $scope.signature, // base64-encoded signature based on policy string (see article below)
-                        "Content-Type": file.type, // != '' ? file.type : 'application/octet-stream', // content type of the file (NotEmpty)
-                        //filename: file.name, // this is needed for Flash polyfill IE8-9
-                        //file: file
-                        body: file
-                    }
-                }).progress(function (evt) {
-                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                    $scope.log = 'progress: ' + progressPercentage + '% ' + evt.config.file.name + '\n' + $scope.log;
-                }).success(function (data, status, headers, config) {
-                    $timeout(function () {
-                        $scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
-                    });
-                });*/
+                /*     Upload.upload({
+                 url: 'https://s3-us-west-2.amazonaws.com/tracker.photos/', //S3 upload url including bucket name
+                 method: 'POST',
+                 data: {
+                 key: $scope.facebookId + '/' + $scope.trip.id + '/' + file.name, // the key to store the file on S3, could be file name or customized
+                 AWSAccessKeyId: 'AKIAIGEOPTU4KRW6GK6Q',
+                 //acl: 'private', // sets the access to the uploaded file in the bucket: private, public-read, ...
+                 //policy: $scope.policy, // base64-encoded json policy (see article below)
+                 //signature: $scope.signature, // base64-encoded signature based on policy string (see article below)
+                 "Content-Type": file.type, // != '' ? file.type : 'application/octet-stream', // content type of the file (NotEmpty)
+                 //filename: file.name, // this is needed for Flash polyfill IE8-9
+                 //file: file
+                 body: file
+                 }
+                 }).progress(function (evt) {
+                 var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                 $scope.log = 'progress: ' + progressPercentage + '% ' + evt.config.file.name + '\n' + $scope.log;
+                 }).success(function (data, status, headers, config) {
+                 $timeout(function () {
+                 $scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
+                 });
+                 });*/
             }
         }
     }
@@ -326,7 +343,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                 origin: from,
                 destination: to,
                 travelMode: 'DRIVING'
-            }, function(response, status) {
+            }, function (response, status) {
                 if (status === 'OK') {
                     var directionRenderer = new google.maps.DirectionsRenderer;
                     directionRenderer.id = directionsDisplay.length;
@@ -351,10 +368,10 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         var firebase_routes_for_route_list = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/routes');
         $scope.routes_list = [];
         firebase_routes_for_route_list.on("child_added", function (snapshot) {
-                console.log('Wizrad:: Tips sections :: Reading new route from firebase under /map/routes');
-                var route = JSON.parse(snapshot.val()); //JSON.parse(childSnapshot);
-                route.firebase_key = snapshot.key();
-                $scope.routes_list.unshift(route);
+            console.log('Wizrad:: Tips sections :: Reading new route from firebase under /map/routes');
+            var route = JSON.parse(snapshot.val()); //JSON.parse(childSnapshot);
+            route.firebase_key = snapshot.key();
+            $scope.routes_list.unshift(route);
         }, function (errorObject) {
             console.log("Trip:: Read trip routes from Firebase failed: " + errorObject.code);
         });
@@ -366,20 +383,24 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             firebase_routes_remove.child(route.firebase_key).remove();
             console.log('Wizard:: Places: Routes: Route removed from Firebase');
 
-            for(var i = 0 ; i <= $scope.routes_list.length ; i++){
-                //delete from list
-                if($scope.routes_list[i].firebase_key == route.firebase_key){
-                    $scope.routes_list.splice(i, 1);
-                    console.log('Wizard:: Places: Routes: Route removed from list');
-                    //break;
-                }
+            //remove route from List
+            $scope.routes_list.splice($scope.routes_list.length - 1, 1);
+            console.log('Wizard:: Places: Routes: Route removed from list');
 
-                //delete from Map
-                if(directionsDisplay[i].id == route.id){
-                    console.log('Wizard: Places : Routes: Disabled route from map')
-                    directionsDisplay[i].setMap(null);
-                    directionsDisplay.splice(i, 1);
-                }
+            //remove route from Map
+            directionsDisplay[directionsDisplay.length - 1].setMap(null);
+            directionsDisplay.splice(directionsDisplay.length - 1, 1);
+            console.log('Wizard: Places : Routes: Disabled route from map');
+
+            //remove last flag
+            $scope.markers[$scope.markers.length - 1].setMap(null);
+            //remove from array (list in UI)
+            $scope.markers.splice($scope.markers.length - 1, 1);
+
+            //remove first flag if it is the last one after delete routes
+            if($scope.markers.length > 0){ //last flaf after delete
+                $scope.markers[$scope.markers.length - 1].setMap(null);
+                $scope.markers.splice($scope.markers.length - 1, 1);
             }
         }
 
@@ -473,7 +494,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             });
 
             //draw the circle directlly (no need to read again all items from firebase)
-            circle.set("id","New circle");
+            circle.set("id", "New circle");
             $scope.circles.push(circle);
             $scope.$apply();
         });
@@ -521,8 +542,8 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
         $scope.removePlace = function (key) {
             firebase_places_remove.child(key).remove();
-            for(var i = 0 ; i < $scope.nearbyPlaces.length ; i++){
-                if($scope.nearbyPlaces[i].firebase_key == key){
+            for (var i = 0; i < $scope.nearbyPlaces.length; i++) {
+                if ($scope.nearbyPlaces[i].firebase_key == key) {
                     $scope.nearbyPlaces.splice(i, 1);
                     console.log('Wizard:: Place was removed');
                     break;
@@ -544,40 +565,40 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             });
 
             //draw the marker directlly (no need to read again all items from firebase)
-            marker.set("id","New marker");
+            marker.set("id", "New marker");
             $scope.markers.push(marker);
 
             //get route
-            if($scope.markers.length > 1){ // wait to the second point to get thr route
+            if ($scope.markers.length > 1) { // wait to the second point to get thr route
                 calculateAndDisplayRoute(directionsService, directionsDisplay, $scope.markers[$scope.markers.length - 2].position, $scope.markers[$scope.markers.length - 1].position);
             }
 
             //////////////// Facebook API get places around ///////////////////////
             //Get places name, Facebook API, bring pages around
-            var getPlacesByFacebook = function(lat, lng, distance, limit) {
-                if(lat != null && lng != null && distance != null){
+            var getPlacesByFacebook = function (lat, lng, distance, limit) {
+                if (lat != null && lng != null && distance != null) {
                     Facebook.api(
-                        "search?access_token=942317529184852%7CXgVb4d3OEZDe9VM1ilqo-u53-4U&pretty=0&q&type=place&center="+lat+","+lng+"&distance="+distance+"&limit="+limit+"&after=MjQZD&fields=name,checkins,picture,link", //APP Token
+                        "search?access_token=942317529184852%7CXgVb4d3OEZDe9VM1ilqo-u53-4U&pretty=0&q&type=place&center=" + lat + "," + lng + "&distance=" + distance + "&limit=" + limit + "&after=MjQZD&fields=name,checkins,picture,link", //APP Token
                         function (places) {
                             if (places && !places.error) {
                                 console.log(places);
-                                for(var i = 0 ; i < places.data.length ; i++){
+                                for (var i = 0; i < places.data.length; i++) {
                                     //_detailsPlaces.push(places.data[i]);
                                     console.log(places.data[i])
                                     firebase_places.push(JSON.stringify(places.data[i]));
                                 }
                             }
                         });
-                }else{
+                } else {
                     console.log('Wizard:: Error:: lat || lng || distance == null');
                 }
             }
             ///////////////////  Facebook Places API END /////////////////////////////
 
             ////////// Google API - Get places around /////////////////
-            var getPlaceDetails = function() {
+            var getPlaceDetails = function () {
                 //Get Details for places
-                for(var i = 0 ; i < _nearbyPlaces.length ; i++ ){
+                for (var i = 0; i < _nearbyPlaces.length; i++) {
                     var request = {
                         placeId: _nearbyPlaces[i].place_id
                     };
@@ -657,14 +678,14 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             console.log('new polyline added to firebase');
             //console.log(polyline.getPath());
 
-            polyline.set("id","New polyline");
-            polyline.set("key","e444");
+            polyline.set("id", "New polyline");
+            polyline.set("key", "e444");
 
             $scope.polylines.push(polyline);
             $scope.$digest();
 
             var polyline_path = [];
-            polyline.getPath().forEach(function(element) {
+            polyline.getPath().forEach(function (element) {
                 polyline_path.push({lat: element.lat(), lng: element.lng()});
             });
             //save into firebase
@@ -705,67 +726,67 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         //Delete items from map
         $scope.deleteItemFromMap = function (type, key) {
 
-            if(type == 'marker'){
-                for(var i = 0 ; i < $scope.markers.length ; i++){
-                    if($scope.markers[i].get("id") == key){
+            if (type == 'marker') {
+                for (var i = 0; i < $scope.markers.length; i++) {
+                    if ($scope.markers[i].get("id") == key) {
                         //remove item from view
                         $scope.markers[i].setMap(null);
                         $scope.markers.splice(i, 1);
                         //remove item from firebase
                         firebase_drawing_markers.child(key).remove();
-                        console.log('delete item from map, type: '+ type+' key: '+key+' done');
+                        console.log('delete item from map, type: ' + type + ' key: ' + key + ' done');
                     }
                 }
             }
-            if(type == 'circle'){
-                for(var i = 0 ; i < $scope.circles.length ; i++){
-                    if($scope.circles[i].get("id") == key){
+            if (type == 'circle') {
+                for (var i = 0; i < $scope.circles.length; i++) {
+                    if ($scope.circles[i].get("id") == key) {
                         //remove item from view
                         $scope.circles[i].setMap(null);
                         $scope.circles.splice(i, 1);
                         //remove item from firebase
                         firebase_drawing_circles.child(key).remove();
-                        console.log('delete item from map, type: '+ type+' key: '+key+' done');
+                        console.log('delete item from map, type: ' + type + ' key: ' + key + ' done');
                     }
                 }
             }
-            if(type == 'polyline'){
-                for(var i = 0 ; i < $scope.polylines.length ; i++){
-                    if($scope.polylines[i].get("id") == key){
+            if (type == 'polyline') {
+                for (var i = 0; i < $scope.polylines.length; i++) {
+                    if ($scope.polylines[i].get("id") == key) {
                         //remove from view
                         $scope.polylines[i].setMap(null);
                         $scope.polylines.splice(i, 1);
                         //remove from firebase
                         firebase_drawing_polyline.child(key).remove();
-                        console.log('delete item from map, type: '+ type+' key: '+key+' done');
+                        console.log('delete item from map, type: ' + type + ' key: ' + key + ' done');
                     }
                 }
             }
         }
 
         $scope.highLightItem = function (type, key) {
-            if(type == 'marker'){
-                for(var i = 0 ; i < $scope.markers.length ; i++){
-                    if($scope.markers[i].get("id") == key){
+            if (type == 'marker') {
+                for (var i = 0; i < $scope.markers.length; i++) {
+                    if ($scope.markers[i].get("id") == key) {
 
-                        console.log('highlight item in map, type: '+ type+' key: '+key+' done');
+                        console.log('highlight item in map, type: ' + type + ' key: ' + key + ' done');
                     }
                 }
             }
-            if(type == 'circle'){
-                for(var i = 0 ; i < $scope.circles.length ; i++){
-                    if($scope.circles[i].get("id") == key){
+            if (type == 'circle') {
+                for (var i = 0; i < $scope.circles.length; i++) {
+                    if ($scope.circles[i].get("id") == key) {
 
-                        console.log('highlight item in map, type: '+ type+' key: '+key+' done');
+                        console.log('highlight item in map, type: ' + type + ' key: ' + key + ' done');
                     }
                 }
             }
-            if(type == 'polyline'){
-                for(var i = 0 ; i < $scope.polylines.length ; i++){
-                    if($scope.polylines[i].get("id") == key){
+            if (type == 'polyline') {
+                for (var i = 0; i < $scope.polylines.length; i++) {
+                    if ($scope.polylines[i].get("id") == key) {
                         //change color
                         var current_color = $scope.polylines[i].get("strokeColor");
-                        $scope.polylines[i].set("strokeColor","51fe0d");
+                        $scope.polylines[i].set("strokeColor", "51fe0d");
 
                         //zoom on item
                         //get polyline path
@@ -775,7 +796,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                         var location = poly_path.pop();
 
                         $scope.map.setCenter(location);
-                        console.log('highlight item in map, type: '+ type+' key: '+key+' done');
+                        console.log('highlight item in map, type: ' + type + ' key: ' + key + ' done');
                     }
                 }
             }
@@ -974,39 +995,39 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
     $scope.startExpense = function () {
 
         //trip days
-        var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+        var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
         var firstDate = new Date($scope.trip.dateStart);
         var secondDate = new Date($scope.trip.dateEnd);
 
-        $scope.tripDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+        $scope.tripDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
 
 
         $scope.getDateAfter = function (days) {
 
 
-                //convert date to object to allow me do action on it like increase the date in the table
-                //var startDate = date;
-                var dateInNumberFormat = new Date(firstDate).getTime();
-                //create array for the dates to show it on table, each cell will have 1 extra day
-                //var day = 1000 * 3600 * 24; //day in miliseconds 1000 * 3600 = hour
-                var month = new Date(dateInNumberFormat).getUTCMonth() + 1; //months from 1-12
-                var day = new Date(dateInNumberFormat).getUTCDate();
-                var year = new Date(dateInNumberFormat).getUTCFullYear();
-                //$scope.dates[0] = month + '/' + day + '/' + year;
+            //convert date to object to allow me do action on it like increase the date in the table
+            //var startDate = date;
+            var dateInNumberFormat = new Date(firstDate).getTime();
+            //create array for the dates to show it on table, each cell will have 1 extra day
+            //var day = 1000 * 3600 * 24; //day in miliseconds 1000 * 3600 = hour
+            var month = new Date(dateInNumberFormat).getUTCMonth() + 1; //months from 1-12
+            var day = new Date(dateInNumberFormat).getUTCDate();
+            var year = new Date(dateInNumberFormat).getUTCFullYear();
+            //$scope.dates[0] = month + '/' + day + '/' + year;
 
-                //  for (var i = 1; i < daysSum; i++) {
-                var anotherDay = 1000 * 3600 * (days * 24);
-                //$scope.dates[i] = new Date(dateInNumberFormat + day).toString("MMMM yyyy");
+            //  for (var i = 1; i < daysSum; i++) {
+            var anotherDay = 1000 * 3600 * (days * 24);
+            //$scope.dates[i] = new Date(dateInNumberFormat + day).toString("MMMM yyyy");
 
-                var month = new Date(dateInNumberFormat + anotherDay).getUTCMonth() + 1; //months from 1-12
-                var day = new Date(dateInNumberFormat + anotherDay).getUTCDate();
-                var year = new Date(dateInNumberFormat + anotherDay).getUTCFullYear();
-                var nextDate = month + '/' + day + '/' + year;
-                return nextDate;
+            var month = new Date(dateInNumberFormat + anotherDay).getUTCMonth() + 1; //months from 1-12
+            var day = new Date(dateInNumberFormat + anotherDay).getUTCDate();
+            var year = new Date(dateInNumberFormat + anotherDay).getUTCFullYear();
+            var nextDate = month + '/' + day + '/' + year;
+            return nextDate;
 
         }
 
-        $scope.getNumber = function(num) {
+        $scope.getNumber = function (num) {
             return new Array(num);
         }
     }
