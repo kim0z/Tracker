@@ -111,9 +111,16 @@
     .map-right-places {
         /* background: #049500; */
         height: 70%;
-        /* flex: 5; */
-        flex-basis: 70%;
+        overflow: scroll;
+        width: 350px;
+    }
 
+    .map-center-places {
+        /*  background: #049500; */
+        height: 70%;
+        flex: 5;
+        padding: 25px;
+        margin-right: 10px;
     }
 
     .left-map-places {
@@ -366,13 +373,12 @@
 
             <div class="container">
                 <!-- Places -->
-
                 <div class="left-map-places">
                     <div ng-cloak layout-gt-sm="row" layout="column">
                         <div flex-gt-sm="100" flex>
-                            <md-toolbar layout="row" class="md-hue-3" >
+                            <md-toolbar layout="row" class="md-hue-3">
                                 <div class="md-toolbar-tools">
-                                    <md-button class="md-raised">Places
+                                    <md-button class="md-raised" style="position: fixed">Places
                                     </md-button>
                                 </div>
                             </md-toolbar>
@@ -383,18 +389,19 @@
                                     <md-list-item class="md-3-line" ng-repeat="place in nearbyPlaces"
                                                   ng-click="">
                                         <!-- <img ng-src="{{place.icon}}" class="md-avatar"/> -->
-                                        <img ng-src="{{place.picture.data.url}}" class="md-avatar" />
+                                        <img ng-src="{{place.picture.data.url}}" class="md-avatar"/>
 
                                         <div class="md-list-item-text" layout="column">
                                             <h3>{{ place.name}}</h3>
-                                           <!--  <h4>{{ place.formatted_address }} </h4> -->
+                                            <!--  <h4>{{ place.formatted_address }} </h4> -->
                                             <h4>Check-Ins: {{ place.checkins }} </h4>
                                             <p>
                                                 <!--<a ng-href="{{place.url}}" target="_blank">Read more...</a>-->
                                                 <a ng-href="{{place.link}}" target="_blank">Read more...</a>
                                             </p>
                                         </div>
-                                        <md-button class="md-icon-button" aria-label="More" ng-click="removePlace(place.firebase_key)">
+                                        <md-button class="md-icon-button" aria-label="More"
+                                                   ng-click="removePlace(place.firebase_key)">
                                             <img src="assets/icons/ic_delete_forever_black_24dp_1x.png"></img>
                                         </md-button>
 
@@ -405,11 +412,40 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="map-right-places">
+                <div class="map-center-places">
                     <iframe id="iframe_drawing" style="width: 100%; height: 100%">
                         <!-- Map -->
                     </iframe>
+                </div>
+                <div class="map-right-places">
+                    <div ng-cloak layout-gt-sm="row" layout="column">
+                        <div flex-gt-sm="100" flex>
+                            <md-toolbar layout="row" class="md-hue-3">
+                                <div class="md-toolbar-tools">
+                                    <md-button class="md-raised">Routes
+                                    </md-button>
+                                </div>
+                            </md-toolbar>
+                            <md-content>
+                                <md-list flex>
+                                    <!-- <md-subheader class="md-no-sticky">Trip tips</md-subheader> -->
+                                    <md-list-item class="md-3-line" ng-repeat="route in routes_list"
+                                                  ng-click="">
+                                        <!-- <img ng-src="" class="md-avatar"/> route icon -->
+                                        <div class="md-list-item-text" layout="column">
+                                            <h3>Summary: {{route.route[0].summary}}</h3>
+                                            <h4>Key:{{route.firebase_key}} </h4>
+                                        </div>
+                                        <md-button class="md-icon-button" aria-label="Delete"
+                                                   ng-click="removeRoute(route)">
+                                            <img src="assets/icons/ic_delete_forever_black_24dp_1x.png"></img>
+                                        </md-button>
+                                        <md-divider></md-divider>
+                                    </md-list-item>
+                                </md-list>
+                            </md-content>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -503,7 +539,6 @@
                         -->
                     </iframe>
                 </div>
-
 
                 <div class="map-right-tips">
                     <div>
