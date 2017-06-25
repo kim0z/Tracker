@@ -11,8 +11,9 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
         $scope.load_progress = 1;
         $scope.user = messages.getUser(); //replace with local service like next line
-        $scope.tips_button = true;
-        $scope.places_button = false;
+        $scope.tips_button = false;
+        $scope.places_button = true;
+        $scope.routes_button = false;
         $scope.travelersList = [];
         $scope.data = []; // Travellers from PG DB
         $scope.messages = []; // Tips from Firebase, based on GPS point
@@ -516,13 +517,15 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             position: google.maps.ControlPosition.TOP_CENTER,
                             drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
                         },
-                        markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+                        markerOptions: {
+                            icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
                             // This marker is 20 pixels wide by 32 pixels high.
                             size: new google.maps.Size(200, 200),
                             // The origin for this image is (0, 0).
                             origin: new google.maps.Point(90, 70),
                             // The anchor for this image is the base of the flagpole at (0, 32).
-                            anchor: new google.maps.Point(300, 302)},
+                            anchor: new google.maps.Point(300, 302)
+                        },
 
                         circleOptions: {
                             fillColor: '#ffff00',
@@ -594,7 +597,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         });
                         $scope.map.fitBounds(bounds);
                     });
-
 
 
                     // %%%% Listeners to save drawing data to firebase %%%%
@@ -810,8 +812,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         }
                     }
                     // ****************************** Drawing events end *******************************
-
-
 
 
                     $scope.map.addListener('click', function (e) {
@@ -1094,25 +1094,27 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                     //****************************************************
 
-                //***** ########### Handle Places ############### ************
+                    //***** ########### Handle Routes ############### ************
+                    //Read Routes from Firebase (Manually added places - it's different from recorded path) - Put on Map
+                    var directionsDisplay = [];
 
-                // if Trip was created manually by user then load places from places_manually
-
-
-
-                    //Read places from Firebase (Manually added places - it's different from recorded path)
                     var firebase_drawing_markers_routes = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/routes');
                     //firebase_drawing_markers_routes.push(JSON.stringify(response));
-
+                    $scope.routes_list = [];
                     firebase_drawing_markers_routes.once("value", function (snapshot) {
                         //create direction Service and Display
                         var directionsService = new google.maps.DirectionsService;
-                        var directionsDisplay = []; //var directionsDisplay = new google.maps.DirectionsRenderer;
+                         //var directionsDisplay = new google.maps.DirectionsRenderer;
 
                         snapshot.forEach(function (childSnapshot) {
                             console.log('Trip:: Reading new route from firebase under /map/routes');
-                            var route = JSON.parse(childSnapshot.val()); //JSON.parse(childSnapshot);
-                            //console.log(route);
+                            var route = JSON.parse(childSnapshot.val());
+
+                            //For the list in right side
+                            route.firebase_key = childSnapshot.key();
+                            $scope.routes_list.unshift(route);
+
+                            //for map
                             directionsDisplay.push(new google.maps.DirectionsRenderer);
                             directionsDisplay[directionsDisplay.length - 1].setMap($scope.map); //last added directionDisplay
                             directionsDisplay[directionsDisplay.length - 1].setDirections(route);
@@ -1121,11 +1123,22 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         console.log("Trip:: Read trip routes from Firebase failed: " + errorObject.code);
                     });
 
+                    $scope.routes_settings = {enable_routes_map: true};
+
+                    $scope.routesOnMap = function (flag) {
+                        if (flag) { //if true then show routes on map
+                            for (var i = 0; i < directionsDisplay.length; i++) {
+                                directionsDisplay[i].setMap($scope.map);
+                            }
+                        } else { //if false then disable routen pn map
+                            for (var i = 0; i < directionsDisplay.length; i++) {
+                                directionsDisplay[i].setMap(null);
+                            }
+                        }
+                    };
 
 
-
-
-                //************************************************************
+                    //************************************************************
 
 
                     //************************
@@ -1192,7 +1205,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     });
 
 
-
                     ///////// **** Maps Trip Path Helper function ****** /////////
                     //Filter polylines by day
                     $scope.filter_trip_paths_by_day = function (day) {
@@ -1235,7 +1247,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     }
                     //Stop path animation
                     $scope.stop_path_animation = function () {
-                        if(poly_animation != null){
+                        if (poly_animation != null) {
                             poly_animation.setMap(null);
                             poly_animation = null;
                             $scope.path_animating = false;
@@ -1262,7 +1274,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                     $scope.runPathAnimation = function () {
                         //$scope.trip_disable_all_paths();
-                        if($scope.path_animating == false && $scope.selectedDay > 0){
+                        if ($scope.path_animating == false && $scope.selectedDay > 0) {
                             var lineSymbolCircle = {
                                 path: google.maps.SymbolPath.CIRCLE,
                                 scale: 8,
@@ -1279,7 +1291,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             $scope.animate_button_icon = 'assets/icons/ic_stop_white_48dp_1x.png';
                             $scope.path_animating = true;
                             animateCircle(poly_animation);
-                        }else{
+                        } else {
                             //Stop animation
                             $scope.stop_path_animation();
                         }
@@ -1317,14 +1329,14 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     //Get if trip was created manually, it means the trip was created manually by users and not using the recorder APP
                     var firebase_update_manually = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/_trip/trip_created_manually');
                     console.log('Wizard:: Firebase:: Reading trip meta data - Trip created manually?');
-                    firebase_update_manually.once("value", function(snapshot) {
+                    firebase_update_manually.once("value", function (snapshot) {
                         console.log('Trip:: Trip meta data:');
                         console.log(snapshot.val());
                         $scope.trip_created_manually = snapshot.val();
 
-                        if($scope.trip_created_manually){
+                        if ($scope.trip_created_manually) {
                             //load places from firebase, markers
-                            $scope.nearbyPlacesReady = true;
+                            $scope.nearbyPlacesReady = true;;
                             $scope.nearbyPlaces = [];
 
                             var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/places');
@@ -1335,9 +1347,9 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             }, function (errorObject) {
                                 console.log("Read Places from Firebase failed: " + errorObject.code);
                             });
-                        }else{
+                        } else {
                             //load places by scan recorded path and find places between 2 points with time > ~15 min
-                           // $scope.loadNearByPlaces($scope.trip_path_hash);
+                            // $scope.loadNearByPlaces($scope.trip_path_hash);
                         }
                     }, function (errorObject) {
                         console.log("The read failed (Trip meta data): " + errorObject.code);

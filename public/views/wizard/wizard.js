@@ -404,6 +404,20 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             }
         }
 
+        $scope.routes_settings = { enable_routes_map: true };
+
+        $scope.routesOnMap = function(flag) {
+            if(flag){ //if true then show routes on map
+                for( var i = 0 ; i < directionsDisplay.length ; i++){
+                    directionsDisplay[i].setMap($scope.map);
+                }
+            }else{ //if false then disable routen pn map
+                for( var i = 0 ; i < directionsDisplay.length ; i++){
+                    directionsDisplay[i].setMap(null);
+                }
+            }
+        };
+
         // Create the search box and link it to the UI element.
         var input = iframe.contentWindow.document.querySelector('#pac-input-drawing');
         var searchBox = new google.maps.places.SearchBox(input);
