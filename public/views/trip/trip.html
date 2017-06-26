@@ -30,14 +30,15 @@
 <div ng-show="!pathLoaded" style="position: absolute; top: 25%; right: 46%; margin-left: auto; margin-right: auto">
     <img src="../../assets/icons/TRACKER1-01_karim_crop.png" style="width: 250px; height: 150px; margin-left: 15px">
     <div class="progress">
-        <div class="progress-bar progress-bar-striped" role="progressbar" ng-style="{width: load_progress + '%'}" aria-valuenow={{load_progress}} aria-valuemin="0" aria-valuemax="100"></div>
-       <div class="progress-bar progress-bar-striped" role="progressbar" ng-style="{width: load_progress + '%'}" aria-valuenow={{load_progress}} aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="progress-bar progress-bar-striped" role="progressbar" ng-style="{width: load_progress + '%'}"
+             aria-valuenow={{load_progress}} aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="progress-bar progress-bar-striped" role="progressbar" ng-style="{width: load_progress + '%'}"
+             aria-valuenow={{load_progress}} aria-valuemin="0" aria-valuemax="100"></div>
         <div class="sr-only">{{trip.load_progress}}% Loading</div>
     </div>
 </div>
 
 <div class="container" ng-class="pathLoaded == false ? 'fade' : ''">
-
 
 
     <div class="left-side" style="overflow: auto; height: 65%" ng-show="drawing_panel">
@@ -92,8 +93,8 @@
 
         <iframe id="iframe" style="height: 100%; width: 100%">
             <!-- from Controller I write the 2 below elements -->
-           <!-- <div id="map"></div>
-            <input id="pac-input" class="form-control" type="text" placeholder="Search Location" style="width: 200px">-->
+            <!-- <div id="map"></div>
+             <input id="pac-input" class="form-control" type="text" placeholder="Search Location" style="width: 200px">-->
         </iframe>
 
 
@@ -106,7 +107,8 @@
                         <label>Day</label>
                         <md-select ng-model="selectedItem">
                             <!-- <md-optgroup label="items"> -->
-                            <md-option ng-value="day" ng-repeat="day in days" ng-click="filter_trip_paths_by_day(day)">Day {{day}}
+                            <md-option ng-value="day" ng-repeat="day in days" ng-click="filter_trip_paths_by_day(day)">
+                                Day {{day}}
                             </md-option>
                             <!-- </md-optgroup> -->
                         </md-select>
@@ -116,7 +118,8 @@
         </div>
 
         <!-- Drawing panel -->
-        <md-button ng-show="!drawing_panel" class="md-fab md-primary" aria-label="Drawing panel" style="position: absolute; top: 30%"
+        <md-button ng-show="!drawing_panel" class="md-fab md-primary" aria-label="Drawing panel"
+                   style="position: absolute; top: 30%"
                    ng-click="openDrawingPanel()">
             <image src="assets/icons/ic_format_paint_white_48dp_1x.png"
                    style="color: greenyellow; margin-left: -2px"></image>
@@ -129,14 +132,16 @@
         </md-button>
 
         <!-- Play path -->
-        <md-button ng-show="!drawing_panel" class="md-fab md-primary" aria-label="Play path" style="position: absolute; top: 40%;"
+        <md-button ng-show="!drawing_panel" class="md-fab md-primary" aria-label="Play path"
+                   style="position: absolute; top: 40%;"
                    ng-click="runPathAnimation()">
             <image ng-src={{animate_button_icon}}
                    style="color: greenyellow; margin-left: -2px"></image>
         </md-button>
 
         <!-- Pano view -->
-        <md-button ng-show="!drawing_panel" class="md-fab md-primary" aria-label="Pano view" style="position: absolute; top: 47%;"
+        <md-button ng-show="!drawing_panel" class="md-fab md-primary" aria-label="Pano view"
+                   style="position: absolute; top: 47%;"
                    ng-click="panoView()">
             <image src="assets/icons/ic_directions_walk_white_48dp_1x.png"
                    style="color: greenyellow; margin-left: -2px"></image>
@@ -176,205 +181,204 @@
     -->
 
 
+        <!-- Slider -->
 
-            <!-- Slider -->
-
-            <!--
-            <rzslider style="top: 90px; color: black;position: absolute;margin-left: 50px;margin-right: 50px;
-            background: #333;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 30px;
-            bottom: 20px;" rz-slider-model="slider.value"
-                      rz-slider-options="slider.options"></rzslider>
+        <!--
+        <rzslider style="top: 90px; color: black;position: absolute;margin-left: 50px;margin-right: 50px;
+        background: #333;
+        border-radius: 10px;
+        font-weight: bold;
+        font-size: 30px;
+        bottom: 20px;" rz-slider-model="slider.value"
+                  rz-slider-options="slider.options"></rzslider>
 
 -->
-            <div id="pano"></div>
+        <div id="pano"></div>
 
-            <!-- Load photos from AWS S3 - disabled, instead sync with Facebook photos
-            <td>
-               <div id="status"></div>
-                <il id="objects"></il>
-                <ul id="rig">
-                    <li ng-repeat="photo in photos track by $index">
-                        <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)">
-                            <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px" >
-                            <span class="rig-overlay"></span>
-                            <span class="rig-text">show on map</span>
-                        </a>
-                    </li>
-                </ul>
-            </td>
-            -->
-            <!-- id status used for AWS S3 status -->
-            <!-- <div id="status"></div> -->
-            <!-- side button photos-->
-            <!--**************************** Photos *************************************-->
-            <!-- Footer photos -->
-            <div ng-show="photosSlider">
-                <style>
-                    .demo {
-                        list-style: none outside none;
-                        padding-left: 0;
-                    }
+        <!-- Load photos from AWS S3 - disabled, instead sync with Facebook photos
+        <td>
+           <div id="status"></div>
+            <il id="objects"></il>
+            <ul id="rig">
+                <li ng-repeat="photo in photos track by $index">
+                    <a class="rig-cell" href="#" ng-click="showPhotoOnMap($event)">
+                        <img class="rig-img" src="{{photo}}" style="width: 250px; height: 200px" >
+                        <span class="rig-overlay"></span>
+                        <span class="rig-text">show on map</span>
+                    </a>
+                </li>
+            </ul>
+        </td>
+        -->
+        <!-- id status used for AWS S3 status -->
+        <!-- <div id="status"></div> -->
+        <!-- side button photos-->
+        <!--**************************** Photos *************************************-->
+        <!-- Footer photos -->
+        <div ng-show="photosSlider">
+            <style>
+                .demo {
+                    list-style: none outside none;
+                    padding-left: 0;
+                }
 
-                    .demo li {
-                        display: block;
-                        float: left;
-                        height: 65px;
-                        margin-bottom: 6px;
-                        margin-right: 6px;
-                        width: 100px;
-                    }
+                .demo li {
+                    display: block;
+                    float: left;
+                    height: 65px;
+                    margin-bottom: 6px;
+                    margin-right: 6px;
+                    width: 100px;
+                }
 
-                    .demo img {
-                        max-width: 100%;
-                        height: auto;
-                    }
+                .demo img {
+                    max-width: 100%;
+                    height: auto;
+                }
 
-                </style>
-                <div class="navbar navbar-default navbar-fixed-bottom"
-                     style="bottom: 50px; overflow: scroll; background-color: inherit;right: 10%;left: 10%; width: 70%">
-                    <ul class="demo">
-                        <li style="cursor: pointer;" lightgallery ng-repeat="photo in photos"
-                            data-src="{{photo.fullres}}">
-                            <img ng-src="{{photo.thumbnail}}" ng-mouseover=""/>
-                            <!-- ng-mouseover="photoMouseOver($event)" -->
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <!-- We will make a simple accordian with hover effects
-        The markup will have a list with images and the titles-->
-            <div class="footer accordian" ng-show="photosSlider"
-                 style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
-                <ul>
-                    <li ng-repeat="item in items">
-                        <div class="image_title">
-                            <a>Photo title</a>
-                        </div>
-                        <a ng-click="showPhotoOnMap($event)" href="javascript:void(0)">
-                            <img ng-src="{{item.img}}"/>
-                        </a>
+            </style>
+            <div class="navbar navbar-default navbar-fixed-bottom"
+                 style="bottom: 50px; overflow: scroll; background-color: inherit;right: 10%;left: 10%; width: 70%">
+                <ul class="demo">
+                    <li style="cursor: pointer;" lightgallery ng-repeat="photo in photos"
+                        data-src="{{photo.fullres}}">
+                        <img ng-src="{{photo.thumbnail}}" ng-mouseover=""/>
+                        <!-- ng-mouseover="photoMouseOver($event)" -->
                     </li>
                 </ul>
             </div>
-            <!-- end facebook photos -->
-            <!-- photos from aws -->
-            <!--
-            <div class="footer accordian" ng-show="photosSlider && awsProvider"
-                 style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px;">
-                <ul>
-                    <li ng-repeat="photo in photos">
-                        <div class="image_title">
-                            <a href="#">Photo title</a>
-                        </div>
-                        <a ng-click="showPhotoOnMap($event)">
-                            <img ng-src="{{photo}}" style="max-width:100%; max-height:100%;"/>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            -->
-            <!-- End aws photos -->
-            <!--********************************* Table ************************ -->
-            <div style="margin-left: 55px" class="footer" class='animate-hide ' ng-hide="tableSlider">
-                <table style="width:100%" class="table table-bordered">
-                    <tr>
-                        <th> Activity / Day</th>
-                        <td ng-hide="editMode" ng-repeat="day in table">{{Utils.keys(day)[0]}}</td>
-                    </tr>
-                    <tr>
-                        <th>Date</th>
-                        <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].date}}</td>
-                        <td ng-show="editMode" ng-repeat="day in table">
-                            <input value="{{day[Utils.keys(day)[0]].date}}">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Flight</th>
-                        <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].flight}}</td>
-                        <td ng-show="editMode" ng-repeat="day in table">
-                            <input value="{{day[Utils.keys(day)[0]].flight}}">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Hotel</th>
-                        <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].hotel}}</td>
-                        <td ng-show="editMode" ng-repeat="day in table">
-                            <input value="{{day[Utils.keys(day)[0]].hotel}}">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Car</th>
-                        <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].car}}</td>
-                        <td ng-show="editMode" ng-repeat="day in table">
-                            <input value="{{day[Utils.keys(day)[0]].car}}">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Action1</th>
-                        <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].action1}}</td>
-                        <td ng-show="editMode" ng-repeat="day in table">
-                            <input value="{{day[Utils.keys(day)[0]].action1}}">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Action2</th>
-                        <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].action2}}</td>
-                        <td ng-show="editMode" ng-repeat="day in table">
-                            <input value="{{day[Utils.keys(day)[0]].action2}}">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Expense</th>
-                        <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].expense}}</td>
-                        <td ng-show="editMode" ng-repeat="day in table">
-                            <input value="{{day[Utils.keys(day)[0]].expense}}">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Delete</th>
-                        <td ng-show="editMode" ng-repeat="day in table">
-                            <button type="button" class="btn btn-danger">Delete Day!</button>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <!-- ######################################################################### -->
-            <!-- Edit Mode -->
-            <!-- ######################################################################### -->
+        </div>
+        <!-- We will make a simple accordian with hover effects
+    The markup will have a list with images and the titles-->
+        <div class="footer accordian" ng-show="photosSlider"
+             style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px">
+            <ul>
+                <li ng-repeat="item in items">
+                    <div class="image_title">
+                        <a>Photo title</a>
+                    </div>
+                    <a ng-click="showPhotoOnMap($event)" href="javascript:void(0)">
+                        <img ng-src="{{item.img}}"/>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- end facebook photos -->
+        <!-- photos from aws -->
+        <!--
+        <div class="footer accordian" ng-show="photosSlider && awsProvider"
+             style="width: 97% ;margin-top: 0px; margin-bottom: 5px; margin-left: 20px;">
+            <ul>
+                <li ng-repeat="photo in photos">
+                    <div class="image_title">
+                        <a href="#">Photo title</a>
+                    </div>
+                    <a ng-click="showPhotoOnMap($event)">
+                        <img ng-src="{{photo}}" style="max-width:100%; max-height:100%;"/>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        -->
+        <!-- End aws photos -->
+        <!--********************************* Table ************************ -->
+        <div style="margin-left: 55px" class="footer" class='animate-hide ' ng-hide="tableSlider">
+            <table style="width:100%" class="table table-bordered">
+                <tr>
+                    <th> Activity / Day</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{Utils.keys(day)[0]}}</td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].date}}</td>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <input value="{{day[Utils.keys(day)[0]].date}}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Flight</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].flight}}</td>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <input value="{{day[Utils.keys(day)[0]].flight}}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Hotel</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].hotel}}</td>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <input value="{{day[Utils.keys(day)[0]].hotel}}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Car</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].car}}</td>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <input value="{{day[Utils.keys(day)[0]].car}}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Action1</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].action1}}</td>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <input value="{{day[Utils.keys(day)[0]].action1}}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Action2</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].action2}}</td>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <input value="{{day[Utils.keys(day)[0]].action2}}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Expense</th>
+                    <td ng-hide="editMode" ng-repeat="day in table">{{day[Utils.keys(day)[0]].expense}}</td>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <input value="{{day[Utils.keys(day)[0]].expense}}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Delete</th>
+                    <td ng-show="editMode" ng-repeat="day in table">
+                        <button type="button" class="btn btn-danger">Delete Day!</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- ######################################################################### -->
+        <!-- Edit Mode -->
+        <!-- ######################################################################### -->
 
     </div>
 
-    <!-- Information panel includes Tips + Places-->
+    <!-- Information panel includes Tips + Places + Routes-->
     <div class="right-side" style="overflow: auto" ng-show="information_panel">
         <!-- Tips -->
         <div ng-cloak layout-gt-sm="row" layout="column">
             <div flex-gt-sm="100" flex>
                 <md-toolbar layout="row" class="md-hue-3" style="position: fixed;">
                     <div class="md-toolbar-tools">
-                        <!--
-                        <a ng-click="information_panel = false;" style="float: left;" type="button"
-                           class="btn btn-default btn-sm">
-                            <span class="glyphicon glyphicon-menu-right"></span>
-                        </a>
-                        -->
-                        <md-button class="md-raised" ng-click="tips_button = false; places_button = true; routes_button = false">Places
+                        <md-button class="md-raised"
+                                   ng-click="tips_button = false; places_button = true; routes_button = false">Places
                         </md-button>
-                        <md-button class="md-raised" ng-click="tips_button = false; places_button = false; routes_button = true">Routes
+                        <md-button class="md-raised"
+                                   ng-click="tips_button = false; places_button = false; routes_button = true">Routes
                         </md-button>
-                        <md-button class="md-raised" ng-click="tips_button = true; places_button = false; routes_button = false">Tips
+                        <md-button class="md-raised"
+                                   ng-click="tips_button = true; places_button = false; routes_button = false">Tips
                         </md-button>
-
                     </div>
                 </md-toolbar>
+                <!-- TIPS -->
                 <md-content ng-show="tips_button" style="top: 60px">
                     <md-list flex>
-                        <md-switch class="md-primary" ng-model="routes_settings.enable_routes_map" aria-label="Enable/Disable Routes" ng-change="tipsOnMap(routes_settings.enable_routes_map)">
-                            Tips
-                        </md-switch>
-                        <md-list-item class="md-3-line" ng-repeat="message in messages"
+                        <div style="height: 40px">
+                            <md-switch class="md-primary" style="position: fixed;" ng-model="tips_items"
+                                       aria-label="Enable/Disable Routes" ng-change="!tips_items">
+                                Tips
+                            </md-switch>
+                        </div>
+                        <md-list-item ng-show="tips_items" class="md-3-line" ng-repeat="message in messages"
                                       ng-click="showMessageOnMap(message)">
                             <img ng-src="assets/icons/ic_message_black_48px.svg" class="md-avatar"/>
                             <div class="md-list-item-text" layout="column">
@@ -389,15 +393,19 @@
                         </md-list-item>
                     </md-list>
                 </md-content>
-
+                <!-- Routes -->
                 <md-content ng-show="routes_button" style="top: 60px">
                     <md-list flex>
-                        <md-switch class="md-primary" ng-model="routes_settings.enable_routes_map" aria-label="Enable/Disable Routes" ng-change="routesOnMap(routes_settings.enable_routes_map)">
-                            Routes
-                        </md-switch>
+                        <div style="height: 40px">
+                            <md-switch class="md-primary" style="position: fixed;"
+                                       ng-model="routes_settings.enable_routes_map" aria-label="Enable/Disable Routes"
+                                       ng-change="routesOnMap(routes_settings.enable_routes_map)">
+                                Routes
+                            </md-switch>
+                        </div>
                         <md-list-item class="md-3-line" ng-repeat="route in routes_list track by $index"
                                       ng-click="" ng-show="routes_settings.enable_routes_map">
-                            <!-- <img ng-src="" class="md-avatar"/> route icon -->
+                            <img ng-src="assets/icons/ic_traffic_black_24dp_1x.png" class="md-avatar"/>
                             <div class="md-list-item-text" layout="column">
                                 <h3>{{route.routes[0].summary}}</h3>
                                 <h4></h4>
@@ -406,16 +414,10 @@
                         </md-list-item>
                     </md-list>
                 </md-content>
-            </div>
-        </div>
-        <!-- Places -->
-        <div ng-cloak layout-gt-sm="row" layout="column" ng-show="places_button">
-            <div flex-gt-sm="50" flex ng-hide="nearbyPlacesReady">
-                <md-content style="top: 60px">
+
+                <!-- progress for loading places by Google API -->
+                <md-content style="top: 60px" ng-hide="nearbyPlacesReady">
                     <md-list flex>
-                        <md-switch class="md-primary" ng-model="routes_settings.enable_routes_map" aria-label="Enable/Disable Routes" ng-change="tipsOnMap(routes_settings.enable_routes_map)">
-                            Places
-                        </md-switch>
                         <md-list-item class="md-3-line">
                             {{iterateOverPathProgress || 0}}% scanning your path...
                         </md-list-item>
@@ -431,15 +433,21 @@
                         </md-list-item>
                     </md-list>
                 </md-content>
-            </div>
-            <div flex-gt-sm="50" flex ng-show="nearbyPlacesReady">
-                <md-content style="top: 60px">
+
+                <!-- Places content -->
+                <md-content style="top: 60px" ng-show="places_button">
                     <md-list flex>
-                        <!-- <md-subheader class="md-no-sticky">Trip tips</md-subheader> -->
+                        <div style="height: 40px">
+                            <md-switch class="md-primary" style="position: fixed"
+                                       ng-model="routes_settings.enable_routes_map" aria-label="Enable/Disable Routes"
+                                       ng-change="tipsOnMap(routes_settings.enable_routes_map)">
+                                Places
+                            </md-switch>
+                        </div>
                         <md-list-item class="md-3-line" ng-repeat="place in nearbyPlaces"
                                       ng-click="">
                             <!--<img ng-src="{{place.icon}}" class="md-avatar"/>-->
-                            <img ng-src="{{place.picture.data.url}}" class="md-avatar" />
+                            <img ng-src="{{place.picture.data.url}}" class="md-avatar"/>
 
                             <div class="md-list-item-text" layout="column">
                                 <h3>{{ place.name}}</h3>
@@ -456,14 +464,13 @@
                 </md-content>
             </div>
         </div>
+        <!-- /////////////////////////////// End Information panel ///////////////////////////////-->
     </div>
-    <!-- /////////////////////////////// End Information panel ///////////////////////////////-->
-</div>
 
-<!-- Footer Trip details -->
-<footer class="navbar navbar-default navbar-fixed-bottom"
-        style="background-color: #1E1E1E; width: 100%; margin-right: 0px; right: 0px">
-    <div class="container">
-        <span class="text-muted" style="font-size: 18px; text-align: left; font-style: inherit">Trip name: {{tripName}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Description: {{tripDescription}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Date: {{dateStart}} - {{dateEnd}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Continent: {{continent}}</span>
-    </div>
-</footer>
+    <!-- Footer Trip details -->
+    <footer class="navbar navbar-default navbar-fixed-bottom"
+            style="background-color: #1E1E1E; width: 100%; margin-right: 0px; right: 0px">
+        <div class="container">
+            <span class="text-muted" style="font-size: 18px; text-align: left; font-style: inherit">Trip name: {{tripName}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Description: {{tripDescription}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Date: {{dateStart}} - {{dateEnd}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Continent: {{continent}}</span>
+        </div>
+    </footer>

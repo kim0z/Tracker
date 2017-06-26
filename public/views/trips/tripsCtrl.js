@@ -22,6 +22,10 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
         {key: "emailAddress", name: "E-Mail", placeholder: "E-Mail...", allowMultiple: true}
     ];
 
+    $scope.$on('advanced-searchbox:modelUpdated', function (event, model) {
+        //Jump to the name of the trip
+    });
+
     $scope.clickToOpen = function () {
         //create new empty trup, in this phase the id returned as a result
         dataBaseService.createNewTripRecord().then(function (results) {

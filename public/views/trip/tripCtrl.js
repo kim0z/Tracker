@@ -11,9 +11,13 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
         $scope.load_progress = 1;
         $scope.user = messages.getUser(); //replace with local service like next line
+    //Right panel buttons
         $scope.tips_button = false;
         $scope.places_button = true;
         $scope.routes_button = false;
+    //Right panel, switches
+        $scope.tips_items = true;
+
         $scope.travelersList = [];
         $scope.data = []; // Travellers from PG DB
         $scope.messages = []; // Tips from Firebase, based on GPS point
@@ -1336,7 +1340,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                         if ($scope.trip_created_manually) {
                             //load places from firebase, markers
-                            $scope.nearbyPlacesReady = true;;
+                            $scope.nearbyPlacesReady = true;
                             $scope.nearbyPlaces = [];
 
                             var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/places');
@@ -1349,7 +1353,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             });
                         } else {
                             //load places by scan recorded path and find places between 2 points with time > ~15 min
-                            // $scope.loadNearByPlaces($scope.trip_path_hash);
+                             $scope.loadNearByPlaces($scope.trip_path_hash);
                         }
                     }, function (errorObject) {
                         console.log("The read failed (Trip meta data): " + errorObject.code);
