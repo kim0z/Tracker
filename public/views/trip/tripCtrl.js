@@ -1353,7 +1353,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             });
                         } else {
                             //load places by scan recorded path and find places between 2 points with time > ~15 min
-                             $scope.loadNearByPlaces($scope.trip_path_hash);
+                             //$scope.loadNearByPlaces($scope.trip_path_hash);
                         }
                     }, function (errorObject) {
                         console.log("The read failed (Trip meta data): " + errorObject.code);
