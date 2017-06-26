@@ -372,8 +372,8 @@
                 <!-- TIPS -->
                 <md-content ng-show="tips_button" style="top: 60px">
                     <md-list flex>
-                        <div style="height: 40px">
-                            <md-switch class="md-primary" style="position: fixed;" ng-model="tips_items"
+                        <div style="height: 40px;">
+                            <md-switch class="md-primary" style="position: fixed; z-index: 1" ng-model="tips_items"
                                        aria-label="Enable/Disable Routes" ng-change="!tips_items">
                                 Tips
                             </md-switch>
@@ -396,8 +396,8 @@
                 <!-- Routes -->
                 <md-content ng-show="routes_button" style="top: 60px">
                     <md-list flex>
-                        <div style="height: 40px">
-                            <md-switch class="md-primary" style="position: fixed;"
+                        <div style="height: 40px;">
+                            <md-switch class="md-primary" style="position: fixed; z-index: 1"
                                        ng-model="routes_settings.enable_routes_map" aria-label="Enable/Disable Routes"
                                        ng-change="routesOnMap(routes_settings.enable_routes_map)">
                                 Routes
@@ -437,8 +437,8 @@
                 <!-- Places content -->
                 <md-content style="top: 60px" ng-show="places_button">
                     <md-list flex>
-                        <div style="height: 40px">
-                            <md-switch class="md-primary" style="position: fixed"
+                        <div style="height: 40px;">
+                            <md-switch class="md-primary" style="position: fixed;  z-index: 1"
                                        ng-model="routes_settings.enable_routes_map" aria-label="Enable/Disable Routes"
                                        ng-change="tipsOnMap(routes_settings.enable_routes_map)">
                                 Places
