@@ -13,8 +13,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.user = messages.getUser(); //replace with local service like next line
     //Right panel buttons
         $scope.tips_button = false;
-        $scope.places_button = true;
-        $scope.routes_button = false;
+        $scope.places_button = false;
+        $scope.routes_button = true;
     //Right panel, switches
         $scope.tips_items = true;
 
