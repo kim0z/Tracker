@@ -1,4 +1,4 @@
-trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeout, $stateParams, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory, nearbyPlacesFactory) {
+trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeout, $stateParams, $firebaseObject, $firebaseArray, $http, $state, $document, $interval, dataBaseService, messages, serverSvc, localStorageService, Facebook, $filter, ngProgressFactory, nearbyPlacesFactory, nearbyPlacesFacebook) {
         //Variables Init
         $scope.loading = true;
         $scope.tripID = $stateParams.id;//localStorageService.get('tripId');
@@ -1338,10 +1338,12 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         console.log(snapshot.val());
                         $scope.trip_created_manually = snapshot.val();
 
+                        $scope.nearbyPlaces = [];
+                        $scope.nearbyPlacesReady = true;
+
                         if ($scope.trip_created_manually) {
                             //load places from firebase, markers
                             $scope.nearbyPlacesReady = true;
-                            $scope.nearbyPlaces = [];
 
                             var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/places');
                             firebase_places.once("value", function (snapshot) {
@@ -1352,8 +1354,28 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                 console.log("Read Places from Firebase failed: " + errorObject.code);
                             });
                         } else {
-                            //load places by scan recorded path and find places between 2 points with time > ~15 min
-                             //$scope.loadNearByPlaces($scope.trip_path_hash);
+                            //Google places
+                            //$scope.loadNearByPlaces($scope.trip_path_hash);
+
+                            // Facebook places
+                            nearbyPlacesFacebook.runNerarbyPlaces($scope.trip_path_hash);
+                            $scope.$on('facebook-places-ready', function(event, args) {
+
+                                var placesByFacebook = nearbyPlacesFacebook.getNerarbyPlaces();
+
+                                //prepare the array to fit places in UI
+
+                                for(var i = 0 ; i < placesByFacebook.length ; i++){
+                                    if(placesByFacebook[i].data.length > 0){
+                                        for(var j = 0 ; j < placesByFacebook[i].data.length ; j++){
+                                            if(placesByFacebook[j].data[j]){
+                                                $scope.nearbyPlaces.push(placesByFacebook[i].data[j]);
+                                            }
+                                        }
+                                    }
+                                }
+
+                            });
                         }
                     }, function (errorObject) {
                         console.log("The read failed (Trip meta data): " + errorObject.code);

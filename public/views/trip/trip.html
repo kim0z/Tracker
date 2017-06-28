@@ -444,7 +444,7 @@
                                 Places
                             </md-switch>
                         </div>
-                        <md-list-item class="md-3-line" ng-repeat="place in nearbyPlaces"
+                        <md-list-item class="md-3-line" ng-repeat="place in nearbyPlaces track by $index"
                                       ng-click="">
                             <!--<img ng-src="{{place.icon}}" class="md-avatar"/>-->
                             <img ng-src="{{place.picture.data.url}}" class="md-avatar"/>
