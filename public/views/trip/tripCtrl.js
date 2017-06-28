@@ -1364,7 +1364,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                 var placesByFacebook = nearbyPlacesFacebook.getNerarbyPlaces();
 
                                 //prepare the array to fit places in UI
-
                                 for(var i = 0 ; i < placesByFacebook.length ; i++){
                                     if(placesByFacebook[i].data.length > 0){
                                         for(var j = 0 ; j < placesByFacebook[i].data.length ; j++){
@@ -1374,7 +1373,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                         }
                                     }
                                 }
-
                             });
                         }
                     }, function (errorObject) {
