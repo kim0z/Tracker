@@ -404,7 +404,7 @@
                             </md-switch>
                         </div>
                         <md-list-item class="md-3-line" ng-repeat="route in routes_list track by $index"
-                                      ng-click="" ng-show="routes_settings.enable_routes_map">
+                                      ng-show="routes_settings.enable_routes_map" ng-click="clickOnRouteList(route)">
                             <img ng-src="assets/icons/ic_traffic_black_24dp_1x.png" class="md-avatar"/>
                             <div class="md-list-item-text" layout="column">
                                 <h3>{{route.routes[0].summary}}</h3>

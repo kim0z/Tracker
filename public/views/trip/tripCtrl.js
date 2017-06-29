@@ -829,15 +829,12 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     });
 
                     $scope.showMessageOnMap = function (message) {
-
                         if ($scope.editMode == false) {
-
                             if (message.location.coords) {
                                 var Latlng_message = {
                                     lat: message.location.coords.latitude,
                                     lng: message.location.coords.longitude
                                 };
-
                                 //Help function - show item on map
                                 showItemOnMap(Latlng_message, message);
                             }
@@ -1098,48 +1095,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                     //****************************************************
 
-                    //***** ########### Handle Routes ############### ************
-                    //Read Routes from Firebase (Manually added places - it's different from recorded path) - Put on Map
-                    var directionsDisplay = [];
-
-                    var firebase_drawing_markers_routes = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/routes');
-                    //firebase_drawing_markers_routes.push(JSON.stringify(response));
-                    $scope.routes_list = [];
-                    firebase_drawing_markers_routes.once("value", function (snapshot) {
-                        //create direction Service and Display
-                        var directionsService = new google.maps.DirectionsService;
-                         //var directionsDisplay = new google.maps.DirectionsRenderer;
-
-                        snapshot.forEach(function (childSnapshot) {
-                            console.log('Trip:: Reading new route from firebase under /map/routes');
-                            var route = JSON.parse(childSnapshot.val());
-
-                            //For the list in right side
-                            route.firebase_key = childSnapshot.key();
-                            $scope.routes_list.unshift(route);
-
-                            //for map
-                            directionsDisplay.push(new google.maps.DirectionsRenderer);
-                            directionsDisplay[directionsDisplay.length - 1].setMap($scope.map); //last added directionDisplay
-                            directionsDisplay[directionsDisplay.length - 1].setDirections(route);
-                        });
-                    }, function (errorObject) {
-                        console.log("Trip:: Read trip routes from Firebase failed: " + errorObject.code);
-                    });
-
-                    $scope.routes_settings = {enable_routes_map: true};
-
-                    $scope.routesOnMap = function (flag) {
-                        if (flag) { //if true then show routes on map
-                            for (var i = 0; i < directionsDisplay.length; i++) {
-                                directionsDisplay[i].setMap($scope.map);
-                            }
-                        } else { //if false then disable routen pn map
-                            for (var i = 0; i < directionsDisplay.length; i++) {
-                                directionsDisplay[i].setMap(null);
-                            }
-                        }
-                    };
 
 
                     //************************************************************
@@ -1329,8 +1284,47 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         //////////////////////
                     }
 
+                    $scope.clickOnRouteList = function (route) {
+                        if ($scope.trip_created_manually){
+                            //show only the selected route
+                        }else{
+                            //Show only the route in the selected day
+                            $scope.filter_trip_paths_by_day(route.routes[0].hash_index);
+                        }
+                    };
+
+                    $scope.routesOnMap = function (flag) {
+                        if($scope.trip_created_manually){
+                            if (flag) { //if true then show routes on map
+                                //show routes on map
+                                for (var i = 0; i < directionsDisplay.length; i++) {
+                                    directionsDisplay[i].setMap($scope.map);
+                                }
+                                //enable flags (markers) this case on for manually - user adding flags when click on places he visited
+
+
+                            } else {
+                                //disable routes on map
+                                for (var i = 0; i < directionsDisplay.length; i++) {
+                                    directionsDisplay[i].setMap(null);
+                                }
+                                //disable flags (markers) this case on for manually - user adding flags when click on places he visited
+
+                                
+                            }
+                        }else{
+                            if (flag) { //if true then show routes on map
+                                $scope.trip_enable_all_paths();
+                            } else { //if false then disable routes on map
+                                $scope.trip_disable_all_paths();
+                            }
+                        }
+                    };
+
                     //if Trip was created automatic using the APP then load from places
                     //Get if trip was created manually, it means the trip was created manually by users and not using the recorder APP
+                    var directionsDisplay = [];
+
                     var firebase_update_manually = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/_trip/trip_created_manually');
                     console.log('Wizard:: Firebase:: Reading trip meta data - Trip created manually?');
                     firebase_update_manually.once("value", function (snapshot) {
@@ -1340,9 +1334,11 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                         $scope.nearbyPlaces = [];
                         $scope.nearbyPlacesReady = true;
+                        $scope.routes_list = [];
+                        if ($scope.trip_created_manually) { //mmanually trip was uploaded
 
-                        if ($scope.trip_created_manually) {
-                            //load places from firebase, markers
+
+                            // ******* load places from firebase ******
                             $scope.nearbyPlacesReady = true;
 
                             var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/places');
@@ -1353,11 +1349,46 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             }, function (errorObject) {
                                 console.log("Read Places from Firebase failed: " + errorObject.code);
                             });
-                        } else {
+
+
+                            //***** ########### Handle Routes ############### ************
+                            //Read Routes from Firebase (Manually added places - it's different from recorded path) - Put on Map
+
+
+                            var firebase_drawing_markers_routes = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/routes');
+                            //firebase_drawing_markers_routes.push(JSON.stringify(response));
+
+                            firebase_drawing_markers_routes.once("value", function (snapshot) {
+                                //create direction Service and Display
+                                var directionsService = new google.maps.DirectionsService;
+                                //var directionsDisplay = new google.maps.DirectionsRenderer;
+
+                                snapshot.forEach(function (childSnapshot) {
+                                    console.log('Trip:: Reading new route from firebase under /map/routes');
+                                    var route = JSON.parse(childSnapshot.val());
+
+                                    //For the list in right side
+                                    route.firebase_key = childSnapshot.key();
+                                    //console.log(route);
+                                    $scope.routes_list.unshift(route);
+
+                                    //for map
+                                    directionsDisplay.push(new google.maps.DirectionsRenderer);
+                                    directionsDisplay[directionsDisplay.length - 1].setMap($scope.map); //last added directionDisplay
+                                    directionsDisplay[directionsDisplay.length - 1].setDirections(route);
+                                });
+                            }, function (errorObject) {
+                                console.log("Trip:: Read trip routes from Firebase failed: " + errorObject.code);
+                            });
+
+                            $scope.routes_settings = {enable_routes_map: true};
+
+
+                        } else { //trip was created by mobile APP
                             //Google places
                             //$scope.loadNearByPlaces($scope.trip_path_hash);
 
-                            // Facebook places
+                            // ****** Facebook places *********
                             nearbyPlacesFacebook.runNerarbyPlaces($scope.trip_path_hash);
                             $scope.$on('facebook-places-ready', function(event, args) {
 
@@ -1374,6 +1405,23 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                     }
                                 }
                             });
+
+
+                            // ********* Create routes from recorded path *****************
+                            // each day is a route in this case
+                            // simulate route data to keep the same structure for UI route.routes[0].summary
+                            $scope.routes_settings = {enable_routes_map: true};
+                            for(var i = 0 ; i < $scope.trip_path_hash.length ; i++){
+                                var routes = new Array(0);
+                                if(i == 0){
+                                    routes[0] = {summary: 'Route - All days', hash_index: i};
+                                }else{
+                                    routes[0] = {summary: 'Route in day '+ i, hash_index: i};
+                                }
+                                 // hash index will be the pointed to the hash table in case user click on route
+                                var route = {routes: routes};
+                                $scope.routes_list.push(route);
+                            }
                         }
                     }, function (errorObject) {
                         console.log("The read failed (Trip meta data): " + errorObject.code);
