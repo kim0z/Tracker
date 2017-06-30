@@ -1310,7 +1310,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                 }
                                 //disable flags (markers) this case on for manually - user adding flags when click on places he visited
 
-                                
+
                             }
                         }else{
                             if (flag) { //if true then show routes on map
