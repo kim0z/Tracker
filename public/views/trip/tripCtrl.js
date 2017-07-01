@@ -22,6 +22,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.data = []; // Travellers from PG DB
         $scope.messages = []; // Tips from Firebase, based on GPS point
         var markers_messages = [];
+        var markers_places = [];
         $scope.editMode = false;
         $scope.panoViewState = false;
         $scope.panoPosition = '';
@@ -495,7 +496,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     $scope.map = new google.maps.Map(mapContainer, {
                         //center: {lat: 34.397, lng: 40.644},
                         center: {lat: 0, lng: 0},
-                        zoom: 4,
+                        zoom: 10,
                         mapTypeControl: true,
                         mapTypeControlOptions: {
                             style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
@@ -1403,7 +1404,26 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/places');
                             firebase_places.once("value", function (snapshot) {
                                 snapshot.forEach(function (childSnapshot) {
-                                    $scope.nearbyPlaces.push(JSON.parse(childSnapshot.val()));
+
+                                    var place = JSON.parse(childSnapshot.val());
+                                    $scope.nearbyPlaces.push(place);
+
+                                    //Show on map by adding marker with info
+                                   /* var marker_place = new google.maps.Marker({
+                                        position: place.Latlng,
+                                        map: $scope.map,
+                                        title: null
+                                    });
+
+                                    var infowindow_message = new google.maps.InfoWindow({
+                                        content: place.name
+                                    });
+
+                                    infowindow_message.open($scope.map, marker_place);
+                                    //save in array to to handle all places on map
+                                    markers_places.push({marker: marker_place, info: infowindow_message});*/
+
+
                                 });
                             }, function (errorObject) {
                                 console.log("Read Places from Firebase failed: " + errorObject.code);
@@ -1432,16 +1452,18 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                     $scope.routes_list.unshift(route);
 
                                     //for map
-                                    directionsDisplay.push(new google.maps.DirectionsRenderer);
+                                    directionsDisplay.push(new google.maps.DirectionsRenderer({
+                                        preserveViewport: false
+                                    }));
                                     directionsDisplay[directionsDisplay.length - 1].setMap($scope.map); //last added directionDisplay
                                     directionsDisplay[directionsDisplay.length - 1].setDirections(route);
                                 });
+                                $scope.$apply();
                             }, function (errorObject) {
                                 console.log("Trip:: Read trip routes from Firebase failed: " + errorObject.code);
                             });
 
                             $scope.routes_settings = {enable_routes_map: true};
-
 
                         } else { //trip was created by mobile APP
                             //Google places
