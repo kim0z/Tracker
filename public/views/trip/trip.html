@@ -373,12 +373,12 @@
                 <md-content ng-show="tips_button" style="top: 60px">
                     <md-list flex>
                         <div style="height: 40px;">
-                            <md-switch class="md-primary" style="position: fixed; z-index: 1" ng-model="tips_items"
-                                       aria-label="Enable/Disable Routes" ng-change="!tips_items">
+                            <md-switch class="md-primary" style="position: fixed; z-index: 1" ng-model="tips_items_flag"
+                                       aria-label="Enable/Disable Routes" ng-change="tipsOnMap(tips_items_flag)">
                                 Tips
                             </md-switch>
                         </div>
-                        <md-list-item ng-show="tips_items" class="md-3-line" ng-repeat="message in messages"
+                        <md-list-item ng-show="tips_items_flag" class="md-3-line" ng-repeat="message in messages"
                                       ng-click="showMessageOnMap(message)">
                             <img ng-src="assets/icons/ic_message_black_48px.svg" class="md-avatar"/>
                             <div class="md-list-item-text" layout="column">
@@ -416,7 +416,7 @@
                 </md-content>
 
                 <!-- progress for loading places by Google API -->
-                <md-content style="top: 60px" ng-hide="nearbyPlacesReady">
+            <!--    <md-content style="top: 60px" ng-hide="nearbyPlacesReady">
                     <md-list flex>
                         <md-list-item class="md-3-line">
                             {{iterateOverPathProgress || 0}}% scanning your path...
@@ -432,7 +432,7 @@
                             <h5>Loading places from path</h5>
                         </md-list-item>
                     </md-list>
-                </md-content>
+                </md-content>-->
 
                 <!-- Places content -->
                 <md-content style="top: 60px" ng-show="places_button">

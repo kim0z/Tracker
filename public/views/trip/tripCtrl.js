@@ -11,12 +11,12 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
         $scope.load_progress = 1;
         $scope.user = messages.getUser(); //replace with local service like next line
-    //Right panel buttons
+        //Right panel buttons
         $scope.tips_button = false;
         $scope.places_button = false;
         $scope.routes_button = true;
-    //Right panel, switches
-        $scope.tips_items = true;
+        //Right panel, switches
+        $scope.tips_items_flag = true;
 
         $scope.travelersList = [];
         $scope.data = []; // Travellers from PG DB
@@ -951,18 +951,11 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             $scope.panoViewState = false;
                             $scope.panoView();
                         }
-
-                        //var myLatlng = {lat: message.latitude, lng: message.longitude};
                         console.log('showItemOnMap function :: ' + 'lat:' + Latlng.lat + '     lng: ' + Latlng.lng);
-
                         if ($scope.editMode == false) {
                             if (Latlng.lat && Latlng.lng) {
-
                                 $scope.map.setCenter(Latlng);
                                 //smoothZoom($scope.map, 7, $scope.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
-
-                                //new google.maps.LatLng(-34, 151)
-
                                 var title = '';
                                 if (message.message.tip != '') {
                                     title = message.message.tip;
@@ -977,13 +970,11 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                     title = 'Invitation';
                                 }
 
-
                                 var marker_message = new google.maps.Marker({
                                     position: Latlng,
                                     map: $scope.map,
                                     title: null
                                 });
-                                markers_messages.push(marker_message);
 
                                 var infowindow_message = new google.maps.InfoWindow({
                                     content: title
@@ -991,12 +982,15 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                                 infowindow_message.open($scope.map, marker_message);
 
-                                var zoom_time = 3000;
-                                $scope.countdown = 100;
-                                setTimeout(function () {
-                                    smoothZoom($scope.map, 12, $scope.map.getZoom())
-                                }, 1000); // call smoothZoom, parameters map, final zoomLevel
+                                markers_messages.push({marker: marker_message, info: infowindow_message});
 
+                                /*
+                                 var zoom_time = 3000;
+                                 $scope.countdown = 100;
+                                 setTimeout(function () {
+                                 smoothZoom($scope.map, 12, $scope.map.getZoom())
+                                 }, 1000); // call smoothZoom, parameters map, final zoomLevel
+                                 */
                             }
                         }
                     }
@@ -1078,23 +1072,47 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     //**********************  load Tips from Firebase ******************
                     //******************************************************************
                     //******************************************************************
+
+                    //bot Auto / Manual trips load the same messages, the same structure
                     var firebase_ref_readTips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/messages');
 
+
+                    //load messages to the right panel list + draw on map
                     firebase_ref_readTips.on("value", function (snapshot) {
                         $scope.messages = [];
                         snapshot.forEach(function (childSnapshot) {
                             var childData = childSnapshot.val(); // childData = location, message and time
+
+                            //load to list
                             $scope.messages.unshift(childData);
+
+                            //load on map
+                            var Latlng_message = {
+                                lat: childData.location.coords.latitude,
+                                lng: childData.location.coords.longitude
+                            };
+                            //Help function - show item on map
+                            showItemOnMap(Latlng_message, childData);
                         });
                     }, function (errorObject) {
                         console.log("Read Tips from Firebase failed: " + errorObject.code);
                     });
 
+                    /* $scope.showMessageOnMap = function (message) {
+                     if ($scope.editMode == false) {
+                     if (message.location.coords) {
+                     var Latlng_message = {
+                     lat: message.location.coords.latitude,
+                     lng: message.location.coords.longitude
+                     };
+                     //Help function - show item on map
+                     showItemOnMap(Latlng_message, message);
+                     }*/
+
 
                     //}
 
                     //****************************************************
-
 
 
                     //************************************************************
@@ -1189,7 +1207,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                 }
                             }
                         }
-                    }
+                    };
                     // disable all trip paths from map
                     $scope.trip_disable_all_paths = function () {
                         for (var i = 0; i < $scope.polys_per_day.length; i++) {
@@ -1197,13 +1215,40 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         }
                         //Stop animation if running
                         $scope.stop_path_animation();
-                    }
+                    };
                     // enable all trip paths on map
                     $scope.trip_enable_all_paths = function () {
                         for (var i = 0; i < $scope.polys_per_day.length; i++) {
                             $scope.polys_per_day[i].setMap($scope.map);
                         }
-                    }
+                    };
+                    // disable all trip markers from map
+                    $scope.trip_disable_all_markers = function () {
+                        for (var i = 0; i < $scope.markers.length; i++) {
+                            $scope.markers[i].setMap(null);
+                        }
+                    };
+                    // enable all trip markers on map
+                    $scope.trip_enable_all_markers = function () {
+                        for (var i = 0; i < $scope.markers.length; i++) {
+                            $scope.markers[i].setMap($scope.map);
+                        }
+                    };
+
+                    //disable all tips on map
+                    $scope.trip_disable_all_tips = function () {
+                        for(var  i = 0 ; i < markers_messages.length ; i++){
+                            markers_messages[i].marker.setMap(null);
+                            //markers_messages[i].info.close();
+                        }
+                    };
+                    //enable all tips on map
+                    $scope.trip_enable_all_tips = function () {
+                        for(var  i = 0 ; i < markers_messages.length ; i++){
+                            markers_messages[i].marker.setMap($scope.map);
+                            //markers_messages[i].info.open($scope.map, markers_messages[i].info);
+                        }
+                    };
                     //Stop path animation
                     $scope.stop_path_animation = function () {
                         if (poly_animation != null) {
@@ -1285,41 +1330,55 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     }
 
                     $scope.clickOnRouteList = function (route) {
-                        if ($scope.trip_created_manually){
+                        if ($scope.trip_created_manually) {
                             //show only the selected route
-                        }else{
+                        } else {
                             //Show only the route in the selected day
                             $scope.filter_trip_paths_by_day(route.routes[0].hash_index);
                         }
                     };
 
+                //disable / Enable routes / Routes List on map + List
                     $scope.routesOnMap = function (flag) {
-                        if($scope.trip_created_manually){
+                        if ($scope.trip_created_manually) {
                             if (flag) { //if true then show routes on map
                                 //show routes on map
                                 for (var i = 0; i < directionsDisplay.length; i++) {
                                     directionsDisplay[i].setMap($scope.map);
                                 }
                                 //enable flags (markers) this case on for manually - user adding flags when click on places he visited
-
-
+                                $scope.trip_enable_all_markers();
                             } else {
                                 //disable routes on map
                                 for (var i = 0; i < directionsDisplay.length; i++) {
                                     directionsDisplay[i].setMap(null);
                                 }
                                 //disable flags (markers) this case on for manually - user adding flags when click on places he visited
-
-
+                                $scope.trip_disable_all_markers();
                             }
-                        }else{
+                        } else {
                             if (flag) { //if true then show routes on map
                                 $scope.trip_enable_all_paths();
+                                //enable flags (markers) this case on for manually - user adding flags when click on places he visited
+                                $scope.trip_enable_all_markers();
                             } else { //if false then disable routes on map
                                 $scope.trip_disable_all_paths();
+                                //disable flags (markers) this case on for manually - user adding flags when click on places he visited
+                                $scope.trip_disable_all_markers();
                             }
                         }
                     };
+
+                //Disbale / Enable Tips + Tips list on map
+                $scope.tipsOnMap = function (tips_flag) {
+                    //if ($scope.trip_created_manually) {} // not relevant for tips
+                        if (tips_flag) { //if True then the show tips in map and list
+                            $scope.trip_enable_all_tips();
+                        }else{ // if false then disable tips on map and list
+                            $scope.trip_disable_all_tips();
+                        }
+                    };
+
 
                     //if Trip was created automatic using the APP then load from places
                     //Get if trip was created manually, it means the trip was created manually by users and not using the recorder APP
@@ -1390,15 +1449,15 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                             // ****** Facebook places *********
                             nearbyPlacesFacebook.runNerarbyPlaces($scope.trip_path_hash);
-                            $scope.$on('facebook-places-ready', function(event, args) {
+                            $scope.$on('facebook-places-ready', function (event, args) {
 
                                 var placesByFacebook = nearbyPlacesFacebook.getNerarbyPlaces();
 
                                 //prepare the array to fit places in UI
-                                for(var i = 0 ; i < placesByFacebook.length ; i++){
-                                    if(placesByFacebook[i].data.length > 0){
-                                        for(var j = 0 ; j < placesByFacebook[i].data.length ; j++){
-                                            if(placesByFacebook[j].data[j]){
+                                for (var i = 0; i < placesByFacebook.length; i++) {
+                                    if (placesByFacebook[i].data.length > 0) {
+                                        for (var j = 0; j < placesByFacebook[i].data.length; j++) {
+                                            if (placesByFacebook[j].data[j]) {
                                                 $scope.nearbyPlaces.push(placesByFacebook[i].data[j]);
                                             }
                                         }
@@ -1411,14 +1470,14 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             // each day is a route in this case
                             // simulate route data to keep the same structure for UI route.routes[0].summary
                             $scope.routes_settings = {enable_routes_map: true};
-                            for(var i = 0 ; i < $scope.trip_path_hash.length ; i++){
+                            for (var i = 0; i < $scope.trip_path_hash.length; i++) {
                                 var routes = new Array(0);
-                                if(i == 0){
+                                if (i == 0) {
                                     routes[0] = {summary: 'Route - All days', hash_index: i};
-                                }else{
-                                    routes[0] = {summary: 'Route in day '+ i, hash_index: i};
+                                } else {
+                                    routes[0] = {summary: 'Route in day ' + i, hash_index: i};
                                 }
-                                 // hash index will be the pointed to the hash table in case user click on route
+                                // hash index will be the pointed to the hash table in case user click on route
                                 var route = {routes: routes};
                                 $scope.routes_list.push(route);
                             }
