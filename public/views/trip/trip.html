@@ -439,13 +439,13 @@
                     <md-list flex>
                         <div style="height: 40px;">
                             <md-switch class="md-primary" style="position: fixed;  z-index: 1"
-                                       ng-model="routes_settings.enable_routes_map" aria-label="Enable/Disable Routes"
-                                       ng-change="tipsOnMap(routes_settings.enable_routes_map)">
+                                       ng-model="places_items_flag" aria-label="Enable/Disable Routes"
+                                       ng-change="placesOnMap(places_items_flag)">
                                 Places
                             </md-switch>
                         </div>
                         <md-list-item class="md-3-line" ng-repeat="place in nearbyPlaces track by $index"
-                                      ng-click="">
+                                      ng-click="" ng-show="places_items_flag">
                             <!--<img ng-src="{{place.icon}}" class="md-avatar"/>-->
                             <img ng-src="{{place.picture.data.url}}" class="md-avatar"/>
 

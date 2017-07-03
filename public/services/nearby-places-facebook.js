@@ -41,12 +41,11 @@ trackerApp.service('nearbyPlacesFacebook', ['$rootScope', '$http', 'Facebook', f
             return Facebook.api(
                 "search?access_token=942317529184852%7CXgVb4d3OEZDe9VM1ilqo-u53-4U&pretty=0&q&type=place&center=" + lat + "," + lng + "&distance=" + distance + "&limit=" + limit + "&after=MjQZD&fields=name,checkins,picture,link", //APP Token
                 function (places) {
-                /*    if (places && !places.error) {
+                    if (places && !places.error) {
                         for (var i = 0; i < places.data.length; i++) {
-                            //console.log(places.data[i]);
-                            places_array.push(places.data[i]);
+                            places.data[i].location =  {lat: lat, lng: lng};
                         }
-                    }*/
+                    }
                 });
         } else {
             console.log('Wizard:: Error:: lat || lng || distance == null');

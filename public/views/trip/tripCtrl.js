@@ -17,6 +17,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.routes_button = true;
         //Right panel, switches
         $scope.tips_items_flag = true;
+        $scope.places_items_flag = true;
 
         $scope.travelersList = [];
         $scope.data = []; // Travellers from PG DB
@@ -1250,6 +1251,25 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             //markers_messages[i].info.open($scope.map, markers_messages[i].info);
                         }
                     };
+
+
+                    //disable all places on map
+                    $scope.trip_disable_all_places = function () {
+                        for(var  i = 0 ; i < markers_places.length ; i++){
+                            markers_places[i].marker.setMap(null);
+                            //markers_messages[i].info.close();
+                        }
+                    };
+                    //enable all places on map
+                    $scope.trip_enable_all_places = function () {
+                        for(var  i = 0 ; i < markers_places.length ; i++){
+                            markers_places[i].marker.setMap($scope.map);
+                            //markers_messages[i].info.open($scope.map, markers_messages[i].info);
+                        }
+                    };
+
+
+
                     //Stop path animation
                     $scope.stop_path_animation = function () {
                         if (poly_animation != null) {
@@ -1380,6 +1400,32 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         }
                     };
 
+                $scope.placesOnMap = function (places_flag) {
+                    if (places_flag) { //if True then the show places in map and list
+                        $scope.trip_enable_all_places();
+                    }else{ // if false then disable places on map and list
+                        $scope.trip_disable_all_places();
+                    }
+                };
+
+                //help function
+                    var add_place_on_map = function (place) {
+                        //Show on map by adding marker with info
+                        var marker_place = new google.maps.Marker({
+                            position: place.location,
+                            map: $scope.map,
+                            title: null
+                        });
+
+                        var infowindow_message = new google.maps.InfoWindow({
+                            content: place.name
+                        });
+
+                        infowindow_message.open($scope.map, marker_place);
+                        //save in array to to handle all places on map
+                        markers_places.push({marker: marker_place, info: infowindow_message});
+                    };
+
 
                     //if Trip was created automatic using the APP then load from places
                     //Get if trip was created manually, it means the trip was created manually by users and not using the recorder APP
@@ -1408,27 +1454,13 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                     var place = JSON.parse(childSnapshot.val());
                                     $scope.nearbyPlaces.push(place);
 
-                                    //Show on map by adding marker with info
-                                   /* var marker_place = new google.maps.Marker({
-                                        position: place.Latlng,
-                                        map: $scope.map,
-                                        title: null
-                                    });
-
-                                    var infowindow_message = new google.maps.InfoWindow({
-                                        content: place.name
-                                    });
-
-                                    infowindow_message.open($scope.map, marker_place);
-                                    //save in array to to handle all places on map
-                                    markers_places.push({marker: marker_place, info: infowindow_message});*/
-
+                                    //add place on map
+                                    add_place_on_map(place);
 
                                 });
                             }, function (errorObject) {
                                 console.log("Read Places from Firebase failed: " + errorObject.code);
                             });
-
 
                             //***** ########### Handle Routes ############### ************
                             //Read Routes from Firebase (Manually added places - it's different from recorded path) - Put on Map
@@ -1481,6 +1513,9 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                         for (var j = 0; j < placesByFacebook[i].data.length; j++) {
                                             if (placesByFacebook[j].data[j]) {
                                                 $scope.nearbyPlaces.push(placesByFacebook[i].data[j]);
+
+                                                //add place on map
+                                                add_place_on_map(placesByFacebook[i].data[j]);
                                             }
                                         }
                                     }

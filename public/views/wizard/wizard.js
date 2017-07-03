@@ -599,7 +599,9 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                                 for (var i = 0; i < places.data.length; i++) {
                                     //_detailsPlaces.push(places.data[i]);
                                     //console.log(places.data[i])
-                                    firebase_places.push(JSON.stringify(places.data[i]));
+                                    var place = places.data[i];
+                                    place.location = {lat: lat, lng: lng};
+                                    firebase_places.push(JSON.stringify(place));
                                 }
                             }
                         });
