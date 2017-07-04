@@ -369,7 +369,7 @@
 
         <wz-step wz-title="Trip Places and Routes">
 
-            <h1>Add the places you visited</h1>
+            <h1>Places</h1>
 
             <div class="container">
                 <!-- Places -->
@@ -378,8 +378,8 @@
                         <div flex-gt-sm="100" flex>
                             <md-toolbar layout="row" class="md-hue-3">
                                 <div class="md-toolbar-tools">
-                                    <md-button class="md-raised" style="position: fixed">Places
-                                    </md-button>
+                                    <label class="md-raised" style="position: fixed">Places
+                                    </label>
                                 </div>
                             </md-toolbar>
 
@@ -487,7 +487,7 @@
 
 
         <wz-step wz-title="Trip tips">
-            <h1>Add your trip tips on the map</h1>
+            <h1>Tips</h1>
 
 
             <div class="container">
@@ -495,17 +495,17 @@
                 <div class="left-map-tips">
                     <!-- Tips -->
                     <div ng-cloak layout-gt-sm="row" layout="column">
-                        <div flex-gt-sm="100" flex>
+                        <div flex-gt-sm="100" flex style="width: 400px">
                             <md-toolbar layout="row" class="md-hue-3">
-                                <div class="md-toolbar-tools" style="width: 350px">
+                                <div class="md-toolbar-tools" style="width: 400px">
                                     <!--
                                     <a ng-click="information_panel = false;" style="float: left;" type="button"
                                        class="btn btn-default btn-sm">
                                         <span class="glyphicon glyphicon-menu-right"></span>
                                     </a>
                                     -->
-                                    <md-button class="md-raised">Tips
-                                    </md-button>
+                                    <label class="md-raised">Tips
+                                    </label>
                                 </div>
                             </md-toolbar>
                             <md-content>
@@ -514,7 +514,7 @@
                                     <md-list-item class="md-3-line" ng-repeat="message in messages"
                                                   ng-click="showMessageOnMap(message)">
                                         <img ng-src="assets/icons/ic_message_black_48px.svg" class="md-avatar"/>
-                                        <div class="md-list-item-text" layout="column">
+                                        <div class="md-list-item-text" layout="column" style="word-wrap: break-word;">
                                             <h3 ng-if="message.message.tip">{{ message.message.tip }}</h3>
                                             <h3 ng-if="message.message.risk">{{ message.message.risk }}</h3>
                                             <h3 ng-if="message.message.price">{{ message.message.price }}</h3>
@@ -543,39 +543,52 @@
 
                 <div class="map-right-tips">
                     <div>
-                        <p>Add new tip</p>
-                        <ul>
-                            <p> Tip
-                                <input type="text" ng-model="message.text"
-                                       style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
-                            <p> Latitude
-                                <input type="text" ng-model="message.lat"
-                                       style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
-                            </p>
-                            <p> Longitude
-                                <input type="text" ng-model="message.lng"
-                                       style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
-                            </p>
-                            <!--
-                            <p> Time
-                                <input type="datetime" ng-model="message.time" style="width: 270px; float: right; margin-right: 10px; margin-left: 10px"/>
-                            </p>
-                            -->
-                            <p> Date
-                                <!-- MMMM d, y' -->
-                                <datepicker date-min-limit="{{trip.dateStart.toString()}}"
-                                            date-max-limit="{{trip.dateEnd.toString()}}" date-format="yyyy-MM-dd"
-                                            datepicker-append-to-body=true>
-                                    <input name="tipDate" ng-model="message.time" class="form-control"
-                                           type="date" required/>
-                                </datepicker>
-                            </p>
+                        <md-toolbar layout="row" class="md-hue-3">
+                            <div class="md-toolbar-tools" style="width: 350px">
+                                <!--
+                                <a ng-click="information_panel = false;" style="float: left;" type="button"
+                                   class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-menu-right"></span>
+                                </a>
+                                -->
+                                <label class="md-raised">New Tip
+                                </label>
+                            </div>
+                        </md-toolbar>
 
-                            <button type="button" class="btn btn-success" ng-click="addMessage()">add</button>
-                        </ul>
+                        <div class="form-group">
+                            <label for="descriptionTextArea">Tip</label>
+                        <textarea name="description" ng-model="message.text" class="form-control"
+                                  id="descriptionTextArea"
+                                  rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="descriptionTextArea">Latitude</label>
+                        <textarea name="description" ng-model="message.lat" class="form-control"
+                                  id="descriptionTextArea"
+                                  rows="1"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="descriptionTextArea">Longitude</label>
+                        <textarea name="description" ng-model="message.lng" class="form-control"
+                                  id="descriptionTextArea"
+                                  rows="1"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descriptionTextArea">Date</label>
+                            <datepicker date-min-limit="{{trip.dateStart.toString()}}"
+                                        date-max-limit="{{trip.dateEnd.toString()}}" date-format="yyyy-MM-dd"
+                                        datepicker-append-to-body=true>
+                                <input name="tipDate" ng-model="message.time" class="form-control"
+                                       type="date" required/>
+                            </datepicker>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-success" style="width: 100%" ng-click="addMessage()">add</button>
+                        </div>
                     </div>
                 </div>
-
             </div>
 
             <input type="submit" wz-next value="Next" class="btn btn-primary" ng-click="startExpense()"/>
@@ -584,7 +597,7 @@
 
 
         <wz-step wz-title="Trip expense">
-            <h1>Add your expense</h1>
+            <h1>Expense</h1>
 
 
             <table ng-table="usersTable" class="table table-striped"

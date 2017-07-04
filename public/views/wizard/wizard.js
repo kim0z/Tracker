@@ -109,6 +109,8 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                 if (toState != null) {
                     if (toState.hasOwnProperty('url')) {
                         $state.go(toState);
+                    }else{
+                        $state.go('mytrips');
                     }
                 }
                 else {
