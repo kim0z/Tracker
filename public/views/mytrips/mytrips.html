@@ -110,7 +110,7 @@
                     Done
                 </md-button>
                 <md-divider></md-divider>
-            </md-content>
+    </md-content>
         </md-sidenav>
 
 
@@ -118,7 +118,7 @@
         <md-content id="main" layout="horizontal" layout-align="center">
             <md-list>
                 <div id="content">
-                    <div ng-repeat="chunk in ::chunks">
+                    <div ng-repeat="chunk in ::chunks track by $index" style="width:1000px;">
                        <!-- <p ng-if="chunk.divider">{{chunk.title}}</p> -->
                         <md-card ng-if="!chunk.expanded && !chunk.divider" ng-click="toggleChunkExpand(chunk)"
                                  ng-mouseover="hover = true" ng-mouseout="hover = false"

@@ -940,6 +940,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             $scope.map_tips.fitBounds(bounds);
         });
 
+        $scope.message = {};
         //Listener to click on map to get GPS
         $scope.map_tips.addListener('click', function (e) {
             $scope.message = {lat: e.latLng.lat(), lng: e.latLng.lng(), time: new Date()};
@@ -979,12 +980,14 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             var directionsDisplay = []; //var directionsDisplay = new google.maps.DirectionsRenderer;
 
             snapshot.forEach(function (childSnapshot) {
-                console.log('Wizrad:: Tips sections :: Reading new route from firebase under /map/routes');
-                var route = JSON.parse(childSnapshot.val()); //JSON.parse(childSnapshot);
-                //console.log(route);
-                directionsDisplay.push(new google.maps.DirectionsRenderer);
-                directionsDisplay[directionsDisplay.length - 1].setMap($scope.map_tips); //last added directionDisplay
-                directionsDisplay[directionsDisplay.length - 1].setDirections(route);
+                if(!childSnapshot.val().hasOwnProperty("separator")){
+                    console.log('Wizrad:: Tips sections :: Reading new route from firebase under /map/routes');
+                    var route = JSON.parse(childSnapshot.val()); //JSON.parse(childSnapshot);
+                    //console.log(route);
+                    directionsDisplay.push(new google.maps.DirectionsRenderer);
+                    directionsDisplay[directionsDisplay.length - 1].setMap($scope.map_tips); //last added directionDisplay
+                    directionsDisplay[directionsDisplay.length - 1].setDirections(route);
+                }
             });
         }, function (errorObject) {
             console.log("Trip:: Read trip routes from Firebase failed: " + errorObject.code);
@@ -996,11 +999,10 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         firebase_ref_readTips.on("value", function (snapshot) {
             $scope.messages = [];
             snapshot.forEach(function (childSnapshot) {
-                //var key = childSnapshot.key();
-                var childData = childSnapshot.val(); // childData = location and message and time
+                var key = childSnapshot.key();
+                var childData = childSnapshot.val();
+                childData.key = key;
                 console.log("Read Tips from Firebase to show on map: " + childData);
-
-                //$scope.messages.unshift(childData['message']);
                 $scope.messages.unshift(childData);
             });
             //$scope.$apply();
@@ -1008,6 +1010,21 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             console.log("Read Tips from Firebase failed: " + errorObject.code);
         });
 
+
+        //delete tip from list
+        $scope.remove_tip = function (tip) {
+            var firebase_ref_readTips_remove = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/messages');
+            firebase_ref_readTips_remove.child(tip.key).remove();
+
+            //remove from list
+           /* for(var i = 0 ; i < $scope.messages.length ; i++){
+                if($scope.messages.key == tip.key){
+                    $scope.messages.splice(i, 1);
+                }
+            }*/
+            $scope.$apply();
+
+        }
         //Add new tip
         $scope.addMessage = function () {
             // add a new note to firebase
