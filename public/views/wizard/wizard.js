@@ -501,11 +501,11 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         });
 
         var drawingManager = new google.maps.drawing.DrawingManager({
-            drawingMode: null,
+            drawingMode: google.maps.drawing.OverlayType.MARKER,
             drawingControl: true,
             drawingControlOptions: {
                 position: google.maps.ControlPosition.RIGHT_TOP,
-                drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
+                drawingModes: ['marker'] //, 'circle', 'polygon', 'polyline', 'rectangle']
             },
             markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'}
         });

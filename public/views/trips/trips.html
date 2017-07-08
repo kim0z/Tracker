@@ -392,7 +392,7 @@
                 <div class="card-header" ng-style="{'background-image':'url( {{ chunk.cover }} )'}" ng-click="showActualMap(chunk.id)">
                     <div class="card-header-mask">
                         <div class="card-header-date" ng-style="{'background-image':'url( {{ chunk.picture }} )'}">
-                            <div class="card-header-date-day">12</div>
+                            <div class="card-header-date-day">{{chunk.days}}</div>
                             <div class="card-header-date-month">Days</div>
                         </div>
                     </div>
@@ -406,9 +406,10 @@
                         </p>
                     </div>
                     <p class="card-body-description" ng-click="showActualMap(chunk.id)">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                        {{ chunk.description }}
+                        <!-- Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                         Molestias autem aliquid, recusandae maiores iste fuga,
-                        explicabo dolor vitae magnam!
+                        explicabo dolor vitae magnam! -->
                     </p>
                     <div class="card-body-footer">
                         <i class="icon icon-time"></i> 6min. read

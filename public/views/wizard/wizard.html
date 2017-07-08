@@ -369,7 +369,7 @@
 
         <wz-step wz-title="Trip Places and Routes">
 
-            <h1>Places</h1>
+            <h1 style="font-weight:400" >Places</h1>
 
             <div class="container">
                 <!-- Places -->
@@ -392,9 +392,9 @@
                                         <img ng-src="{{place.picture.data.url}}" class="md-avatar"/>
 
                                         <div class="md-list-item-text" layout="column">
-                                            <h3>{{ place.name}}</h3>
+                                            <h3>{{place.name}}</h3>
                                             <!--  <h4>{{ place.formatted_address }} </h4> -->
-                                            <h4>Check-Ins: {{ place.checkins }} </h4>
+                                            <h4>Check-Ins: {{place.checkins}} </h4>
                                             <p>
                                                 <!--<a ng-href="{{place.url}}" target="_blank">Read more...</a>-->
                                                 <a ng-href="{{place.link}}" target="_blank">Read more...</a>
@@ -425,6 +425,9 @@
                                     <md-switch class="md-primary" ng-model="routes_settings.enable_routes_map" aria-label="Enable/Disable Routes" ng-change="routesOnMap(routes_settings.enable_routes_map)">
                                         Routes
                                     </md-switch>
+                                    <md-button class="md-raised" ng-show="add_new_route_flag" ng-click="new_route_separator()">
+                                        New Route
+                                    </md-button>
                                 </div>
                             </md-toolbar>
                             <md-content>
@@ -433,9 +436,10 @@
                                     <md-list-item class="md-1-line" ng-repeat="route in routes_list track by $index"
                                                   ng-click="" ng-show="routes_settings.enable_routes_map">
                                         <!-- <img ng-src="" class="md-avatar"/> route icon -->
+                                        <img ng-src="assets/icons/ic_traffic_black_24dp_1x.png" class="md-avatar"/>
                                         <div class="md-list-item-text" layout="column">
-                                            <h3>Summary: {{route.routes[0].summary}}</h3>
-                                            <h4>Key:{{route.firebase_key}} </h4>
+                                            <h4 style="font-weight:normal">Summary: {{route.routes[0].summary}}</h4>
+                                            <h5 style="font-weight:normal">Key:{{route.firebase_key}} </h5>
                                         </div>
                                         <md-button class="md-icon-button" aria-label="Delete"
                                                    ng-click="removeRoute(route)">
@@ -443,15 +447,6 @@
                                         </md-button>
                                         <md-divider></md-divider>
                                     </md-list-item>
-
-                                    <!-- New Route Button -->
-                                    <md-list-item class="md-1-line" ng-show="add_new_route_flag" ng-click="new_route_separator()">
-                                        <md-button>
-                                            <h4>New Route</h4>
-                                        </md-button>
-                                        <md-divider></md-divider>
-                                    </md-list-item>
-
                                 </md-list>
                             </md-content>
                         </div>

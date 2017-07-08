@@ -112,6 +112,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     $scope.dateEnd = $filter('date')($scope.trip[0].end_date, 'MMM d, y');
 
                     //Date to be used for slider, helps to add days on top of start day
+                    //Date to be used for slider, helps to add days on top of start day
                     $scope.startDateSlider = new Date($scope.trip[0].start_date);
                     $scope.startDateSliderForPath = new Date($scope.trip[0].start_date);
 
@@ -542,7 +543,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             zIndex: 1
                         }
                     });
-                    drawingManager.setMap($scope.map);
+                    //drawingManager.setMap($scope.map);
 
                     // Create the search box and link it to the UI element.
                     //var input = document.getElementById('pac-input');
@@ -1476,19 +1477,22 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                                 snapshot.forEach(function (childSnapshot) {
                                     console.log('Trip:: Reading new route from firebase under /map/routes');
-                                    var route = JSON.parse(childSnapshot.val());
 
-                                    //For the list in right side
-                                    route.firebase_key = childSnapshot.key();
-                                    //console.log(route);
-                                    $scope.routes_list.unshift(route);
+                                    if(!childSnapshot.val().hasOwnProperty("separator")){ //ignore separator object
+                                        var route = JSON.parse(childSnapshot.val());
+                                        //For the list in right side
+                                        route.firebase_key = childSnapshot.key();
+                                        //console.log(route);
+                                        $scope.routes_list.unshift(route);
 
-                                    //for map
-                                    directionsDisplay.push(new google.maps.DirectionsRenderer({
-                                        preserveViewport: false
-                                    }));
-                                    directionsDisplay[directionsDisplay.length - 1].setMap($scope.map); //last added directionDisplay
-                                    directionsDisplay[directionsDisplay.length - 1].setDirections(route);
+                                        //for map
+                                        directionsDisplay.push(new google.maps.DirectionsRenderer({
+                                            preserveViewport: false
+                                        }));
+                                        directionsDisplay[directionsDisplay.length - 1].setMap($scope.map); //last added directionDisplay
+                                        directionsDisplay[directionsDisplay.length - 1].setDirections(route);
+                                    }
+
                                 });
                                 $scope.$apply();
                             }, function (errorObject) {

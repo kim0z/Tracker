@@ -328,13 +328,15 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
         //create JSON list of trips in the Client
         for (var i = 0; i < $scope.trips.length; i++) {
 
-
-
             var continent = '';
             if ($scope.trips[i].continent != null) {
                 continent = $scope.trips[i].continent[0];
                 //console.log(continent);
             }
+
+            var time_diff = Math.abs(new Date($scope.trips[i].end_date) - new Date($scope.trips[i].start_date));
+            var trip_days = Math.ceil(time_diff / (1000 * 3600 * 24));
+
             var jsonTrip = {
                 id: $scope.trips[i].id,
                 title: $scope.trips[i].trip_name,
@@ -348,7 +350,8 @@ trackerApp.controller('tripsCtrl', function ($scope, $rootScope, $location, $anc
                 picture: $scope.trips[i].picture,
                 //cover:  getCoverPhoto($scope.trips[i].facebook_id, $scope.trips[i].id)
                 //http://tracker.photos.s3-website-us-west-2.amazonaws.com/400x400/102211533498839/417/cover
-                cover: 'http://tracker.photos.s3-website-us-west-2.amazonaws.com/370x235/'+ $scope.trips[i].facebook_id +'/'+ $scope.trips[i].id +'/cover'
+                cover: 'http://tracker.photos.s3-website-us-west-2.amazonaws.com/370x235/'+ $scope.trips[i].facebook_id +'/'+ $scope.trips[i].id +'/cover',
+                days: trip_days
                 //cover: 'http://tracker.photos.s3-website-us-west-2.amazonaws.com/370x235/102211533498839/417/cover'
             };
 
