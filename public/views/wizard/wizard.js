@@ -337,6 +337,10 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             }
         });
 
+
+        //Flags
+        $scope.add_new_route_flag = false;
+
         //Prepare Google API nearbySearch
         var _gmapService = new google.maps.places.PlacesService($scope.map);
 
@@ -374,9 +378,26 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             var route = JSON.parse(snapshot.val()); //JSON.parse(childSnapshot);
             route.firebase_key = snapshot.key();
             $scope.routes_list.unshift(route);
+
+            //enable New Rout button after the user already have at least 1 route added
+            if($scope.routes_list.length > 0){
+                $scope.add_new_route_flag = true;
+            }
+
+            $scope.$apply();
         }, function (errorObject) {
             console.log("Trip:: Read trip routes from Firebase failed: " + errorObject.code);
         });
+
+        $scope.new_route_separator = function () {
+            //Separator between routs to allow routes to be disconnected
+            var firebase_drawing_markers_routes_separator = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/routes');
+            console.log('new route separator added to firebase under /map/routes');
+            firebase_drawing_markers_routes_separator.push({separator: true}); //this will help in drawing mode
+
+            //also add to markers to help in recognize in this view
+            $scope.markers.push({separator: true});
+        }
 
         //remove route from Firebase and route list
         $scope.removeRoute = function (route) {
@@ -580,13 +601,17 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                 position: {lat: marker.position.lat(), lng: marker.position.lng()}
             });
 
-            //draw the marker directlly (no need to read again all items from firebase)
+            //draw the marker directly (no need to read again all items from firebase)
             marker.set("id", "New marker");
             $scope.markers.push(marker);
 
             //get route
-            if ($scope.markers.length > 1) { // wait to the second point to get thr route
-                calculateAndDisplayRoute(directionsService, directionsDisplay, $scope.markers[$scope.markers.length - 2].position, $scope.markers[$scope.markers.length - 1].position);
+            //check if new route required, new route means: first route in map Or the user choose to disconnect route
+            //if ($scope.markers.length > 1) { // wait to the second point to get thr route
+            if($scope.markers.length > 1){
+                if(!$scope.markers[$scope.markers.length - 2].hasOwnProperty("separator")){
+                    calculateAndDisplayRoute(directionsService, directionsDisplay, $scope.markers[$scope.markers.length - 2].position, $scope.markers[$scope.markers.length - 1].position);
+                }
             }
 
             //////////////// Facebook API get places around ///////////////////////
