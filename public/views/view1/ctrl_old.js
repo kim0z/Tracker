@@ -1,4 +1,3 @@
-'use strict';
 
 var app = angular.module('myApp.view1', ['ngRoute','uiGmapgoogle-maps','angularNumberPicker','720kb.datepicker'])
 

@@ -685,9 +685,11 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                 });
             }
             /////////////////// Google places API End ///////////////////////////////////
-
+            $scope.places_settings = {};
+            $scope.places_settings.facebook_distance = 500;
+            $scope.places_settings.facebook_limit = 5;
             //get places around
-            getPlacesByFacebook(marker.position.lat(), marker.position.lng(), 500, 10);
+            getPlacesByFacebook(marker.position.lat(), marker.position.lng(), $scope.places_settings.facebook_distance, $scope.places_settings.facebook_limit);
             //getPlacesByGoogle(); //enable to allow Google places to work
 
             //$scope.$apply();

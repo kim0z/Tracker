@@ -404,7 +404,6 @@
                                                    ng-click="removePlace(place.firebase_key)">
                                             <img src="assets/icons/ic_delete_forever_black_24dp_1x.png"></img>
                                         </md-button>
-
                                         <md-divider></md-divider>
                                     </md-list-item>
                                 </md-list>
@@ -413,6 +412,24 @@
                     </div>
                 </div>
                 <div class="map-center-places">
+                    <div class="form-group" style="width: 200px; display: flex">
+                        <label for="distance_select_settings">Distance</label>
+                        <select class="form-control" id="distance_select_settings" ng-model="places_settings.facebook_distance" style="width: 50px">
+                            <option>100</option>
+                            <option>200</option>
+                            <option>300</option>
+                            <option>400</option>
+                            <option selected>500</option>
+                        </select>
+                        <label for="limit_select_settings">Limit</label>
+                        <select class="form-control" id="limit_select_settings" ng-model="places_settings.facebook_limit" style="width: 50px">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option selected>5</option>
+                        </select>
+                    </div>
                     <iframe id="iframe_drawing" style="width: 100%; height: 100%">
                         <!-- Map -->
                     </iframe>
