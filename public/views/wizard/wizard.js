@@ -1056,12 +1056,40 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
     // ************************** Start expense view *********************************
     $scope.startExpense = function () {
 
+        $scope.expense = {};
+        $scope.expense.type = ['Select Expense Type','Flight','Hotel', 'Car', 'Meal', 'Medical', 'Taxi', 'Attractions'];
+        $scope.expense.currency = ['USD', 'Euro', 'GBP'];
+
+        $scope.user = {};
+        $scope.user.type = $scope.expense.type[0];
+        $scope.user.currency = $scope.expense.currency[0];
+        $scope.user.cost = 0;
+
+
+
         //trip days
         var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
         var firstDate = new Date($scope.trip.dateStart);
         var secondDate = new Date($scope.trip.dateEnd);
 
         $scope.tripDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
+
+
+        $scope.addExpense = function () {
+
+            if($scope.user.type != '' && $scope.user.currency != '' && $scope.user.cost != ''){
+                var firebase_expense = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/expense');
+                var expense = {type: $scope.user.type, currency: $scope.user.currency, cost: $scope.user.cost};
+                firebase_expense.push(expense);
+                console.log('New expense saved in Firebase');
+
+                $scope.user.type = '';
+                $scope.user.currency = '';
+                $scope.user.cost = 0;
+
+            }
+        
+        };
 
 
         $scope.getDateAfter = function (days) {

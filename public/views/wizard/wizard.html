@@ -225,11 +225,13 @@
         border-radius: 50%;
     }
 
+
+
 </style>
 
 <div id="tripDetailsSection" style="margin-right: 150px; margin-left: 150px">
 
-    <wizard on-finish="finishedWizard()">
+    <wizard on-finish="finishedWizard()" indicators-position='top'>
 
         <wz-step wz-title="Trip details">
             <div style="margin-right: 400px; margin-left: 400px">
@@ -612,7 +614,7 @@
                             </datepicker>
                         </div>
                         <div>
-                            <button type="button" class="btn btn-success" style="width: 100%" ng-click="addMessage()">add</button>
+                            <button type="button" class="btn btn-success" style="width: 100%" ng-click="addMessage()">Add Tip</button>
                         </div>
                     </div>
                 </div>
@@ -627,64 +629,40 @@
             <h1>Expense</h1>
 
 
-            <table ng-table="usersTable" class="table table-striped"
-                   style="text-align: center; overflow:scroll; height:200px; width: 1000px" border="0">
-                <tr>
-                    <td>Date</td>
-                    <td ng-repeat="i in getNumber(tripDays) track by $index">{{getDateAfter($index + 1) | date:
-                        'longDate'}}
-                    </td>
-                </tr>
 
-                <tr>
-                    <td>Day</td>
-                    <td ng-repeat="i in getNumber(tripDays) track by $index">{{$index + 1}}</td>
-                </tr>
 
-                <tr>
-                    <td>City</td>
-                    <td ng-repeat="i in getNumber(tripDays) track by $index">
-                        <input>
-                    </td>
-                </tr>
 
-                <tr>
-                    <td>Flight</td>
-                    <td ng-repeat="i in getNumber(tripDays) track by $index">
-                        <input>
-                    </td>
-                </tr>
+<div style="width: 400px; margin-bottom: 350px" >
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Type</label>
+            <md-select ng-model="user.type">
+              <md-option ng-repeat="type in expense.type" value="{{type}}">
+                {{type}}
+              </md-option>
+            </md-select>
+          </md-input-container>
 
-                <tr>
-                    <td>Hotel</td>
-                    <td ng-repeat="i in getNumber(tripDays) track by $index">
-                        <input>
-                    </td>
-                </tr>
+            <md-input-container class="md-block" flex-gt-sm>
+            <label>Currency</label>
+            <md-select ng-model="user.currency">
+              <md-option ng-repeat="currency in expense.currency" value="{{currency}}">
+                {{currency}}
+              </md-option>
+            </md-select>
+          </md-input-container>
 
-                <tr>
-                    <td>Car</td>
-                    <td ng-repeat="i in getNumber(tripDays) track by $index">
-                        <input>
-                    </td>
-                </tr>
-                </tr>
+        <md-input-container class="md-block" flex-gt-sm>
+            <label>Cost</label>
+            <input ng-model="user.cost" required type="number" min="0" max="999999">
+          </md-input-container>
+           
 
-                <tr>
-                    <td>Action1</td>
-                    <td ng-repeat="i in getNumber(tripDays) track by $index">
-                        <input>
-                    </td>
-                </tr>
+    <div>
+                <button type="button" class="btn btn-success" style="width: 100%" ng-click="addExpense()">Add Expense</button>
+            </div>
 
-                <tr>
-                    <td>Expense</td>
-                    <td ng-repeat="i in getNumber(tripDays) track by $index">
-                        <input>
-                    </td>
-                </tr>
-            </table>
 
+    </div>
 
             <input type="submit" wz-next value="Finish" class="btn btn-success" ng-click="finishWizard()"/>
             <input type="submit" value="Cancel" class="btn btn-danger" ng-click="showConfirm($event)"/>
