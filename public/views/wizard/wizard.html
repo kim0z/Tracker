@@ -414,24 +414,38 @@
                     </div>
                 </div>
                 <div class="map-center-places">
-                    <div class="form-group" style="width: 200px; display: flex">
-                        <label for="distance_select_settings">Distance</label>
-                        <select class="form-control" id="distance_select_settings" ng-model="places_settings.facebook_distance" style="width: 50px">
-                            <option>100</option>
-                            <option>200</option>
-                            <option>300</option>
-                            <option>400</option>
-                            <option selected>500</option>
-                        </select>
-                        <label for="limit_select_settings">Limit</label>
-                        <select class="form-control" id="limit_select_settings" ng-model="places_settings.facebook_limit" style="width: 50px">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option selected>5</option>
-                        </select>
+                   <!-- <div class="form-group" style="width: 200px; display: flex">
+
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Distance</label>
+                            <md-select ng-model="places_settings.facebook_distance">
+                                <md-option>
+                                    <md-option value="100">100</md-option>
+                                    <md-option value="200">200</md-option>
+                                    <md-option value="300">300</md-option>
+                                    <md-option value="400">400</md-option>
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Limit</label>
+                            <md-select ng-model="places_settings.facebook_limit">
+                                <md-option>
+                                    <md-option value="1">1</md-option>
+                                    <md-option value="2">2</md-option>
+                                    <md-option value="3">3</md-option>
+                                    <md-option value="4">4</md-option>
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <div>
+                        <button type="button" class="btn btn-success" style="width: 100%" ng-click="changedValue()">Update settings</button>
                     </div>
+
+
+
+                </div>-->
                     <iframe id="iframe_drawing" style="width: 100%; height: 100%">
                         <!-- Map -->
                     </iframe>
@@ -632,7 +646,7 @@
 
 
 
-<div style="width: 400px; margin-bottom: 350px" >
+<div style="width: 200px; margin-bottom: 50px" >
           <md-input-container class="md-block" flex-gt-sm>
             <label>Type</label>
             <md-select ng-model="user.type">
@@ -655,7 +669,7 @@
             <label>Cost</label>
             <input ng-model="user.cost" required type="number" min="0" max="999999">
           </md-input-container>
-           
+
 
     <div>
                 <button type="button" class="btn btn-success" style="width: 100%" ng-click="addExpense()">Add Expense</button>
@@ -663,6 +677,33 @@
 
 
     </div>
+
+
+            <!-- List of expense items -->
+
+
+                <md-content class="md-padding" layout-xs="column" layout="row">
+
+
+                    <div flex-xs flex-gt-xs="50" layout="row" style="margin-bottom: 200px">
+                        <md-card md-theme="default" md-theme-watch ng-repeat="expense_item in list_expense">
+                            <md-card-title>
+                                <md-card-title-text layout="column" >
+                                    <span class="md-headline">{{expense_item.cost}} {{expense_item.currency}}</span>
+                                    <span class="md-subhead">{{expense_item.type}}</span>
+                                </md-card-title-text>
+                                <md-card-title-media>
+                                    <div class="md-media-sm card-media"></div>
+                                </md-card-title-media>
+                            </md-card-title>
+                            <md-card-actions layout="row" layout-align="end center">
+                                <md-button class="md-warn" ng-click="removeExpense(expense_item.firebase_key)">Delete</md-button>
+                            </md-card-actions>
+                        </md-card>
+                    </div>
+                </md-content>
+
+
 
             <input type="submit" wz-next value="Finish" class="btn btn-success" ng-click="finishWizard()"/>
             <input type="submit" value="Cancel" class="btn btn-danger" ng-click="showConfirm($event)"/>

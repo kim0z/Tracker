@@ -15,6 +15,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.tips_button = false;
         $scope.places_button = false;
         $scope.routes_button = true;
+        $scope.expense_button = false;
         //Right panel, switches
         $scope.tips_items_flag = true;
         $scope.places_items_flag = true;
@@ -1545,6 +1546,18 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         }
                     }, function (errorObject) {
                         console.log("The read failed (Trip meta data): " + errorObject.code);
+                    });
+
+
+                // ################### Handle Expense ##########################
+                    $scope.expense_list = [];
+                    var firebase_expense_load = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/expense');
+                    firebase_expense_load.once("value", function (snapshot) {
+                            snapshot.forEach(function (childSnapshot) {
+                                var expense_item = childSnapshot.val();
+                                expense_item.firebase_key = childSnapshot.key();
+                                $scope.expense_list.push(expense_item);
+                            })
                     });
 
 ///////////////////////////////////////////////////////////////////////////////////////

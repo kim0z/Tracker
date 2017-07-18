@@ -359,13 +359,16 @@
                 <md-toolbar layout="row" class="md-hue-3" style="position: fixed;">
                     <div class="md-toolbar-tools">
                         <md-button class="md-raised"
-                                   ng-click="tips_button = false; places_button = true; routes_button = false">Places
+                                   ng-click="tips_button = false; places_button = true; routes_button = false"; expense_button = false">Places
                         </md-button>
                         <md-button class="md-raised"
-                                   ng-click="tips_button = false; places_button = false; routes_button = true">Routes
+                                   ng-click="tips_button = false; places_button = false; routes_button = true; expense_button = false">Routes
                         </md-button>
                         <md-button class="md-raised"
-                                   ng-click="tips_button = true; places_button = false; routes_button = false">Tips
+                                   ng-click="tips_button = true; places_button = false; routes_button = false; expense_button = false">Tips
+                        </md-button>
+                        <md-button class="md-raised"
+                                   ng-click="tips_button = false; places_button = false; routes_button = false; expense_button = true">Expense
                         </md-button>
                     </div>
                 </md-toolbar>
@@ -456,6 +459,36 @@
                                 <p>
                                     <!--<a ng-href="{{place.url}}" target="_blank">Read more...</a>-->
                                     <a ng-href="{{place.link}}" target="_blank">Read more...</a>
+                                </p>
+                            </div>
+                            <md-divider></md-divider>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+
+                <!-- Expense content -->
+                <md-content style="top: 60px" ng-show="expense_button">
+                    <md-list flex>
+                        <!--
+                        <div style="height: 40px;">
+
+                            <md-switch class="md-primary" style="position: fixed;  z-index: 1"
+                                       ng-model="places_items_flag" aria-label="Enable/Disable Routes"
+                                       ng-change="placesOnMap(places_items_flag)">
+                                Places
+                            </md-switch>
+                        </div>
+                        -->
+                        <md-list-item class="md-3-line" ng-repeat="expense in expense_list"
+                                      ng-click="" ng-show="expense_button">
+                            <!--<img ng-src="{{place.icon}}" class="md-avatar"/>-->
+                            <img ng-src="assets/icons/ic_attach_money_black_24dp_1x.png" class="md-avatar"/>
+
+                            <div class="md-list-item-text" layout="column">
+                                <h3>{{expense.cost}} {{expense.currency}}</h3>
+                                <h4>Type: {{expense.type}} </h4>
+                                <p>
+                                    <!--<a ng-href="{{place.url}}" target="_blank">Read more...</a>-->
                                 </p>
                             </div>
                             <md-divider></md-divider>

@@ -686,8 +686,13 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             }
             /////////////////// Google places API End ///////////////////////////////////
             $scope.places_settings = {};
-            $scope.places_settings.facebook_distance = 500;
+            $scope.places_settings.facebook_distance = 300;
             $scope.places_settings.facebook_limit = 5;
+
+            $scope.$watch('places_settings', function() {
+                alert($scope.places_settings.facebook_distance);
+            });
+
             //get places around
             getPlacesByFacebook(marker.position.lat(), marker.position.lng(), $scope.places_settings.facebook_distance, $scope.places_settings.facebook_limit);
             //getPlacesByGoogle(); //enable to allow Google places to work
@@ -1056,6 +1061,8 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
     // ************************** Start expense view *********************************
     $scope.startExpense = function () {
 
+
+
         $scope.expense = {};
         $scope.expense.type = ['Select Expense Type','Flight','Hotel', 'Car', 'Meal', 'Medical', 'Taxi', 'Attractions'];
         $scope.expense.currency = ['USD', 'Euro', 'GBP'];
@@ -1067,6 +1074,30 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
 
 
+        //Load expense
+        var firebase_expense_load = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/expense');
+        var firebase_expense_remove = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/expense');
+        //firebase_drawing_markers_routes.push(JSON.stringify(response));
+
+        $scope.list_expense = [];
+
+        firebase_expense_load.on("child_added", function (snapshot) {
+                var expense_item = snapshot.val();
+                expense_item.firebase_key = snapshot.key();
+                $scope.list_expense.push(expense_item);
+        });
+
+        $scope.removeExpense = function (key) {
+            firebase_expense_remove.child(key).remove();
+            for (var i = 0; i < $scope.list_expense.length; i++) {
+                if ($scope.list_expense[i].firebase_key == key) {
+                    $scope.list_expense.splice(i, 1);
+                    console.log('Wizard:: Remove expense item');
+                    break;
+                }
+            }
+        }
+
         //trip days
         var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
         var firstDate = new Date($scope.trip.dateStart);
@@ -1076,7 +1107,6 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
 
         $scope.addExpense = function () {
-
             if($scope.user.type != '' && $scope.user.currency != '' && $scope.user.cost != ''){
                 var firebase_expense = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/expense');
                 var expense = {type: $scope.user.type, currency: $scope.user.currency, cost: $scope.user.cost};
@@ -1088,13 +1118,10 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                 $scope.user.cost = 0;
 
             }
-        
         };
 
 
         $scope.getDateAfter = function (days) {
-
-
             //convert date to object to allow me do action on it like increase the date in the table
             //var startDate = date;
             var dateInNumberFormat = new Date(firstDate).getTime();
@@ -1114,7 +1141,6 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             var year = new Date(dateInNumberFormat + anotherDay).getUTCFullYear();
             var nextDate = month + '/' + day + '/' + year;
             return nextDate;
-
         }
 
         $scope.getNumber = function (num) {
