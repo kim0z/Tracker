@@ -689,10 +689,6 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             $scope.places_settings.facebook_distance = 300;
             $scope.places_settings.facebook_limit = 5;
 
-            $scope.$watch('places_settings', function() {
-                alert($scope.places_settings.facebook_distance);
-            });
-
             //get places around
             getPlacesByFacebook(marker.position.lat(), marker.position.lng(), $scope.places_settings.facebook_distance, $scope.places_settings.facebook_limit);
             //getPlacesByGoogle(); //enable to allow Google places to work
