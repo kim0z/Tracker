@@ -5,6 +5,14 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
     console.log('wizard started with trip id: ', $stateParams);
 
+    //Load countries JSON
+    $.getJSON("assets/countries/countries.json", function(json) {
+        //$scope.currency_list = json; // this will show the info it in firebug console
+        $scope.trip.countries = json;
+    });
+
+
+
     $scope.profile = localStorageService.get('profile');
     $scope.facebookId = $scope.profile.identities[0].user_id;
 
@@ -238,15 +246,17 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         var fileChooser = document.getElementById('coverPhotoInput')
         var file_cover = fileChooser.files[0];
 
-        var params = {
-            Key: $scope.facebookId + '/' + $scope.trip.id + '/cover',
-            ContentType: file_cover.type,
-            Body: file_cover
-        };
+        if(file_cover){
+            var params = {
+                Key: $scope.facebookId + '/' + $scope.trip.id + '/cover',
+                ContentType: file_cover.type,
+                Body: file_cover
+            };
 
-        bucket.upload(params, function (err, data) {
-            console.log(err ? 'ERROR!' : 'Cover photo UPLOADED.');
-        });
+            bucket.upload(params, function (err, data) {
+                console.log(err ? 'ERROR!' : 'Cover photo UPLOADED.');
+            });
+        }
     };
 
     // ************************** Upload *******************************
@@ -854,6 +864,8 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
     // *************************** Trip tips on map **************************
     $scope.startMapTips = function () {
 
+        var tips_on_map = [];
+
         //Map configuration
         var iframe = document.getElementById('iframe_tips');
         iframe.contentWindow.document.open();
@@ -1025,9 +1037,18 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                     $scope.messages.splice(i, 1);
                 }
             }*/
+
+            //remove from map
+            for(var i = 0; i < tips_on_map.length ; i++){
+                if(tips_on_map[i].firebase_key == tip.key){
+                    tips_on_map[i].close();
+                }
+            }
+
             $scope.$apply();
 
         }
+
         //Add new tip
         $scope.addMessage = function () {
             // add a new note to firebase
@@ -1036,14 +1057,34 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             var firebase_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/messages');
 
             var location = {coords: {latitude: $scope.message.lat, longitude: $scope.message.lng}};
+            var markerLatLng = {lat: $scope.message.lat, lng: $scope.message.lng};
+
             message_json = {
                 location: location,
                 time: $scope.message.time,
                 email: '',
                 message: {tip: $scope.message.text, invite: '', risk: '', price: ''}
             };
+            var ref_firebase_tip = firebase_tips.push(message_json);
 
-            firebase_tips.push(message_json);
+            //show on map
+            var marker_message = new google.maps.Marker({
+                position: markerLatLng,
+                map: $scope.map_tips,
+                title: null
+            });
+
+            var infowindow_message = new google.maps.InfoWindow({
+                content: $scope.message.text
+            });
+
+            infowindow_message.firebase_key = ref_firebase_tip.name();
+
+            infowindow_message.open($scope.map_tips, marker_message);
+
+            tips_on_map.push(infowindow_message);
+
+
             console.log('New Tip saved in Firebase');
 
             $scope.message.lat = '';
@@ -1056,16 +1097,20 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
     // ************************** Start expense view *********************************
     $scope.startExpense = function () {
-
-
+        $scope.currency_list = {};
+        $.getJSON("assets/currency/Common-Currency.json", function(json) {
+            //$scope.currency_list = json; // this will show the info it in firebug console
+            $scope.expense.currency = json;
+            $scope.user.currency = "USD";
+        });
 
         $scope.expense = {};
         $scope.expense.type = ['Select Expense Type','Flight','Hotel', 'Car', 'Meal', 'Medical', 'Taxi', 'Attractions'];
-        $scope.expense.currency = ['USD', 'Euro', 'GBP'];
+        //$scope.expense.currency = $scope.currency_list;
 
         $scope.user = {};
         $scope.user.type = $scope.expense.type[0];
-        $scope.user.currency = $scope.expense.currency[0];
+
         $scope.user.cost = 0;
 
 
