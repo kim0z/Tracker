@@ -6,12 +6,12 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
     console.log('wizard started with trip id: ', $stateParams);
 
     //Load countries JSON
+    $scope.drop_down_list_filter_settings = {enableSearch: true, scrollableHeight: '400px', scrollable: true, externalIdProp : ''}
+    $scope.selected_countries = []
     $.getJSON("assets/countries/countries.json", function(json) {
         //$scope.currency_list = json; // this will show the info it in firebug console
         $scope.trip.countries = json;
     });
-
-
 
     $scope.profile = localStorageService.get('profile');
     $scope.facebookId = $scope.profile.identities[0].user_id;
@@ -227,7 +227,8 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             profile_picture: $scope.profile.picture,
             facebook_id: $scope.facebookId,
             trip_type: $scope.trip.type,
-            options: {trip_public: $scope.trip.public}
+            options: {trip_public: $scope.trip.public},
+            cities: $scope.selected_countries
         };
 
         //updateMapCenter($scope.trip.continents);

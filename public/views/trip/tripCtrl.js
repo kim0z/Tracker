@@ -68,8 +68,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.selectedFacebookAlbum = [];
         $scope.facebookAlbumsList = []; //Facebook albums from Firebase
         $scope.pathHash = [];
-        $scope.trip_created_manually = ''
-
+        $scope.trip_created_manually = true;
 
         $scope.columns = [
             {title: 'Name', field: 'name', visible: true, filter: {'name': 'text'}},
@@ -108,7 +107,18 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     $scope.trip = results.data;
                     $scope.tripName = $scope.trip[0].trip_name;
                     $scope.tripDescription = $scope.trip[0].trip_description;
+                    $scope.cities = $scope.trip[0].cities;
 
+                    $scope.citites_list = '';
+                if($scope.cities){
+                    for(var index = 0 ; index < $scope.cities.length ; index++){
+                        if(index == 0){
+                            $scope.citites_list = $scope.cities[index].label;
+                        }else{
+                            $scope.citites_list = $scope.citites_list+' , ' + $scope.cities[index].label;
+                        }
+                    }
+                }
                     $scope.dateStart = $filter('date')($scope.trip[0].start_date, 'MMM d, y');
                     $scope.dateEnd = $filter('date')($scope.trip[0].end_date, 'MMM d, y');
 
@@ -1669,13 +1679,18 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     console.log('Wizard:: Firebase:: Reading trip meta data - Trip created manually?');
                     firebase_update_manually.once("value", function (snapshot) {
                         console.log('Trip:: Trip meta data:');
+                        console.log('Trip:: Trip was created manually ::')
                         console.log(snapshot.val());
-                        $scope.trip_created_manually = snapshot.val();
+                        if(snapshot.val() == true){
+                            $scope.trip_created_manually = true;
+                        }else{
+                            $scope.trip_created_manually = false;
+                        }
 
                         $scope.nearbyPlaces = [];
                         $scope.nearbyPlacesReady = true;
                         $scope.routes_list = [];
-                        if ($scope.trip_created_manually) { //mmanually trip was uploaded
+                        if ($scope.trip_created_manually) { //manually trip was uploaded
 
 
                             // ******* load places from firebase ******

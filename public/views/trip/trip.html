@@ -99,7 +99,7 @@
 
 
         <!-- Filter by day -->
-        <div class="md-padding" ng-cloak style="position: absolute; top: 70px; background: white; margin: 5px">
+        <div class="md-padding" ng-cloak style="position: absolute; top: 70px; background: white; margin: 5px" ng-show="!trip_created_manually">
             <div>
                 <h1 class="md-title">Pick an day</h1>
                 <div layout="row">
@@ -117,13 +117,15 @@
             </div>
         </div>
 
-        <!-- Drawing panel -->
+        <!-- Drawing panel -- disable for Auto trip and manual trip -->
+        <div ng-show="false">
         <md-button ng-show="!drawing_panel" class="md-fab md-primary" aria-label="Drawing panel"
                    style="position: absolute; top: 30%"
                    ng-click="openDrawingPanel()">
             <image src="assets/icons/ic_format_paint_white_48dp_1x.png"
                    style="color: greenyellow; margin-left: -2px"></image>
         </md-button>
+        </div>
 
         <!-- Information panel -->
         <md-button ng-show="!information_panel" class="md-fab md-primary" aria-label="Information panel"
@@ -132,7 +134,7 @@
         </md-button>
 
         <!-- Play path -->
-        <md-button ng-show="!drawing_panel" class="md-fab md-primary" aria-label="Play path"
+        <md-button ng-show="!drawing_panel && !trip_created_manually" class="md-fab md-primary" aria-label="Play path"
                    style="position: absolute; top: 40%;"
                    ng-click="runPathAnimation()">
             <image ng-src={{animate_button_icon}}
@@ -504,6 +506,6 @@
     <footer class="navbar navbar-default navbar-fixed-bottom"
             style="background-color: #1E1E1E; width: 100%; margin-right: 0px; right: 0px">
         <div class="container">
-            <span class="text-muted" style="font-size: 18px; text-align: left; font-style: inherit">Trip name: {{tripName}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Description: {{tripDescription}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Date: {{dateStart}} - {{dateEnd}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Continent: {{continent}}</span>
+            <span class="text-muted" style="font-size: 18px; text-align: left; font-style: inherit">Trip name: {{tripName}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Description: {{tripDescription}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Date: {{dateStart}} - {{dateEnd}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Continent: {{continent}} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Cities: {{citites_list}}</span>
         </div>
     </footer>
