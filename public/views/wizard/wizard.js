@@ -348,7 +348,6 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             }
         });
 
-
         //Flags
         $scope.add_new_route_flag = false;
 
