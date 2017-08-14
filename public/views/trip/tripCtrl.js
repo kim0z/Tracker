@@ -1665,15 +1665,19 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     var add_place_on_map = function (place) {
 
                           // InfoWindow content
-                    var content = '<div id="iw-container">' +
-                            '<div class="iw-title">Porcelain Factory of Vista Alegre</div>' +
-                            '<div class="iw-content">' +
-                            '<div class="iw-subTitle">History</div>' +
-                            '<img src='+place.picture.data.url+' alt="Porcelain Factory of Vista Alegre" height="115" width="83">' +
-                            '<p>Founded, having become "the first example of free enterprise" in Portugal.</p>' +
-                            '</div>' +
-                            '<div class="iw-bottom-gradient"></div>' +
-                            '</div>';
+                    var content = '<table style="width: 100%;">' +
+                                    '<tr>'+
+                                        '<td class="block">' +
+                                            '<img src='+place.picture.data.url+' height="50" width="50">' +
+                                        '</td>' +
+                                        '<td class="block" >'+place.name+'</td>' +
+                                        '<td class="block">| Checkins: '+place.checkins+'</td>' +
+                                    '</tr>' +
+                                    '</table>' +
+                                    '<div>' +
+                                        '<a href='+place.link+' target="_blank">'+place.link+'</a>'
+                                    '</div>'
+
 
                         //Show on map by adding marker with info
                         var marker_place = new google.maps.Marker({
