@@ -1379,6 +1379,11 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             return true;
                         }
                     }
+
+                    $scope.pathLoaded = true;
+
+                    if (!$scope.trip_created_manually) { // load path from server only when the path was created by APP
+
                     //Get Path in hash table from server
                     var data = {userId: $scope.facebookId, tripId: $scope.tripID, tripDays: $scope.tripDays};
                     dataBaseService.getTripPathHash(data).then(function (results) {
@@ -1426,6 +1431,10 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         //});
 
                     });
+
+
+                    }
+                  
 
 
                     ///////// **** Maps Trip Path Helper function ****** /////////
@@ -1654,6 +1663,18 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                 //help function
                     var add_place_on_map = function (place) {
+
+                          // InfoWindow content
+                    var content = '<div id="iw-container">' +
+                            '<div class="iw-title">Porcelain Factory of Vista Alegre</div>' +
+                            '<div class="iw-content">' +
+                            '<div class="iw-subTitle">History</div>' +
+                            '<img src='+place.picture.data.url+' alt="Porcelain Factory of Vista Alegre" height="115" width="83">' +
+                            '<p>Founded, having become "the first example of free enterprise" in Portugal.</p>' +
+                            '</div>' +
+                            '<div class="iw-bottom-gradient"></div>' +
+                            '</div>';
+
                         //Show on map by adding marker with info
                         var marker_place = new google.maps.Marker({
                             position: place.location,
@@ -1662,7 +1683,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         });
 
                         var infowindow_message = new google.maps.InfoWindow({
-                            content: place.name
+                            content: content // place.name
                         });
 
                         infowindow_message.open($scope.map, marker_place);
