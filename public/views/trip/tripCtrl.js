@@ -1684,7 +1684,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             position: new google.maps.LatLng (place.location.latitude, place.location.longitude),
                             map: $scope.map,
                             title: null,
-                            icon: null //'assets/icons/google-place-optimization-32.png'
+                            icon: 'assets/icons/google-place-optimization-32.png'
                         });
 
                         var infowindow_message = new google.maps.InfoWindow({
