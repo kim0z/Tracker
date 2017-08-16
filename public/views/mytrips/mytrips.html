@@ -154,7 +154,7 @@
                                             {{chunk.content.quotes.length}} more details
                                         </md-button>
                                         <md-button
-                                                ng-click="edit_mode = !edit_mode; editTrip(chunk.id);$event.stopPropagation();" ng-disabled="true">
+                                                ng-click="edit_mode = !edit_mode; startWizard(chunk.id, true);$event.stopPropagation();" ng-disabled="false">
                                             Edit Trip Plan
                                         </md-button>
                                         <md-button

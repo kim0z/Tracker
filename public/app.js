@@ -53,7 +53,7 @@ var trackerApp = angular.module('myApp', [
                 controller: 'welcomeCtrl'
             })
             .state('wizard', {
-                url: "/wizard",
+                url: "/wizard/:id/:edit",
                 templateUrl: "views/wizard/wizard.html",
                 controller: 'wizard',
                 params: {

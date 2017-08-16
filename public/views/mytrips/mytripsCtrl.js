@@ -14,18 +14,24 @@ trackerApp.controller('myTripsCtrl', function ($scope,$rootScope, $http, $window
     ];
 
     //Create new trip using wizard
-    $scope.startWizard = function () {
-        //create new empty trup, in this phase the id returned as a result
-        dataBaseService.createNewTripRecord().then(function (results) {
-            //$scope.message = data; //handle data back from server - not needed meanwhile
-            console.log('Client:: myTrips:: Fun:: openTripPlanPage :: new empty trip record created with id:: ' + results.data);
-            messages.saveTripID(results.data);
-            //ngDialog.open( {template: 'views/mytrips/newTrip.html', controller: 'newTripCtrl', scope: $scope,showClose: false,closeByDocument: false, closeByEscape: false,  width: 800, height: 800});
+    $scope.startWizard = function (tripId, edit_mode) {
 
-            $state.go('wizard', {tripId: results.data});
-        })
+        if(edit_mode){ //Edit exists trip
+            console.log('Client:: myTrips :: Edit trip by Wizard:: ' + tripId);
+            $state.go('wizard', {id: tripId, edit: 'Edit'});
+            //$state.go('#/wizard/'+tripId+'/'+true, '_self', false);
+        }else{ // New trip
+            //create new empty trup, in this phase the id returned as a result
+            dataBaseService.createNewTripRecord().then(function (results) {
+                //$scope.message = data; //handle data back from server - not needed meanwhile
+                console.log('Client:: myTrips :: new empty trip record created with id:: ' + results.data);
+                messages.saveTripID(results.data);
+                //ngDialog.open( {template: 'views/mytrips/newTrip.html', controller: 'newTripCtrl', scope: $scope,showClose: false,closeByDocument: false, closeByEscape: false,  width: 800, height: 800});
 
-
+                $state.go('wizard', {id: results.data, edit: 'New'});
+                //('#/wizard/'+results.data+'/'+false, '_self', false);
+            })
+        }
     }
 /*
     $scope.clickToOpen = function () {

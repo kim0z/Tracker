@@ -5,10 +5,18 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
     console.log('wizard started with trip id: ', $stateParams);
 
+    var edit_mode = $stateParams.edit;
+    var tripId = $stateParams.id;
+
     //Load countries JSON
-    $scope.drop_down_list_filter_settings = {enableSearch: true, scrollableHeight: '400px', scrollable: true, externalIdProp : ''}
+    $scope.drop_down_list_filter_settings = {
+        enableSearch: true,
+        scrollableHeight: '400px',
+        scrollable: true,
+        externalIdProp: ''
+    }
     $scope.selected_countries = []
-    $.getJSON("assets/countries/countries.json", function(json) {
+    $.getJSON("assets/countries/countries.json", function (json) {
         //$scope.currency_list = json; // this will show the info it in firebug console
         $scope.trip.countries = json;
     });
@@ -18,10 +26,10 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
     $scope.userAccessToken = localStorageService.get('providerToken');
 
-    if (!$stateParams.tripId || !$scope.facebookId) { //if no trip Id or user id then return back to My Trips page (I should understand when this happened?)
+    if (!tripId || !$scope.facebookId) { //if no trip Id or user id then return back to My Trips page (I should understand when this happened?)
         console.log('Wizard:: exit because user id or trip id = null');
         console.log('user id:' + $scope.facebookId);
-        console.log('trip id:' + $stateParams.tripId);
+        console.log('trip id:' + tripId);
         $state.go('mytrips');
     }
 
@@ -35,7 +43,8 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             if (toState.url == '/trip/:id') { //when user click finish and move to Trip page
                 //do nothing
             } else {
-                if ($location.path() != '/wizard') {
+                console.log($location.path().substring(0, 7));
+                if ($location.path().substring(0, 7) != '/wizard') {
                     event.preventDefault();
                     $scope.showConfirm(toState);
                 }
@@ -46,7 +55,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
     $scope.files = {};
 
     $scope.trip = {
-        id: $stateParams.tripId,
+        id: tripId,
         name: '',
         dateStart: '',
         dateEnd: '',
@@ -76,7 +85,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
     $scope.finishWizard = function () {
         //$state.go('mytrips');
-        window.open('#/trip/' + $stateParams.tripId, '_self', false);
+        window.open('#/trip/' + tripId, '_self', false);
     }
 
 
@@ -105,19 +114,16 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
         //delete trip details and assets
         if ($scope.trip.id == '') {
-            console.log('error:: Client:: New Trip Dialog:: Cancel trip creation, no trip id');
+            console.log('error:: Cancel trip creation, no trip id');
         } else {
 
-            var dataTripId = {trip_id: $scope.trip.id};
-            dataBaseService.deleteTripById(dataTripId).then(function (results) {
-
-                console.log('Client:: Wizard:: Cancel trip creation :: Delete trip id:: ' + $scope.trip.id);
-
+            if (edit_mode == 'Edit') {
+                // Cancel without delete trip
                 //if the Cancel was by click cancel button then go to My Trips page
                 if (toState != null) {
                     if (toState.hasOwnProperty('url')) {
                         $state.go(toState);
-                    }else{
+                    } else {
                         $state.go('mytrips');
                     }
                 }
@@ -125,42 +131,63 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                     $state.go('mytrips');
                 }
 
-                //if user clicked on any other pages then go to the toState after alert to the user about it
-            })
+            } else {
+                //Cancel and delete trip
 
-            function emptyBucket(callback) {
-                //photos S3
-                var params = {
-                    // Bucket: 'tracker.photos',
-                    Prefix: $scope.facebookId + '/' + $scope.trip.id + '/'
+                var dataTripId = {trip_id: $scope.trip.id};
+                dataBaseService.deleteTripById(dataTripId).then(function (results) {
+
+                    console.log('Client:: Wizard:: Cancel trip creation :: Delete trip id:: ' + $scope.trip.id);
+
+                    //if the Cancel was by click cancel button then go to My Trips page
+                    if (toState != null) {
+                        if (toState.hasOwnProperty('url')) {
+                            $state.go(toState);
+                        } else {
+                            $state.go('mytrips');
+                        }
+                    }
+                    else {
+                        $state.go('mytrips');
+                    }
+
+                    //if user clicked on any other pages then go to the toState after alert to the user about it
+                })
+
+                function emptyBucket(callback) {
+                    //photos S3
+                    var params = {
+                        // Bucket: 'tracker.photos',
+                        Prefix: $scope.facebookId + '/' + $scope.trip.id + '/'
+                    }
+
+                    bucket.listObjects(params, function (err, data) {
+                        if (err) return callback(err);
+
+                        if (data.Contents.length == 0) return;
+
+                        params = {Bucket: 'tracker.photos'};
+                        params.Delete = {Objects: []};
+
+                        data.Contents.forEach(function (content) {
+                            params.Delete.Objects.push({Key: content.Key});
+                        });
+
+                        bucket.deleteObjects(params, function (err, data) {
+                            if (err) return callback(err);
+                            if (data.Deleted.length > 0)emptyBucket(callback);
+                            else callback();
+                        });
+                    });
                 }
 
-                bucket.listObjects(params, function (err, data) {
-                    if (err) return callback(err);
+                emptyBucket();
 
-                    if (data.Contents.length == 0) return;
-
-                    params = {Bucket: 'tracker.photos'};
-                    params.Delete = {Objects: []};
-
-                    data.Contents.forEach(function (content) {
-                        params.Delete.Objects.push({Key: content.Key});
-                    });
-
-                    bucket.deleteObjects(params, function (err, data) {
-                        if (err) return callback(err);
-                        if (data.Deleted.length > 0)emptyBucket(callback);
-                        else callback();
-                    });
-                });
+                //tips and paths
+                //Delete Firebase
+                var firebase_trip_assets = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id);
+                firebase_trip_assets.remove();
             }
-
-            emptyBucket();
-
-            //tips and paths
-            //Delete Firebase
-            var firebase_trip_assets = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id);
-            firebase_trip_assets.remove();
         }
     }
     //watch any change in input fields of details form, then check if all fields are not empty to enable Next button
@@ -176,6 +203,33 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
     }, true);
 
     // ************************** Trip details *************************
+
+
+    //if Edit mode is enabled then load trip details into the right fields
+    if (edit_mode == 'Edit') {
+        //load trip from PG
+        console.log('*EDIT TRIP MODE*')
+        dataBaseService.getTripById({trip_id: tripId}).then(function (results) {
+            console.log('Wizard:: Trip details::Get trip by id for Edit mode')
+            console.log(results.data[0]);
+
+                $scope.profile.email = results.data[0].email;
+                $scope.trip.id = results.data[0].id;
+                $scope.trip.name = results.data[0].trip_name;
+                $scope.trip.description = results.data[0].trip_description;
+                $scope.trip.dateStart = new Date(results.data[0].start_date);
+                $scope.trip.dateEnd = new Date(results.data[0].end_date);
+                $scope.trip.continents = results.data[0].continent[0];
+                $scope.profile.picture = results.data[0].picture;
+                $scope.facebookId = results.data[0].facebook_id;
+                $scope.trip.type = results.data[0].trip_type;
+                $scope.trip.public = results.data[0].public;
+                $scope.selected_countries = results.data[0].cities;
+
+
+        });
+    }
+
     $scope.addTrip = function () {
 
         var continents_lat_lng = {
@@ -247,7 +301,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         var fileChooser = document.getElementById('coverPhotoInput')
         var file_cover = fileChooser.files[0];
 
-        if(file_cover){
+        if (file_cover) {
             var params = {
                 Key: $scope.facebookId + '/' + $scope.trip.id + '/cover',
                 ContentType: file_cover.type,
@@ -390,7 +444,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             $scope.routes_list.unshift(route);
 
             //enable New Rout button after the user already have at least 1 route added
-            if($scope.routes_list.length > 0){
+            if ($scope.routes_list.length > 0) {
                 $scope.add_new_route_flag = true;
             }
 
@@ -431,21 +485,21 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             $scope.markers.splice($scope.markers.length - 1, 1);
 
             //remove first flag if it is the last one after delete routes
-            if($scope.markers.length > 0){ //last flaf after delete
+            if ($scope.markers.length > 0) { //last flaf after delete
                 $scope.markers[$scope.markers.length - 1].setMap(null);
                 $scope.markers.splice($scope.markers.length - 1, 1);
             }
         }
 
-        $scope.routes_settings = { enable_routes_map: true };
+        $scope.routes_settings = {enable_routes_map: true};
 
-        $scope.routesOnMap = function(flag) {
-            if(flag){ //if true then show routes on map
-                for( var i = 0 ; i < directionsDisplay.length ; i++){
+        $scope.routesOnMap = function (flag) {
+            if (flag) { //if true then show routes on map
+                for (var i = 0; i < directionsDisplay.length; i++) {
                     directionsDisplay[i].setMap($scope.map);
                 }
-            }else{ //if false then disable routen pn map
-                for( var i = 0 ; i < directionsDisplay.length ; i++){
+            } else { //if false then disable routen pn map
+                for (var i = 0; i < directionsDisplay.length; i++) {
                     directionsDisplay[i].setMap(null);
                 }
             }
@@ -618,8 +672,8 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             //get route
             //check if new route required, new route means: first route in map Or the user choose to disconnect route
             //if ($scope.markers.length > 1) { // wait to the second point to get thr route
-            if($scope.markers.length > 1){
-                if(!$scope.markers[$scope.markers.length - 2].hasOwnProperty("separator")){
+            if ($scope.markers.length > 1) {
+                if (!$scope.markers[$scope.markers.length - 2].hasOwnProperty("separator")) {
                     calculateAndDisplayRoute(directionsService, directionsDisplay, $scope.markers[$scope.markers.length - 2].position, $scope.markers[$scope.markers.length - 1].position);
                 }
             }
@@ -995,7 +1049,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             var directionsDisplay = []; //var directionsDisplay = new google.maps.DirectionsRenderer;
 
             snapshot.forEach(function (childSnapshot) {
-                if(!childSnapshot.val().hasOwnProperty("separator")){
+                if (!childSnapshot.val().hasOwnProperty("separator")) {
                     console.log('Wizrad:: Tips sections :: Reading new route from firebase under /map/routes');
                     var route = JSON.parse(childSnapshot.val()); //JSON.parse(childSnapshot);
                     //console.log(route);
@@ -1032,15 +1086,15 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             firebase_ref_readTips_remove.child(tip.key).remove();
 
             //remove from list
-           /* for(var i = 0 ; i < $scope.messages.length ; i++){
-                if($scope.messages.key == tip.key){
-                    $scope.messages.splice(i, 1);
-                }
-            }*/
+            /* for(var i = 0 ; i < $scope.messages.length ; i++){
+             if($scope.messages.key == tip.key){
+             $scope.messages.splice(i, 1);
+             }
+             }*/
 
             //remove from map
-            for(var i = 0; i < tips_on_map.length ; i++){
-                if(tips_on_map[i].firebase_key == tip.key){
+            for (var i = 0; i < tips_on_map.length; i++) {
+                if (tips_on_map[i].firebase_key == tip.key) {
                     tips_on_map[i].close();
                 }
             }
@@ -1098,21 +1152,20 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
     // ************************** Start expense view *********************************
     $scope.startExpense = function () {
         $scope.currency_list = {};
-        $.getJSON("assets/currency/Common-Currency.json", function(json) {
+        $.getJSON("assets/currency/Common-Currency.json", function (json) {
             //$scope.currency_list = json; // this will show the info it in firebug console
             $scope.expense.currency = json;
             $scope.user.currency = "USD";
         });
 
         $scope.expense = {};
-        $scope.expense.type = ['Select Expense Type','Flight','Hotel', 'Car', 'Meal', 'Medical', 'Taxi', 'Attractions'];
+        $scope.expense.type = ['Select Expense Type', 'Flight', 'Hotel', 'Car', 'Meal', 'Medical', 'Taxi', 'Attractions'];
         //$scope.expense.currency = $scope.currency_list;
 
         $scope.user = {};
         $scope.user.type = $scope.expense.type[0];
 
         $scope.user.cost = 0;
-
 
 
         //Load expense
@@ -1123,9 +1176,9 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         $scope.list_expense = [];
 
         firebase_expense_load.on("child_added", function (snapshot) {
-                var expense_item = snapshot.val();
-                expense_item.firebase_key = snapshot.key();
-                $scope.list_expense.push(expense_item);
+            var expense_item = snapshot.val();
+            expense_item.firebase_key = snapshot.key();
+            $scope.list_expense.push(expense_item);
         });
 
         $scope.removeExpense = function (key) {
@@ -1148,7 +1201,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
 
         $scope.addExpense = function () {
-            if($scope.user.type != '' && $scope.user.currency != '' && $scope.user.cost != ''){
+            if ($scope.user.type != '' && $scope.user.currency != '' && $scope.user.cost != '') {
                 var firebase_expense = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/expense');
                 var expense = {type: $scope.user.type, currency: $scope.user.currency, cost: $scope.user.cost};
                 firebase_expense.push(expense);
