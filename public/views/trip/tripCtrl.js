@@ -1681,9 +1681,10 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                         //Show on map by adding marker with info
                         var marker_place = new google.maps.Marker({
-                            position: place.location,
+                            position: new google.maps.LatLng (place.location.latitude, place.location.longitude),
                             map: $scope.map,
-                            title: null
+                            title: null,
+                            icon: null //'assets/icons/google-place-optimization-32.png'
                         });
 
                         var infowindow_message = new google.maps.InfoWindow({
