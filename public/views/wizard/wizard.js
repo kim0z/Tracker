@@ -376,8 +376,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         iframe.contentWindow.document.close();
 
         //Map configuration
-        var directionsService = new google.maps.DirectionsService;
-        var directionsDisplay = []; //var directionsDisplay = new google.maps.DirectionsRenderer;
+    
 
         var mapContainer = iframe.contentWindow.document.querySelector('#map_drawing');
 
@@ -408,6 +407,13 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         //Prepare Google API nearbySearch
         var _gmapService = new google.maps.places.PlacesService($scope.map);
 
+
+
+// ******************** Routes **********************
+	$scope.routes_list = [];
+	var directionsService = new google.maps.DirectionsService;
+	var directionsDisplay = []; //var directionsDisplay = new google.maps.DirectionsRenderer;
+
         function calculateAndDisplayRoute(directionsService, directionsDisplay, from, to) {
             directionsService.route({
                 origin: from,
@@ -425,7 +431,16 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                     //save to Firebase under places (Manually added places - it's different from recorded path)
                     var firebase_drawing_markers_routes = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/routes');
                     console.log('new route added to firebase under /map/routes');
-                    firebase_drawing_markers_routes.push(JSON.stringify(response));
+                    var firebase_key = firebase_drawing_markers_routes.push(JSON.stringify(response)).key();
+
+                    var route = response;
+                    route.firebase_key = firebase_key;
+            		$scope.routes_list.unshift(route);
+
+            		 //enable New Rout button after the user already have at least 1 route added
+             		if ($scope.routes_list.length > 0) {
+                 		$scope.add_new_route_flag = true;
+             		}
 
                 } else {
                     window.alert('Directions request failed due to ' + status);
@@ -433,25 +448,62 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             });
         }
 
-        // ******************** Load routes when new route added and manage it in array to Delete later if needed **********************
+
+// ******************** Load routes - Edit mode **********************
         //Read places from Firebase (Manually added places - it's different from recorded path)
-        var firebase_routes_for_route_list = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/routes');
-        $scope.routes_list = [];
-        firebase_routes_for_route_list.on("child_added", function (snapshot) {
-            console.log('Wizrad:: Tips sections :: Reading new route from firebase under /map/routes');
-            var route = JSON.parse(snapshot.val()); //JSON.parse(childSnapshot);
-            route.firebase_key = snapshot.key();
-            $scope.routes_list.unshift(route);
+        var firebase_routes_for_tips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/routes');
+        //firebase_drawing_markers_routes.push(JSON.stringify(response));
 
-            //enable New Rout button after the user already have at least 1 route added
-            if ($scope.routes_list.length > 0) {
-                $scope.add_new_route_flag = true;
-            }
+        firebase_routes_for_tips.once("value", function (snapshot) {
+            //create direction Service and Display
+            var directionsService = new google.maps.DirectionsService;
+             //var directionsDisplay = new google.maps.DirectionsRenderer;
 
-            $scope.$apply();
+            snapshot.forEach(function (childSnapshot) {
+                if (!childSnapshot.val().hasOwnProperty("separator")) {
+                    console.log('Wizrad:: Tips sections :: Reading new route from firebase under /map/routes');
+                    var route = JSON.parse(childSnapshot.val()); //JSON.parse(childSnapshot);
+                    //console.log(route);
+                    directionsDisplay.push(new google.maps.DirectionsRenderer);
+                    directionsDisplay[directionsDisplay.length - 1].setMap($scope.map); //last added directionDisplay
+                    directionsDisplay[directionsDisplay.length - 1].setDirections(route);
+
+                    //add to route list to be manages later, for delete
+            		route.firebase_key = childSnapshot.key();
+                    $scope.routes_list.unshift(route);
+
+                    //enable New Rout button after the user already have at least 1 route added
+             		if ($scope.routes_list.length > 0) {
+                 		$scope.add_new_route_flag = true;
+             		}
+
+                }
+            });
         }, function (errorObject) {
             console.log("Trip:: Read trip routes from Firebase failed: " + errorObject.code);
         });
+
+
+        // ******************** Load routes when new route added and manage it in array to Delete later if needed **********************
+        //Read places from Firebase (Manually added places - it's different from recorded path)
+        // var firebase_routes_for_route_list = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/map/routes');
+        
+        // firebase_routes_for_route_list.on("child_added", function (snapshot) {
+        //     console.log('Wizrad:: Tips sections :: Reading new route from firebase under /map/routes');
+        //     var route = JSON.parse(snapshot.val()); //JSON.parse(childSnapshot);
+        //     route.firebase_key = snapshot.key();
+        //     $scope.routes_list.unshift(route);
+
+
+        //     //enable New Rout button after the user already have at least 1 route added
+        //     if ($scope.routes_list.length > 0) {
+        //         $scope.add_new_route_flag = true;
+        //     }
+
+        //     $scope.$apply();
+        // }, function (errorObject) {
+        //     console.log("Trip:: Read trip routes from Firebase failed: " + errorObject.code);
+        // });
 
         $scope.new_route_separator = function () {
             //Separator between routs to allow routes to be disconnected
@@ -471,9 +523,11 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             console.log('Wizard:: Places: Routes: Route removed from Firebase');
 
             //remove route from List
-            $scope.routes_list.splice($scope.routes_list.length - 1, 1);
-            console.log('Wizard:: Places: Routes: Route removed from list');
-
+            if($scope.routes_list.length > 0){
+            	$scope.routes_list.splice(0, 1);
+            	console.log('Wizard:: Places: Routes: Route removed from list');
+            }
+           
             //remove route from Map
             directionsDisplay[directionsDisplay.length - 1].setMap(null);
             directionsDisplay.splice(directionsDisplay.length - 1, 1);
@@ -1074,7 +1128,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                 console.log("Read Tips from Firebase to show on map: " + childData);
                 $scope.messages.unshift(childData);
             });
-            //$scope.$apply();
+            $scope.$apply();
         }, function (errorObject) {
             console.log("Read Tips from Firebase failed: " + errorObject.code);
         });
