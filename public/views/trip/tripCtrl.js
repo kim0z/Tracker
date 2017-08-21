@@ -1716,26 +1716,28 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         $scope.nearbyPlaces = [];
                         $scope.nearbyPlacesReady = true;
                         $scope.routes_list = [];
+
+                        // ******* load places from firebase ****** Places saved the same if Automatic trip or Manually created
+                        $scope.nearbyPlacesReady = true;
+
+                        var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/places');
+                        firebase_places.once("value", function (snapshot) {
+                            snapshot.forEach(function (childSnapshot) {
+
+                                var place = JSON.parse(childSnapshot.val());
+                                $scope.nearbyPlaces.push(place);
+
+                                //add place on map
+                                add_place_on_map(place);
+
+                            });
+                        }, function (errorObject) {
+                            console.log("Read Places from Firebase failed: " + errorObject.code);
+                        });
                         if ($scope.trip_created_manually) { //manually trip was uploaded
 
 
-                            // ******* load places from firebase ******
-                            $scope.nearbyPlacesReady = true;
 
-                            var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/places');
-                            firebase_places.once("value", function (snapshot) {
-                                snapshot.forEach(function (childSnapshot) {
-
-                                    var place = JSON.parse(childSnapshot.val());
-                                    $scope.nearbyPlaces.push(place);
-
-                                    //add place on map
-                                    add_place_on_map(place);
-
-                                });
-                            }, function (errorObject) {
-                                console.log("Read Places from Firebase failed: " + errorObject.code);
-                            });
 
                             //***** ########### Handle Routes ############### ************
                             //Read Routes from Firebase (Manually added places - it's different from recorded path) - Put on Map

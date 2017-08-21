@@ -150,14 +150,14 @@
                                     <p>{{ chunk.description }}</p>
 
                                     <div ng-if="chunk.content && chunk.content.type === 'QUOTE'">
-                                        <md-button ng-click="show_quotes = !show_quotes; $event.stopPropagation();">Show
+                                        <md-button ng-show="false" ng-ng-click="show_quotes = !show_quotes; $event.stopPropagation();">Show
                                             {{chunk.content.quotes.length}} more details
                                         </md-button>
                                         <md-button
                                                 ng-click="edit_mode = !edit_mode; startWizard(chunk.id, true);$event.stopPropagation();" ng-disabled="false">
-                                            Edit Trip Plan
+                                            Edit Trip
                                         </md-button>
-                                        <md-button
+                                        <md-button ng-show="false"
                                                 ng-click="edit_mode = !edit_mode; showActualMap(chunk.id);$event.stopPropagation();" ng-disabled="true">
                                             Show Actual Map
                                         </md-button>

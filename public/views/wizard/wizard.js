@@ -225,8 +225,6 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                 $scope.trip.type = results.data[0].trip_type;
                 $scope.trip.public = results.data[0].public;
                 $scope.selected_countries = results.data[0].cities;
-
-
         });
     }
 
