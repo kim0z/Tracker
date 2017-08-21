@@ -1782,6 +1782,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             //$scope.loadNearByPlaces($scope.trip_path_hash);
 
                             // ****** Facebook places *********
+                            /*
                             nearbyPlacesFacebook.runNerarbyPlaces($scope.trip_path_hash);
                             $scope.$on('facebook-places-ready', function (event, args) {
 
@@ -1801,7 +1802,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                     }
                                 }
                             });
-
+                            */
 
                             // ********* Create routes from recorded path *****************
                             // each day is a route in this case
