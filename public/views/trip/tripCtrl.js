@@ -1382,58 +1382,63 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                     $scope.pathLoaded = true;
 
-                    if (!$scope.trip_created_manually) { // load path from server only when the path was created by APP
+                //try to load path from server that was recrded by app even if it is empty
+                    //if (!$scope.trip_created_manually) { // load path from server only when the path was created by APP
 
                     //Get Path in hash table from server
+
+                    //***************** Load path from server **********************
+
+
                     var data = {userId: $scope.facebookId, tripId: $scope.tripID, tripDays: $scope.tripDays};
                     dataBaseService.getTripPathHash(data).then(function (results) {
                         $scope.trip_path_hash = results.data;
+                        
+                        if($scope.trip_path_hash){ // if not empty then draw path
+                            //create polyline for each day
+                            var lineSymbol = {
+                                //path: 'M 0,-1 0,1',
+                                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                                strokeOpacity: 1,
+                                scale: 2,
+                            };
 
+                            $scope.polys_per_day = new Array($scope.trip_path_hash.length);
+                            for (var poly_index = 0; poly_index < $scope.trip_path_hash.length; poly_index++) {
+                                //Hash table for all users path
+                                $scope.polys_per_day[poly_index] = new google.maps.Polyline({
+                                    map: $scope.map,
+                                    path: $scope.trip_path_hash[poly_index],
+                                    geodesic: true,
+                                    //strokeColor: '#000000', //getRandomColor(), #E38C2D
+                                    strokeColor: '#000000',
+                                    strokeOpacity: 0,
+                                    strokeWeight: 2,
+                                    icons: [{
+                                        icon: lineSymbol,
+                                        offset: '0',
+                                        repeat: '20px'
+                                    }]
+                                });
+                            }
+                            console.log($scope.polys_per_day);
+                            $scope.polys_per_day_temp = $scope.polys_per_day; // to be used as backup when filter
+                            $scope.pathLoaded = true;
+                            if ($scope.polys_per_day.length > 0) {
+                                $scope.map.setCenter($scope.trip_path_hash[0].pop());
+                            }
+                            $scope.map.setZoom(7);
 
-                        //create polyline for each day
-                        var lineSymbol = {
-                            //path: 'M 0,-1 0,1',
-                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                            strokeOpacity: 1,
-                            scale: 2,
-                        };
-
-                        $scope.polys_per_day = new Array($scope.trip_path_hash.length);
-                        for (var poly_index = 0; poly_index < $scope.trip_path_hash.length; poly_index++) {
-                            //Hash table for all users path
-                            $scope.polys_per_day[poly_index] = new google.maps.Polyline({
-                                map: $scope.map,
-                                path: $scope.trip_path_hash[poly_index],
-                                geodesic: true,
-                                //strokeColor: '#000000', //getRandomColor(), #E38C2D
-                                strokeColor: '#000000',
-                                strokeOpacity: 0,
-                                strokeWeight: 2,
-                                icons: [{
-                                    icon: lineSymbol,
-                                    offset: '0',
-                                    repeat: '20px'
-                                }]
-                            });
+                            //Get places for the current path
+                            //$scope.loadNearByPlaces($scope.trip_path_hash);
+                            //Get Places
+                            //dataBaseService.getTripPlaces({path: $scope.trip_path_hash}).then(function (results) {
+                            //});
                         }
-                        console.log($scope.polys_per_day);
-                        $scope.polys_per_day_temp = $scope.polys_per_day; // to be used as backup when filter
-                        $scope.pathLoaded = true;
-                        if ($scope.polys_per_day.length > 0) {
-                            $scope.map.setCenter($scope.trip_path_hash[0].pop());
-                        }
-                        $scope.map.setZoom(7);
-
-                        //Get places for the current path
-                        //$scope.loadNearByPlaces($scope.trip_path_hash);
-                        //Get Places
-                        //dataBaseService.getTripPlaces({path: $scope.trip_path_hash}).then(function (results) {
-                        //});
-
                     });
+//***************** End load path from server **********************
 
-
-                    }
+                    //}
                   
 
 
