@@ -1393,7 +1393,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     var data = {userId: $scope.facebookId, tripId: $scope.tripID, tripDays: $scope.tripDays};
                     dataBaseService.getTripPathHash(data).then(function (results) {
                         $scope.trip_path_hash = results.data;
-                        
+
                         if($scope.trip_path_hash){ // if not empty then draw path
                             //create polyline for each day
                             var lineSymbol = {
