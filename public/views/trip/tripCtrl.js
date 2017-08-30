@@ -1728,13 +1728,12 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/places');
                         firebase_places.once("value", function (snapshot) {
                             snapshot.forEach(function (childSnapshot) {
-
-                                var place = JSON.parse(childSnapshot.val());
-                                $scope.nearbyPlaces.push(place);
-
-                                //add place on map
-                                add_place_on_map(place);
-
+                                if(childSnapshot != ''){
+                                    var place = JSON.parse(childSnapshot.val());
+                                    $scope.nearbyPlaces.push(place);
+                                    //add place on map
+                                    add_place_on_map(place);
+                                }
                             });
                         }, function (errorObject) {
                             console.log("Read Places from Firebase failed: " + errorObject.code);
