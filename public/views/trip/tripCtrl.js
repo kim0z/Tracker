@@ -1728,7 +1728,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         var firebase_places = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.tripID + '/map/places');
                         firebase_places.once("value", function (snapshot) {
                             snapshot.forEach(function (childSnapshot) {
-                                if(childSnapshot != ''){
+                                if(childSnapshot.val() != ''){
                                     var place = JSON.parse(childSnapshot.val());
                                     $scope.nearbyPlaces.push(place);
                                     //add place on map
