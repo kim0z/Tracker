@@ -704,7 +704,7 @@ app.post('/getPublicTrips', function (request, response) {
         }
         //var email = "'" + request.body.email + "'";
         // SQL Query > Select Data
-        var query = client.query("SELECT * FROM trips WHERE public = true ORDER BY id ASC  ;");
+        var query = client.query("SELECT * FROM trips WHERE public = true ORDER BY id DESC;");
 
         console.log(query);
         // Stream results back one row at a time
