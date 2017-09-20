@@ -331,6 +331,10 @@ app.post('/getTripPath', function (request, response) {
             if(i+1 == tripDays){
                 response.send(trip_path_hash);
             }
+            else{
+                console.log('i :' + i);
+                console.log(tripDays);
+            }
         }
         //console.log('HASH');
         //console.log(trip_path_hash);
