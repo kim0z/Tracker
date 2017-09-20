@@ -328,17 +328,10 @@ app.post('/getTripPath', function (request, response) {
                     console.log('Trip path not sliced into hash because of date issue')
                 }
             }
-            if(i+1 == tripDays){
-                response.send(trip_path_hash);
-            }
-            else{
-                console.log('i :' + i);
-                console.log(tripDays);
-            }
         }
         //console.log('HASH');
         //console.log(trip_path_hash);
-
+        response.send(trip_path_hash);
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
     });
