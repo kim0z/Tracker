@@ -1815,7 +1815,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             // each day is a route in this case
                             // simulate route data to keep the same structure for UI route.routes[0].summary
                             $scope.routes_settings = {enable_routes_map: true};
-                            for (var i = 0; i < $scope.trip_path_hash.length; i++) {
+                      /*      for (var i = 0; i < $scope.trip_path_hash.length; i++) {
                                 var routes = new Array(0);
                                 if (i == 0) {
                                     routes[0] = {summary: 'Route - All days', hash_index: i};
@@ -1825,7 +1825,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                 // hash index will be the pointed to the hash table in case user click on route
                                 var route = {routes: routes};
                                 $scope.routes_list.push(route);
-                            }
+                            }*/
                         }
                     }, function (errorObject) {
                         console.log("The read failed (Trip meta data): " + errorObject.code);
