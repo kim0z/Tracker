@@ -27,21 +27,22 @@
         <th>uuid</th>
     </tr>
     <tr ng-repeat="step in path_not_hash">
-        <td>{{ step.activity.type }}</td>
-        <td>{{ step.activity.confidence }}</td>
-        <td>{{ step.battery.is_charging }}</td>
-        <td>{{ step.battery.level }}</td>
-        <td>{{ step.coords.accuracy }}</td>
-        <td>{{ step.coords.altitude }}</td>
-        <td>{{ step.coords.altitudeAccuracy }}</td>
-        <td>{{ step.coords.heading }}</td>
-        <td>{{ step.coords.latitude }}</td>
-        <td>{{ step.coords.longitude }}</td>
-        <td>{{ step.coords.speed }}</td>
-        <td>{{ step.is_heartbeat }}</td>
-        <td>{{ step.is_moving }}</td>
-        <td>{{ step.odometer }}</td>
-        <td>{{ step.timestamp }}</td>
-        <td>{{ step.uuid }}</td>
+        {{step}}
+        <td>{{ step.data.activity.type }}</td>
+        <td>{{ step.data.activity.confidence }}</td>
+        <td>{{ step.data.battery.is_charging }}</td>
+        <td>{{ step.data.battery.level }}</td>
+        <td>{{ step.data.coords.accuracy }}</td>
+        <td>{{ step.data.coords.altitude }}</td>
+        <td>{{ step.data.coords.altitudeAccuracy }}</td>
+        <td>{{ step.data.coords.heading }}</td>
+        <td>{{ step.data.coords.latitude }}</td>
+        <td>{{ step.data.coords.longitude }}</td>
+        <td>{{ step.data.coords.speed }}</td>
+        <td>{{ step.data.is_heartbeat }}</td>
+        <td>{{ step.data.is_moving }}</td>
+        <td>{{ step.data.odometer }}</td>
+        <td>{{ step.data.timestamp }}</td>
+        <td>{{ step.data.uuid }}</td>
     </tr>
 </table>

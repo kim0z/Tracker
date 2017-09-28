@@ -310,12 +310,13 @@ app.post('/getTripPath', function (request, response) {
             for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new cel
                 if (trip_path[j]['timestamp'] && path_firast_date) {
                     if (trip_path[j].timestamp.substring(0, 10) == path_firast_date.substring(0, 10)) {
-                        if (checkAccuracy(trip_path[j], 50)) { //check accuracy
+                        if (checkAccuracy(trip_path[j], 10)) { //check accuracy
                             trip_path_hash[day].push(
                                 {
                                     lat: JSON.parse(trip_path[j]['coords'].latitude),
                                     lng: JSON.parse(trip_path[j]['coords'].longitude),
-                                    timestamp: trip_path[j]['timestamp']
+                                    timestamp: trip_path[j]['timestamp'],
+                                    data: trip_path[j]
                                 }
                             );
                         }
