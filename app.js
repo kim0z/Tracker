@@ -276,7 +276,7 @@ app.post('/getTripPath', function (request, response) {
         var trip_path = [];
         snapshot.forEach(function (item) {
             console.log(item.val().coords.accuracy);
-            if(item.val().coords.accuracy < 100){
+            if(item.val().coords.accuracy < 50){
                 trip_path.push(item.val());
             }
         });
