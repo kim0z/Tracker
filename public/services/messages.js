@@ -5,7 +5,7 @@ trackerApp.service('messages', function ($rootScope) {
     var email='';
     var prevSatate = 'welcome';
     var lastState = '';
-    var steps = []; // for debug
+    var path = []; // for debug
     var trip_loading_progress = 1;
 
     this.saveTripID = function (id) {
@@ -48,15 +48,15 @@ trackerApp.service('messages', function ($rootScope) {
     };
 
     //console
-    this.addSteps = function (allSteps) {
+    this.savePath = function (allSteps) {
         //console.log('Messages service - save all steps (for debugging - console) : ', allSteps);
-        steps = allSteps;
+        path = allSteps;
     };
 
     //console
-    this.getSteps = function () {
+    this.getPath = function () {
         //console.log('Messages service - get steps (for debugging - console) : ', steps);
-        return steps;
+        return path;
     };
 
     //Trip progressbar Set
