@@ -287,6 +287,19 @@ app.post('/getTripPath', function (request, response) {
             return new Date(a.timestamp) - new Date(b.timestamp);
         });
 
+        for (var i = 0; i < trip_path.length; i++) {
+            if (!trip_path[i].hasOwnProperty('timestamp')) {
+                console.log('Has no timestamp:::::::')
+                console.log(trip_path[i]);
+                console.log('******************************')
+            } else if (trip_path[i].timestamp > trip_path[i + 1].timestamp) {
+                console.log('index : ' + i)
+                console.log(trip_path[i].timestamp);
+                console.log(trip_path[i + 1].timestamp);
+                console.log('..........................');
+            }
+        }
+
         //when path sorted, save it into hash table for easy use
         //$scope.trip_path_hash [0] = $scope.trip_path; //day zero is all the trip
         var path_firast_date = '';
