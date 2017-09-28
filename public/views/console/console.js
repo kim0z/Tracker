@@ -8,7 +8,11 @@ trackerApp.controller('console', function ($scope, messages) {
     }
 
     for(var i = 0 ; i < $scope.path_not_hash.length ; i++){
-        console.log($scope.path_not_hash[i].data.coords.accuracy);
+        if($scope.path_not_hash[i].lat > $scope.path_not_hash[i+1].lat || $scope.path_not_hash[i].lng > $scope.path_not_hash[i+1].lng){
+            console.error($scope.path_not_hash[i].lat);
+            console.error($scope.path_not_hash[i].lng);
+            console.log('..........................');
+        }
     }
 });
 
