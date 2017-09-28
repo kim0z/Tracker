@@ -275,7 +275,10 @@ app.post('/getTripPath', function (request, response) {
 
         var trip_path = [];
         snapshot.forEach(function (item) {
-            trip_path.push(item.val());
+            console.log(item.val().coords.accuracy);
+            if(item.val().coords.accuracy < 100){
+                trip_path.push(item.val());
+            }
         });
 
         //console.log(trip_path);
