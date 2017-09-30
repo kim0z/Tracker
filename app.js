@@ -288,6 +288,7 @@ app.post('/getTripPath', function (request, response) {
         });
 
         for (var i = 0; i < trip_path.length; i++) {
+            console.log(trip_path[i]);
             if (!trip_path[i].hasOwnProperty('timestamp')) {
                 console.log('Has no timestamp:::::::')
                 console.log(trip_path[i]);
