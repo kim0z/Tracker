@@ -288,13 +288,14 @@ app.post('/getTripPath', function (request, response) {
         });
 
         for (var i = 0; i < trip_path.length; i++) {
-            if(trip_path[i].timestamp != null){
-                 if (trip_path[i].timestamp > trip_path[i + 1].timestamp) {
-                     console.log('index : ' + i)
-                     console.log(trip_path[i].timestamp);
-                     console.log(trip_path[i + 1].timestamp);
-                     console.log('..........................');
-                 }
+            if(trip_path[i].timestamp != null) {
+                if (trip_path[i].timestamp > trip_path[i + 1].timestamp) {
+                    console.log('index : ' + i)
+                    console.log(trip_path[i].timestamp);
+                    console.log(trip_path[i + 1].timestamp);
+                    console.log('..........................');
+                }
+            }
         }
 
         //when path sorted, save it into hash table for easy use
