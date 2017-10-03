@@ -283,9 +283,9 @@ app.post('/getTripPath', function (request, response) {
         console.log('Trip path length : ' + trip_path.length);
 
         //When path loaded, sort it by timestamp - the path could be sorted by default ????????????
-        trip_path.sort(function (a, b) {
-            return new Date(a.timestamp) - new Date(b.timestamp);
-        });
+        //trip_path.sort(function (a, b) {
+        //    return new Date(a.timestamp) - new Date(b.timestamp);
+        //});
         //when path sorted, save it into hash table for easy use
         //$scope.trip_path_hash [0] = $scope.trip_path; //day zero is all the trip
         var path_firast_date = '';
