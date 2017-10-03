@@ -381,6 +381,15 @@
             <h1 >Places & Routes</h1>
             <h5>auto suggested places, delete if you didn't visit</h5>
 
+
+
+                Place name:<br>
+                <input type="text" ng-model="place_by_user"><br>
+                <br><br>
+                <button ng-click="getPlacesByNameByFacebook(place_by_user)">Find</button>
+
+
+
             <div class="container">
                 <!-- Places -->
                 <div class="left-map-places">

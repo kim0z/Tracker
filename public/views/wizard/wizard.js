@@ -367,6 +367,24 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
     }
     // ***************************** Places - Map drawing tracks *******************************
     $scope.startMapDrawing = function () {
+
+        //Get places name, Facebook API, bring pages around
+        $scope.place_by_user = '';
+        $scope.getPlacesByNameByFacebook = function (page_name) {
+            if (page_name != null) {
+                Facebook.api(
+                    "search?access_token=942317529184852%7CXgVb4d3OEZDe9VM1ilqo-u53-4U&pretty=0&q="+page_name+"&type=place&fields=name,checkins,picture,link,location,rating_count", //APP Token
+                    function (places) {
+                        if (places && !places.error) {
+                            console.log(places);
+                        }
+                    });
+            } else {
+                console.log('Wizard:: Error:: Can not find place by name');
+            }
+        }
+
+
         var iframe = document.getElementById('iframe_drawing');
         iframe.contentWindow.document.open();
         iframe.contentWindow.document.write('<div id="map_drawing" style="width: 100%; height: 100%"></div>');
@@ -752,6 +770,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                     console.log('Wizard:: Error:: lat || lng || distance == null');
                 }
             }
+
             ///////////////////  Facebook Places API END /////////////////////////////
 
             ////////// Google API - Get places around /////////////////
