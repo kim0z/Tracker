@@ -1671,40 +1671,43 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                 };
 
                 //help function
-                    var add_place_on_map = function (place) {
+                  //  var add_place_on_map = function (place) { //deprecated
+                  //  };
 
-                          // InfoWindow content
+                $scope.showPlaceOnMap = function (place) {
+                    console.log(place);
+
+                    // InfoWindow content
                     var content = '<table style="width: 100%;">' +
-                                    '<tr>'+
-                                        '<td class="block">' +
-                                            '<img src='+place.picture.data.url+' height="50" width="50">' +
-                                        '</td>' +
-                                        '<td class="block" >'+place.name+'</td>' +
-                                        '<td class="block">| Checkins: '+place.checkins+'</td>' +
-                                    '</tr>' +
-                                    '</table>' +
-                                    '<div>' +
-                                        '<a href='+place.link+' target="_blank">'+place.link+'</a>'
-                                    '</div>'
+                        '<tr>'+
+                        '<td class="block">' +
+                        '<img src='+place.picture.data.url+' height="50" width="50">' +
+                        '</td>' +
+                        '<td class="block" >'+place.name+'</td>' +
+                        '<td class="block">| Checkins: '+place.checkins+'</td>' +
+                        '</tr>' +
+                        '</table>' +
+                        '<div>' +
+                        '<a href='+place.link+' target="_blank">'+place.link+'</a>'
+                    '</div>'
 
 
-                        //Show on map by adding marker with info
-                        var marker_place = new google.maps.Marker({
-                            position: new google.maps.LatLng (place.location.latitude, place.location.longitude),
-                            map: $scope.map,
-                            title: null,
-                            icon: 'assets/icons/google-place-optimization-32.png'
-                        });
+                    //Show on map by adding marker with info
+                    var marker_place = new google.maps.Marker({
+                        position: new google.maps.LatLng (place.location.latitude, place.location.longitude),
+                        map: $scope.map,
+                        title: null,
+                        icon: 'assets/icons/google-place-optimization-32.png'
+                    });
 
-                        var infowindow_message = new google.maps.InfoWindow({
-                            content: content // place.name
-                        });
+                    var infowindow_message = new google.maps.InfoWindow({
+                        content: content // place.name
+                    });
 
-                        infowindow_message.open($scope.map, marker_place);
-                        //save in array to to handle all places on map
-                        markers_places.push({marker: marker_place, info: infowindow_message});
-                    };
-
+                    infowindow_message.open($scope.map, marker_place);
+                    //save in array to to handle all places on map
+                    markers_places.push({marker: marker_place, info: infowindow_message});
+                }
 
                     //if Trip was created automatic using the APP then load from places
                     //Get if trip was created manually, it means the trip was created manually by users and not using the recorder APP
@@ -1736,7 +1739,18 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                     var place = JSON.parse(childSnapshot.val());
                                     $scope.nearbyPlaces.push(place);
                                     //add place on map
-                                    add_place_on_map(place);
+                                   // add_place_on_map(place);
+
+                                    //add marker without info about the place - else it will be busy
+                                    //let user click on a place then a pop up will be created in the right lat, lng
+                                    //Show on map by adding marker with info
+
+                                    var marker = new google.maps.Marker({
+                                        position: new google.maps.LatLng (place.location.latitude, place.location.longitude),
+                                        map: $scope.map,
+                                        title: null,
+                                        icon: 'assets/icons/google-place-optimization-32.png'
+                                    });
                                 }
                             });
                         }, function (errorObject) {
