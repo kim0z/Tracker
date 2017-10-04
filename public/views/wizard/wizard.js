@@ -376,7 +376,14 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                     "search?access_token=942317529184852%7CXgVb4d3OEZDe9VM1ilqo-u53-4U&pretty=0&q="+page_name+"&type=place&fields=name,checkins,picture,link,location,rating_count", //APP Token
                     function (places) {
                         if (places && !places.error) {
-                            console.log(places);
+                            //console.log(places);
+                            for (var i = 0; i < places.data.length; i++) {
+                                //_detailsPlaces.push(places.data[i]);
+                                //console.log(places.data[i])
+                                var place = places.data[i];
+                                //place.location = {lat: lat, lng: lng};
+                                firebase_places.push(JSON.stringify(place));
+                            }
                         }
                     });
             } else {
