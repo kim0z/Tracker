@@ -1415,9 +1415,13 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                 });
                             }
 
-                            if($scope.trip_path_hash[$scope.trip_path_hash.length / 2][0] != null){
-                                var lat = $scope.trip_path_hash[$scope.trip_path_hash.length / 2][0].lat;
-                                var lng = $scope.trip_path_hash[$scope.trip_path_hash.length / 2][0].lng;
+                            var index = 0;
+                            while ($scope.trip_path_hash[index].length > 0){
+                                index++;
+                            }
+                            if($scope.trip_path_hash[index / 2][0] != null){
+                                var lat = $scope.trip_path_hash[index / 2][0].lat;
+                                var lng = $scope.trip_path_hash[index / 2][0].lng;
                                 $scope.map.panTo(new google.maps.LatLng(lat, lng));
                             }
 
