@@ -509,7 +509,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     $scope.map = new google.maps.Map(mapContainer, {
                         //center: {lat: 34.397, lng: 40.644},
                         center: {lat: 0, lng: 0},
-                        zoom: 10,
+                        zoom: 8,
                         mapTypeControl: true,
                         mapTypeControlOptions: {
                             style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
