@@ -1319,6 +1319,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         $scope.messages = [];
                         snapshot.forEach(function (childSnapshot) {
                             var childData = childSnapshot.val(); // childData = location, message and time
+                            childData.time = Date.parse(childData.time);
 
                             //load to list
                             $scope.messages.unshift(childData);
@@ -1412,6 +1413,12 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                         repeat: '20px'
                                     }]
                                 });
+                            }
+
+                            if($scope.trip_path_hash[$scope.trip_path_hash.length / 2][0] != null){
+                                var lat = $scope.trip_path_hash[$scope.trip_path_hash.length / 2][0].lat;
+                                var lng = $scope.trip_path_hash[$scope.trip_path_hash.length / 2][0].lng;
+                                $scope.map.panTo(new google.maps.LatLng(lat, lng));
                             }
 
                             $scope.$apply();
@@ -1520,8 +1527,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             //markers_messages[i].info.open($scope.map, markers_messages[i].info);
                         }
                     };
-
-
 
                     //Stop path animation
                     $scope.stop_path_animation = function () {
@@ -1643,10 +1648,10 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         }
                     };
 
-                //Disbale / Enable Tips + Tips list on map
+                //Disable / Enable Tips + Tips list on map
                 $scope.tipsOnMap = function (tips_flag) {
                     //if ($scope.trip_created_manually) {} // not relevant for tips
-                        if (tips_flag) { //if True then the show tips in map and list
+                        if (tips_flag) { //if True then the show tips in map and list //update, no need to delete from list
                             $scope.trip_enable_all_tips();
                         }else{ // if false then disable tips on map and list
                             $scope.trip_disable_all_tips();

@@ -383,12 +383,12 @@
                                 Tips
                             </md-switch>
                         </div>
-                        <md-list-item ng-show="tips_items_flag" class="md-3-line" ng-repeat="message in messages"
+                        <md-list-item ng-repeat="message in messages"
                                       ng-click="showMessageOnMap(message)">
                             <div class="md-list-item-text" layout="column">
                                 <p  md-line class="wrap">{{ message.text }}</p>
-                                <h4>{{message.time | date:'medium'}} </h4>
-                                <h4>Category: {{message.category}}</h4>
+                                <p>{{message.time | date:'medium'}} </p>
+                                <p>Category: {{message.category}}</p>
                                 <!-- <p>{{ item.notes }}</p> -->
                             </div>
                             <md-divider></md-divider>
@@ -406,7 +406,7 @@
                             </md-switch>
                         </div>
                         <md-list-item class="md-3-line" ng-repeat="route in routes_list track by $index"
-                                      ng-show="routes_settings.enable_routes_map" ng-click="clickOnRouteList(route)">
+                                      ng-click="clickOnRouteList(route)">
                             <img ng-src="assets/icons/ic_traffic_black_24dp_1x.png" class="md-avatar"/>
                             <div class="md-list-item-text" layout="column">
                                 <h3>{{route.routes[0].summary}}</h3>
@@ -447,7 +447,7 @@
                             </md-switch>
                         </div>
                         <md-list-item class="md-3-line" ng-repeat="place in nearbyPlaces track by $index"
-                                      ng-click="showPlaceOnMap(place)" ng-show="places_items_flag">
+                                      ng-click="showPlaceOnMap(place)" >
                             <!--<img ng-src="{{place.icon}}" class="md-avatar"/>-->
                             <img ng-src="{{place.picture.data.url}}" class="md-avatar"/>
 
@@ -479,7 +479,7 @@
                         </div>
                         -->
                         <md-list-item class="md-3-line" ng-repeat="expense in expense_list"
-                                      ng-click="" ng-show="expense_button">
+                                      ng-click="" >
                             <!--<img ng-src="{{place.icon}}" class="md-avatar"/>-->
                             <img ng-src="assets/icons/ic_attach_money_black_24dp_1x.png" class="md-avatar"/>
 

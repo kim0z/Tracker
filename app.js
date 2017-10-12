@@ -301,7 +301,7 @@ app.post('/getTripPath', function (request, response) {
         var path_last_index = 0;
         var trip_path_hash = [];
         //$scope.trip_path_hash = new Array($scope.tripDays + 1);
-        for (var hash_index = 0; hash_index < tripDays + 10; hash_index++) { //init hashtable with extra 10 cells
+        for (var hash_index = 0; hash_index < tripDays; hash_index++) { //init hashtable with extra 10 cells, I removed the 10 extra no need
             trip_path_hash[hash_index] = [];
         }
 

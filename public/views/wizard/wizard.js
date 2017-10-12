@@ -1212,7 +1212,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
             message_json = {
                 location: location,
-                time: $scope.message.time,
+                time: $scope.message.time.toString(),
                 category: $scope.message.category,
                 text: $scope.message.text
             };
