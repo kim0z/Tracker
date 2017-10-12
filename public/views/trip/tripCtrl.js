@@ -1419,6 +1419,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             while ($scope.trip_path_hash[index].length > 0){
                                 index++;
                             }
+                            var x = index / 2;
                             if($scope.trip_path_hash[index / 2][0] != null){
                                 var lat = $scope.trip_path_hash[index / 2][0].lat;
                                 var lng = $scope.trip_path_hash[index / 2][0].lng;
