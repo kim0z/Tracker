@@ -1203,17 +1203,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                 $scope.map.setCenter(Latlng);
                                 //smoothZoom($scope.map, 7, $scope.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
                                 var title = '';
-                                if (message.message.tip != '') {
-                                    title = message.message.tip;
-                                }
-                                if (message.message.risk) {
-                                    title = 'Risk';
-                                }
-                                if (message.message.price) {
-                                    title = message.message.price;
-                                }
-                                if (message.message.invite) {
-                                    title = 'Invitation';
+                                if (message.text != '') {
+                                    title = message.text;
                                 }
 
                                 var marker_message = new google.maps.Marker({

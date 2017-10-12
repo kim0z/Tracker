@@ -1090,7 +1090,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         $scope.message = {};
         //Listener to click on map to get GPS
         $scope.map_tips.addListener('click', function (e) {
-            $scope.message = {lat: e.latLng.lat(), lng: e.latLng.lng(), time: new Date()};
+            $scope.message = {text: $scope.message.text, category: $scope.message.category, lat: e.latLng.lat(), lng: e.latLng.lng(), time: new Date()};
             $scope.$apply(); //used to update 'add tips right side of the map', but why it doesn't update without it ????
         });
 
@@ -1140,17 +1140,33 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             console.log("Trip:: Read trip routes from Firebase failed: " + errorObject.code);
         });
 
+        //**********************  load Categories  ******************
+        var firebase_ref_readCategories = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/messages/categories');
+
+        firebase_ref_readCategories.on("value", function (snapshot) {
+            $scope.categories = [];
+            snapshot.forEach(function (childSnapshot) {
+                var key = childSnapshot.key();
+                var childData = childSnapshot.val();
+                childData.key = key;
+                console.log("Read Categories from Firebase to show on map: " + childData);
+                $scope.categories.unshift(childData);
+            });
+        }, function (errorObject) {
+            console.log("Read Tips from Firebase failed: " + errorObject.code);
+        });
+
         //**********************  load Tips from Firebase ******************
         var firebase_ref_readTips = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/messages');
 
         firebase_ref_readTips.on("value", function (snapshot) {
-            $scope.messages = [];
+            $scope.messages_from_firebase = [];
             snapshot.forEach(function (childSnapshot) {
                 var key = childSnapshot.key();
                 var childData = childSnapshot.val();
                 childData.key = key;
                 console.log("Read Tips from Firebase to show on map: " + childData);
-                $scope.messages.unshift(childData);
+                $scope.messages_from_firebase.unshift(childData);
             });
             $scope.$apply();
         }, function (errorObject) {
@@ -1176,11 +1192,14 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
                     tips_on_map[i].close();
                 }
             }
-
             $scope.$apply();
-
         }
 
+        //Add title to messages similar to category
+        $scope.addCategory = function (category) {
+            var firebase_tips_category = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/messages/categories');
+            firebase_tips_category.push({category: category});
+        }
         //Add new tip
         $scope.addMessage = function () {
             // add a new note to firebase
@@ -1194,8 +1213,8 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             message_json = {
                 location: location,
                 time: $scope.message.time,
-                email: '',
-                message: {tip: $scope.message.text, invite: '', risk: '', price: ''}
+                category: $scope.message.category,
+                text: $scope.message.text
             };
             var ref_firebase_tip = firebase_tips.push(message_json);
 
@@ -1223,6 +1242,7 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
             $scope.message.lng = '';
             $scope.message.time = '';
             $scope.message.text = '';
+            $scope.message.category = '';
 
         }
     }

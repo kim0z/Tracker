@@ -385,13 +385,10 @@
                         </div>
                         <md-list-item ng-show="tips_items_flag" class="md-3-line" ng-repeat="message in messages"
                                       ng-click="showMessageOnMap(message)">
-                            <img ng-src="assets/icons/ic_message_black_48px.svg" class="md-avatar"/>
                             <div class="md-list-item-text" layout="column">
-                                <h3 ng-if="message.message.tip">{{ message.message.tip }}</h3>
-                                <h3 ng-if="message.message.risk">{{ message.message.risk }}</h3>
-                                <h3 ng-if="message.message.price">{{ message.message.price }}</h3>
-                                <h3 ng-if="message.message.invite">Invitation to join me..</h3>
+                                <h3 >{{ message.text }}</h3>
                                 <h4>{{message.time | date:'medium'}} </h4>
+                                <h4>Category: {{message.category}}</h4>
                                 <!-- <p>{{ item.notes }}</p> -->
                             </div>
                             <md-divider></md-divider>
