@@ -386,7 +386,7 @@
                         <md-list-item ng-show="tips_items_flag" class="md-3-line" ng-repeat="message in messages"
                                       ng-click="showMessageOnMap(message)">
                             <div class="md-list-item-text" layout="column">
-                                <h3 >{{ message.text }}</h3>
+                                <p  md-line class="wrap">{{ message.text }}</p>
                                 <h4>{{message.time | date:'medium'}} </h4>
                                 <h4>Category: {{message.category}}</h4>
                                 <!-- <p>{{ item.notes }}</p> -->
