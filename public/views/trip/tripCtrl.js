@@ -1254,7 +1254,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             $scope.panoViewState = true;
                         } else {
                             document.getElementById("pano").style.width = "0%";
-                            document.getElementById("map").style.width = "100%";
+                            //document.getElementById("map").style.width = "100%";
                             $scope.panoViewState = false;
                         }
 
@@ -1375,6 +1375,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                 var lat = $scope.trip_path_hash[center_index][0].lat;
                                 var lng = $scope.trip_path_hash[center_index][0].lng;
                                 $scope.map.panTo(new google.maps.LatLng(lat, lng));
+                                $scope.panoPosition = new google.maps.LatLng(lat, lng);
                             }
 
                             //$scope.$apply();
@@ -1415,9 +1416,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                 var route = {routes: routes};
                                 $scope.routes_list.push(route);
                             }
-
-
-
                         }
                     });
 //***************** End load path from server **********************
@@ -1659,11 +1657,15 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     //When user click on Tip from the list then show the info window
                     $scope.showTipInfoOnMap_List = function (tip) {
                         markers_tips[tip.id].info.open($scope.map, markers_tips[tip.id].marker);
+                        //update Panoramic view position
+                        $scope.panoPosition = new google.maps.LatLng(tip.location.coords.latitude, tip.location.coords.longitude);
                     }
 
                     //When user click on place from the list then show the info window
                     $scope.showPlaceInfoOnMap_List = function (place) {
                         markers_places[place.id].info.open($scope.map, markers_places[place.id].marker);
+                        //update Panoramic view position
+                        $scope.panoPosition = new google.maps.LatLng(place.location.latitude, place.location.longitude);
                     }
                     //Show Tip on map by click on item in the right panel
                     $scope.showTipOnMap = function (tip) {
@@ -1844,17 +1846,22 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                // $scope.routes_settings = {enable_routes_map: true};
 
-                for (var i = 0; i < $scope.trip_path_hash.length; i++) {
-                    var routes = new Array(0);
-                    if (i == 0) {
-                        routes[0] = {summary: 'Route - All days', hash_index: i};
-                    } else {
-                        routes[0] = {summary: 'Route in day ' + i, hash_index: i};
-                    }
-                    // hash index will be the pointed to the hash table in case user click on route
-                    var route = {routes: routes};
-                    $scope.routes_list.push(route);
-                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ///////////////////// $$$$$$$%%%%%%%%%%#^#$%#$%#$%#$%$#^#$^#$^#$^$ ///////////////////////////////////////
                     //if Trip was created automatic using the APP then load from places
