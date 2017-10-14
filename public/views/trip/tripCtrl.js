@@ -1402,6 +1402,9 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             // $scope.routes_settings = {enable_routes_map: true};
 
                             for (var i = 0; i < $scope.trip_path_hash.length; i++) {
+                                if ($scope.trip_path_hash[i] == []){
+                                    break;
+                                }
                                 var routes = new Array(0);
                                 if (i == 0) {
                                     routes[0] = {summary: 'Route - All days', hash_index: i};
@@ -1414,7 +1417,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             }
 
 
-                            
+
                         }
                     });
 //***************** End load path from server **********************
