@@ -1402,7 +1402,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             // $scope.routes_settings = {enable_routes_map: true};
 
                             for (var i = 0; i < $scope.trip_path_hash.length; i++) {
-                                if ($scope.trip_path_hash[i] == []){
+                                if ($scope.trip_path_hash[i].length == 0){
                                     break;
                                 }
                                 var routes = new Array(0);
