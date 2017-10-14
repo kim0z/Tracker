@@ -1538,7 +1538,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         if ($scope.path_animating == false && $scope.selectedDay > 0) {
                             var lineSymbolCircle = {
                                 path: google.maps.SymbolPath.CIRCLE,
-                                scale: 8,
+                                scale: 12,
                                 strokeColor: '#393'
                             };
                             poly_animation = new google.maps.Polyline({
