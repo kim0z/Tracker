@@ -1141,10 +1141,10 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         });
 
         //**********************  load Categories  ******************
+        $scope.categories = [];
         var firebase_ref_readCategories = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + $scope.facebookId + '/' + $scope.trip.id + '/messages/categories');
 
         firebase_ref_readCategories.on("value", function (snapshot) {
-            $scope.categories = [];
             snapshot.forEach(function (childSnapshot) {
                 var key = childSnapshot.key();
                 var childData = childSnapshot.val();

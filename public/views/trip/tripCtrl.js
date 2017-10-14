@@ -21,10 +21,11 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.places_items_flag = true;
 
         $scope.travelersList = [];
-        $scope.data = []; // Travellers from PG DB
-        $scope.messages = []; // Tips from Firebase, based on GPS point
-        var markers_messages = [];
-        var markers_places = [];
+        $scope.data = [];                   //Travellers from PG DB
+        $scope.messages = [];               //Tips from Firebase, based on GPS point
+
+        var markers_places = [];            //used in showPlaceOnMap
+        var markers_tips = [];              //used in showTipOnMap
         $scope.editMode = false;
         $scope.panoViewState = false;
         $scope.panoPosition = '';
@@ -1077,12 +1078,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     $scope.showMessageOnMap = function (message) {
                         if ($scope.editMode == false) {
                             if (message.location.coords) {
-                                var Latlng_message = {
-                                    lat: message.location.coords.latitude,
-                                    lng: message.location.coords.longitude
-                                };
                                 //Help function - show item on map
-                                showItemOnMap(Latlng_message, message);
+                                $scope.showTipOnMap(message);
                             }
 
                             /*    $timeout(function () {
@@ -1188,49 +1185,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                          } */
                     }
 
-                    var showItemOnMap = function (Latlng, message) {
-
-                        //Google panorama street view - update with new position
-                        $scope.panoPosition = Latlng;
-                        //if pano view already opened, then reload, else just update position as done in top of this row
-                        if ($scope.panoViewState == true) {
-                            $scope.panoViewState = false;
-                            $scope.panoView();
-                        }
-                        console.log('showItemOnMap function :: ' + 'lat:' + Latlng.lat + '     lng: ' + Latlng.lng);
-                        if ($scope.editMode == false) {
-                            if (Latlng.lat && Latlng.lng) {
-                                $scope.map.setCenter(Latlng);
-                                //smoothZoom($scope.map, 7, $scope.map.getZoom()); // call smoothZoom, parameters map, final zoomLevel
-                                var title = '';
-                                if (message.text != '') {
-                                    title = message.text;
-                                }
-
-                                var marker_message = new google.maps.Marker({
-                                    position: Latlng,
-                                    map: $scope.map,
-                                    title: null
-                                });
-
-                                var infowindow_message = new google.maps.InfoWindow({
-                                    content: title
-                                });
-
-                                infowindow_message.open($scope.map, marker_message);
-
-                                markers_messages.push({marker: marker_message, info: infowindow_message});
-
-                                /*
-                                 var zoom_time = 3000;
-                                 $scope.countdown = 100;
-                                 setTimeout(function () {
-                                 smoothZoom($scope.map, 12, $scope.map.getZoom())
-                                 }, 1000); // call smoothZoom, parameters map, final zoomLevel
-                                 */
-                            }
-                        }
-                    }
                     var addGPStoPhoto = function (img) {
                         //get gps point from map and then
 
@@ -1324,13 +1278,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             //load to list
                             $scope.messages.unshift(childData);
 
-                            //load on map
-                            var Latlng_message = {
-                                lat: childData.location.coords.latitude,
-                                lng: childData.location.coords.longitude
-                            };
                             //Help function - show item on map
-                            showItemOnMap(Latlng_message, childData);
+                            $scope.showTipOnMap(childData);
                         });
                     }, function (errorObject) {
                         console.log("Read Tips from Firebase failed: " + errorObject.code);
@@ -1504,32 +1453,31 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                     //disable all tips on map
                     $scope.trip_disable_all_tips = function () {
-                        for(var  i = 0 ; i < markers_messages.length ; i++){
-                            markers_messages[i].marker.setMap(null);
-                            //markers_messages[i].info.close();
+                        for(var  i = 0 ; i < markers_tips.length ; i++){
+                            //markers_tips[i].marker.setMap(null);
+                            markers_tips[i].info.close();
                         }
                     };
                     //enable all tips on map
                     $scope.trip_enable_all_tips = function () {
-                        for(var  i = 0 ; i < markers_messages.length ; i++){
-                            markers_messages[i].marker.setMap($scope.map);
-                            //markers_messages[i].info.open($scope.map, markers_messages[i].info);
+                        for(var  i = 0 ; i < markers_tips.length ; i++){
+                            markers_tips[i].marker.setMap($scope.map);
+                            //markers_tips[i].info.open($scope.map, markers_messages[i].info);
                         }
                     };
-
 
                     //disable all places on map
                     $scope.trip_disable_all_places = function () {
                         for(var  i = 0 ; i < markers_places.length ; i++){
-                            markers_places[i].marker.setMap(null);
-                            //markers_messages[i].info.close();
+                            //markers_places[i].marker.setMap(null);
+                            markers_places[i].info.close();
                         }
                     };
                     //enable all places on map
                     $scope.trip_enable_all_places = function () {
                         for(var  i = 0 ; i < markers_places.length ; i++){
                             markers_places[i].marker.setMap($scope.map);
-                            //markers_messages[i].info.open($scope.map, markers_messages[i].info);
+                            //markers_places[i].info.open($scope.map, markers_messages[i].info);
                         }
                     };
 
@@ -1655,28 +1603,64 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                 //Disable / Enable Tips + Tips list on map
                 $scope.tipsOnMap = function (tips_flag) {
+                    $scope.trip_disable_all_tips();
+                    /*
                     //if ($scope.trip_created_manually) {} // not relevant for tips
                         if (tips_flag) { //if True then the show tips in map and list //update, no need to delete from list
                             $scope.trip_enable_all_tips();
                         }else{ // if false then disable tips on map and list
                             $scope.trip_disable_all_tips();
                         }
+                        */
                     };
 
                 $scope.placesOnMap = function (places_flag) {
+                    $scope.trip_disable_all_places();
+                    /*
                     if (places_flag) { //if True then the show places in map and list
                         $scope.trip_enable_all_places();
                     }else{ // if false then disable places on map and list
                         $scope.trip_disable_all_places();
                     }
+                    */
                 };
 
-                //help function
-                  //  var add_place_on_map = function (place) { //deprecated
-                  //  };
+                /////////////////// ******* help function ********* /////////////////
 
+                //Show Tip on map by click on item in the right panel
+                    $scope.showTipOnMap = function (tip) {
+                        console.log(tip);
+
+                        // InfoWindow content
+                        var content = '<table style="width: 100%;">' +
+                            '<tr>'+
+                            '<td class="block" >'+tip.category+'</td>' +
+                            '<td class="block" >'+tip.text+'</td>' +
+                            '</tr>' +
+                            '</table>' +
+                            '<div>' +
+                        '</div>'
+
+                        //Show on map by adding marker with info
+                        var marker_tip = new google.maps.Marker({
+                            position: new google.maps.LatLng (tip.location.coords.latitude, tip.location.coords.longitude),
+                            map: $scope.map,
+                            title: null,
+                            icon: 'assets/icons/map_info_tip.png'
+                        });
+
+                        var infowindow_message = new google.maps.InfoWindow({
+                            content: content // place.name
+                        });
+
+                        //infowindow_message.open($scope.map, marker_tip);
+                        //save in array to to handle all places on map
+                        markers_tips.push({marker: marker_tip, info: infowindow_message});
+                    }
+
+                //Show place on map by click on item in the right panel
                 $scope.showPlaceOnMap = function (place) {
-                    console.log(place);
+                    //console.log(place);
 
                     // InfoWindow content
                     var content = '<table style="width: 100%;">' +
@@ -1692,7 +1676,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         '<a href='+place.link+' target="_blank">'+place.link+'</a>'
                     '</div>'
 
-
                     //Show on map by adding marker with info
                     var marker_place = new google.maps.Marker({
                         position: new google.maps.LatLng (place.location.latitude, place.location.longitude),
@@ -1705,7 +1688,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         content: content // place.name
                     });
 
-                    infowindow_message.open($scope.map, marker_place);
+                    //infowindow_message.open($scope.map, marker_place);
                     //save in array to to handle all places on map
                     markers_places.push({marker: marker_place, info: infowindow_message});
                 }
@@ -1746,12 +1729,16 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                     //let user click on a place then a pop up will be created in the right lat, lng
                                     //Show on map by adding marker with info
 
+                                    $scope.showPlaceOnMap(place);
+
+                                    /*
                                     var marker = new google.maps.Marker({
                                         position: new google.maps.LatLng (place.location.latitude, place.location.longitude),
                                         map: $scope.map,
                                         title: null,
                                         icon: 'assets/icons/google-place-optimization-32.png'
                                     });
+                                    */
                                 }
                             });
                         }, function (errorObject) {

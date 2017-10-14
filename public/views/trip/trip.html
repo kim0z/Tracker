@@ -378,13 +378,16 @@
                 <md-content ng-show="tips_button" style="top: 60px">
                     <md-list flex>
                         <div style="height: 40px;">
+                            <!--
                             <md-switch class="md-primary" style="position: fixed; z-index: 1" ng-model="tips_items_flag"
                                        aria-label="Enable/Disable Routes" ng-change="tipsOnMap(tips_items_flag)">
                                 Tips
                             </md-switch>
+                            -->
+                            <md-button class="md-raised md-warn" ng-click="tipsOnMap(tips_items_flag)">Clear Map</md-button>
                         </div>
                         <md-list-item ng-repeat="message in messages"
-                                      ng-click="showMessageOnMap(message)">
+                                      ng-click="showTipOnMap(message)">
                             <div class="md-list-item-text" layout="column">
                                 <p  md-line class="wrap">{{ message.text }}</p>
                                 <p>{{message.time | date:'medium'}} </p>
@@ -440,11 +443,14 @@
                 <md-content style="top: 60px" ng-show="places_button">
                     <md-list flex>
                         <div style="height: 40px;">
+                            <!--
                             <md-switch class="md-primary" style="position: fixed;  z-index: 1"
                                        ng-model="places_items_flag" aria-label="Enable/Disable Routes"
                                        ng-change="placesOnMap(places_items_flag)">
                                 Places
                             </md-switch>
+                            -->
+                            <md-button class="md-raised md-warn" ng-click="placesOnMap(places_items_flag)">Clear Map</md-button>
                         </div>
                         <md-list-item class="md-3-line" ng-repeat="place in nearbyPlaces track by $index"
                                       ng-click="showPlaceOnMap(place)" >
