@@ -711,10 +711,14 @@
             <div style="width: 200px; margin-bottom: 50px">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Type</label>
+                    <textarea maxlength="150" ng-model="user.type" class="form-control"
+                              rows="1"></textarea>
+                    <!--
                     <md-select ng-model="user.type">
                         <md-option ng-repeat="type in expense.type" value="{{type}}">
                             {{type}}
                         </md-option>
+                        -->
                     </md-select>
                 </md-input-container>
 

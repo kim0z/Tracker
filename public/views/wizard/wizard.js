@@ -1261,7 +1261,8 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
         //$scope.expense.currency = $scope.currency_list;
 
         $scope.user = {};
-        $scope.user.type = $scope.expense.type[0];
+        //$scope.user.type = $scope.expense.type[0];
+        $scope.user.type = '';
 
         $scope.user.cost = 0;
 
@@ -1311,7 +1312,6 @@ trackerApp.controller('wizard', function ($rootScope, $scope, $location, Upload,
 
             }
         };
-
 
         $scope.getDateAfter = function (days) {
             //convert date to object to allow me do action on it like increase the date in the table

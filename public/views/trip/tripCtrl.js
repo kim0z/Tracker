@@ -1275,6 +1275,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             var childData = childSnapshot.val(); // childData = location, message and time
                             childData.time = Date.parse(childData.time);
 
+                            var id = $scope.messages.length;
+                            childData.id = id;
                             //load to list
                             $scope.messages.unshift(childData);
 
@@ -1604,6 +1606,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                 //Disable / Enable Tips + Tips list on map
                 $scope.tipsOnMap = function (tips_flag) {
                     $scope.trip_disable_all_tips();
+                    $scope.trip_disable_all_places();
                     /*
                     //if ($scope.trip_created_manually) {} // not relevant for tips
                         if (tips_flag) { //if True then the show tips in map and list //update, no need to delete from list
@@ -1616,6 +1619,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                 $scope.placesOnMap = function (places_flag) {
                     $scope.trip_disable_all_places();
+                    $scope.trip_disable_all_tips();
                     /*
                     if (places_flag) { //if True then the show places in map and list
                         $scope.trip_enable_all_places();
@@ -1627,8 +1631,18 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                 /////////////////// ******* help function ********* /////////////////
 
+                //When user click on Tip from the list then show the info window
+                    $scope.showTipInfoOnMap_List = function (tip) {
+                        markers_tips[tip.id].info.open($scope.map, markers_tips[tip.id].marker);
+                    }
+
+                //When user click on place from the list then show the info window
+                    $scope.showPlaceInfoOnMap_List = function (place) {
+                        markers_places[place.id].info.open($scope.map, markers_places[place.id].marker);
+                    }
                 //Show Tip on map by click on item in the right panel
                     $scope.showTipOnMap = function (tip) {
+
                         console.log(tip);
 
                         // InfoWindow content
@@ -1641,16 +1655,34 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             '<div>' +
                         '</div>'
 
+                        var id = markers_tips.length;
+
                         //Show on map by adding marker with info
                         var marker_tip = new google.maps.Marker({
                             position: new google.maps.LatLng (tip.location.coords.latitude, tip.location.coords.longitude),
                             map: $scope.map,
                             title: null,
-                            icon: 'assets/icons/map_info_tip.png'
+                            icon: 'assets/icons/map_info_tip.png',
+                            id: id,
+                            clicked: false
                         });
 
                         var infowindow_message = new google.maps.InfoWindow({
                             content: content // place.name
+                        });
+
+                        marker_tip.addListener('click', function() {
+                            console.log(marker_tip.id);
+                            console.log(markers_tips.length);
+                            if(marker_tip.id != null && marker_tip.id >= 0 && marker_tip.clicked == false){
+                                markers_tips[marker_tip.id].info.open($scope.map, marker_tip);
+                                markers_tips[marker_tip.id].marker.clicked = true;
+                            }else{
+                                if(marker_tip.id != null && marker_tip.id >= 0 && marker_tip.clicked == true){
+                                    markers_tips[marker_tip.id].info.close();
+                                    markers_tips[marker_tip.id].marker.clicked = false;
+                                }
+                            }
                         });
 
                         //infowindow_message.open($scope.map, marker_tip);
@@ -1676,19 +1708,36 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         '<a href='+place.link+' target="_blank">'+place.link+'</a>'
                     '</div>'
 
+                    var id = markers_places.length;
                     //Show on map by adding marker with info
                     var marker_place = new google.maps.Marker({
                         position: new google.maps.LatLng (place.location.latitude, place.location.longitude),
                         map: $scope.map,
                         title: null,
-                        icon: 'assets/icons/google-place-optimization-32.png'
+                        icon: 'assets/icons/google-place-optimization-32.png',
+                        id: id,
+                        clicked: false
                     });
 
                     var infowindow_message = new google.maps.InfoWindow({
                         content: content // place.name
                     });
 
+                    marker_place.addListener('click', function() {
+                        console.log(marker_place.id);
+                        console.log(markers_places.length);
+                        if(marker_place.id != null && marker_place.id >= 0 && marker_place.clicked == false){
+                            markers_places[marker_place.id].info.open($scope.map, marker_place);
+                            markers_places[marker_place.id].marker.clicked = true;
+                        }else{
+                            if(marker_place.id != null && marker_place.id >= 0 && marker_place.clicked == true){
+                                markers_places[marker_place.id].info.close();
+                                markers_places[marker_place.id].marker.clicked = false;
+                            }
+                        }
+                    });
                     //infowindow_message.open($scope.map, marker_place);
+
                     //save in array to to handle all places on map
                     markers_places.push({marker: marker_place, info: infowindow_message});
                 }
@@ -1721,6 +1770,10 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             snapshot.forEach(function (childSnapshot) {
                                 if(childSnapshot.val() != ''){
                                     var place = JSON.parse(childSnapshot.val());
+
+                                    var  id = $scope.nearbyPlaces.length;
+                                    place.id = id;
+
                                     $scope.nearbyPlaces.push(place);
                                     //add place on map
                                    // add_place_on_map(place);
@@ -1731,14 +1784,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                                     $scope.showPlaceOnMap(place);
 
-                                    /*
-                                    var marker = new google.maps.Marker({
-                                        position: new google.maps.LatLng (place.location.latitude, place.location.longitude),
-                                        map: $scope.map,
-                                        title: null,
-                                        icon: 'assets/icons/google-place-optimization-32.png'
-                                    });
-                                    */
                                 }
                             });
                         }, function (errorObject) {
@@ -1818,7 +1863,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             // each day is a route in this case
                             // simulate route data to keep the same structure for UI route.routes[0].summary
                             $scope.routes_settings = {enable_routes_map: true};
-                      /*      for (var i = 0; i < $scope.trip_path_hash.length; i++) {
+                            for (var i = 0; i < $scope.trip_path_hash.length; i++) {
                                 var routes = new Array(0);
                                 if (i == 0) {
                                     routes[0] = {summary: 'Route - All days', hash_index: i};
@@ -1828,7 +1873,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                 // hash index will be the pointed to the hash table in case user click on route
                                 var route = {routes: routes};
                                 $scope.routes_list.push(route);
-                            }*/
+                            }
                         }
                     }, function (errorObject) {
                         console.log("The read failed (Trip meta data): " + errorObject.code);

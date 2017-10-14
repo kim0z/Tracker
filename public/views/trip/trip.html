@@ -387,7 +387,7 @@
                             <md-button class="md-raised md-warn" ng-click="tipsOnMap(tips_items_flag)">Clear Map</md-button>
                         </div>
                         <md-list-item ng-repeat="message in messages"
-                                      ng-click="showTipOnMap(message)">
+                                      ng-click="showTipInfoOnMap_List(message)">
                             <div class="md-list-item-text" layout="column">
                                 <p  md-line class="wrap">{{ message.text }}</p>
                                 <p>{{message.time | date:'medium'}} </p>
@@ -453,7 +453,7 @@
                             <md-button class="md-raised md-warn" ng-click="placesOnMap(places_items_flag)">Clear Map</md-button>
                         </div>
                         <md-list-item class="md-3-line" ng-repeat="place in nearbyPlaces track by $index"
-                                      ng-click="showPlaceOnMap(place)" >
+                                      ng-click="showPlaceInfoOnMap_List(place)" >
                             <!--<img ng-src="{{place.icon}}" class="md-avatar"/>-->
                             <img ng-src="{{place.picture.data.url}}" class="md-avatar"/>
 
