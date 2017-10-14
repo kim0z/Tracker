@@ -1371,9 +1371,9 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                 index++;
                             }
                             var center_index = Math.floor(index / 2);
-                            if ($scope.trip_path_hash[center_index][0] != null) {
-                                var lat = $scope.trip_path_hash[center_index][0].lat;
-                                var lng = $scope.trip_path_hash[center_index][0].lng;
+                            if ($scope.trip_path_hash[center_index + 1][0] != null) {
+                                var lat = $scope.trip_path_hash[center_index + 1][0].lat;
+                                var lng = $scope.trip_path_hash[center_index + 1][0].lng;
                                 $scope.map.panTo(new google.maps.LatLng(lat, lng));
                                 $scope.panoPosition = new google.maps.LatLng(lat, lng);
                                 $scope.map.setZoom(10);
