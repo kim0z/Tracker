@@ -509,7 +509,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     var mapContainer = iframe.contentWindow.document.querySelector('#map');
                     $scope.map = new google.maps.Map(mapContainer, {
                         //center: {lat: 34.397, lng: 40.644},
-                        center: {lat: 0, lng: 0},
+                        center: {lat: 61.2181, lng: 149.9003},
                         zoom: 8,
                         mapTypeControl: true,
                         mapTypeControlOptions: {
@@ -1374,7 +1374,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             if ($scope.trip_path_hash[center_index + 1][0] != null) {
                                 var lat = $scope.trip_path_hash[center_index + 1][0].lat;
                                 var lng = $scope.trip_path_hash[center_index + 1][0].lng;
-                                $scope.map.panTo(new google.maps.LatLng(lat, lng));
+                                //$scope.map.panTo(new google.maps.LatLng(lat, lng));
                                 //$scope.panoPosition = new google.maps.LatLng(lat, lng);
                             }
 
