@@ -492,6 +492,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
 
                     $scope.map;
                     $scope.lastGPSpoint = "";
+                    $scope.map_style = '';
+
 
                     var moveToLocation = function (lat, lng) {
                         var center = new google.maps.LatLng(lat, lng);
@@ -499,6 +501,32 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         $scope.map.panTo(center);
                     }
 
+                $scope.change_map_style = function (style) {
+                    $http.get('assets/map/map_style.json').success(function(response) {
+                        switch(style) {
+                            case 'standard':
+                                $scope.map.setOptions({styles:   $scope.map_style = ''})
+                                break;
+                            case 'silver':
+                                $scope.map.setOptions({styles:   $scope.map_style = response[0].silver})
+                                break;
+                            case 'retro':
+                                $scope.map.setOptions({styles:   $scope.map_style = response[1].retro})
+                                break;
+                            case 'dark':
+                                $scope.map.setOptions({styles:   $scope.map_style = response[2].dark})
+                                break;
+                            case 'night':
+                                $scope.map.setOptions({styles:   $scope.map_style = response[3].night})
+                                break;
+                            case 'aubergine':
+                                $scope.map.setOptions({styles:   $scope.map_style = response[4].aubergine})
+                                break;
+                            default:
+                                $scope.map.setOptions({styles:   $scope.map_style = response[5].silver})
+                        }
+                    });
+                }
                     //Map configuration
                     var iframe = document.getElementById('iframe');
                     iframe.contentWindow.document.open();
@@ -526,7 +554,8 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         streetViewControlOptions: {
                             position: google.maps.ControlPosition.LEFT_CENTER
                         },
-                        styles: [
+                        styles:     $scope.map_style
+                            /*[
                             {
                                 "elementType": "geometry",
                                 "stylers": [
@@ -758,6 +787,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                                 ]
                             }
                         ]
+                        */
                     });
 
                     var drawingManager = new google.maps.drawing.DrawingManager({
