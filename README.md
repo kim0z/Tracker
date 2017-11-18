@@ -1,6 +1,6 @@
 # Tracker
 
-http://kim0z.me/  
+https://greatbear.io/  
 Open in Chrome desktop 
 
 Tracker in test mode, only allowed users can login.
@@ -15,4 +15,4 @@ Sync your trip in real time while traveling, by using the APP you will make sure
 ![alt tag](http://54.187.56.64:9090/assets/icons/ic_share_black_48dp_1x.png)  
 Trackers have the ability to share a trip or all the trips that already finished with others like family, friends, and public for all travellers around the globe.
 
-![alt tag](http://54.187.56.64:9090/assets/images/Tracker.jpg)  
+![alt tag](http://54.187.56.64:9090/assets/images/screenshot1.jpg)  
