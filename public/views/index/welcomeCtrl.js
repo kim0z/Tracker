@@ -31,9 +31,13 @@ trackerApp.controller('welcomeCtrl', function ($scope, $state, $mdDialog, dataBa
     var i = 0;
 
     var videoSource = new Array();
-    videoSource[0] = 'assets/videos/IMG_0302.MOV';
-    videoSource[1] = 'assets/videos/IMG_0349.MOV';
-    videoSource[2] = 'assets/videos/IMG_0317.MOV';
+    videoSource[0] = 'assets/videos/greatbear_alaska_sea.mp4';
+    videoSource[1] = 'assets/videos/greatbear_alaska_fall.mp4';
+    videoSource[2] = 'assets/videos/greatbear_alaska_boat.mp4';
+    videoSource[3] = 'assets/videos/greatbear_alaska_glacier.mp4';
+    videoSource[4] = 'assets/videos/greatbear_iceland_gayzer.mp4';
+    videoSource[5] = 'assets/videos/greatbear_iceland_dayanotherday.mp4';
+    videoSource[6] = 'assets/videos/greatbear_iceland_fall_water.mp4';
     var videoCount = videoSource.length;
 
     document.getElementById('video').addEventListener('ended', myHandler, false);
@@ -50,7 +54,7 @@ trackerApp.controller('welcomeCtrl', function ($scope, $state, $mdDialog, dataBa
     function videoPlay(videoNum) {
         document.getElementById("video").setAttribute("src", videoSource[videoNum]);
         document.getElementById("video").load();
-        document.getElementById("video").playbackRate = 0.7;
+        document.getElementById("video").playbackRate = 1;
         document.getElementById("video").play();
     }
 
