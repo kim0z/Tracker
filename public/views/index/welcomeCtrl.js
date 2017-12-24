@@ -56,7 +56,7 @@ trackerApp.controller('welcomeCtrl', function ($scope, $state, $mdDialog, dataBa
     function videoPlay(videoNum) {
         document.getElementById("video").setAttribute("src", videoSource[videoNum]);
         document.getElementById("video").load();
-        document.getElementById("video").playbackRate = 1;
+        document.getElementById("video").playbackRate = 0.7;
         document.getElementById("video").play();
     }
 
