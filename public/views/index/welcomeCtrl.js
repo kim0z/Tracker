@@ -29,15 +29,17 @@ trackerApp.controller('welcomeCtrl', function ($scope, $state, $mdDialog, dataBa
 
 
     var i = 0;
-
+//dcfzra40jo7ha.cloudfront.net
+    //http://dcfzra40jo7ha.cloudfront.net/videos/
+    //videoSource[0] = 'assets/videos/greatbear_alaska_sea.mp4';
     var videoSource = new Array();
-    videoSource[0] = 'assets/videos/greatbear_alaska_sea.mp4';
-    videoSource[1] = 'assets/videos/greatbear_alaska_fall.mp4';
-    videoSource[2] = 'assets/videos/greatbear_alaska_boat.mp4';
-    videoSource[3] = 'assets/videos/greatbear_alaska_glacier.mp4';
-    videoSource[4] = 'assets/videos/greatbear_iceland_gayzer.mp4';
-    videoSource[5] = 'assets/videos/greatbear_iceland_dayanotherday.mp4';
-    videoSource[6] = 'assets/videos/greatbear_iceland_fall_water.mp4';
+    videoSource[0] = 'http://dcfzra40jo7ha.cloudfront.net/videos/greatbear_alaska_sea.mp4';
+    videoSource[1] = 'http://dcfzra40jo7ha.cloudfront.net/videos/greatbear_alaska_fall.mp4';
+    videoSource[2] = 'http://dcfzra40jo7ha.cloudfront.net/videos/greatbear_alaska_boat.mp4';
+    videoSource[3] = 'http://dcfzra40jo7ha.cloudfront.net/videos/greatbear_alaska_glacier.mp4';
+    videoSource[4] = 'http://dcfzra40jo7ha.cloudfront.net/videos/greatbear_iceland_gayzer.mp4';
+    videoSource[5] = 'http://dcfzra40jo7ha.cloudfront.net/videos/greatbear_iceland_dayanotherday.mp4';
+    videoSource[6] = 'http://dcfzra40jo7ha.cloudfront.net/videos/greatbear_iceland_fall_water.mp4';
     var videoCount = videoSource.length;
 
     document.getElementById('video').addEventListener('ended', myHandler, false);
