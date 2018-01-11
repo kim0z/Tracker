@@ -68,7 +68,7 @@ trackerApp.controller('welcomeCtrl', function ($scope, $state, $mdDialog, dataBa
             playPromise.then({
 
             })
-            .catch()
+            .catch({})
         }
     }
 
