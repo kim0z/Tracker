@@ -11,6 +11,11 @@ trackerApp.controller('welcomeCtrl', function ($scope, $state, $mdDialog, dataBa
         $state.go('agreement');
     }
 
+    $scope.goToPrivacyPolicy = function () {
+        $state.go('privacy');
+    }
+
+
     $scope.showAlert = function(ev) {
         // Appending dialog to document.body to cover sidenav in docs app
         // Modal dialogs should fully cover application
@@ -57,7 +62,14 @@ trackerApp.controller('welcomeCtrl', function ($scope, $state, $mdDialog, dataBa
         document.getElementById("video").setAttribute("src", videoSource[videoNum]);
         document.getElementById("video").load();
         document.getElementById("video").playbackRate = 0.7;
-        document.getElementById("video").play();
+        var playPromise = document.getElementById("video").play();
+
+        if(playPromise !== undefined) {
+            playPromise.then({
+
+            })
+            .catch()
+        }
     }
 
 

@@ -118,6 +118,11 @@ var trackerApp = angular.module('myApp', [
                 templateUrl: "views/agreement/terms.html",
                 controller: ''
             })
+            .state('privacy', {
+                url: "/privacy",
+                templateUrl: "views/agreement/privacy_policy.html",
+                controller: ''
+            })
             .state('trip', {
                 url: "/trip/:id",
                 templateUrl: "views/trip/trip.html",
