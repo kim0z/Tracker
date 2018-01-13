@@ -24,7 +24,7 @@
 <!--[if IE 8]>
 <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="html" lang="en" ng-app="myApp" class="no-js" style="zoom: 85%"> <!--<![endif]-->
+<html class="html" lang="en" ng-app="myApp" class="no-js" style="zoom: 78%"> <!--<![endif]-->
 <head>
 
     <link rel="shortcut icon" href="assets/icons/greatbear_black_crop.ico">
@@ -269,30 +269,35 @@
 
 <div ng-hide="hideToolBar" layout="column" layout-fill style="background: white">
 
-    <md-toolbar style="position: fixed; flex: 0 0 auto;">
+    <md-toolbar style="position: fixed; flex: 0 0 auto; background-color: white">
         <div class="md-toolbar-tools" ng-controller="mainIndexCtrl" scroll-shrink>
 
-            <md-button ng-click="menuClick('Welcome')" style="font-size: 20px; text-transform: none">GreatBear</md-button>
+            <md-button ng-click="menuClick('Welcome')" style="font-size: 30px; font-weight: 330; text-transform: none; color: black">GreatBear</md-button>
 
             <img src="assets/icons/TRACKER1-01_karim_crop.png"
                  style="height: auto; width: auto; max-width: 55px; max-height: 55px;">
-
-            <md-button ng-click="menuClick('Trips')">Trips
+            <span flex></span> <!-- move buttons to right -->
+            <md-button style="color: black; font-size: 20px; font-weight: 310;" ng-click="menuClick('Trips')">Trips
                 <md-tooltip md-direction="bottom">Get inspired by travellers trips from around the world</md-tooltip>
             </md-button>
-            <md-button ng-click="menuClick('My Trips')">My Trips
+            <md-button style="color: black; font-size: 20px; font-weight: 310;" ng-click="menuClick('My Trips')">My Trips
                 <md-tooltip md-direction="bottom">Your trips</md-tooltip>
             </md-button>
-            <md-button ng-click="showAlert($event)" >Real-Time Travelers
+            <md-button style="color: black; font-size: 20px; font-weight: 310;" ng-click="showAlert($event)" >Messages
+                <md-tooltip md-direction="bottom">Messages from travellers</md-tooltip>
+            </md-button>
+            <!--
+            <md-button style="color: black; font-size: 20px; font-weight: 310; " ng-click="showAlert($event)" >Real-Time Travelers
                 <md-tooltip md-direction="bottom">Watch travellers in real-time, location, photos, chat ...</md-tooltip>
             </md-button>
-            <span flex></span>
+            -->
+
             <img ng-src="{{profilePic}}" style="
                     width: 48px;
                     margin: 2px;
                     border-radius: 48px;
                     border: 0px solid #ddd;">
-            <md-button ng-click="authUser()" ng-class="expressionAuth">{{authButton}}
+            <md-button style="color: black; font-size: 17px; font-weight: 310;" ng-click="authUser()" ng-class="expressionAuth">{{authButton}}
                 <md-tooltip md-direction="bottom">Login / Logout</md-tooltip>
             </md-button>
             <md-button class="md-icon-button" aria-label="More" ng-disabled="true">

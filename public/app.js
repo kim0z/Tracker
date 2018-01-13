@@ -236,16 +236,33 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, $location, 
         // Appending dialog to document.body to cover sidenav in docs app
         // Modal dialogs should fully cover application
         // to prevent interaction outside of dialog
-        $mdDialog.show(
-            $mdDialog.alert()
-                .parent(angular.element(document.querySelector('#popupContainer')))
-                .clickOutsideToClose(true)
-                .title('Coming soon')
-                .content('Watch travellers in real-time, you can find location, photos, adventures and more.')
-                .ariaLabel('GreatBear')
-                .ok('Got it!')
-                .targetEvent(ev)
-        );
+       //if(ev.currentTarget.textContent == "Messages"){
+           $mdDialog.show(
+               $mdDialog.alert()
+                   .parent(angular.element(document.querySelector('#popupContainer')))
+                   .clickOutsideToClose(true)
+                   .title('Coming soon')
+                   .content('Message will help to communicate with other travellers.')
+                   .ariaLabel('GreatBear')
+                   .ok('Got it!')
+                   .targetEvent(ev)
+           );
+       /*}else{
+           if(ev.currentTarget.textContent == "Messages"){
+               $mdDialog.show(
+                   $mdDialog.alert()
+                       .parent(angular.element(document.querySelector('#popupContainer')))
+                       .clickOutsideToClose(true)
+                       .title('Coming soon')
+                       .content('Watch travellers in real-time, you can find location, photos, adventures and more.')
+                       .ariaLabel('GreatBear')
+                       .ok('Got it!')
+                       .targetEvent(ev)
+               );
+           }
+           }
+           */
+
     };
 
     //debug ui router changes
@@ -298,8 +315,8 @@ trackerApp.controller('mainIndexCtrl', function ($scope, $rootScope, $location, 
         else {
             $scope.profile = null;
             $scope.profilePic = '/assets/icons/ic_person_white_48dp_2x.png';
-            $scope.authButton = 'Login';
-            $scope.expressionAuth = 'md-raised md-primary md-button md-default-theme';
+            $scope.authButton = ' Login ';
+            $scope.expressionAuth = ''; //md-raised md-primary md-button md-default-theme
         }
 
     });
