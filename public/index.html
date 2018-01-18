@@ -277,18 +277,18 @@
     <md-toolbar style="position: fixed; flex: 0 0 auto; background-color: white">
         <div class="md-toolbar-tools" ng-controller="mainIndexCtrl" scroll-shrink>
 
-            <md-button ng-click="menuClick('Welcome')" style="font-size: 30px; font-weight: 330; text-transform: none; color: black">GreatBear</md-button>
-
             <img src="assets/icons/TRACKER1-01_karim_crop.png"
                  style="height: auto; width: auto; max-width: 55px; max-height: 55px;">
+            <md-button ng-click="menuClick('Welcome')" style="font-size: 25px; font-weight: 325; text-transform: none; color: black">GreatBear</md-button>
+
             <span flex></span> <!-- move buttons to right -->
-            <md-button style="color: black; font-size: 20px; font-weight: 310;" ng-click="menuClick('Trips')">Trips
+            <md-button style="color: black; font-size: 16px; font-weight: 310;" ng-click="menuClick('Trips')">Trips
                 <md-tooltip md-direction="bottom">Get inspired by travellers trips from around the world</md-tooltip>
             </md-button>
-            <md-button style="color: black; font-size: 20px; font-weight: 310;" ng-click="menuClick('My Trips')">My Trips
+            <md-button style="color: black; font-size: 16px; font-weight: 310;" ng-click="menuClick('My Trips')">My Trips
                 <md-tooltip md-direction="bottom">Your trips</md-tooltip>
             </md-button>
-            <md-button style="color: black; font-size: 20px; font-weight: 310;" ng-click="showAlert($event)" >Messages
+            <md-button style="color: black; font-size: 16px; font-weight: 310;" ng-click="showAlert($event)" >Messages
                 <md-tooltip md-direction="bottom">Messages from travellers</md-tooltip>
             </md-button>
             <!--
@@ -302,7 +302,7 @@
                     margin: 2px;
                     border-radius: 48px;
                     border: 0px solid #ddd;">
-            <md-button style="color: black; font-size: 17px; font-weight: 310;" ng-click="authUser()" ng-class="expressionAuth">{{authButton}}
+            <md-button style="color: black; font-size: 16px; font-weight: 310;" ng-click="authUser()" ng-class="expressionAuth">{{authButton}}
                 <md-tooltip md-direction="bottom">Login / Logout</md-tooltip>
             </md-button>
             <md-button class="md-icon-button" aria-label="More" ng-disabled="true">
