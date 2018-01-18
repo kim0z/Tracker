@@ -20,6 +20,12 @@
 <meta name="viewport" content="width=device-width">
 <title>GreatBear.io - Document, Track and Share your trip</title>
 <link media="all" rel="stylesheet" href="assets/css/welcome.css">
+<link media="all" rel="stylesheet" href="assets/css/carousel.css">
+
+<!-- Trips css to show trips in Crousel like Trips page -->
+<!-- <link media="all" rel="stylesheet" href="assets/css/trips.css"> -->
+
+
 <!-- <link media="all" rel="stylesheet" href="assets/css/crew.css"> -->
 <meta name="keywords"
       content="greatbear, tracker, walks, tour, guide, walking tours, travel, tourism, things to do, what to do, maps, tips">
@@ -78,6 +84,66 @@
                 <p class="announcement-text">GreatBear is now available for Alpha users! <span ng-click="goToAgreement()"><strong>Terms of service!</strong></span>	&nbsp;	&nbsp;<span ng-click="goToPrivacyPolicy()"><strong>Privacy policy!</strong></span></p>
             </div>
         </a>
+
+
+
+    <div class="box-container">
+      <ui-carousel slides="chunks" on-init="onCarouselInit()" slides-to-show="4" slides-to-scroll="3" initial-slide="0" style="width: 1400px">
+        <!-- For slider render -->
+        <carousel-item style="height: 220px; width: 380px; margin: 8px">
+
+  <div style="height: 220px; width: 330px; " ng-style="{'background-image':'url( {{ item.cover }} )'}" ng-click="showActualMap(item.id)">
+      
+  </div>
+<div style="padding-top: 8px; padding-bottom: 8px; width: 100%; line-height: 1.43" ng-click='showActualMap({{item.id}})'>
+
+    <div style="font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 0.4px; line-height: 16px; color: #108AA8; display: inline"> {{item.days}} Days </div>
+    <br />
+    <br />
+    <div style="font-family: Arial, Helvetica, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: 0.4px; line-height: 16px; color: #484848; display: -webkit-box"> {{ item.title }} </div>
+    <br />
+    <div style="font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 400; letter-spacing: 0.4px; line-height: 16px; color: #484848; display: -webkit-box"> {{ item.continent }} </div>
+</div>
+
+ 
+          
+ 
+
+
+
+      
+
+          <!-- end -->
+        </carousel-item>
+
+        <!-- For customize carousel next, previous button -->
+        <carousel-prev>
+          <!-- placed your previous button here -->
+          <span class="glyphicon glyphicon-menu-left" aria-hidden="true" style="font-size: 35px;"></span>
+          <!-- end -->
+        </carousel-prev>
+
+        <carousel-next>
+          <!-- placed your next button here -->
+          <span class="glyphicon glyphicon-menu-right" aria-hidden="true" style="font-size: 35px;"></span>
+          <!-- end -->
+        </carousel-next>
+      </ui-carousel>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="container" id="container">
             <div class="row text-center benefits-block">
                 <div class="col-sm-4 col-grid-img">
