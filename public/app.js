@@ -28,7 +28,8 @@ var trackerApp = angular.module('myApp', [
         'angular-flexslider',
         'angularjs-dropdown-multiselect',
         'mgo-angular-wizard',
-        'ngFileUpload'
+        'ngFileUpload',
+        'ui.carousel'
     ])
     .config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $locationProvider) {
 
@@ -195,7 +196,7 @@ var trackerApp = angular.module('myApp', [
 
     .constant('_', window._)
     // use in views, ng-repeat="x in _.range(3)"
-    .run(function ($rootScope, auth, jwtHelper, localStorageService) {
+    .run(function ($rootScope, auth, jwtHelper, localStorageService, Carousel) {
         $rootScope._ = window._;
         auth.hookEvents();
 
@@ -225,6 +226,23 @@ var trackerApp = angular.module('myApp', [
                 }
             }
         });
+
+  Carousel.setOptions({
+    arrows: true,
+    autoplay: false,
+    autoplaySpeed: 3000,
+    cssEase: 'ease',
+    dots: false,
+
+    easing: 'linear',
+    fade: false,
+    infinite: true,
+    initialSlide: 0,
+
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    speed: 500,
+  });
 
     });
 

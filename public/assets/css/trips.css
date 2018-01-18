@@ -1,0 +1,268 @@
+        .checkboxdemoBasicUsage div.flex-xs {
+            min-height: 40px;
+        }
+
+        .checkboxdemoBasicUsage .checkboxDemo1 div {
+            clear: both;
+        }
+
+        .checkboxdemoBasicUsage p {
+            padding-left: 8px;
+        }
+
+        .checkboxdemoBasicUsage fieldset.standard {
+            border-style: solid;
+            border-width: 1px;
+        }
+
+        .checkboxdemoBasicUsage legend {
+            color: #3F51B5;
+        }
+
+        .checkboxdemoBasicUsage legend code {
+            color: #3F51B5;
+            font-weight: normal;
+        }
+
+        .checkboxdemoBasicUsage .ipsum {
+            color: saddlebrown;
+        }
+
+        /* override some CSS from welocme.css */
+        .flex-grid .flex-grid-item {
+            overflow: hidden;
+            display: inline-block;
+            margin-bottom: 8px;
+            width: 280px;
+            height: 130px;
+            margin-right: 8px;
+            align-items: center;
+            justify-content: center; }
+
+        .cont-img {
+            height: 70px;
+            width: 270px
+        }
+
+        /* New View */
+
+        .container {
+            /* background-color: #f2f2f2; */
+            padding: 10px;
+           /*  border: 2px solid #CCCCCC;*/
+            /* max-width: 900px; */
+            margin: 0 auto;
+            height: 100%;
+            width: 90%;
+            display: flex;
+            flex-flow: row wrap; /* Shorthand – you could use ‘flex-direction: column’ and ‘flex-wrap: wrap’ instead */
+            /* justify-content: flex-start; */
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .item {
+            background-color: orange;
+            height: 150px;
+            /* width: 31%; */
+            margin: 1%;
+        }
+
+        /*
+        .item:nth-child(2) {
+            background-color: pink;
+            height: 250px;
+        }
+
+        .item:nth-child(3) {
+            height: 190px;
+        }
+
+        .item:nth-child(4) {
+            background-color: aqua;
+            height: 220px;
+        }
+        */
+        .wrapperr {
+            /* position: absolute; */
+            width: 370px;
+            height: 500px;
+            margin: 10px;
+            /*
+            background: -webkit-linear-gradient(#A5B5BD 0, #7B847B 100%);
+            background: -moz-linear-gradient(#A5B5BD 0, #7B847B 100%);
+            background: -ms-linear-gradient(#A5B5BD 0, #7B847B 100%);
+            background: -o-linear-gradient(#A5B5BD 0, #7B847B 100%);
+            background: linear-gradient(#A5B5BD 0, #7B847B 100%);
+            */
+        }
+
+        .card {
+            cursor: default;
+            position: relative;
+            width: 371px;
+            top: 50%;
+            left: 50%;
+            transform: -webkit-translate(-50%, -50%);
+            transform: -moz-translate(-50%, -50%);
+            transform: -ms-translate(-50%, -50%);
+            transform: -o-translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .card-header {
+            width: 371px;
+            height: 235px;
+            background: url(../../assets/images/background.jpg) no-repeat;
+            background-size: 371px 235px;
+            border-radius: 1px 1px 0 0;
+            -webkit-transition: all .3s ease-in-out;
+            -moz-transition: all .3s ease-in-out;
+            -ms-transition: all .3s ease-in-out;
+            -o-transition: all .3s ease-in-out;
+            transition: all .3s ease-in-out;
+        }
+
+        .card:hover .card-header {
+            background-size: 403px 267px;
+            background-position: -16px -16px;
+        }
+
+        .card-header-mask {
+            height: 100%;
+            -webkit-transition: all .3s ease-in-out;
+            -moz-transition: all .3s ease-in-out;
+            -ms-transition: all .3s ease-in-out;
+            -o-transition: all .3s ease-in-out;
+            transition: all .3s ease-in-out;
+        }
+
+        .card:hover .card-header-mask {
+            background-color: rgba(0, 0, 0, .6);
+        }
+
+        .card-header-date, .card-body-header-category {
+            text-transform: uppercase;
+            background-color: #EF5A31;
+            color: #FFF;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .card-body-header-category {
+            position: absolute;
+            font-size: 13px;
+            top: -31px;
+            left: 0;
+            padding: 8px 14px;
+            line-height: 15px;
+        }
+
+        .card-header-date {
+            float: right;
+            margin: 20px 20px 0 0;
+            border-radius: 50%;
+            font-weight: bold;
+            padding: 12px 15px;
+            line-height: 15px;
+        }
+
+        .card-header-date-day {
+            font-size: 18px;
+        }
+
+        .card-header-date-month {
+            font-size: 11px;
+        }
+
+        .card-body {
+            background-color: #FFF;
+            border-radius: 0 0 1px 1px;
+            padding: 0 26px 26px 26px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+        }
+
+        .card-body-header {
+            position: absolute;
+            left: 0;
+            padding: 26px;
+            width: 100%;
+            background-color: #FFF;
+            -webkit-transition: all .3s ease-in-out;
+            -moz-transition: all .3s ease-in-out;
+            -ms-transition: all .3s ease-in-out;
+            -o-transition: all .3s ease-in-out;
+            transition: all .3s ease-in-out;
+        }
+
+        .card:hover .card-body-header {
+            margin-top: -141px;
+        }
+
+        h1 {
+            color: #23282D;
+            letter-spacing: -1px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .card-body-header-sentence {
+            color: #EF5A31;
+            margin-top: 14px;
+            font-size: 19px;
+        }
+
+        .card-body-header-sentence span {
+            font-style: italic;
+        }
+
+        .card-body-description {
+            opacity: 0;
+            color: #757B82;
+            line-height: 30px;
+            -webkit-transition: all .2s ease-in-out;
+            -moz-transition: all .2s ease-in-out;
+            -ms-transition: all .2s ease-in-out;
+            -o-transition: all .2s ease-in-out;
+            transition: all .2s ease-in-out;
+        }
+
+        .card:hover .card-body-description {
+            opacity: 1;
+            -webkit-transition: all .5s ease-in-out;
+            -moz-transition: all .5s ease-in-out;
+            -ms-transition: all .5s ease-in-out;
+            -o-transition: all .5s ease-in-out;
+            transition: all .5s ease-in-out;
+        }
+
+        .card-body-footer {
+            position: relative;
+            z-index: 10;
+            margin-top: 14px;
+            font-size: 14px;
+            color: #9FA5A8;
+        }
+
+        .icon {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 2px;
+        }
+
+        .icon-time {
+            margin-top: -3px;
+            width: 10px;
+            height: 17px;
+            background: url(../../assets/images/icon-time.png) no-repeat;
+        }
+
+        .icon-comment {
+            margin-top: -2px;
+            margin-left: 12px;
+            width: 14px;
+            height: 14px;
+            background: url(../../assets/images/icon-comment.png) no-repeat;
+        }
+
+        .x[ng-click] { cursor: default; }
