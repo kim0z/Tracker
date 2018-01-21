@@ -1,8 +1,9 @@
 
 .box-container {
-  width: 1200px;
-  height: 300px;
-  margin: 0 auto;
+  width: 57%;
+  height: 350px;
+  margin: auto;
+  padding: 10px;
 }
 
 .carousel-prev {
