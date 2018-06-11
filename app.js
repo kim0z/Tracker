@@ -798,19 +798,15 @@ app.post('/updateTripPhotosProvider', function (request, response) {
 
 
 //Postgres read trips table
-app.post('/getTrips', function (request, response, next) {
-
+app.post('/getMyTrips', function (request, response, next) {
     // add validation to the email is valid - add function to do the validation
     //else return nothing
-
-
     if (request.body.email == '') {
         response.status(200);
     } else {
         console.log('SERVER:: Postgres:: get all trip from trips by user email');
         console.log(request.body.email);
         var results = [];
-
         // Get a Postgres client from the connection pool
         pg.connect(conString, function (err, client, done) {
             // Handle connection errors
@@ -839,7 +835,6 @@ app.post('/getTrips', function (request, response, next) {
         });
     }
 });
-
 
 //Postgres get trip by id
 app.post('/getTripById', function (request, response) {
