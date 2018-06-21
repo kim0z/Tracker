@@ -26,7 +26,7 @@ trackerApp.service('dataBaseService', ['$http', function ($http) {
     //get all trips by user email
     this.getTrips = function (userEmail) { // in use
         console.log('Client::dataBaseService:: get all trips from table = trips by user email');
-        return $http.post('/getTrips', userEmail);
+        return $http.post('/getMyTrips', userEmail);
     };
 
     //get all public trips
