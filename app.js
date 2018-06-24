@@ -301,26 +301,39 @@ app.post('/getTripPath', function (request, response) {
         var path_last_index = 0;
         var trip_path_hash = [];
         //$scope.trip_path_hash = new Array($scope.tripDays + 1);
-        for (var hash_index = 0; hash_index < tripDays; hash_index++) { //init hashtable with extra 10 cells, I removed the 10 extra no need
+        for (var hash_index = 0; hash_index < 100; hash_index++) { //init hashtable with extra 10 cells, I removed the 10 extra no need
             trip_path_hash[hash_index] = [];
         }
 
         for (var i = 0; i < tripDays; i++) {
+            console.log('inside loop1');
             for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new cel
+                console.log('inside loop2')
+                console.log('path length');
+                console.log(trip_path.length);
+                console.log('path index');
+                console.log(path_last_index);
                 if (trip_path[j]['timestamp'] && path_firast_date) {
+                    console.log('if 1');
                     if (trip_path[j].timestamp.substring(0, 10) == path_firast_date.substring(0, 10)) {
+                        console.log('if 2');
                         if (checkAccuracy(trip_path[j], 10)) { //check accuracy
-                            trip_path_hash[day].push(
-                                {
-                                    lat: JSON.parse(trip_path[j]['coords'].latitude),
-                                    lng: JSON.parse(trip_path[j]['coords'].longitude),
-                                    timestamp: trip_path[j]['timestamp'],
-                                    data: trip_path[j]
-                                }
-                            );
+                            console.log('if 3');
+                            console.log(day);
+                            console.log(trip_path_hash.length);
+                                trip_path_hash[day].push(
+                                    {
+                                        lat: JSON.parse(trip_path[j]['coords'].latitude),
+                                        lng: JSON.parse(trip_path[j]['coords'].longitude),
+                                        timestamp: trip_path[j]['timestamp'],
+                                        data: trip_path[j]
+                                    }
+                                );
                         }
                     } else {
                         //if date changed it means new day started, updated day and path index
+                        console.log('day');
+                        console.log(day++);
                         day++;
                         path_last_index = j;
                         path_firast_date = trip_path[j].timestamp;
