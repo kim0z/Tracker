@@ -16,6 +16,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
         $scope.places_button = true;
         $scope.routes_button = false;
         $scope.expense_button = false;
+        $scope.settings_button = false;
         //Right panel, switches
         $scope.tips_items_flag = true;
         $scope.places_items_flag = true;
@@ -98,6 +99,16 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
             document.getElementById("mySidenav").style.width = "0";
         }
 
+        $scope.settings_input_gps_accuracy = ''; // by default in case data server pll will not work
+        dataBaseService.getGpsAccuracy({data:''}).then(function (result) {
+            $scope.settings_input_gps_accuracy = result.data;
+        });
+        //change GPS accuracy
+        $scope.change_gps_accuracy = function () {
+            dataBaseService.changeGpsAccuracy({gps_accuracy: $scope.settings_input_gps_accuracy}).then(function (results) {
+
+            })
+        }
         //Get trip Id to start working on the trip
         //############ Main closure ###################### //
         var dataTripId = {trip_id: $scope.tripID};
@@ -501,32 +512,32 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         $scope.map.panTo(center);
                     }
 
-                $scope.change_map_style = function (style) {
-                    $http.get('assets/map/map_style.json').success(function(response) {
-                        switch(style) {
-                            case 'standard':
-                                $scope.map.setOptions({styles:   $scope.map_style = ''})
-                                break;
-                            case 'silver':
-                                $scope.map.setOptions({styles:   $scope.map_style = response[0].silver})
-                                break;
-                            case 'retro':
-                                $scope.map.setOptions({styles:   $scope.map_style = response[1].retro})
-                                break;
-                            case 'dark':
-                                $scope.map.setOptions({styles:   $scope.map_style = response[2].dark})
-                                break;
-                            case 'night':
-                                $scope.map.setOptions({styles:   $scope.map_style = response[3].night})
-                                break;
-                            case 'aubergine':
-                                $scope.map.setOptions({styles:   $scope.map_style = response[4].aubergine})
-                                break;
-                            default:
-                                $scope.map.setOptions({styles:   $scope.map_style = response[5].silver})
-                        }
-                    });
-                }
+                    $scope.change_map_style = function (style) {
+                        $http.get('assets/map/map_style.json').success(function (response) {
+                            switch (style) {
+                                case 'standard':
+                                    $scope.map.setOptions({styles: $scope.map_style = ''})
+                                    break;
+                                case 'silver':
+                                    $scope.map.setOptions({styles: $scope.map_style = response[0].silver})
+                                    break;
+                                case 'retro':
+                                    $scope.map.setOptions({styles: $scope.map_style = response[1].retro})
+                                    break;
+                                case 'dark':
+                                    $scope.map.setOptions({styles: $scope.map_style = response[2].dark})
+                                    break;
+                                case 'night':
+                                    $scope.map.setOptions({styles: $scope.map_style = response[3].night})
+                                    break;
+                                case 'aubergine':
+                                    $scope.map.setOptions({styles: $scope.map_style = response[4].aubergine})
+                                    break;
+                                default:
+                                    $scope.map.setOptions({styles: $scope.map_style = response[5].silver})
+                            }
+                        });
+                    }
                     //Map configuration
                     var iframe = document.getElementById('iframe');
                     iframe.contentWindow.document.open();
@@ -554,240 +565,240 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         streetViewControlOptions: {
                             position: google.maps.ControlPosition.LEFT_CENTER
                         },
-                        styles:     $scope.map_style
-                            /*[
-                            {
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#ebe3cd"
-                                    }
-                                ]
-                            },
-                            {
-                                "elementType": "labels.text.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#523735"
-                                    }
-                                ]
-                            },
-                            {
-                                "elementType": "labels.text.stroke",
-                                "stylers": [
-                                    {
-                                        "color": "#f5f1e6"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "administrative",
-                                "elementType": "geometry.stroke",
-                                "stylers": [
-                                    {
-                                        "color": "#c9b2a6"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "administrative.land_parcel",
-                                "elementType": "geometry.stroke",
-                                "stylers": [
-                                    {
-                                        "color": "#dcd2be"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "administrative.land_parcel",
-                                "elementType": "labels.text.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#ae9e90"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "landscape.natural",
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#dfd2ae"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "poi",
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#dfd2ae"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "poi",
-                                "elementType": "labels.text.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#93817c"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "poi.park",
-                                "elementType": "geometry.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#a5b076"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "poi.park",
-                                "elementType": "labels.text.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#447530"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "road",
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#f5f1e6"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "road.arterial",
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#fdfcf8"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "road.highway",
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#f8c967"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "road.highway",
-                                "elementType": "geometry.stroke",
-                                "stylers": [
-                                    {
-                                        "color": "#e9bc62"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "road.highway.controlled_access",
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#e98d58"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "road.highway.controlled_access",
-                                "elementType": "geometry.stroke",
-                                "stylers": [
-                                    {
-                                        "color": "#db8555"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "road.local",
-                                "elementType": "labels.text.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#806b63"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "transit.line",
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#dfd2ae"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "transit.line",
-                                "elementType": "labels.text.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#8f7d77"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "transit.line",
-                                "elementType": "labels.text.stroke",
-                                "stylers": [
-                                    {
-                                        "color": "#ebe3cd"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "transit.station",
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#dfd2ae"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "water",
-                                "stylers": [
-                                    {
-                                        "color": "#3388ff"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "water",
-                                "elementType": "geometry.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#3cadf2"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "water",
-                                "elementType": "geometry.stroke",
-                                "stylers": [
-                                    {
-                                        "color": "#3388ff"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "water",
-                                "elementType": "labels.text.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#92998d"
-                                    }
-                                ]
-                            }
-                        ]
-                        */
+                        styles: $scope.map_style
+                        /*[
+                         {
+                         "elementType": "geometry",
+                         "stylers": [
+                         {
+                         "color": "#ebe3cd"
+                         }
+                         ]
+                         },
+                         {
+                         "elementType": "labels.text.fill",
+                         "stylers": [
+                         {
+                         "color": "#523735"
+                         }
+                         ]
+                         },
+                         {
+                         "elementType": "labels.text.stroke",
+                         "stylers": [
+                         {
+                         "color": "#f5f1e6"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "administrative",
+                         "elementType": "geometry.stroke",
+                         "stylers": [
+                         {
+                         "color": "#c9b2a6"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "administrative.land_parcel",
+                         "elementType": "geometry.stroke",
+                         "stylers": [
+                         {
+                         "color": "#dcd2be"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "administrative.land_parcel",
+                         "elementType": "labels.text.fill",
+                         "stylers": [
+                         {
+                         "color": "#ae9e90"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "landscape.natural",
+                         "elementType": "geometry",
+                         "stylers": [
+                         {
+                         "color": "#dfd2ae"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "poi",
+                         "elementType": "geometry",
+                         "stylers": [
+                         {
+                         "color": "#dfd2ae"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "poi",
+                         "elementType": "labels.text.fill",
+                         "stylers": [
+                         {
+                         "color": "#93817c"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "poi.park",
+                         "elementType": "geometry.fill",
+                         "stylers": [
+                         {
+                         "color": "#a5b076"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "poi.park",
+                         "elementType": "labels.text.fill",
+                         "stylers": [
+                         {
+                         "color": "#447530"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "road",
+                         "elementType": "geometry",
+                         "stylers": [
+                         {
+                         "color": "#f5f1e6"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "road.arterial",
+                         "elementType": "geometry",
+                         "stylers": [
+                         {
+                         "color": "#fdfcf8"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "road.highway",
+                         "elementType": "geometry",
+                         "stylers": [
+                         {
+                         "color": "#f8c967"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "road.highway",
+                         "elementType": "geometry.stroke",
+                         "stylers": [
+                         {
+                         "color": "#e9bc62"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "road.highway.controlled_access",
+                         "elementType": "geometry",
+                         "stylers": [
+                         {
+                         "color": "#e98d58"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "road.highway.controlled_access",
+                         "elementType": "geometry.stroke",
+                         "stylers": [
+                         {
+                         "color": "#db8555"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "road.local",
+                         "elementType": "labels.text.fill",
+                         "stylers": [
+                         {
+                         "color": "#806b63"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "transit.line",
+                         "elementType": "geometry",
+                         "stylers": [
+                         {
+                         "color": "#dfd2ae"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "transit.line",
+                         "elementType": "labels.text.fill",
+                         "stylers": [
+                         {
+                         "color": "#8f7d77"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "transit.line",
+                         "elementType": "labels.text.stroke",
+                         "stylers": [
+                         {
+                         "color": "#ebe3cd"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "transit.station",
+                         "elementType": "geometry",
+                         "stylers": [
+                         {
+                         "color": "#dfd2ae"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "water",
+                         "stylers": [
+                         {
+                         "color": "#3388ff"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "water",
+                         "elementType": "geometry.fill",
+                         "stylers": [
+                         {
+                         "color": "#3cadf2"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "water",
+                         "elementType": "geometry.stroke",
+                         "stylers": [
+                         {
+                         "color": "#3388ff"
+                         }
+                         ]
+                         },
+                         {
+                         "featureType": "water",
+                         "elementType": "labels.text.fill",
+                         "stylers": [
+                         {
+                         "color": "#92998d"
+                         }
+                         ]
+                         }
+                         ]
+                         */
                     });
 
                     var drawingManager = new google.maps.drawing.DrawingManager({
@@ -1426,7 +1437,6 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             //});
 
 
-
                             // ********* Create routes from recorded path *****************
                             // each day is a route in this case
                             // simulate route data to keep the same structure for UI route.routes[0].summary
@@ -1434,7 +1444,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                             // $scope.routes_settings = {enable_routes_map: true};
 
                             for (var i = 0; i < $scope.trip_path_hash.length; i++) {
-                                if ($scope.trip_path_hash[i].length == 0){
+                                if ($scope.trip_path_hash[i].length == 0) {
                                     break;
                                 }
                                 var routes = new Array(0);
@@ -1800,7 +1810,7 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                         markers_places.push({marker: marker_place, info: infowindow_message});
                     }
 
-                // ************** Load Places from Firebase *********************
+                    // ************** Load Places from Firebase *********************
 
                     $scope.nearbyPlaces = [];
                     $scope.nearbyPlacesReady = true;
@@ -1870,28 +1880,12 @@ trackerApp.controller('tripCtrl', function ($rootScope, $scope, $sce, $q, $timeo
                     });
 
 
-                //If no routes in Firebase then let's try to load from Recorded path
-                // ********* Create routes from recorded path *****************
-                // each day is a route in this case
-                // simulate route data to keep the same structure for UI route.routes[0].summary
+                    //If no routes in Firebase then let's try to load from Recorded path
+                    // ********* Create routes from recorded path *****************
+                    // each day is a route in this case
+                    // simulate route data to keep the same structure for UI route.routes[0].summary
 
-               // $scope.routes_settings = {enable_routes_map: true};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    // $scope.routes_settings = {enable_routes_map: true};
 
 
 ///////////////////// $$$$$$$%%%%%%%%%%#^#$%#$%#$%#$%$#^#$^#$^#$^$ ///////////////////////////////////////

@@ -1,5 +1,16 @@
 trackerApp.service('dataBaseService', ['$http', function ($http) {
 
+    //change GPS accuracy
+    this.changeGpsAccuracy = function (data) {
+        console.log('Client::database service:: change GPS accuracy to :');
+        console.log(data.gps_accuracy);
+        return $http.post('/changeGPSAccuracy', data);
+    }
+    //get GPS accuracy
+    this.getGpsAccuracy = function (data) { //remove data after change from post to get
+        console.log('Client::database service:: get GPS accuracy to :');
+        return $http.post('/getGPSAccuracy', data);
+    }
     //get Trip path Hash table
     this.getTripPathHash = function (data) { // in use
         console.log('Client::dataBaseService:: get Trip path Hash Table');

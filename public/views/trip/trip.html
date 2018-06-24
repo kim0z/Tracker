@@ -383,16 +383,19 @@
                 <md-toolbar layout="row" class="md-hue-3" style="position: fixed;">
                     <div class="md-toolbar-tools">
                         <md-button class="md-raised"
-                                   ng-click="tips_button = false; places_button = true; routes_button = false"; expense_button = false">Places
+                                   ng-click="tips_button = false; places_button = true; routes_button = false"; expense_button = false; settings_button = false">Places
                         </md-button>
                         <md-button class="md-raised"
-                                   ng-click="tips_button = false; places_button = false; routes_button = true; expense_button = false">Routes
+                                   ng-click="tips_button = false; places_button = false; routes_button = true; expense_button = false; settings_button = false">Routes
                         </md-button>
                         <md-button class="md-raised"
-                                   ng-click="tips_button = true; places_button = false; routes_button = false; expense_button = false">Tips
+                                   ng-click="tips_button = true; places_button = false; routes_button = false; expense_button = false; settings_button = false">Tips
                         </md-button>
                         <md-button class="md-raised"
-                                   ng-click="tips_button = false; places_button = false; routes_button = false; expense_button = true">Expense
+                                   ng-click="tips_button = false; places_button = false; routes_button = false; expense_button = true; settings_button = false">Expense
+                        </md-button>
+                        <md-button class="md-raised"
+                                   ng-click="tips_button = false; places_button = false; routes_button = false; expense_button = false; settings_button = true">Settings
                         </md-button>
                     </div>
                 </md-toolbar>
@@ -521,6 +524,21 @@
                             <md-divider></md-divider>
                         </md-list-item>
                     </md-list>
+                </md-content>
+
+                <!-- Settings content -->
+                <md-content style="top: 60px" ng-show="settings_button">
+                    <md-list flex>
+                        <input type="number" name="gps_accuracy"
+                               class="form-control"
+                               data-ng-model-option="{updateOn: 'blur' }"
+                               data-ng-maxlength="4"
+                               ng-model="settings_input_gps_accuracy"
+                               />
+
+                    </md-list>
+                    <md-button class="md-raised" ng-click="change_gps_accuracy()">Save</md-button>
+
                 </md-content>
             </div>
         </div>

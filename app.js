@@ -171,6 +171,19 @@ request(options, function (error, response, body) {
 
 });
 
+var gps_accuracy = 10; //client have the ability to control accuracy
+
+app.post('/changeGPSAccuracy', function (request, res) {
+    console.log('LOG:: Server :: change GPS accuracy');
+    console.log(request.body.gps_accuracy);
+    gps_accuracy = request.body.gps_accuracy;
+});
+
+app.post('/getGPSAccuracy', function (request, res) {
+    console.log('LOG:: Server :: get GPS accuracy');
+    console.log(gps_accuracy);
+    res.json(gps_accuracy);
+});
 
 app.post('/getProviderToken', function (request, res) {
 
@@ -317,7 +330,7 @@ app.post('/getTripPath', function (request, response) {
                     console.log('if 1');
                     if (trip_path[j].timestamp.substring(0, 10) == path_firast_date.substring(0, 10)) {
                         console.log('if 2');
-                        if (checkAccuracy(trip_path[j], 10)) { //check accuracy
+                        if (checkAccuracy(trip_path[j], gps_accuracy)) { //check accuracy
                             console.log('if 3');
                             console.log(day);
                             console.log(trip_path_hash.length);
