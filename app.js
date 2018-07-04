@@ -274,7 +274,106 @@ var checkAccuracy = function (GPS_Point, accuracy) {
 
 
 //Get Path from Firebase
+//Get Path from Firebase
 app.post('/getTripPath', function (request, response) {
+    console.log('SERVER:: Firebase::  Get Trip Path');
+    var tripDays = request.body.tripDays;
+    console.log('Trip days: ' + request.body.tripDays);
+    console.log('User ID: ' + request.body.userId);
+    console.log('Trip Id: ' + request.body.tripId);
+    var firebase_trip_path = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + request.body.userId + "/" + request.body.tripId + "/path");
+    //var firebase_trip_path = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/10207022211887806/216/path");
+
+    firebase_trip_path.once("value", function (snapshot) {
+        //console.log(snapshot.val());
+
+        var trip_path = [];
+        snapshot.forEach(function (item) {
+            trip_path.push(item.val());
+        });
+
+        //console.log(trip_path);
+        console.log('Trip path loaded');
+        console.log('Trip path length : ' + trip_path.length);
+
+        //When path loaded, sort it by timestamp - the path could be sorted by default ????????????
+        //trip_path.sort(function (a, b) {
+        //    return new Date(a.timestamp) - new Date(b.timestamp);
+        //});
+        //when path sorted, save it into hash table for easy use
+        //$scope.trip_path_hash [0] = $scope.trip_path; //day zero is all the trip
+        var path_first_date = '';
+        for (var trip_first_day_index = 0; trip_first_day_index < trip_path.length; trip_first_day_index++) {
+            if (trip_path[trip_first_day_index].timestamp != null) {
+                console.log('First date found in the GPS points array:: '+ trip_path[trip_first_day_index].timestamp);
+                path_first_date = trip_path[trip_first_day_index].timestamp; //know what is the first datei
+                path_first_date = new Date(parseInt(path_first_date));
+                path_first_date = path_first_date.toISOString();
+                break;
+            }
+        }
+        console.log('first date: ' + path_first_date);
+
+        var day = 0;
+        var path_last_index = 0;
+        var trip_path_hash = [];
+        //$scope.trip_path_hash = new Array($scope.tripDays + 1);
+        for (var hash_index = 0; hash_index < tripDays + 1; hash_index++) { //init hashtable with extra 10 cells, I removed the 10 extra no need
+            trip_path_hash[hash_index] = [];
+        }
+
+        for (var i = 0; i < tripDays - 1; i++) {
+
+            for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new celi
+
+                if(day < tripDays){
+                    console.log('Path Index:: ' + j + ' of ' + trip_path.length)
+                    console.log('GPS Point date:: ' + trip_path[j].timestamp);
+                    var d = new Date(parseInt(trip_path[j].timestamp));
+                    trip_path[j].timestamp = d;
+                    trip_path[j].timestamp = trip_path[j].timestamp.toISOString();
+                    if (trip_path[j]['timestamp'] && path_first_date) {
+                        console.log('GPS Point date after convert '+trip_path[j].timestamp.substring(0, 10));
+                        console.log('First date in loop:: ' + path_first_date);
+
+                        //trip_path[j].timestamp = trip_path[j].timestamp.toString();
+                        //path_first_date = path_first_date.toString();
+
+                        if (trip_path[j].timestamp.substring(0, 10) == path_first_date.substring(0, 10)) {
+                            if (checkAccuracy(trip_path[j], gps_accuracy)) { //check accuracy
+                                trip_path_hash[day].push(
+                                    {
+                                        lat: JSON.parse(trip_path[j]['coords'].latitude),
+                                        lng: JSON.parse(trip_path[j]['coords'].longitude),
+                                        timestamp: trip_path[j]['timestamp'],
+                                        data: trip_path[j]
+                                    }
+                                );
+                            }
+                        } else {
+                            //if date changed it means new day started, updated day and path index
+                            console.log('day');
+                            console.log('Starting new date ' + day++);
+                            day++;
+                            path_last_index = j;
+                            path_first_date = trip_path[j].timestamp;
+                            console.log('new first date: '+path_first_date);
+
+                        }
+                    }
+                } else {
+                    console.log('Trip path not sliced into hash because of date issue')
+                }
+            }
+        }
+        //console.log('HASH');
+        //console.log(trip_path_hash);
+        response.send(trip_path_hash);
+    }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+    });
+});
+/*app.post('/getTripPath', function (request, response) {
     console.log('SERVER:: Firebase::  Get Trip Path');
     var tripDays = request.body.tripDays;
     console.log('Trip days: ' + request.body.tripDays);
@@ -362,7 +461,7 @@ app.post('/getTripPath', function (request, response) {
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
     });
-});
+});*/
 
 //get Trip Places
 app.post('/getTripPlaces', function (request, response) {
@@ -745,9 +844,38 @@ app.post('/getPublicTrips', function (request, response) {
             done();
             return response.json(results);
         });
-
     });
+});
 
+
+//get My Trips id list - to help in showing the Dashboard for each trip
+app.post('/getMyTripsId', function (request, response) {
+    console.log('SERVER:: Postgres:: get all ids of My Trips');
+    var id_list = [];
+    console.log(request.body);
+    // Get a Postgres client from the connection pool
+    pg.connect(conString, function (err, client, done) {
+        // Handle connection errors
+        if (err) {
+            done();
+            console.log(err);
+            return response.status(500).json({success: false, data: err});
+        }
+        // SQL Query > Select Data
+        var query = client.query("SELECT id FROM trips WHERE email = \'" + request.body.email + "\' ORDER BY id DESC  ;");
+
+        console.log(query);
+        // Stream results back one row at a time
+        query.on('row', function (row) {
+            console.log(row);
+            id_list.push(row);
+        });
+        // After all data is returned, close connection and return results
+        query.on('end', function () {
+            done();
+            return response.json(id_list);
+        });
+    });
 });
 
 
