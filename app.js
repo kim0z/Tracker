@@ -814,6 +814,62 @@ app.post('/publicTrip', function (request, response) {
 
 });
 
+//get path
+app.post('/getPathJsonPostgres', function (request, response) {
+
+    console.log('SERVER:: Postgres:: get Trip path from postgres');
+    var results = [];
+    console.log(request.body);
+    // Get a Postgres client from the connection pool
+    pg.connect(conString, function (err, client, done) {
+        // Handle connection errors
+        if (err) {
+            done();
+            console.log(err);
+            return response.status(500).json({success: false, data: err});
+        }
+        //var email = "'" + request.body.email + "'";
+        // SQL Query > Select Data
+        var query = client.query("SELECT * FROM trips WHERE id = ($1)",[request.body.id]);
+
+        console.log(query);
+        // Stream results back one row at a time
+        query.on('row', function (row) {
+            console.log(row);
+            results.push(row);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function () {
+            done();
+            return response.json(results);
+        });
+    });
+});
+//save path
+app.post('/savePathJsonPostgres', function (request, response) {
+    console.log('SERVER:: Postgres:: save / update trip with path' + request.body);
+    //var path = request.body;
+    console.log(request.body);
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }//ARRAY[$${"hello": "world"}$$, $${"baz": "bing"}$$]::JSON[]
+        client.query("UPDATE trips SET path = (path || $1) WHERE id = $2",[request.body.path, request.body.tripid], function (err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+            console.log(result);
+            //output: 1
+        });
+    });
+    response.status(200).end();
+});
+
+
 //getPublicTrips
 app.post('/getPublicTrips', function (request, response) {
 
