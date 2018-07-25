@@ -487,8 +487,8 @@ app.post('/getTripPathPostgres', function (request, response) {
                     if (day < tripDays) {
 
                         //Debug
-                        console.log('Path Index:: ' + j + ' of ' + trip_path.length)
-                        console.log('GPS Point date:: ' + trip_path[j].timestamp);
+                        //console.log('Path Index:: ' + j + ' of ' + trip_path.length)
+                        //console.log('GPS Point date:: ' + trip_path[j].timestamp);
 
                         var d = new Date(parseInt(trip_path[j].timestamp));
                         trip_path[j].timestamp = d;
