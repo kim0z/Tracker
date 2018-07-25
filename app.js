@@ -197,10 +197,10 @@ app.post('/getProviderToken', function (request, res) {
         headers: {authorization: 'Bearer ' + auth0ApiToken.access_token}
     };
     requestHttp(options, function (error, response, body) {
-        if (error){
+        if (error) {
             console.log('error :: server :: getProviderToken :: no token, server shold be restart, bug: re ask for the token')
             console.log(error);
-        } 
+        }
         console.log(body);
         res.end(body);
     });
@@ -305,7 +305,7 @@ app.post('/getTripPath', function (request, response) {
         var path_first_date = '';
         for (var trip_first_day_index = 0; trip_first_day_index < trip_path.length; trip_first_day_index++) {
             if (trip_path[trip_first_day_index].timestamp != null) {
-                console.log('First date found in the GPS points array:: '+ trip_path[trip_first_day_index].timestamp);
+                console.log('First date found in the GPS points array:: ' + trip_path[trip_first_day_index].timestamp);
                 path_first_date = trip_path[trip_first_day_index].timestamp; //know what is the first datei
                 path_first_date = new Date(parseInt(path_first_date));
                 path_first_date = path_first_date.toISOString();
@@ -326,14 +326,14 @@ app.post('/getTripPath', function (request, response) {
 
             for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new celi
 
-                if(day < tripDays){
+                if (day < tripDays) {
                     console.log('Path Index:: ' + j + ' of ' + trip_path.length)
                     console.log('GPS Point date:: ' + trip_path[j].timestamp);
                     var d = new Date(parseInt(trip_path[j].timestamp));
                     trip_path[j].timestamp = d;
                     trip_path[j].timestamp = trip_path[j].timestamp.toISOString();
                     if (trip_path[j]['timestamp'] && path_first_date) {
-                        console.log('GPS Point date after convert '+trip_path[j].timestamp.substring(0, 10));
+                        console.log('GPS Point date after convert ' + trip_path[j].timestamp.substring(0, 10));
                         console.log('First date in loop:: ' + path_first_date);
 
                         //trip_path[j].timestamp = trip_path[j].timestamp.toString();
@@ -357,7 +357,7 @@ app.post('/getTripPath', function (request, response) {
                             day++;
                             path_last_index = j;
                             path_first_date = trip_path[j].timestamp;
-                            console.log('new first date: '+path_first_date);
+                            console.log('new first date: ' + path_first_date);
 
                         }
                     }
@@ -377,7 +377,7 @@ app.post('/getTripPath', function (request, response) {
 
 //get path
 //app.post('/getPathJsonPostgres', function (request, response) {
-var getPathJsonPostgres = function(tripid) {
+var getPathJsonPostgres = function (tripid) {
     console.log('SERVER:: Postgres:: get Trip path from postgres');
     var results = [];
     //console.log(request.body);
@@ -409,7 +409,7 @@ var getPathJsonPostgres = function(tripid) {
 }
 
 
-//Get Path from Firebase
+//Get Path from Postgres
 app.post('/getTripPathPostgres', function (request, response) {
     console.log('SERVER:: Posgtres::  Get Trip Path');
     var tripDays = request.body.tripDays;
@@ -417,7 +417,7 @@ app.post('/getTripPathPostgres', function (request, response) {
     console.log('User ID: ' + request.body.userId);
     console.log('Trip Id: ' + request.body.tripId);
 
-   // firebase_trip_path.once("value", function (snapshot) {
+    // firebase_trip_path.once("value", function (snapshot) {
 
     var results = [];
     //console.log(request.body);
@@ -425,31 +425,31 @@ app.post('/getTripPathPostgres', function (request, response) {
     pg.connect(conString, function (err, client, done) {
         // Handle connection errors
         if (err) {
-            done();
+            pg.end();
             console.log(err);
             //return response.status(500).json({success: false, data: err});
         }
         //var email = "'" + request.body.email + "'";
         // SQL Query > Select Data
-        var query = client.query("SELECT path FROM trips WHERE id = ($1)", [tripid]); //request.body.id
+        var query = client.query("SELECT path FROM trips WHERE id = ($1)", [request.body.tripId]); //request.body.id
 
-        console.log(query);
+        //console.log(query);
         // Stream results back one row at a time
         query.on('row', function (row) {
-            console.log(row);
+            // console.log(row);
             results.push(row);
         });
 
         // After all data is returned, close connection and return results
         query.on('end', function () {
-            done();
-            return results;
+            pg.end();
+            //return results;
 
             //getPathJsonPostgres(request.body.tripId).then(function (results) {
 
             //Trying to get Path from Postgres
             console.log(results)
-            var trip_path = results;
+            var trip_path = results[0].path;
 
             console.log('Trip path loaded');
             console.log('Trip path length : ' + trip_path.length);
@@ -463,7 +463,7 @@ app.post('/getTripPathPostgres', function (request, response) {
             var path_first_date = '';
             for (var trip_first_day_index = 0; trip_first_day_index < trip_path.length; trip_first_day_index++) {
                 if (trip_path[trip_first_day_index].timestamp != null) {
-                    console.log('First date found in the GPS points array:: '+ trip_path[trip_first_day_index].timestamp);
+                    console.log('First date found in the GPS points array:: ' + trip_path[trip_first_day_index].timestamp);
                     path_first_date = trip_path[trip_first_day_index].timestamp; //know what is the first datei
                     path_first_date = new Date(parseInt(path_first_date));
                     path_first_date = path_first_date.toISOString();
@@ -484,11 +484,11 @@ app.post('/getTripPathPostgres', function (request, response) {
 
                 for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new celi
 
-                    if(day < tripDays){
+                    if (day < tripDays) {
 
                         //Debug
-                        //console.log('Path Index:: ' + j + ' of ' + trip_path.length)
-                        //console.log('GPS Point date:: ' + trip_path[j].timestamp);
+                        console.log('Path Index:: ' + j + ' of ' + trip_path.length)
+                        console.log('GPS Point date:: ' + trip_path[j].timestamp);
 
                         var d = new Date(parseInt(trip_path[j].timestamp));
                         trip_path[j].timestamp = d;
@@ -501,7 +501,6 @@ app.post('/getTripPathPostgres', function (request, response) {
 
                             //trip_path[j].timestamp = trip_path[j].timestamp.toString();
                             //path_first_date = path_first_date.toString();
-
                             if (trip_path[j].timestamp.substring(0, 10) == path_first_date.substring(0, 10)) {
                                 if (checkAccuracy(trip_path[j], gps_accuracy)) { //check accuracy
                                     trip_path_hash[day].push(
@@ -529,112 +528,102 @@ app.post('/getTripPathPostgres', function (request, response) {
                         //console.log('Trip path not sliced into hash because of date issue')
                     }
                 }
+
             }
-
-
-
-
-
+            response.send(trip_path_hash);
 
         });
     });
-
-        //console.log('HASH');
-        //console.log(trip_path_hash);
-        response.send(trip_path_hash);
-   /* }, function (errorObject) {
-        console.log("Path read from Postgres failed: ");
-    }); */
 });
 /*app.post('/getTripPath', function (request, response) {
-    console.log('SERVER:: Firebase::  Get Trip Path');
-    var tripDays = request.body.tripDays;
-    console.log('Trip days: ' + request.body.tripDays);
-    console.log('User ID: ' + request.body.userId);
-    console.log('Trip Id: ' + request.body.tripId);
-    var firebase_trip_path = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + request.body.userId + "/" + request.body.tripId + "/path");
-    //var firebase_trip_path = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/10207022211887806/216/path");
+ console.log('SERVER:: Firebase::  Get Trip Path');
+ var tripDays = request.body.tripDays;
+ console.log('Trip days: ' + request.body.tripDays);
+ console.log('User ID: ' + request.body.userId);
+ console.log('Trip Id: ' + request.body.tripId);
+ var firebase_trip_path = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/" + request.body.userId + "/" + request.body.tripId + "/path");
+ //var firebase_trip_path = new Firebase("https://luminous-torch-9364.firebaseio.com/web/users/10207022211887806/216/path");
 
-    firebase_trip_path.once("value", function (snapshot) {
-        //console.log(snapshot.val());
+ firebase_trip_path.once("value", function (snapshot) {
+ //console.log(snapshot.val());
 
-        var trip_path = [];
-        snapshot.forEach(function (item) {
-                trip_path.push(item.val());
-        });
+ var trip_path = [];
+ snapshot.forEach(function (item) {
+ trip_path.push(item.val());
+ });
 
-        //console.log(trip_path);
-        console.log('Trip path loaded');
-        console.log('Trip path length : ' + trip_path.length);
+ //console.log(trip_path);
+ console.log('Trip path loaded');
+ console.log('Trip path length : ' + trip_path.length);
 
-        //When path loaded, sort it by timestamp - the path could be sorted by default ????????????
-        //trip_path.sort(function (a, b) {
-        //    return new Date(a.timestamp) - new Date(b.timestamp);
-        //});
-        //when path sorted, save it into hash table for easy use
-        //$scope.trip_path_hash [0] = $scope.trip_path; //day zero is all the trip
-        var path_firast_date = '';
-        for (var trip_first_day_index = 0; trip_first_day_index < trip_path.length; trip_first_day_index++) {
-            if (trip_path[trip_first_day_index].timestamp != null) {
-                path_firast_date = trip_path[trip_first_day_index].timestamp; //know what is the first date
-                break;
-            }
-        }
-        console.log('first date: ' + path_firast_date);
+ //When path loaded, sort it by timestamp - the path could be sorted by default ????????????
+ //trip_path.sort(function (a, b) {
+ //    return new Date(a.timestamp) - new Date(b.timestamp);
+ //});
+ //when path sorted, save it into hash table for easy use
+ //$scope.trip_path_hash [0] = $scope.trip_path; //day zero is all the trip
+ var path_firast_date = '';
+ for (var trip_first_day_index = 0; trip_first_day_index < trip_path.length; trip_first_day_index++) {
+ if (trip_path[trip_first_day_index].timestamp != null) {
+ path_firast_date = trip_path[trip_first_day_index].timestamp; //know what is the first date
+ break;
+ }
+ }
+ console.log('first date: ' + path_firast_date);
 
-        var day = 0;
-        var path_last_index = 0;
-        var trip_path_hash = [];
-        //$scope.trip_path_hash = new Array($scope.tripDays + 1);
-        for (var hash_index = 0; hash_index < 100; hash_index++) { //init hashtable with extra 10 cells, I removed the 10 extra no need
-            trip_path_hash[hash_index] = [];
-        }
+ var day = 0;
+ var path_last_index = 0;
+ var trip_path_hash = [];
+ //$scope.trip_path_hash = new Array($scope.tripDays + 1);
+ for (var hash_index = 0; hash_index < 100; hash_index++) { //init hashtable with extra 10 cells, I removed the 10 extra no need
+ trip_path_hash[hash_index] = [];
+ }
 
-        for (var i = 0; i < tripDays; i++) {
-            console.log('inside loop1');
-            for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new cel
-                console.log('inside loop2')
-                console.log('path length');
-                console.log(trip_path.length);
-                console.log('path index');
-                console.log(path_last_index);
-                if (trip_path[j]['timestamp'] && path_firast_date) {
-                    console.log('if 1');
-                    if (trip_path[j].timestamp.substring(0, 10) == path_firast_date.substring(0, 10)) {
-                        console.log('if 2');
-                        if (checkAccuracy(trip_path[j], gps_accuracy)) { //check accuracy
-                            console.log('if 3');
-                            console.log(day);
-                            console.log(trip_path_hash.length);
-                                trip_path_hash[day].push(
-                                    {
-                                        lat: JSON.parse(trip_path[j]['coords'].latitude),
-                                        lng: JSON.parse(trip_path[j]['coords'].longitude),
-                                        timestamp: trip_path[j]['timestamp'],
-                                        data: trip_path[j]
-                                    }
-                                );
-                        }
-                    } else {
-                        //if date changed it means new day started, updated day and path index
-                        console.log('day');
-                        console.log(day++);
-                        day++;
-                        path_last_index = j;
-                        path_firast_date = trip_path[j].timestamp;
-                    }
-                } else {
-                    console.log('Trip path not sliced into hash because of date issue')
-                }
-            }
-        }
-        //console.log('HASH');
-        //console.log(trip_path_hash);
-        response.send(trip_path_hash);
-    }, function (errorObject) {
-        console.log("The read failed: " + errorObject.code);
-    });
-});*/
+ for (var i = 0; i < tripDays; i++) {
+ console.log('inside loop1');
+ for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new cel
+ console.log('inside loop2')
+ console.log('path length');
+ console.log(trip_path.length);
+ console.log('path index');
+ console.log(path_last_index);
+ if (trip_path[j]['timestamp'] && path_firast_date) {
+ console.log('if 1');
+ if (trip_path[j].timestamp.substring(0, 10) == path_firast_date.substring(0, 10)) {
+ console.log('if 2');
+ if (checkAccuracy(trip_path[j], gps_accuracy)) { //check accuracy
+ console.log('if 3');
+ console.log(day);
+ console.log(trip_path_hash.length);
+ trip_path_hash[day].push(
+ {
+ lat: JSON.parse(trip_path[j]['coords'].latitude),
+ lng: JSON.parse(trip_path[j]['coords'].longitude),
+ timestamp: trip_path[j]['timestamp'],
+ data: trip_path[j]
+ }
+ );
+ }
+ } else {
+ //if date changed it means new day started, updated day and path index
+ console.log('day');
+ console.log(day++);
+ day++;
+ path_last_index = j;
+ path_firast_date = trip_path[j].timestamp;
+ }
+ } else {
+ console.log('Trip path not sliced into hash because of date issue')
+ }
+ }
+ }
+ //console.log('HASH');
+ //console.log(trip_path_hash);
+ response.send(trip_path_hash);
+ }, function (errorObject) {
+ console.log("The read failed: " + errorObject.code);
+ });
+ });*/
 
 //get Trip Places
 app.post('/getTripPlaces', function (request, response) {
@@ -998,7 +987,7 @@ app.post('/savePathJsonPostgres', function (request, response) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }//ARRAY[$${"hello": "world"}$$, $${"baz": "bing"}$$]::JSON[]
-        client.query("UPDATE trips SET path = (path || $1) WHERE id = $2",[JSON.parse(request.body.path), request.body.tripid], function (err, result) {
+        client.query("UPDATE trips SET path = (path || $1) WHERE id = $2", [JSON.parse(request.body.path), request.body.tripid], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
