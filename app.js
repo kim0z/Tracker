@@ -374,6 +374,41 @@ app.post('/getTripPath', function (request, response) {
     });
 });
 
+
+//get path
+//app.post('/getPathJsonPostgres', function (request, response) {
+var getPathJsonPostgres = function(tripid) {
+    console.log('SERVER:: Postgres:: get Trip path from postgres');
+    var results = [];
+    //console.log(request.body);
+    // Get a Postgres client from the connection pool
+    pg.connect(conString, function (err, client, done) {
+        // Handle connection errors
+        if (err) {
+            done();
+            console.log(err);
+            //return response.status(500).json({success: false, data: err});
+        }
+        //var email = "'" + request.body.email + "'";
+        // SQL Query > Select Data
+        var query = client.query("SELECT path FROM trips WHERE id = ($1)", [tripid]); //request.body.id
+
+        console.log(query);
+        // Stream results back one row at a time
+        query.on('row', function (row) {
+            console.log(row);
+            results.push(row);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function () {
+            done();
+            return results;
+        });
+    });
+}
+
+
 //Get Path from Firebase
 app.post('/getTripPathPostgres', function (request, response) {
     console.log('SERVER:: Posgtres::  Get Trip Path');
@@ -918,38 +953,7 @@ app.post('/publicTrip', function (request, response) {
 
 });
 
-//get path
-//app.post('/getPathJsonPostgres', function (request, response) {
-var getPathJsonPostgres = function(tripid) {
-    console.log('SERVER:: Postgres:: get Trip path from postgres');
-    var results = [];
-    //console.log(request.body);
-    // Get a Postgres client from the connection pool
-    pg.connect(conString, function (err, client, done) {
-        // Handle connection errors
-        if (err) {
-            done();
-            console.log(err);
-            //return response.status(500).json({success: false, data: err});
-        }
-        //var email = "'" + request.body.email + "'";
-        // SQL Query > Select Data
-        var query = client.query("SELECT path FROM trips WHERE id = ($1)", [tripid]); //request.body.id
 
-        console.log(query);
-        // Stream results back one row at a time
-        query.on('row', function (row) {
-            console.log(row);
-            results.push(row);
-        });
-
-        // After all data is returned, close connection and return results
-        query.on('end', function () {
-            done();
-            return response.json(results);
-        });
-    });
-}
 //});
 //save path
 app.post('/savePathJsonPostgres', function (request, response) {
