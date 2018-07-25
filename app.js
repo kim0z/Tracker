@@ -830,7 +830,7 @@ app.post('/getPathJsonPostgres', function (request, response) {
         }
         //var email = "'" + request.body.email + "'";
         // SQL Query > Select Data
-        var query = client.query("SELECT * FROM trips WHERE id = ($1)",[request.body.id]);
+        var query = client.query("SELECT path FROM trips WHERE id = ($1)",[request.body.id]);
 
         console.log(query);
         // Stream results back one row at a time
@@ -855,7 +855,7 @@ app.post('/savePathJsonPostgres', function (request, response) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }//ARRAY[$${"hello": "world"}$$, $${"baz": "bing"}$$]::JSON[]
-        client.query("UPDATE trips SET path = (path || $1) WHERE id = $2",[request.body.path, request.body.tripid], function (err, result) {
+        client.query("UPDATE trips SET path = (path || $1) WHERE id = $2",[JSON.parse(request.body.path), request.body.tripid], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
