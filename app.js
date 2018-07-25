@@ -425,14 +425,19 @@ app.post('/getTripPathPostgres', function (request, response) {
             for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new celi
 
                 if(day < tripDays){
-                    console.log('Path Index:: ' + j + ' of ' + trip_path.length)
-                    console.log('GPS Point date:: ' + trip_path[j].timestamp);
+
+                    //Debug
+                    //console.log('Path Index:: ' + j + ' of ' + trip_path.length)
+                    //console.log('GPS Point date:: ' + trip_path[j].timestamp);
+
                     var d = new Date(parseInt(trip_path[j].timestamp));
                     trip_path[j].timestamp = d;
                     trip_path[j].timestamp = trip_path[j].timestamp.toISOString();
                     if (trip_path[j]['timestamp'] && path_first_date) {
-                        console.log('GPS Point date after convert '+trip_path[j].timestamp.substring(0, 10));
-                        console.log('First date in loop:: ' + path_first_date);
+
+                        //Debug
+                        //console.log('GPS Point date after convert '+trip_path[j].timestamp.substring(0, 10));
+                        //console.log('First date in loop:: ' + path_first_date);
 
                         //trip_path[j].timestamp = trip_path[j].timestamp.toString();
                         //path_first_date = path_first_date.toString();
@@ -450,17 +455,18 @@ app.post('/getTripPathPostgres', function (request, response) {
                             }
                         } else {
                             //if date changed it means new day started, updated day and path index
-                            console.log('day');
-                            console.log('Starting new date ' + day++);
+                            //Debug
+                            //console.log('day');
+                            //console.log('Starting new date ' + day++);
                             day++;
                             path_last_index = j;
                             path_first_date = trip_path[j].timestamp;
-                            console.log('new first date: '+path_first_date);
+                            //console.log('new first date: '+path_first_date);
 
                         }
                     }
                 } else {
-                    console.log('Trip path not sliced into hash because of date issue')
+                    //console.log('Trip path not sliced into hash because of date issue')
                 }
             }
         }
