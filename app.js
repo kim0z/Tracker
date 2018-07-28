@@ -10,6 +10,7 @@ var database = require('./config/database');
 var multiparty = require('multiparty'); //for upload photos
 var express = require('express');
 var app = express();
+var fs = require('fs');
 //app.use(compression());                           
 var port = process.env.PORT || 9090;
 var server = http.createServer(app);
@@ -107,19 +108,11 @@ app.use(express.static(__dirname + '/public')); // set static path
 app.use(morgan('dev')); // log every request to the console
 
 //bodyParser
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
-
-// create application/json parser
-var jsonParser = bodyParser.json();
-
 // create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
-//app.use(bodyParser.urlencoded({extended: true})); // parse application/x-www-form-urlencoded
-//var bodyParser = require('body-parser');
-//app.use(bodyParser.json({limit: '50mb'}));
-//app.use(bodyParser.urlencoded({limit: '50mb'}));
-//app.use(bodyParser.json()); // parse application/json
+app.use(bodyParser.urlencoded({})); // parse application/x-www-form-urlencoded
+app.use(bodyParser.json({limit: '100mb'}));
+app.use(bodyParser.urlencoded({limit: '100mb', extended: true, parameterLimit:50000}));
+app.use(bodyParser.json({limit: '100mb'})); // parse application/json
 //app.use(bodyParser.json({type: 'application/vnd.api+json'})); // parse application/vnd.api+json as json
 app.use(methodOverride());
 
@@ -1230,14 +1223,25 @@ app.post('/getTripById', function (request, response) {
 
 app.post('/uploadPhotos',  function (req, res) {
     console.log('LOG:: Upload photos to AWS S3');
-    console.log(req.body);
+
     var form = new multiparty.Form();
 
     form.parse(req, function(err, fields, files) {
-        var imgArray = files.imatges;
+        console.log(files);
 
+       // var imgArray = files.imatges;
+        for (var key in files) {
+            if (files.hasOwnProperty(key)) {
 
-        for (var i = 0; i < imgArray.length; i++) {
+                var newPath = process.cwd()+'/temp/uploads/'+files[key][0].originalFilename; //add user id
+                //var singleImg = imgArray[i];
+                //newPath+= singleImg.originalFilename;
+                readAndWriteFile(files[key][0], newPath);
+                
+            }
+        }
+/*
+        for (var i = 0; i < Object.keys(files).length; i++) {
             var newPath = './public/uploads/'+fields.imgName+'/';
             var singleImg = imgArray[i];
             newPath+= singleImg.originalFilename;
@@ -1245,7 +1249,7 @@ app.post('/uploadPhotos',  function (req, res) {
         }
        // res.send("File uploaded to: " + newPath);
         res.status(200).send("yay");
-
+*/
     });
 
     function readAndWriteFile(singleImg, newPath) {
