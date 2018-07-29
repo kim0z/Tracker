@@ -111,7 +111,7 @@ app.use(morgan('dev')); // log every request to the console
 // create application/x-www-form-urlencoded parser
 app.use(bodyParser.urlencoded({})); // parse application/x-www-form-urlencoded
 app.use(bodyParser.json({limit: '100mb'}));
-app.use(bodyParser.urlencoded({limit: '100mb', extended: true, parameterLimit:50000}));
+app.use(bodyParser.urlencoded({limit: '100mb', extended: true, parameterLimit: 50000}));
 app.use(bodyParser.json({limit: '100mb'})); // parse application/json
 //app.use(bodyParser.json({type: 'application/vnd.api+json'})); // parse application/vnd.api+json as json
 app.use(methodOverride());
@@ -1223,17 +1223,27 @@ app.post('/getTripById', function (request, response) {
 
 app.post('/uploadPhotos',  function (req, res) {
     console.log('LOG:: Upload photos to AWS S3');
+
     var form = new multiparty.Form();
     form.parse(req, function(err, fields, files) {
+
+        console.log(fields);
+
+        var data = JSON.parse(fields.data[0]);
+        var userid = data.userid;
+        var tripid = data.tripid;
+
+
         for (var key in files) {
             if (files.hasOwnProperty(key)) {
-                var newPath = process.cwd()+'/temp/uploads/'+files[key][0].fieldName; //add user id
-                readAndWriteFile(files[key][0], newPath);
+                var fileName = fields[files[key][0].fieldName][0];
+                var newPath = process.cwd()+'/temp/uploads/'+fileName; //add user id
+                readAndWriteFile(files[key][0], newPath, userid, tripid, fileName);
             }
         }
     });
 
-    function readAndWriteFile(singleImg, newPath) {
+    function readAndWriteFile(singleImg, newPath, userid, tripid, filename) {
 
         fs.readFile(singleImg.path , function(err,data) {
             fs.writeFile(newPath,data, function(err) {
@@ -1254,10 +1264,11 @@ app.post('/uploadPhotos',  function (req, res) {
                     var base64data = new Buffer(data, 'binary');
 
                     var s3 = new AWS.S3();
-
+                    console.log(userid);
+                    console.log(tripid);
                     // call S3 to retrieve upload file to specified bucket
                     var uploadParams = {Bucket: 'tracker.photos',
-                        Key: req.body.data.userid+'/'+req.body.data.tripid+'/'+singleImg.fieldName,
+                        Key: userid+'/'+tripid+'/'+filename,
                         Body: base64data,
                         ACL: 'public-read'};
 
@@ -1269,8 +1280,8 @@ app.post('/uploadPhotos',  function (req, res) {
                     });
                     uploadParams.Body = fileStream;
 
-                    var path = require('path');
-                    uploadParams.Key = path.basename(file);
+                    // var path = require('path');
+                    //uploadParams.Key = path.basename(file);
 
                     // call S3 to retrieve upload file to specified bucket
                     s3.upload (uploadParams, function (err, data) {
@@ -1279,7 +1290,8 @@ app.post('/uploadPhotos',  function (req, res) {
                         } if (data) {
                             console.log("Upload Success", data.Location);
                         }
-                });
+                    });
+                })
             })
         })
     }
