@@ -1254,16 +1254,31 @@ app.post('/uploadPhotos',  function (req, res) {
                     var base64data = new Buffer(data, 'binary');
 
                     var s3 = new AWS.S3();
-                    s3.client.putObject({
-                        Bucket: 'tracker.photos',
+
+                    // call S3 to retrieve upload file to specified bucket
+                    var uploadParams = {Bucket: 'tracker.photos',
                         Key: req.body.data.userid+'/'+req.body.data.tripid+'/'+singleImg.fieldName,
                         Body: base64data,
-                        ACL: 'public-read'
-                    },function (resp) {
-                        //console.log(arguments);
-                        console.log('Successfully uploaded package.');
-                    });
+                        ACL: 'public-read'};
 
+                    var file = newPath;
+
+                    var fileStream = fs.createReadStream(file);
+                    fileStream.on('error', function(err) {
+                        console.log('File Error', err);
+                    });
+                    uploadParams.Body = fileStream;
+
+                    var path = require('path');
+                    uploadParams.Key = path.basename(file);
+
+                    // call S3 to retrieve upload file to specified bucket
+                    s3.upload (uploadParams, function (err, data) {
+                        if (err) {
+                            console.log("Error", err);
+                        } if (data) {
+                            console.log("Upload Success", data.Location);
+                        }
                 });
             })
         })
