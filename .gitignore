@@ -11,3 +11,5 @@ config/*
 public/.DS_Store
 
 public/assets/.DS_Store
+
+package-lock.json

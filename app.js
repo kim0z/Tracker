@@ -14,7 +14,7 @@ var fs = require('fs');
 //app.use(compression());                           
 var port = process.env.PORT || 9090;
 var server = http.createServer(app);
-
+var AWS = require('aws-sdk');
 
 var io = require('socket.io').listen(server);
 
@@ -1223,47 +1223,51 @@ app.post('/getTripById', function (request, response) {
 
 app.post('/uploadPhotos',  function (req, res) {
     console.log('LOG:: Upload photos to AWS S3');
-
     var form = new multiparty.Form();
-
     form.parse(req, function(err, fields, files) {
-        console.log(files);
-
-       // var imgArray = files.imatges;
         for (var key in files) {
             if (files.hasOwnProperty(key)) {
-
-                var newPath = process.cwd()+'/temp/uploads/'+files[key][0].originalFilename; //add user id
-                //var singleImg = imgArray[i];
-                //newPath+= singleImg.originalFilename;
+                var newPath = process.cwd()+'/temp/uploads/'+files[key][0].fieldName; //add user id
                 readAndWriteFile(files[key][0], newPath);
-                
             }
         }
-/*
-        for (var i = 0; i < Object.keys(files).length; i++) {
-            var newPath = './public/uploads/'+fields.imgName+'/';
-            var singleImg = imgArray[i];
-            newPath+= singleImg.originalFilename;
-            readAndWriteFile(singleImg, newPath);
-        }
-       // res.send("File uploaded to: " + newPath);
-        res.status(200).send("yay");
-*/
     });
 
     function readAndWriteFile(singleImg, newPath) {
 
         fs.readFile(singleImg.path , function(err,data) {
             fs.writeFile(newPath,data, function(err) {
-                if (err) console.log('ERRRRRR!! :'+err);
-                console.log('Fitxer: '+singleImg.originalFilename +' - '+ newPath);
+                if (err) console.log('Error ReadWrite image!! :'+err);
+                console.log('File saved (local): '+singleImg.fieldName +' - '+ newPath);
+
+                //upload to S3
+                console.log('upload to S3');
+
+
+                // For dev purposes only
+                AWS.config.update({ accessKeyId: 'AKIAIGEOPTU4KRW6GK6Q', secretAccessKey: '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' });
+
+                // Read in the file, convert it to base64, store to S3
+                fs.readFile(newPath, function (err, data) {
+                    if (err) { throw err; }
+
+                    var base64data = new Buffer(data, 'binary');
+
+                    var s3 = new AWS.S3();
+                    s3.client.putObject({
+                        Bucket: 'tracker.photos',
+                        Key: req.body.data.userid+'/'+req.body.data.tripid+'/'+singleImg.fieldName,
+                        Body: base64data,
+                        ACL: 'public-read'
+                    },function (resp) {
+                        //console.log(arguments);
+                        console.log('Successfully uploaded package.');
+                    });
+
+                });
             })
         })
     }
-
-
-
 });
 //Postgres Delete trip by id
 app.post('/deleteTripById', function (request, response) {
