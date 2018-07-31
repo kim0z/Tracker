@@ -475,6 +475,7 @@ app.post('/getTripPathPostgres', function (request, response) {
             }
             console.log('first date: ' + path_first_date);
 
+            var push_count = 0;
             var day = 0;
             var path_last_index = 0;
             var trip_path_hash = [];
@@ -490,8 +491,8 @@ app.post('/getTripPathPostgres', function (request, response) {
                     if (day < tripDays) {
 
                         //Debug
-                        //console.log('Path Index:: ' + j + ' of ' + trip_path.length)
-                        //console.log('GPS Point date:: ' + trip_path[j].timestamp);
+                        console.log('Path Index:: ' + j + ' of ' + trip_path.length)
+                        console.log('GPS Point date:: ' + trip_path[j].timestamp);
 
                         var d = new Date(parseInt(trip_path[j].timestamp));
                         trip_path[j].timestamp = d;
@@ -499,8 +500,8 @@ app.post('/getTripPathPostgres', function (request, response) {
                         if (trip_path[j]['timestamp'] && path_first_date) {
 
                             //Debug
-                            //console.log('GPS Point date after convert '+trip_path[j].timestamp.substring(0, 10));
-                            //console.log('First date in loop:: ' + path_first_date);
+                            console.log('GPS Point date after convert '+trip_path[j].timestamp.substring(0, 10));
+                            console.log('First date in loop:: ' + path_first_date);
 
                             //trip_path[j].timestamp = trip_path[j].timestamp.toString();
                             //path_first_date = path_first_date.toString();
@@ -514,12 +515,13 @@ app.post('/getTripPathPostgres', function (request, response) {
                                             data: trip_path[j]
                                         }
                                     );
+                                    push_count++;
                                 }
                             } else {
                                 //if date changed it means new day started, updated day and path index
                                 //Debug
                                 //console.log('day');
-                                //console.log('Starting new date ' + day++);
+                                console.log('Starting new date ' + day++);
                                 day++;
                                 path_last_index = j;
                                 path_first_date = trip_path[j].timestamp;
@@ -533,7 +535,7 @@ app.post('/getTripPathPostgres', function (request, response) {
                 }
 
             }
-            response.send(trip_path_hash);
+            response.send({hash: trip_path_hash, length: push_count});
 
         });
     });
