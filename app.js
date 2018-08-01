@@ -1142,6 +1142,43 @@ app.post('/updateTripPhotosProvider', function (request, response) {
 
  });*/
 
+//weather
+var request = require('request');
+app.post('/getWeather', function (req, res) {
+    console.log(req.body);
+
+    //Loop path and take 5 points from each day
+    //for each point get the weather by
+    // * cnt =  current date - point date
+    // * lat and lng
+    // save results in postgress with hashtable [day 1     ,    day 2    ,       day 3]
+    //                                           [5 points]  [5 points]  [5 points]
+
+    //before loop path, check if the path day have already the 5 points, else get the weather for the 5 points
+
+
+
+    //api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}
+    //cnt number of days returned (from 1 to 16)
+    var key = 'c54b53573f2a9abe64b2694e1234e775';
+    let city = 'london';//req.body.city;
+    let url = 'http://api.openweathermap.org/data/2.5/weather?q=London&units=imperial&appid='+key;
+    request(url, function (err, response, body) {
+        console.log(body);
+        if (err) {
+            console.log('weather API error: please try again');
+        } else {
+            let weather = JSON.parse(body)
+            if (weather.main == undefined) {
+                console.log('weather API: null, error: Error, please try again');
+            } else {
+                let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
+                console.log('Weather result: ' + weatherText);
+            }
+        }
+    })
+});
+
 
 
 //Postgres read trips table
