@@ -1023,7 +1023,7 @@ app.post('/getPublicTrips', function (request, response) {
         }
         //var email = "'" + request.body.email + "'";
         // SQL Query > Select Data
-        var query = client.query("SELECT * FROM trips WHERE public = true ORDER BY id DESC;");
+        var query = client.query("SELECT * EXCEPT path FROM trips WHERE public = true ORDER BY id DESC;");
 
         console.log(query);
         // Stream results back one row at a time
@@ -1164,7 +1164,7 @@ app.post('/getMyTrips', function (request, response, next) {
             }
             //var email = "'" + request.body.email + "'";
             // SQL Query > Select Data
-            var query = client.query("SELECT * FROM trips WHERE email = \'" + request.body.email + "\' ORDER BY id DESC  ;");
+            var query = client.query("SELECT * EXCEPT path FROM trips WHERE email = \'" + request.body.email + "\' ORDER BY id DESC  ;");
 
             console.log(query);
             // Stream results back one row at a time
