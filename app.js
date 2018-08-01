@@ -1023,7 +1023,7 @@ app.post('/getPublicTrips', function (request, response) {
         }
         //var email = "'" + request.body.email + "'";
         // SQL Query > Select Data
-        var query = client.query("SELECT * EXCEPT path FROM trips WHERE public = true ORDER BY id DESC;");
+        var query = client.query("SELECT id, trip_name, start_date, end_date, continent, trip_description, cities_list, table_plan, email, active, track_mode, public, picture, photos_provider, facebook_id, trip_type, cities FROM trips WHERE public = true ORDER BY id DESC;");
 
         console.log(query);
         // Stream results back one row at a time
@@ -1164,7 +1164,7 @@ app.post('/getMyTrips', function (request, response, next) {
             }
             //var email = "'" + request.body.email + "'";
             // SQL Query > Select Data
-            var query = client.query("SELECT * EXCEPT path FROM trips WHERE email = \'" + request.body.email + "\' ORDER BY id DESC  ;");
+            var query = client.query("SELECT id, trip_name, start_date, end_date, continent, trip_description, cities_list, table_plan, email, active, track_mode, public, picture, photos_provider, facebook_id, trip_type, cities FROM trips WHERE email = \'" + request.body.email + "\' ORDER BY id DESC  ;");
 
             console.log(query);
             // Stream results back one row at a time
