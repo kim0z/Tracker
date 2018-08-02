@@ -275,8 +275,6 @@ var checkAccuracy = function (GPS_Point, accuracy) {
     }
 }
 
-
-//Get Path from Firebase
 //Get Path from Firebase
 app.post('/getTripPath', function (request, response) {
     console.log('SERVER:: Firebase::  Get Trip Path');
@@ -411,32 +409,27 @@ var getPathJsonPostgres = function (tripid) {
     });
 }
 
-
 //Get Path from Postgres
 app.post('/getTripPathPostgres', function (request, response) {
     console.log('SERVER:: Posgtres::  Get Trip Path');
     var tripDays = request.body.tripDays;
     console.log('Trip days: ' + request.body.tripDays);
-    console.log('User ID: ' + request.body.userId);
-    console.log('Trip Id: ' + request.body.tripId);
-
-    // firebase_trip_path.once("value", function (snapshot) {
+    console.log('User id: ' + request.body.userId);
+    console.log('Trip id: ' + request.body.tripId);
 
     var results = [];
-    //console.log(request.body);
+
     // Get a Postgres client from the connection pool
     pg.connect(conString, function (err, client, done) {
         // Handle connection errors
         if (err) {
             pg.end();
             console.log(err);
-            //return response.status(500).json({success: false, data: err});
+            return response.status(500).json({success: false, data: err});
         }
-        //var email = "'" + request.body.email + "'";
         // SQL Query > Select Data
         var query = client.query("SELECT path FROM trips WHERE id = ($1)", [request.body.tripId]); //request.body.id
 
-        //console.log(query);
         // Stream results back one row at a time
         query.on('row', function (row) {
             // console.log(row);
@@ -446,67 +439,61 @@ app.post('/getTripPathPostgres', function (request, response) {
         // After all data is returned, close connection and return results
         query.on('end', function () {
             pg.end();
-            //return results;
 
-            //getPathJsonPostgres(request.body.tripId).then(function (results) {
-
-            //Trying to get Path from Postgres
-            console.log(results)
+            //console.log(results)
             var trip_path = results[0].path;
 
             console.log('Trip path loaded');
             console.log('Trip path length : ' + trip_path.length);
 
-            //When path loaded, sort it by timestamp - the path could be sorted by default ????????????
-            //trip_path.sort(function (a, b) {
-            //    return new Date(a.timestamp) - new Date(b.timestamp);
-            //});
-            //when path sorted, save it into hash table for easy use
-            //$scope.trip_path_hash [0] = $scope.trip_path; //day zero is all the trip
             var path_first_date = '';
+
             for (var trip_first_day_index = 0; trip_first_day_index < trip_path.length; trip_first_day_index++) {
                 if (trip_path[trip_first_day_index].timestamp != null) {
-                    console.log('First date found in the GPS points array:: ' + trip_path[trip_first_day_index].timestamp);
-                    path_first_date = trip_path[trip_first_day_index].timestamp; //know what is the first datei
+                    console.log('First date found in GPS points array:: ' + trip_path[trip_first_day_index].timestamp);
+                    path_first_date = trip_path[trip_first_day_index].timestamp;
                     path_first_date = new Date(parseInt(path_first_date));
                     path_first_date = path_first_date.toISOString();
+                    console.log('First date set :' + path_first_date);
                     break;
                 }
             }
-            console.log('first date: ' + path_first_date);
-
+            
             var push_count = 0;
             var day = 0;
             var path_last_index = 0;
             var trip_path_hash = [];
-            //$scope.trip_path_hash = new Array($scope.tripDays + 1);
-            for (var hash_index = 0; hash_index < tripDays + 1; hash_index++) { //init hashtable with extra 10 cells, I removed the 10 extra no need
+
+            for (var hash_index = 0; hash_index < tripDays + 1; hash_index++) {
                 trip_path_hash[hash_index] = [];
             }
 
-            for (var i = 0; i < tripDays - 1; i++) {
-
-                for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new celi
-
-                    if (day < tripDays) {
-
-                        //Debug
-                        console.log('Path Index:: ' + j + ' of ' + trip_path.length)
-                        console.log('GPS Point date:: ' + trip_path[j].timestamp);
-
-                        var d = new Date(parseInt(trip_path[j].timestamp));
-                        trip_path[j].timestamp = d;
-                        trip_path[j].timestamp = trip_path[j].timestamp.toISOString();
-                        if (trip_path[j]['timestamp'] && path_first_date) {
-
+            build_hash:
+                for (var i = 0; i < tripDays - 1; i++) {
+                    for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new celi
+                        if (j == trip_path.length || j == trip_path.length - 1 || j > trip_path.length) {
+                            console.log('***************************************************************************************************');
+                            break build_hash;
+                        }
+                        if (day < tripDays) {
                             //Debug
-                            console.log('GPS Point date after convert '+trip_path[j].timestamp.substring(0, 10));
-                            console.log('First date in loop:: ' + path_first_date);
+                            console.log('Path Index:: ' + j + ' of ' + trip_path.length)
+                            console.log('GPS Point date:: ' + trip_path[j].timestamp);
 
-                            //trip_path[j].timestamp = trip_path[j].timestamp.toString();
-                            //path_first_date = path_first_date.toString();
-                            if (trip_path[j].timestamp.substring(0, 10) == path_first_date.substring(0, 10)) {
-                                if (checkAccuracy(trip_path[j], gps_accuracy)) { //check accuracy
+                            var d = new Date(parseInt(trip_path[j].timestamp));
+                            trip_path[j].timestamp = d;
+                            trip_path[j].timestamp = trip_path[j].timestamp.toISOString();
+                            if (trip_path[j]['timestamp'] && path_first_date) {
+
+                                //Debug
+                                console.log('GPS Point date after convert ' + trip_path[j].timestamp.substring(0, 10));
+                                console.log('First date in loop:: ' + path_first_date);
+
+                                console.log('Current GPS pont timestamp: ' + trip_path[j].timestamp.substring(0, 10));
+                                console.log('First date: ' + path_first_date.substring(0, 10));
+
+                                if (trip_path[j].timestamp.substring(0, 10) == path_first_date.substring(0, 10)) {
+                                    // if (checkAccuracy(trip_path[j], gps_accuracy)) { //check accuracy
                                     trip_path_hash[day].push(
                                         {
                                             lat: JSON.parse(trip_path[j]['coords'].latitude),
@@ -516,30 +503,145 @@ app.post('/getTripPathPostgres', function (request, response) {
                                         }
                                     );
                                     push_count++;
+                                    //}
+                                } else {
+                                    //if date changed it means new day started, updated day and path index
+                                    console.log('Starting new day ' + day++);
+                                    day++;
+                                    console.log('Last index: ' + j);
+                                    path_last_index = j;
+                                    path_first_date = trip_path[j].timestamp;
+                                    console.log('new first date: ' + path_first_date);
                                 }
-                            } else {
-                                //if date changed it means new day started, updated day and path index
-                                //Debug
-                                //console.log('day');
-                                console.log('Starting new date ' + day++);
-                                day++;
-                                path_last_index = j;
-                                path_first_date = trip_path[j].timestamp;
-                                //console.log('new first date: '+path_first_date);
-
                             }
+                        } else {
+                            //console.log('Trip path not sliced into hash because of date issue')
                         }
-                    } else {
-                        //console.log('Trip path not sliced into hash because of date issue')
                     }
                 }
-
-            }
             response.send({hash: trip_path_hash, length: push_count});
-
         });
     });
 });
+//Get Path from Postgres -- DELETE I created a new one above
+/*app.post('/getTripPathPostgres', function (request, response) {
+ console.log('SERVER:: Posgtres::  Get Trip Path');
+ var tripDays = request.body.tripDays;
+ console.log('Trip days: ' + request.body.tripDays);
+ console.log('User ID: ' + request.body.userId);
+ console.log('Trip Id: ' + request.body.tripId);
+
+ // firebase_trip_path.once("value", function (snapshot) {
+
+ var results = [];
+ //console.log(request.body);
+ // Get a Postgres client from the connection pool
+ pg.connect(conString, function (err, client, done) {
+ // Handle connection errors
+ if (err) {
+ pg.end();
+ console.log(err);
+ //return response.status(500).json({success: false, data: err});
+ }
+ //var email = "'" + request.body.email + "'";
+ // SQL Query > Select Data
+ var query = client.query("SELECT path FROM trips WHERE id = ($1)", [request.body.tripId]); //request.body.id
+
+ //console.log(query);
+ // Stream results back one row at a time
+ query.on('row', function (row) {
+ // console.log(row);
+ results.push(row);
+ });
+
+ // After all data is returned, close connection and return results
+ query.on('end', function () {
+ pg.end();
+ //return results;
+
+ //getPathJsonPostgres(request.body.tripId).then(function (results) {
+
+ //Trying to get Path from Postgres
+ console.log(results)
+ var trip_path = results[0].path;
+
+ console.log('Trip path loaded');
+ console.log('Trip path length : ' + trip_path.length);
+
+ //When path loaded, sort it by timestamp - the path could be sorted by default ????????????
+ //trip_path.sort(function (a, b) {
+ //    return new Date(a.timestamp) - new Date(b.timestamp);
+ //});
+ //when path sorted, save it into hash table for easy use
+ //$scope.trip_path_hash [0] = $scope.trip_path; //day zero is all the trip
+ var path_first_date = '';
+ for (var trip_first_day_index = 0; trip_first_day_index < trip_path.length; trip_first_day_index++) {
+ if (trip_path[trip_first_day_index].timestamp != null) {
+ console.log('First date found in the GPS points array:: ' + trip_path[trip_first_day_index].timestamp);
+ path_first_date = trip_path[trip_first_day_index].timestamp; //know what is the first datei
+ path_first_date = new Date(parseInt(path_first_date));
+ path_first_date = path_first_date.toISOString();
+ break;
+ }
+ }
+ console.log('first date: ' + path_first_date);
+
+ var push_count = 0;
+ var day = 0;
+ var path_last_index = 0;
+ var trip_path_hash = [];
+ //$scope.trip_path_hash = new Array($scope.tripDays + 1);
+ for (var hash_index = 0; hash_index < tripDays + 1; hash_index++) { //init hashtable with extra 10 cells, I removed the 10 extra no need
+ trip_path_hash[hash_index] = [];
+ }
+ for (var i = 0; i < tripDays - 1; i++) {
+ for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new celi
+ if (day < tripDays) {
+ //Debug
+ console.log('Path Index:: ' + j + ' of ' + trip_path.length)
+ console.log('GPS Point date:: ' + trip_path[j].timestamp);
+
+ var d = new Date(parseInt(trip_path[j].timestamp));
+ trip_path[j].timestamp = d;
+ trip_path[j].timestamp = trip_path[j].timestamp.toISOString();
+ if (trip_path[j]['timestamp'] && path_first_date) {
+
+ //Debug
+ console.log('GPS Point date after convert '+trip_path[j].timestamp.substring(0, 10));
+ console.log('First date in loop:: ' + path_first_date);
+
+ if (trip_path[j].timestamp.substring(0, 10) == path_first_date.substring(0, 10)) {
+ if (checkAccuracy(trip_path[j], gps_accuracy)) { //check accuracy
+ trip_path_hash[day].push(
+ {
+ lat: JSON.parse(trip_path[j]['coords'].latitude),
+ lng: JSON.parse(trip_path[j]['coords'].longitude),
+ timestamp: trip_path[j]['timestamp'],
+ data: trip_path[j]
+ }
+ );
+ push_count++;
+ }
+ } else {
+ //if date changed it means new day started, updated day and path index
+ console.log('Starting new date ' + day++);
+ day++;
+ path_last_index = j;
+ path_first_date = trip_path[j].timestamp;
+ //console.log('new first date: '+path_first_date);
+ }
+ }
+ } else {
+ //console.log('Trip path not sliced into hash because of date issue')
+ }
+ }
+
+ }
+ response.send({hash: trip_path_hash, length: push_count});
+
+ });
+ });
+ });*/
 /*app.post('/getTripPath', function (request, response) {
  console.log('SERVER:: Firebase::  Get Trip Path');
  var tripDays = request.body.tripDays;
@@ -1157,12 +1259,11 @@ app.post('/getWeather', function (req, res) {
     //before loop path, check if the path day have already the 5 points, else get the weather for the 5 points
 
 
-
     //api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}
     //cnt number of days returned (from 1 to 16)
     var key = 'c54b53573f2a9abe64b2694e1234e775';
     let city = 'london';//req.body.city;
-    let url = 'http://api.openweathermap.org/data/2.5/weather?q=London&units=imperial&appid='+key;
+    let url = 'http://api.openweathermap.org/data/2.5/weather?q=London&units=imperial&appid=' + key;
     request(url, function (err, response, body) {
         console.log(body);
         if (err) {
@@ -1178,7 +1279,6 @@ app.post('/getWeather', function (req, res) {
         }
     })
 });
-
 
 
 //Postgres read trips table
@@ -1260,11 +1360,11 @@ app.post('/getTripById', function (request, response) {
 });
 
 
-app.post('/uploadPhotos',  function (req, res) {
+app.post('/uploadPhotos', function (req, res) {
     console.log('LOG:: Upload photos to AWS S3');
 
     var form = new multiparty.Form();
-    form.parse(req, function(err, fields, files) {
+    form.parse(req, function (err, fields, files) {
 
         console.log(fields);
 
@@ -1276,7 +1376,7 @@ app.post('/uploadPhotos',  function (req, res) {
         for (var key in files) {
             if (files.hasOwnProperty(key)) {
                 var fileName = fields[files[key][0].fieldName][0];
-                var newPath = process.cwd()+'/temp/uploads/'+fileName; //add user id
+                var newPath = process.cwd() + '/temp/uploads/' + fileName; //add user id
                 readAndWriteFile(files[key][0], newPath, userid, tripid, fileName);
             }
         }
@@ -1284,21 +1384,26 @@ app.post('/uploadPhotos',  function (req, res) {
 
     function readAndWriteFile(singleImg, newPath, userid, tripid, filename) {
 
-        fs.readFile(singleImg.path , function(err,data) {
-            fs.writeFile(newPath,data, function(err) {
-                if (err) console.log('Error ReadWrite image!! :'+err);
-                console.log('File saved (local): '+singleImg.fieldName +' - '+ newPath);
+        fs.readFile(singleImg.path, function (err, data) {
+            fs.writeFile(newPath, data, function (err) {
+                if (err) console.log('Error ReadWrite image!! :' + err);
+                console.log('File saved (local): ' + singleImg.fieldName + ' - ' + newPath);
 
                 //upload to S3
                 console.log('upload to S3');
 
 
                 // For dev purposes only
-                AWS.config.update({ accessKeyId: 'AKIAIGEOPTU4KRW6GK6Q', secretAccessKey: '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' });
+                AWS.config.update({
+                    accessKeyId: 'AKIAIGEOPTU4KRW6GK6Q',
+                    secretAccessKey: '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'
+                });
 
                 // Read in the file, convert it to base64, store to S3
                 fs.readFile(newPath, function (err, data) {
-                    if (err) { throw err; }
+                    if (err) {
+                        throw err;
+                    }
 
                     var base64data = new Buffer(data, 'binary');
 
@@ -1306,15 +1411,17 @@ app.post('/uploadPhotos',  function (req, res) {
                     console.log(userid);
                     console.log(tripid);
                     // call S3 to retrieve upload file to specified bucket
-                    var uploadParams = {Bucket: 'tracker.photos',
-                        Key: userid+'/'+tripid+'/'+filename,
+                    var uploadParams = {
+                        Bucket: 'tracker.photos',
+                        Key: userid + '/' + tripid + '/' + filename,
                         Body: base64data,
-                        ACL: 'public-read'};
+                        ACL: 'public-read'
+                    };
 
                     var file = newPath;
 
                     var fileStream = fs.createReadStream(file);
-                    fileStream.on('error', function(err) {
+                    fileStream.on('error', function (err) {
                         console.log('File Error', err);
                     });
                     uploadParams.Body = fileStream;
@@ -1323,10 +1430,11 @@ app.post('/uploadPhotos',  function (req, res) {
                     //uploadParams.Key = path.basename(file);
 
                     // call S3 to retrieve upload file to specified bucket
-                    s3.upload (uploadParams, function (err, data) {
+                    s3.upload(uploadParams, function (err, data) {
                         if (err) {
                             console.log("Error", err);
-                        } if (data) {
+                        }
+                        if (data) {
                             console.log("Upload Success", data.Location);
                         }
                     });
