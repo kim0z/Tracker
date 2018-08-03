@@ -458,7 +458,7 @@ app.post('/getTripPathPostgres', function (request, response) {
                     break;
                 }
             }
-            
+
             var push_count = 0;
             var day = 0;
             var path_last_index = 0;
@@ -469,8 +469,8 @@ app.post('/getTripPathPostgres', function (request, response) {
             }
 
             build_hash:
-                for (var i = 0; i < tripDays - 1; i++) {
-                    for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new celi
+                for (var i = 0; i < tripDays; i++) {
+                    for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new cell
                         if (j == trip_path.length || j == trip_path.length - 1 || j > trip_path.length) {
                             console.log('***************************************************************************************************');
                             break build_hash;
@@ -486,7 +486,7 @@ app.post('/getTripPathPostgres', function (request, response) {
                             if (trip_path[j]['timestamp'] && path_first_date) {
 
                                 //Debug
-                                console.log('GPS Point date after convert ' + trip_path[j].timestamp.substring(0, 10));
+                                console.log('GPS Point date after convert ' + trip_path[j].timestamp);
                                 console.log('First date in loop:: ' + path_first_date);
 
                                 console.log('Current GPS pont timestamp: ' + trip_path[j].timestamp.substring(0, 10));
