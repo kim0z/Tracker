@@ -1355,9 +1355,9 @@ app.post('/getWeather', function (req, res) {
                                 console.log('Weather result: ' + weatherText);
                                 //push to the same hash points by adding the weather results
                                 var gps_point = hash_weather_points[weather_hash_index][index];
-                                hash_weather_points[weather_hash_index][index] = {point: gps_point, weather: weatherText};
+                                hash_weather_points[weather_hash_index][index] = {point: gps_point, weather_text: weatherText, weather: body};
 
-                                if(weather_hash_index == hash_weather_points.length && index == hash_weather_points[weather_hash_index].length){
+                                if(weather_hash_index == hash_weather_points.length -1 && index == hash_weather_points[weather_hash_index].length -1){
                                     console.log('Done! all weather set and ready');
                                     return res.status(200).send(hash_weather_points);
                                 }
