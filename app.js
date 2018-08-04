@@ -1330,8 +1330,8 @@ app.post('/getWeather', function (req, res) {
         if (i >= path_hash.length - 1) {
             console.log('Looping weather points results to start get weather for each point');
             console.log(hash_weather_points);
-            for(var weather_hash_index = 0; weather_hash_index < hash_weather_points.length ; weather_hash_index++){
-                for(var index = 0; index < hash_weather_points[weather_hash_index].length ; index++){
+            for(let weather_hash_index = 0; weather_hash_index < hash_weather_points.length ; weather_hash_index++){
+                for(let index = 0; index < hash_weather_points[weather_hash_index].length ; index++){
                     console.log(hash_weather_points[weather_hash_index][index]);
                     //Get weather
                     //api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}
