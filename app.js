@@ -1246,6 +1246,7 @@ app.post('/updateTripPhotosProvider', function (request, response) {
  });*/
 
 //weather GPS points
+/*
 var getXpointsFromPath = function (path_hash, points_number_per_day) {
     //  var d = Q.defer();
     var hash_weather_points = [];
@@ -1281,11 +1282,12 @@ var getXpointsFromPath = function (path_hash, points_number_per_day) {
         }
     }
 };
-
+*/
 //weather
 var request = require('request');
 app.post('/getWeather', function (req, res) {
     console.log('** Weather API started **')
+    var key = 'c54b53573f2a9abe64b2694e1234e775'; //weather key
     console.log(req.body);
 
     var path_hash = req.body.hash_path;
@@ -1299,7 +1301,6 @@ app.post('/getWeather', function (req, res) {
     //                                           [5 points]  [5 points]  [5 points]
 
     //before loop path, check if the path day have already the 5 points, else get the weather for the 5 points
-
 
     var hash_weather_points = [];
     console.log('Required wetaher points: ' + points_number_per_day);
@@ -1316,7 +1317,6 @@ app.post('/getWeather', function (req, res) {
                     console.log('break loop');
                     break;
                 }
-
                 if (j < path_hash[i].length) {
                     console.log('Point ' + j * points_between + ' :' + path_hash[i][j * points_between]);
                     hash_weather_points[i].push(path_hash[i][j * points_between]);
@@ -1331,19 +1331,17 @@ app.post('/getWeather', function (req, res) {
             console.log('Looping weather points results to start get weather for each point');
             console.log(hash_weather_points);
             for(weather_hash_index = 0; weather_hash_index < hash_weather_points.length ; weather_hash_index++){
-                for(index = 0; index < hash_weather_points[weather_hash_index] ; index++){
-
+                for(index = 0; index < hash_weather_points[weather_hash_index].length ; index++){
                     console.log(hash_weather_points[weather_hash_index][index]);
-
-
                     //Get weather
                     //api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}
                     //cnt number of days returned (from 1 to 16)
-
-                    var key = 'c54b53573f2a9abe64b2694e1234e775';
-                    let city = 'london';//req.body.city;
+                    //let city = 'london';//req.body.city;
+                    //var cnt = 2;
                     //let url = 'http://api.openweathermap.org/data/2.5/weather?q=London&units=imperial&appid=' + key;
-                    let url = 'https://api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + lon + '&cnt=' + cnt + '&appid=' + key;
+                    //let url = 'https://api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + lon + '&cnt=' + cnt + '&appid=' + key;  -- history cnt days
+                    //api.openweathermap.org/data/2.5/weather?lat=35&lon=139  --- current
+                    let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + hash_weather_points[weather_hash_index][index].lat + '&lon=' + hash_weather_points[weather_hash_index][index].lng +'&appid=' + key;
                     request(url, function (err, response, body) {
                         console.log(body);
                         if (err) {
@@ -1355,20 +1353,17 @@ app.post('/getWeather', function (req, res) {
                             } else {
                                 let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
                                 console.log('Weather result: ' + weatherText);
+                                //push to the same hash points by adding the weather results
+                                var gps_point = hash_weather_points[weather_hash_index][index];
+                                hash_weather_points[weather_hash_index][index] = {point: gps_point, weather: weatherText};
                             }
                         }
                     });
-
-
                 }
             }
+            return response.status(200).(hash_weather_points);
         }
     }
-
-
-    //getXpointsFromPath(req.body.hash_path, req.body.points_per_day).then(function (results) {
-
-    //});
 });
 
 
