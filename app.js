@@ -1361,7 +1361,7 @@ app.post('/getWeather', function (req, res) {
                     });
                 }
             }
-            return response.status(200).(hash_weather_points);
+            return response.status(200).send(hash_weather_points);
         }
     }
 });
