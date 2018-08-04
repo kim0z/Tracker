@@ -1356,12 +1356,16 @@ app.post('/getWeather', function (req, res) {
                                 //push to the same hash points by adding the weather results
                                 var gps_point = hash_weather_points[weather_hash_index][index];
                                 hash_weather_points[weather_hash_index][index] = {point: gps_point, weather: weatherText};
+
+                                if(weather_hash_index == hash_weather_points.length && index == hash_weather_points[weather_hash_index].length){
+                                    console.log('Done! all weather set and ready');
+                                    return res.status(200).send(hash_weather_points);
+                                }
                             }
                         }
                     });
                 }
             }
-            return res.status(200).send(hash_weather_points);
         }
     }
 });
