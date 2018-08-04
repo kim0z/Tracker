@@ -1354,8 +1354,9 @@ app.post('/getWeather', function (req, res) {
                                 let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
                                 console.log('Weather result: ' + weatherText);
                                 //push to the same hash points by adding the weather results
-                                var gps_point = hash_weather_points[weather_hash_index][index];
+                                let gps_point = hash_weather_points[weather_hash_index][index];
                                 hash_weather_points[weather_hash_index][index] = {point: gps_point, weather_text: weatherText, weather: body};
+                                console.log('weather pushed in cell: [' +weather_hash_index +']['+index+']');
 
                                 if(weather_hash_index == hash_weather_points.length -1 && index == hash_weather_points[weather_hash_index].length -1){
                                     console.log('Done! all weather set and ready');
