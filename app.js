@@ -1247,23 +1247,37 @@ app.post('/updateTripPhotosProvider', function (request, response) {
 
 //weather GPS points
 var getXpointsFromPath = function (path_hash, points_number_per_day) {
-    var d = $q.defer();
+    //  var d = Q.defer();
     var hash_weather_points = [];
-    for(var i = 0; i < path_hash.length; i++){
-        //get 5 points from each day
-        //example: if day include 1000 points, and the required points per day is 5 then 1000 / 5 = 200, take point each 200 points.
-        var points_between = path_hash[i].length / points_number_per_day;
+    console.log('Required wetaher points: ' + points_number_per_day);
+    for (var i = 0; i < path_hash.length; i++) {
+        console.log('Day ' + i + ' of ' + path_hash.length);
+        if (path_hash[i].length > 0) {
+            hash_weather_points[i] = [];
+            //get 5 points from each day
+            //example: if day include 1000 points, and the required points per day is 5 then 1000 / 5 = 200, take point each 200 points.
+            var points_between = path_hash[i].length / points_number_per_day;
+            console.log('Ponits between: ' + points_between);
+            for (var j = 0; j < points_number_per_day; j++) { //0 x 200, 1 x 200, 2 x 200, 3 x 200, 3 x 200, 4 x 200
+                if (j > path_hash[i].length) {
+                    console.log('break loop');
+                    break;
+                }
 
-        for(var j = 0; j < points_number_per_day ;){ //0 x 200, 1 x 200, 2 x 200, 3 x 200, 3 x 200, 4 x 200
-            if(j * points_between < path_hash[i].length){
-                hash_weather_points[i].push(path_hash[i][j * points_between]);
-            }else{
-                console.log('Error: Calculating weather points exceeded array day length');
+                if (j < path_hash[i].length) {
+                    console.log('Point ' + j * points_between + ' :' + path_hash[i][j * points_between]);
+                    hash_weather_points[i].push(path_hash[i][j * points_between]);
+                } else {
+                    console.log('Error: Calculating weather points exceeded array day length');
+                }
             }
+        } else {
+            console.log('Path hash day ' + i + ' is empty');
         }
-        if(i >= path_hash.length){
-            d.resolve();
-            return d.promise;
+        if (i >= path_hash.length - 1) {
+            console.log('KMMMOS');
+            //d.resolve();
+            //return d.promise;
         }
     }
 };
@@ -1283,31 +1297,98 @@ app.post('/getWeather', function (req, res) {
 
     //before loop path, check if the path day have already the 5 points, else get the weather for the 5 points
 
-    getXpointsFromPath(req.body.hash_path, req.body.points_per_day).then(function(results){
-       //Get weather
-        //api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}
-        //cnt number of days returned (from 1 to 16)
-        console.log('Weather points ready:');
-        console.log(results);
-        var key = 'c54b53573f2a9abe64b2694e1234e775';
-        let city = 'london';//req.body.city;
-        //let url = 'http://api.openweathermap.org/data/2.5/weather?q=London&units=imperial&appid=' + key;
-        let url = 'https://api.openweathermap.org/data/2.5/forecast/daily?lat='+lat+'&lon='+lon+'&cnt='+cnt+'&appid=' + key;
-        request(url, function (err, response, body) {
-            console.log(body);
-            if (err) {
-                console.log('weather API error: please try again');
-            } else {
-                let weather = JSON.parse(body)
-                if (weather.main == undefined) {
-                    console.log('weather API: null, error: Error, please try again');
+
+    var hash_weather_points = [];
+    console.log('Required wetaher points: ' + points_number_per_day);
+    for (var i = 0; i < path_hash.length; i++) {
+        console.log('Day ' + i + ' of ' + path_hash.length);
+        if (path_hash[i].length > 0) {
+            hash_weather_points[i] = [];
+            //get 5 points from each day
+            //example: if day include 1000 points, and the required points per day is 5 then 1000 / 5 = 200, take point each 200 points.
+            var points_between = path_hash[i].length / points_number_per_day;
+            console.log('Ponits between: ' + points_between);
+            for (var j = 0; j < points_number_per_day; j++) { //0 x 200, 1 x 200, 2 x 200, 3 x 200, 3 x 200, 4 x 200
+                if (j > path_hash[i].length) {
+                    console.log('break loop');
+                    break;
+                }
+
+                if (j < path_hash[i].length) {
+                    console.log('Point ' + j * points_between + ' :' + path_hash[i][j * points_between]);
+                    hash_weather_points[i].push(path_hash[i][j * points_between]);
                 } else {
-                    let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
-                    console.log('Weather result: ' + weatherText);
+                    console.log('Error: Calculating weather points exceeded array day length');
                 }
             }
-        });
-    });
+        } else {
+            console.log('Path hash day ' + i + ' is empty');
+        }
+        if (i >= path_hash.length - 1) {
+            console.log('Looping wetaher points results to start get weather for each point');
+            //d.resolve();
+            //return d.promise;
+            //loop weather points
+            for(weather_hash_index = 0; weather_hash_index < hash_weather_points.length ; weather_hash_index++){
+                for(index = 0; index < hash_weather_points[weather_hash_index] ; index++){
+                    console.log(hash_weather_points[weather_hash_index][index]);
+                }
+            }
+
+            //Get weather
+            //api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}
+            //cnt number of days returned (from 1 to 16)
+            console.log('Weather points ready:');
+            console.log(results);
+            var key = 'c54b53573f2a9abe64b2694e1234e775';
+            let city = 'london';//req.body.city;
+            //let url = 'http://api.openweathermap.org/data/2.5/weather?q=London&units=imperial&appid=' + key;
+            let url = 'https://api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + lon + '&cnt=' + cnt + '&appid=' + key;
+            request(url, function (err, response, body) {
+                console.log(body);
+                if (err) {
+                    console.log('weather API error: please try again');
+                } else {
+                    let weather = JSON.parse(body)
+                    if (weather.main == undefined) {
+                        console.log('weather API: null, error: Error, please try again');
+                    } else {
+                        let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
+                        console.log('Weather result: ' + weatherText);
+                    }
+                }
+            });
+
+
+
+
+
+
+
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //getXpointsFromPath(req.body.hash_path, req.body.points_per_day).then(function (results) {
+
+    //});
 });
 
 
