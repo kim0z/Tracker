@@ -1303,7 +1303,7 @@ app.post('/getWeather', function (req, res) {
     //before loop path, check if the path day have already the 5 points, else get the weather for the 5 points
 
     var hash_weather_points = [];
-    console.log('Required wetaher points: ' + points_number_per_day);
+    console.log('Required weather points: ' + points_number_per_day);
     for (var i = 0; i < path_hash.length; i++) {
         console.log('Day ' + i + ' of ' + path_hash.length);
         if (path_hash[i].length > 0) {
@@ -1311,13 +1311,14 @@ app.post('/getWeather', function (req, res) {
             //get 5 points from each day
             //example: if day include 1000 points, and the required points per day is 5 then 1000 / 5 = 200, take point each 200 points.
             var points_between = path_hash[i].length / points_number_per_day;
-            console.log('Ponits between: ' + points_between);
+            console.log('Points between: ' + points_between);
             for (var j = 0; j < points_number_per_day; j++) { //0 x 200, 1 x 200, 2 x 200, 3 x 200, 3 x 200, 4 x 200
                 if (j > path_hash[i].length) {
                     console.log('break loop');
                     break;
                 }
                 if (j < path_hash[i].length) {
+                    j = Math.round(j);
                     console.log('Point ' + j * points_between + ' :' + path_hash[i][j * points_between]);
                     hash_weather_points[i].push(path_hash[i][j * points_between]);
                 } else {
