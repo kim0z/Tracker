@@ -1288,6 +1288,9 @@ app.post('/getWeather', function (req, res) {
     console.log('** Weather API started **')
     console.log(req.body);
 
+    var path_hash = req.body.hash_path;
+    var points_number_per_day = req.body.points_per_day;
+
     //Loop path and take 5 points from each day
     //for each point get the weather by
     // * cnt =  current date - point date
@@ -1359,31 +1362,8 @@ app.post('/getWeather', function (req, res) {
                 }
             });
 
-
-
-
-
-
-
-
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     //getXpointsFromPath(req.body.hash_path, req.body.points_per_day).then(function (results) {
