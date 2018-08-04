@@ -1328,40 +1328,40 @@ app.post('/getWeather', function (req, res) {
             console.log('Path hash day ' + i + ' is empty');
         }
         if (i >= path_hash.length - 1) {
-            console.log('Looping wetaher points results to start get weather for each point');
-            //d.resolve();
-            //return d.promise;
-            //loop weather points
+            console.log('Looping weather points results to start get weather for each point');
+            console.log(hash_weather_points);
             for(weather_hash_index = 0; weather_hash_index < hash_weather_points.length ; weather_hash_index++){
                 for(index = 0; index < hash_weather_points[weather_hash_index] ; index++){
+
                     console.log(hash_weather_points[weather_hash_index][index]);
+
+
+                    //Get weather
+                    //api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}
+                    //cnt number of days returned (from 1 to 16)
+
+                    var key = 'c54b53573f2a9abe64b2694e1234e775';
+                    let city = 'london';//req.body.city;
+                    //let url = 'http://api.openweathermap.org/data/2.5/weather?q=London&units=imperial&appid=' + key;
+                    let url = 'https://api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + lon + '&cnt=' + cnt + '&appid=' + key;
+                    request(url, function (err, response, body) {
+                        console.log(body);
+                        if (err) {
+                            console.log('weather API error: please try again');
+                        } else {
+                            let weather = JSON.parse(body)
+                            if (weather.main == undefined) {
+                                console.log('weather API: null, error: Error, please try again');
+                            } else {
+                                let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
+                                console.log('Weather result: ' + weatherText);
+                            }
+                        }
+                    });
+
+
                 }
             }
-
-            //Get weather
-            //api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}
-            //cnt number of days returned (from 1 to 16)
-            console.log('Weather points ready:');
-            console.log(results);
-            var key = 'c54b53573f2a9abe64b2694e1234e775';
-            let city = 'london';//req.body.city;
-            //let url = 'http://api.openweathermap.org/data/2.5/weather?q=London&units=imperial&appid=' + key;
-            let url = 'https://api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + lon + '&cnt=' + cnt + '&appid=' + key;
-            request(url, function (err, response, body) {
-                console.log(body);
-                if (err) {
-                    console.log('weather API error: please try again');
-                } else {
-                    let weather = JSON.parse(body)
-                    if (weather.main == undefined) {
-                        console.log('weather API: null, error: Error, please try again');
-                    } else {
-                        let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
-                        console.log('Weather result: ' + weatherText);
-                    }
-                }
-            });
-
         }
     }
 
