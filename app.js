@@ -1325,7 +1325,7 @@ app.post('/getDistance', function (request, response) {
                 if(i == trip_path.length - 1){
                     //calculate distance
                     console.log('start calculating path distance');
-                    console.log(path_distance);
+                    //console.log(path_distance);
                     var distance_length = distance(path_distance);
                     return response.status(200).json(distance_length);
                 }
