@@ -409,7 +409,7 @@ var getPathJsonPostgres = function (tripid) {
     });
 }
 
-//Get Path from Postgres
+//Get Path from Postgres - IN USE
 app.post('/getTripPathPostgres', function (request, response) {
     console.log('SERVER:: Posgtres::  Get Trip Path');
     var tripDays = request.body.tripDays;
@@ -1247,42 +1247,94 @@ app.post('/updateTripPhotosProvider', function (request, response) {
 
 //weather GPS points
 /*
-var getXpointsFromPath = function (path_hash, points_number_per_day) {
-    //  var d = Q.defer();
-    var hash_weather_points = [];
-    console.log('Required wetaher points: ' + points_number_per_day);
-    for (var i = 0; i < path_hash.length; i++) {
-        console.log('Day ' + i + ' of ' + path_hash.length);
-        if (path_hash[i].length > 0) {
-            hash_weather_points[i] = [];
-            //get 5 points from each day
-            //example: if day include 1000 points, and the required points per day is 5 then 1000 / 5 = 200, take point each 200 points.
-            var points_between = path_hash[i].length / points_number_per_day;
-            console.log('Ponits between: ' + points_between);
-            for (var j = 0; j < points_number_per_day; j++) { //0 x 200, 1 x 200, 2 x 200, 3 x 200, 3 x 200, 4 x 200
-                if (j > path_hash[i].length) {
-                    console.log('break loop');
-                    break;
-                }
+ var getXpointsFromPath = function (path_hash, points_number_per_day) {
+ //  var d = Q.defer();
+ var hash_weather_points = [];
+ console.log('Required wetaher points: ' + points_number_per_day);
+ for (var i = 0; i < path_hash.length; i++) {
+ console.log('Day ' + i + ' of ' + path_hash.length);
+ if (path_hash[i].length > 0) {
+ hash_weather_points[i] = [];
+ //get 5 points from each day
+ //example: if day include 1000 points, and the required points per day is 5 then 1000 / 5 = 200, take point each 200 points.
+ var points_between = path_hash[i].length / points_number_per_day;
+ console.log('Ponits between: ' + points_between);
+ for (var j = 0; j < points_number_per_day; j++) { //0 x 200, 1 x 200, 2 x 200, 3 x 200, 3 x 200, 4 x 200
+ if (j > path_hash[i].length) {
+ console.log('break loop');
+ break;
+ }
 
-                if (j < path_hash[i].length) {
-                    console.log('Point ' + j * points_between + ' :' + path_hash[i][j * points_between]);
-                    hash_weather_points[i].push(path_hash[i][j * points_between]);
-                } else {
-                    console.log('Error: Calculating weather points exceeded array day length');
+ if (j < path_hash[i].length) {
+ console.log('Point ' + j * points_between + ' :' + path_hash[i][j * points_between]);
+ hash_weather_points[i].push(path_hash[i][j * points_between]);
+ } else {
+ console.log('Error: Calculating weather points exceeded array day length');
+ }
+ }
+ } else {
+ console.log('Path hash day ' + i + ' is empty');
+ }
+ if (i >= path_hash.length - 1) {
+ console.log('KMMMOS');
+ //d.resolve();
+ //return d.promise;
+ }
+ }
+ };
+ */
+
+//GPS distance
+var distance = require('gps-distance');
+app.post('/getDistance', function (request, response) {
+    //get PATH FROM DB
+    console.log('calculate path distance')
+    console.log('Trip id: ' + request.body.tripId);
+    var results = [];
+    var trip_path = [];
+    var path_distance = [];
+
+    // Get a Postgres client from the connection pool
+    pg.connect(conString, function (err, client, done) {
+        // Handle connection errors
+        if (err) {
+            pg.end();
+            console.log(err);
+            return response.status(500).json({success: false, data: err});
+        }
+        // SQL Query > Select Data
+        var query = client.query("SELECT path FROM trips WHERE id = ($1)", [request.body.tripId]); //request.body.id
+
+        // Stream results back one row at a time
+        query.on('row', function (row) {
+            // console.log(row);
+            results.push(row);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function () {
+            pg.end();
+
+            //console.log(results)
+            trip_path = results[0].path;
+
+            for (var i = 0; i < trip_path.length; i++) {
+                var point = [];
+                point.push(trip_path[i]['coords'].latitude, trip_path[i]['coords'].longitude);
+                path_distance.push(point);
+                if(i == trip_path.length - 1){
+                    //calculate distance
+                    console.log('start calculating path distance');
+                    console.log(path_distance);
+                    var distance_length = distance(path_distance);
+                    return response.status(200).json(distance_length);
                 }
             }
-        } else {
-            console.log('Path hash day ' + i + ' is empty');
-        }
-        if (i >= path_hash.length - 1) {
-            console.log('KMMMOS');
-            //d.resolve();
-            //return d.promise;
-        }
-    }
-};
-*/
+        })
+    })
+});
+
+
 //weather
 var request = require('request');
 app.post('/getWeather', function (req, res) {
@@ -1332,9 +1384,9 @@ app.post('/getWeather', function (req, res) {
         if (i >= path_hash.length - 1) {
             console.log('Looping weather points results to start get weather for each point');
             console.log(hash_weather_points);
-            for(let weather_hash_index = 0; weather_hash_index < hash_weather_points.length ; weather_hash_index++){
-                if(hash_weather_points[weather_hash_index]){
-                    for(let index = 0; index < hash_weather_points[weather_hash_index].length ; index++){
+            for (let weather_hash_index = 0; weather_hash_index < hash_weather_points.length; weather_hash_index++) {
+                if (hash_weather_points[weather_hash_index]) {
+                    for (let index = 0; index < hash_weather_points[weather_hash_index].length; index++) {
                         console.log(hash_weather_points[weather_hash_index][index]);
                         //Get weather
                         //api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}
@@ -1344,7 +1396,7 @@ app.post('/getWeather', function (req, res) {
                         //let url = 'http://api.openweathermap.org/data/2.5/weather?q=London&units=imperial&appid=' + key;
                         //let url = 'https://api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + lon + '&cnt=' + cnt + '&appid=' + key;  -- history cnt days
                         //api.openweathermap.org/data/2.5/weather?lat=35&lon=139  --- current
-                        let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + hash_weather_points[weather_hash_index][index].lat + '&lon=' + hash_weather_points[weather_hash_index][index].lng +'&appid=' + key;
+                        let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + hash_weather_points[weather_hash_index][index].lat + '&lon=' + hash_weather_points[weather_hash_index][index].lng + '&appid=' + key;
                         request(url, function (err, response, body) {
                             console.log(body);
                             if (err) {
@@ -1358,10 +1410,14 @@ app.post('/getWeather', function (req, res) {
                                     console.log('Weather result: ' + weatherText);
                                     //push to the same hash points by adding the weather results
                                     let gps_point = hash_weather_points[weather_hash_index][index];
-                                    hash_weather_points[weather_hash_index][index] = {point: gps_point, weather_text: weatherText, weather: body};
-                                    console.log('weather pushed in cell: [' +weather_hash_index +']['+index+']');
+                                    hash_weather_points[weather_hash_index][index] = {
+                                        point: gps_point,
+                                        weather_text: weatherText,
+                                        weather: body
+                                    };
+                                    console.log('weather pushed in cell: [' + weather_hash_index + '][' + index + ']');
 
-                                    if(weather_hash_index == hash_weather_points.length -1 && index == hash_weather_points[weather_hash_index].length -1){
+                                    if (weather_hash_index == hash_weather_points.length - 1 && index == hash_weather_points[weather_hash_index].length - 1) {
                                         console.log('Done! all weather set and ready');
                                         return res.status(200).send(hash_weather_points);
                                     }
@@ -1369,7 +1425,7 @@ app.post('/getWeather', function (req, res) {
                             }
                         });
                     }
-                }else{
+                } else {
                     console.log('Day path empty, move to next day');
                 }
 

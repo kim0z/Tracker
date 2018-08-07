@@ -21,6 +21,7 @@
     "express-session": "1.14.1",
     "firebase": "2.2.9",
     "googlemaps": "1.0.1",
+    "gps-distance": "0.0.4",
     "method-override": "2.1.2",
     "morgan": "1.2.2",
     "multiparty": "^4.1.4",
