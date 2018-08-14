@@ -1540,9 +1540,9 @@ app.post('/uploadPhotos', function (req, res) {
     app.post('/deleteFile', function (req, res) {
         console.log('LOG:: Delete file (photo) to AWS S3');
 
-        var userid = data.userid;
-        var tripid = data.tripid;
-        var fileName = data.fileName;
+        var userid = req.userid;
+        var tripid = req.tripid;
+        var fileName = req.fileName;
 
         console.log('file '+ fileName +'deleted '+'user id: '+ userid + 'trip id: '+ tripid);
 
