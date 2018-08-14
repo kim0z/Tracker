@@ -1558,7 +1558,7 @@ app.post('/uploadPhotos', function (req, res) {
         // call S3 to retrieve upload file to specified bucket
         var DeleteParams = {
             Bucket: 'tracker.photos',
-            Key: userid + '/' + tripid + '/' + fileName,
+            Key: '335x200/' + userid + '/' + tripid + '/' + fileName,
         };
 
         s3.deleteObject(DeleteParams, function(err, data) {
