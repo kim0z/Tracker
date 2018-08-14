@@ -1567,7 +1567,7 @@ app.post('/uploadPhotos', function (req, res) {
                 return res.status(500).send(err.stack);
             }  // error
             else{
-                return res.status(200).send('file '+ fileName +' user id: '+ userid + ' trip id: '+ tripid);
+                return res.status(200).send('file deleted: ', data);
             }
         });
     });
