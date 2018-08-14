@@ -1322,7 +1322,7 @@ app.post('/getDistance', function (request, response) {
                 var point = [];
                 point.push(trip_path[i]['coords'].latitude, trip_path[i]['coords'].longitude);
                 path_distance.push(point);
-                if(i == trip_path.length - 1){
+                if (i == trip_path.length - 1) {
                     //calculate distance
                     console.log('start calculating path distance');
                     //console.log(path_distance);
@@ -1534,6 +1534,39 @@ app.post('/uploadPhotos', function (req, res) {
                 readAndWriteFile(files[key][0], newPath, userid, tripid, fileName);
             }
         }
+    });
+
+    app.post('/deleteFile', function (req, res) {
+        console.log('LOG:: Delete file (photo) to AWS S3');
+
+        var userid = data.userid;
+        var tripid = data.tripid;
+        var fileName = data.fileName;
+
+        console.log('file '+ fileName +'deleted '+'user id: '+ userid + 'trip id: '+ tripid);
+
+        AWS.config.update({
+            accessKeyId: 'AKIAIGEOPTU4KRW6GK6Q',
+            secretAccessKey: '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'
+        });
+
+        var s3 = new AWS.S3();
+
+        // call S3 to retrieve upload file to specified bucket
+        var DeleteParams = {
+            Bucket: 'tracker.photos',
+            Key: userid + '/' + tripid + '/' + fileName,
+        };
+
+        s3.deleteObject(DeleteParams, function(err, data) {
+            if (err) {
+                console.log(err, err.stack);
+                return res.status(500).send(err.stack);
+            }  // error
+            else{
+                return res.status(200).send('file '+ fileName +'deleted '+'user id: '+ userid + 'trip id: '+ tripid);
+            }
+        });
     });
 
     function readAndWriteFile(singleImg, newPath, userid, tripid, filename) {
