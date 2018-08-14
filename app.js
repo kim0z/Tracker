@@ -1564,10 +1564,10 @@ app.post('/uploadPhotos', function (req, res) {
         s3.deleteObject(DeleteParams, function(err, data) {
             if (err) {
                 console.log(err, err.stack);
-                return res.status(500).send(err.stack);
+                res.status(500).send(err.stack)
             }  // error
             else{
-                return res.status(200).send('file deleted: ', data);
+                res.status(200).send('file deleted: ', data)
             }
         });
     });
