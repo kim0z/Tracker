@@ -1544,7 +1544,9 @@ app.post('/uploadPhotos', function (req, res) {
         var tripid = req.body.tripid;
         var fileName = req.body.fileName;
 
-        console.log('file '+ fileName +'deleted '+'user id: '+ userid + 'trip id: '+ tripid);
+        console.log('file :'+ fileName);
+        console.log('user id: '+ userid);
+        console.log('trip id: '+ tripid);
 
         AWS.config.update({
             accessKeyId: 'AKIAIGEOPTU4KRW6GK6Q',
@@ -1565,7 +1567,7 @@ app.post('/uploadPhotos', function (req, res) {
                 return res.status(500).send(err.stack);
             }  // error
             else{
-                return res.status(200).send('file '+ fileName +'deleted '+'user id: '+ userid + 'trip id: '+ tripid);
+                return res.status(200).send('file '+ fileName +' user id: '+ userid + ' trip id: '+ tripid);
             }
         });
     });
