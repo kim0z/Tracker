@@ -1534,6 +1534,7 @@ app.post('/uploadPhotos', function (req, res) {
                 readAndWriteFile(files[key][0], newPath, userid, tripid, fileName);
             }
         }
+        return res.status(200).send('file uploaded '+'user id: '+ userid + 'trip id: '+ tripid);
     });
 
     app.post('/deleteFile', function (req, res) {
