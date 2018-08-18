@@ -1320,21 +1320,24 @@ app.post('/getDistance', function (request, response) {
         // After all data is returned, close connection and return results
         query.on('end', function () {
             pg.end();
-
             //console.log(results)
             trip_path = results[0].path;
-
-            for (var i = 0; i < trip_path.length; i++) {
-                var point = [];
-                point.push(trip_path[i]['coords'].latitude, trip_path[i]['coords'].longitude);
-                path_distance.push(point);
-                if (i == trip_path.length - 1) {
-                    //calculate distance
-                    console.log('start calculating path distance');
-                    //console.log(path_distance);
-                    var distance_length = distance(path_distance);
-                    return response.status(200).json(distance_length);
+            if(trip_path){
+                for (var i = 0; i < trip_path.length; i++) {
+                    var point = [];
+                    point.push(trip_path[i]['coords'].latitude, trip_path[i]['coords'].longitude);
+                    path_distance.push(point);
+                    if (i == trip_path.length - 1) {
+                        //calculate distance
+                        console.log('start calculating path distance');
+                        //console.log(path_distance);
+                        var distance_length = distance(path_distance);
+                        return response.status(200).json(distance_length);
+                    }
                 }
+            }else{
+                console.log('No path loaded from postgres, no distance to calculate');
+                response.send('No path loaded from postgres, no distance to calculate');
             }
         })
     })
