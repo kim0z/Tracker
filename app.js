@@ -443,83 +443,89 @@ app.post('/getTripPathPostgres', function (request, response) {
             //console.log(results)
             var trip_path = results[0].path;
 
-            console.log('Trip path loaded');
-            console.log('Trip path length : ' + trip_path.length);
+            if(trip_path){
 
-            var path_first_date = '';
+                console.log('Trip path loaded');
+                console.log('Trip path length : ' + trip_path.length);
 
-            for (var trip_first_day_index = 0; trip_first_day_index < trip_path.length; trip_first_day_index++) {
-                if (trip_path[trip_first_day_index].timestamp != null) {
-                    console.log('First date found in GPS points array:: ' + trip_path[trip_first_day_index].timestamp);
-                    path_first_date = trip_path[trip_first_day_index].timestamp;
-                    path_first_date = new Date(parseInt(path_first_date));
-                    path_first_date = path_first_date.toISOString();
-                    console.log('First date set :' + path_first_date);
-                    break;
-                }
-            }
+                var path_first_date = '';
 
-            var push_count = 0;
-            var day = 0;
-            var path_last_index = 0;
-            var trip_path_hash = [];
-
-            for (var hash_index = 0; hash_index < tripDays + 1; hash_index++) {
-                trip_path_hash[hash_index] = [];
-            }
-
-            build_hash:
-                for (var i = 0; i < tripDays; i++) {
-                    for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new cell
-                        if (j == trip_path.length || j == trip_path.length - 1 || j > trip_path.length) {
-                            console.log('***************************************************************************************************');
-                            break build_hash;
-                        }
-                        if (day < tripDays) {
-                            //Debug
-                            console.log('Path Index:: ' + j + ' of ' + trip_path.length)
-                            console.log('GPS Point date:: ' + trip_path[j].timestamp);
-
-                            var d = new Date(parseInt(trip_path[j].timestamp));
-                            trip_path[j].timestamp = d;
-                            trip_path[j].timestamp = trip_path[j].timestamp.toISOString();
-                            if (trip_path[j]['timestamp'] && path_first_date) {
-
-                                //Debug
-                                console.log('GPS Point date after convert ' + trip_path[j].timestamp);
-                                console.log('First date in loop:: ' + path_first_date);
-
-                                console.log('Current GPS pont timestamp: ' + trip_path[j].timestamp.substring(0, 10));
-                                console.log('First date: ' + path_first_date.substring(0, 10));
-
-                                if (trip_path[j].timestamp.substring(0, 10) == path_first_date.substring(0, 10)) {
-                                    // if (checkAccuracy(trip_path[j], gps_accuracy)) { //check accuracy
-                                    trip_path_hash[day].push(
-                                        {
-                                            lat: JSON.parse(trip_path[j]['coords'].latitude),
-                                            lng: JSON.parse(trip_path[j]['coords'].longitude),
-                                            timestamp: trip_path[j]['timestamp'],
-                                            data: trip_path[j]
-                                        }
-                                    );
-                                    push_count++;
-                                    //}
-                                } else {
-                                    //if date changed it means new day started, updated day and path index
-                                    console.log('Starting new day ' + day++);
-                                    day++;
-                                    console.log('Last index: ' + j);
-                                    path_last_index = j;
-                                    path_first_date = trip_path[j].timestamp;
-                                    console.log('new first date: ' + path_first_date);
-                                }
-                            }
-                        } else {
-                            //console.log('Trip path not sliced into hash because of date issue')
-                        }
+                for (var trip_first_day_index = 0; trip_first_day_index < trip_path.length; trip_first_day_index++) {
+                    if (trip_path[trip_first_day_index].timestamp != null) {
+                        console.log('First date found in GPS points array:: ' + trip_path[trip_first_day_index].timestamp);
+                        path_first_date = trip_path[trip_first_day_index].timestamp;
+                        path_first_date = new Date(parseInt(path_first_date));
+                        path_first_date = path_first_date.toISOString();
+                        console.log('First date set :' + path_first_date);
+                        break;
                     }
                 }
-            response.send({hash: trip_path_hash, length: push_count});
+
+                var push_count = 0;
+                var day = 0;
+                var path_last_index = 0;
+                var trip_path_hash = [];
+
+                for (var hash_index = 0; hash_index < tripDays + 1; hash_index++) {
+                    trip_path_hash[hash_index] = [];
+                }
+
+                build_hash:
+                    for (var i = 0; i < tripDays; i++) {
+                        for (var j = path_last_index; j < trip_path.length; j++) { //each day should be saved into new cell
+                            if (j == trip_path.length || j == trip_path.length - 1 || j > trip_path.length) {
+                                console.log('***************************************************************************************************');
+                                break build_hash;
+                            }
+                            if (day < tripDays) {
+                                //Debug
+                                console.log('Path Index:: ' + j + ' of ' + trip_path.length)
+                                console.log('GPS Point date:: ' + trip_path[j].timestamp);
+
+                                var d = new Date(parseInt(trip_path[j].timestamp));
+                                trip_path[j].timestamp = d;
+                                trip_path[j].timestamp = trip_path[j].timestamp.toISOString();
+                                if (trip_path[j]['timestamp'] && path_first_date) {
+
+                                    //Debug
+                                    console.log('GPS Point date after convert ' + trip_path[j].timestamp);
+                                    console.log('First date in loop:: ' + path_first_date);
+
+                                    console.log('Current GPS pont timestamp: ' + trip_path[j].timestamp.substring(0, 10));
+                                    console.log('First date: ' + path_first_date.substring(0, 10));
+
+                                    if (trip_path[j].timestamp.substring(0, 10) == path_first_date.substring(0, 10)) {
+                                        // if (checkAccuracy(trip_path[j], gps_accuracy)) { //check accuracy
+                                        trip_path_hash[day].push(
+                                            {
+                                                lat: JSON.parse(trip_path[j]['coords'].latitude),
+                                                lng: JSON.parse(trip_path[j]['coords'].longitude),
+                                                timestamp: trip_path[j]['timestamp'],
+                                                data: trip_path[j]
+                                            }
+                                        );
+                                        push_count++;
+                                        //}
+                                    } else {
+                                        //if date changed it means new day started, updated day and path index
+                                        console.log('Starting new day ' + day++);
+                                        day++;
+                                        console.log('Last index: ' + j);
+                                        path_last_index = j;
+                                        path_first_date = trip_path[j].timestamp;
+                                        console.log('new first date: ' + path_first_date);
+                                    }
+                                }
+                            } else {
+                                //console.log('Trip path not sliced into hash because of date issue')
+                            }
+                        }
+                    }
+                response.send({hash: trip_path_hash, length: push_count});
+            }else{
+                console.log('No Path loaded from Postgres');
+                response.send('No Path loaded from Postgres');
+            }
         });
     });
 });
@@ -1554,7 +1560,7 @@ app.post('/uploadPhotos', function (req, res) {
         });
 
         var s3 = new AWS.S3();
-
+        console.log('335x200/' + userid + '/' + tripid + '/' + fileName);
         // call S3 to retrieve upload file to specified bucket
         var DeleteParams = {
             Bucket: 'tracker.photos',
