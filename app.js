@@ -275,6 +275,31 @@ var checkAccuracy = function (GPS_Point, accuracy) {
     }
 }
 
+
+//Postgres :: add new user
+app.post('/submitFeedback', function (request, response) {
+
+    console.log('SERVER:: Postgres::  Submit new feedback');
+    pg.connect(conString, function (err, client, done) {
+        // Handle connection errors
+        if (err) {
+            done();
+            console.log(err);
+            return res.status(500).json({success: false, data: err});
+        }
+        var query = client.query("INSERT INTO feedback(user_name, user_id, title, description, date, email, family_name) values($1, $2, $3, $4, $5, $6, $7)", [request.body.user_name, request.body.user_id, request.body.title ,request.body.description , request.body.date. request.body.email, request.body.family_name], function (err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+            console.log(result);
+            // add response to client about success
+        });
+    });
+});
+
 //Get Path from Firebase
 app.post('/getTripPath', function (request, response) {
     console.log('SERVER:: Firebase::  Get Trip Path');
