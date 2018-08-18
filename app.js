@@ -1364,82 +1364,86 @@ app.post('/getWeather', function (req, res) {
     //before loop path, check if the path day have already the 5 points, else get the weather for the 5 points
 
     var hash_weather_points = [];
-    console.log('Required weather points: ' + points_number_per_day);
-    for (var i = 0; i < path_hash.length; i++) {
-        console.log('Day ' + i + ' of ' + path_hash.length);
-        if (path_hash[i].length > 0) {
-            hash_weather_points[i] = [];
-            //get 5 points from each day
-            //example: if day include 1000 points, and the required points per day is 5 then 1000 / 5 = 200, take point each 200 points.
-            var points_between = path_hash[i].length / points_number_per_day;
-            points_between = Math.round(points_between);
-            console.log('Points between: ' + points_between);
-            for (var j = 0; j < points_number_per_day; j++) { //0 x 200, 1 x 200, 2 x 200, 3 x 200, 3 x 200, 4 x 200
-                if (j > path_hash[i].length) {
-                    console.log('break loop');
-                    break;
+    if(path_hash){
+        console.log('Required weather points: ' + points_number_per_day);
+        for (var i = 0; i < path_hash.length; i++) {
+            console.log('Day ' + i + ' of ' + path_hash.length);
+            if (path_hash[i].length > 0) {
+                hash_weather_points[i] = [];
+                //get 5 points from each day
+                //example: if day include 1000 points, and the required points per day is 5 then 1000 / 5 = 200, take point each 200 points.
+                var points_between = path_hash[i].length / points_number_per_day;
+                points_between = Math.round(points_between);
+                console.log('Points between: ' + points_between);
+                for (var j = 0; j < points_number_per_day; j++) { //0 x 200, 1 x 200, 2 x 200, 3 x 200, 3 x 200, 4 x 200
+                    if (j > path_hash[i].length) {
+                        console.log('break loop');
+                        break;
+                    }
+                    if (j < path_hash[i].length) {
+                        j = Math.round(j);
+                        console.log('Point ' + j * points_between + ' :' + path_hash[i][j * points_between]);
+                        hash_weather_points[i].push(path_hash[i][j * points_between]);
+                    } else {
+                        console.log('Error: Calculating weather points exceeded array day length');
+                    }
                 }
-                if (j < path_hash[i].length) {
-                    j = Math.round(j);
-                    console.log('Point ' + j * points_between + ' :' + path_hash[i][j * points_between]);
-                    hash_weather_points[i].push(path_hash[i][j * points_between]);
-                } else {
-                    console.log('Error: Calculating weather points exceeded array day length');
-                }
+            } else {
+                console.log('Path hash day ' + i + ' is empty');
             }
-        } else {
-            console.log('Path hash day ' + i + ' is empty');
-        }
-        if (i >= path_hash.length - 1) {
-            console.log('Looping weather points results to start get weather for each point');
-            console.log(hash_weather_points);
-            for (let weather_hash_index = 0; weather_hash_index < hash_weather_points.length; weather_hash_index++) {
-                if (hash_weather_points[weather_hash_index]) {
-                    for (let index = 0; index < hash_weather_points[weather_hash_index].length; index++) {
-                        console.log(hash_weather_points[weather_hash_index][index]);
-                        //Get weather
-                        //api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}
-                        //cnt number of days returned (from 1 to 16)
-                        //let city = 'london';//req.body.city;
-                        //var cnt = 2;
-                        //let url = 'http://api.openweathermap.org/data/2.5/weather?q=London&units=imperial&appid=' + key;
-                        //let url = 'https://api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + lon + '&cnt=' + cnt + '&appid=' + key;  -- history cnt days
-                        //api.openweathermap.org/data/2.5/weather?lat=35&lon=139  --- current
-                        let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + hash_weather_points[weather_hash_index][index].lat + '&lon=' + hash_weather_points[weather_hash_index][index].lng + '&appid=' + key;
-                        request(url, function (err, response, body) {
-                            console.log(body);
-                            if (err) {
-                                console.log('weather API error: please try again');
-                            } else {
-                                let weather = JSON.parse(body)
-                                if (weather.main == undefined) {
-                                    console.log('weather API: null, error: Error, please try again');
+            if (i >= path_hash.length - 1) {
+                console.log('Looping weather points results to start get weather for each point');
+                console.log(hash_weather_points);
+                for (let weather_hash_index = 0; weather_hash_index < hash_weather_points.length; weather_hash_index++) {
+                    if (hash_weather_points[weather_hash_index]) {
+                        for (let index = 0; index < hash_weather_points[weather_hash_index].length; index++) {
+                            console.log(hash_weather_points[weather_hash_index][index]);
+                            //Get weather
+                            //api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}
+                            //cnt number of days returned (from 1 to 16)
+                            //let city = 'london';//req.body.city;
+                            //var cnt = 2;
+                            //let url = 'http://api.openweathermap.org/data/2.5/weather?q=London&units=imperial&appid=' + key;
+                            //let url = 'https://api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + lon + '&cnt=' + cnt + '&appid=' + key;  -- history cnt days
+                            //api.openweathermap.org/data/2.5/weather?lat=35&lon=139  --- current
+                            let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + hash_weather_points[weather_hash_index][index].lat + '&lon=' + hash_weather_points[weather_hash_index][index].lng + '&appid=' + key;
+                            request(url, function (err, response, body) {
+                                console.log(body);
+                                if (err) {
+                                    console.log('weather API error: please try again');
                                 } else {
-                                    let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
-                                    console.log('Weather result: ' + weatherText);
-                                    //push to the same hash points by adding the weather results
-                                    let gps_point = hash_weather_points[weather_hash_index][index];
-                                    hash_weather_points[weather_hash_index][index] = {
-                                        point: gps_point,
-                                        weather_text: weatherText,
-                                        weather: body
-                                    };
-                                    console.log('weather pushed in cell: [' + weather_hash_index + '][' + index + ']');
+                                    let weather = JSON.parse(body)
+                                    if (weather.main == undefined) {
+                                        console.log('weather API: null, error: Error, please try again');
+                                    } else {
+                                        let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
+                                        console.log('Weather result: ' + weatherText);
+                                        //push to the same hash points by adding the weather results
+                                        let gps_point = hash_weather_points[weather_hash_index][index];
+                                        hash_weather_points[weather_hash_index][index] = {
+                                            point: gps_point,
+                                            weather_text: weatherText,
+                                            weather: body
+                                        };
+                                        console.log('weather pushed in cell: [' + weather_hash_index + '][' + index + ']');
 
-                                    if (weather_hash_index == hash_weather_points.length - 1 && index == hash_weather_points[weather_hash_index].length - 1) {
-                                        console.log('Done! all weather set and ready');
-                                        return res.status(200).send(hash_weather_points);
+                                        if (weather_hash_index == hash_weather_points.length - 1 && index == hash_weather_points[weather_hash_index].length - 1) {
+                                            console.log('Done! all weather set and ready');
+                                            return res.status(200).send(hash_weather_points);
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
+                    } else {
+                        console.log('Day path empty, move to next day');
                     }
-                } else {
-                    console.log('Day path empty, move to next day');
-                }
 
+                }
             }
         }
+    }else{
+        console.log('Empty path sent to server, no weather to check');
     }
 });
 
