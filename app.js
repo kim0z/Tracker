@@ -303,7 +303,7 @@ app.post('/submitFeedback', function (request, response) {
 });
 
 //Postgres :: submit abuse
-app.post('/submitFeedback', function (request, response) {
+app.post('/submitAbuse', function (request, response) {
 
     console.log('SERVER:: Postgres::  Submit new abuse');
     var abuse = request.body;
@@ -315,7 +315,7 @@ app.post('/submitFeedback', function (request, response) {
             console.log(err);
             return res.status(500).json({success: false, data: err});
         }
-        var query = client.query("INSERT INTO feedback(user_name, user_id, title, description, date, email, family_name) values($1, $2, $3, $4, $5, $6, $7)", [abuse.user_name, abuse.user_id, abuse.title , abuse.description , abuse.date, abuse.email, abuse.family_name], function (err, result) {
+        var query = client.query("INSERT INTO abuse(user_name, user_id, title, description, date, email, family_name) values($1, $2, $3, $4, $5, $6, $7)", [abuse.user_name, abuse.user_id, abuse.title , abuse.description , abuse.date, abuse.email, abuse.family_name], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
