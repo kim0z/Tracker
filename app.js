@@ -276,7 +276,7 @@ var checkAccuracy = function (GPS_Point, accuracy) {
 }
 
 
-//Postgres :: add new user
+//Postgres :: submit feedback
 app.post('/submitFeedback', function (request, response) {
 
     console.log('SERVER:: Postgres::  Submit new feedback');
@@ -290,6 +290,32 @@ app.post('/submitFeedback', function (request, response) {
             return res.status(500).json({success: false, data: err});
         }
         var query = client.query("INSERT INTO feedback(user_name, user_id, title, description, date, email, family_name) values($1, $2, $3, $4, $5, $6, $7)", [feedback.user_name, feedback.user_id, feedback.title , feedback.description , feedback.date, feedback.email, feedback.family_name], function (err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+            console.log(result);
+            // add response to client about success
+        });
+    });
+});
+
+//Postgres :: submit abuse
+app.post('/submitFeedback', function (request, response) {
+
+    console.log('SERVER:: Postgres::  Submit new abuse');
+    var abuse = request.body;
+    console.log(abuse);
+    pg.connect(conString,  function (err, client, done) {
+        // Handle connection errors
+        if (err) {
+            done();
+            console.log(err);
+            return res.status(500).json({success: false, data: err});
+        }
+        var query = client.query("INSERT INTO feedback(user_name, user_id, title, description, date, email, family_name) values($1, $2, $3, $4, $5, $6, $7)", [abuse.user_name, abuse.user_id, abuse.title , abuse.description , abuse.date, abuse.email, abuse.family_name], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
