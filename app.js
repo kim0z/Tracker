@@ -1406,7 +1406,7 @@ app.post('/getGooglePlaces', function (req, res) {
     var radius = req.body.radius;
     var tripid_val = req.body.tripid;
     let indexI = req.body.i; //if path have new GPS data then continue from i index that was saved from last time
-    // let indexJ = req.body.j;
+    let indexJ = req.body.j;
     var sensor = false;
     var types = "";//"restaurant";
     var keyword = "";//"fast";
@@ -1414,21 +1414,26 @@ app.post('/getGooglePlaces', function (req, res) {
 
     const GPSPoints = [];
 
+    console.log('Request data');
+    console.log('radius: ' + radius);
+    console.log('tripid: ' + tripid_val);
+    console.log('indexI ' + indexI);
+    console.log('indexJ ' + indexJ);
+    console.log(path_hash);
 
-    console.log("Index I: " + indexI);
+
     //console.log("Index J: " + indexJ);
     console.log("Hash path length: " + path_hash.length);
 
     if (path_hash) {
-        for (let indexI = 0; indexI < path_hash.length; indexI++) {
-            //console.log('Loop I')
-            //console.log("Index I: " + indexI);
-            //console.log(path_hash[indexI].length);
+        for ( ; indexI < path_hash.length; indexI++) {
+            
+            for ( ; indexJ < path_hash[indexI].length - 1; indexJ++) {
 
-            for (let indexJ = 0; indexJ < path_hash[indexI].length - 2; indexJ++) {
-                //console.log("Index I: " + indexI);
-                //console.log("Index J: " + indexJ);
-                //console.log('Have DATA')
+                //console.log('path_hash '+path_hash.length);
+                //console.log('path_hash inside'+path_hash[indexI].length);
+                //console.log('i '+ indexI);
+                //console.log('j '+indexJ);
 
 
                 if (path_hash[indexI][indexJ + 1].data) {
@@ -1450,13 +1455,11 @@ app.post('/getGooglePlaces', function (req, res) {
                             console.log(url);
 
                             GPSPoints.push(url);
-
                         }
                     }
                 }
             }
-
-            if (indexI == 13) { //&& indexJ == path[indexI].length - 1
+            if (indexI == path_hash.length - 1) { //  && indexJ ==  path_hash[indexI].length - 2 IN THIS WAY I MISS LAST DAY
                 //loop done, save places in DB
                 console.log("Places loop done, now cal save places to Postgres");
 
@@ -1476,7 +1479,7 @@ app.post('/getGooglePlaces', function (req, res) {
                     var places_in_one_array = "";
                     for (var i = 0; i < all_ocations.length; i++) {
                         for (var j = 0; j < all_ocations[i].length; j++) {
-                            places_in_one_array = places_in_one_array + JSON.stringify(all_ocations[i][j]) + ",";
+                            places_in_one_array = places_in_one_array + JSON.stringify(all_ocations[i][j]) + ";";
 
                             //'UPDATE paths SET path = path || \'' + ',' + location + '\'  WHERE id = ' + trip.id)
 
@@ -1485,6 +1488,8 @@ app.post('/getGooglePlaces', function (req, res) {
                                 console.log('done separating places into 1 array');
                                 //console.log(places_in_one_array);
                                 savePlacesToPostgres(places_in_one_array, tripid_val);
+
+                                res.send(200); //when start saving it's time to update client that data saved
                             }
                         }
                     }
@@ -1527,7 +1532,7 @@ var savePlacesToPostgres = function (places, tripid) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("UPDATE trips SET places = ($1 || places) WHERE id = $2", [places, tripid], function (err, result) {
+        client.query("UPDATE trips SET places = (places || $1) WHERE id = $2", [places, tripid], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -1537,7 +1542,6 @@ var savePlacesToPostgres = function (places, tripid) {
             console.log(result);
             //output: 1
         });
-
     });
 };
 //weather
