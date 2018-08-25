@@ -282,14 +282,14 @@ app.post('/submitFeedback', function (request, response) {
     console.log('SERVER:: Postgres::  Submit new feedback');
     var feedback = request.body;
     console.log(feedback);
-    pg.connect(conString,  function (err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         // Handle connection errors
         if (err) {
             done();
             console.log(err);
             return res.status(500).json({success: false, data: err});
         }
-        var query = client.query("INSERT INTO feedback(user_name, user_id, title, description, date, email, family_name) values($1, $2, $3, $4, $5, $6, $7)", [feedback.user_name, feedback.user_id, feedback.title , feedback.description , feedback.date, feedback.email, feedback.family_name], function (err, result) {
+        var query = client.query("INSERT INTO feedback(user_name, user_id, title, description, date, email, family_name) values($1, $2, $3, $4, $5, $6, $7)", [feedback.user_name, feedback.user_id, feedback.title, feedback.description, feedback.date, feedback.email, feedback.family_name], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -308,14 +308,14 @@ app.post('/submitAbuse', function (request, response) {
     console.log('SERVER:: Postgres::  Submit new abuse');
     var abuse = request.body;
     console.log(abuse);
-    pg.connect(conString,  function (err, client, done) {
+    pg.connect(conString, function (err, client, done) {
         // Handle connection errors
         if (err) {
             done();
             console.log(err);
             return res.status(500).json({success: false, data: err});
         }
-        var query = client.query("INSERT INTO abuse(user_name, user_id, title, description, date, email, family_name) values($1, $2, $3, $4, $5, $6, $7)", [abuse.user_name, abuse.user_id, abuse.title , abuse.description , abuse.date, abuse.email, abuse.family_name], function (err, result) {
+        var query = client.query("INSERT INTO abuse(user_name, user_id, title, description, date, email, family_name) values($1, $2, $3, $4, $5, $6, $7)", [abuse.user_name, abuse.user_id, abuse.title, abuse.description, abuse.date, abuse.email, abuse.family_name], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -496,7 +496,7 @@ app.post('/getTripPathPostgres', function (request, response) {
             //console.log(results)
             var trip_path = results[0].path;
 
-            if(trip_path){
+            if (trip_path) {
 
                 console.log('Trip path loaded');
                 console.log('Trip path length : ' + trip_path.length);
@@ -575,7 +575,7 @@ app.post('/getTripPathPostgres', function (request, response) {
                         }
                     }
                 response.send({hash: trip_path_hash, length: push_count});
-            }else{
+            } else {
                 console.log('No Path loaded from Postgres');
                 response.send('No Path loaded from Postgres');
             }
@@ -1375,7 +1375,7 @@ app.post('/getDistance', function (request, response) {
             pg.end();
             //console.log(results)
             trip_path = results[0].path;
-            if(trip_path){
+            if (trip_path) {
                 for (var i = 0; i < trip_path.length; i++) {
                     var point = [];
                     point.push(trip_path[i]['coords'].latitude, trip_path[i]['coords'].longitude);
@@ -1388,7 +1388,7 @@ app.post('/getDistance', function (request, response) {
                         return response.status(200).json(distance_length);
                     }
                 }
-            }else{
+            } else {
                 console.log('No path loaded from postgres, no distance to calculate');
                 response.send('No path loaded from postgres, no distance to calculate');
             }
@@ -1396,7 +1396,150 @@ app.post('/getDistance', function (request, response) {
     })
 });
 
+//Google Places
+var https = require('https');
+app.post('/getGooglePlaces', function (req, res) {
+    console.log('Get Google Places');
+    var key = 'AIzaSyBGUgiAjVugGZ4xVK57PKknf98Dr7YHmD4';
+    var path_hash = req.body.path_hash;
+    var location = ""; //example : -33.8670522,151.1957362
+    var radius = req.body.radius;
+    var tripid_val = req.body.tripid;
+    let indexI = req.body.i; //if path have new GPS data then continue from i index that was saved from last time
+    // let indexJ = req.body.j;
+    var sensor = false;
+    var types = "";//"restaurant";
+    var keyword = "";//"fast";
+    var placeStayingTime = "";
 
+    const GPSPoints = [];
+
+
+    console.log("Index I: " + indexI);
+    //console.log("Index J: " + indexJ);
+    console.log("Hash path length: " + path_hash.length);
+
+    if (path_hash) {
+        for (let indexI = 0; indexI < path_hash.length; indexI++) {
+            //console.log('Loop I')
+            //console.log("Index I: " + indexI);
+            //console.log(path_hash[indexI].length);
+
+            for (let indexJ = 0; indexJ < path_hash[indexI].length - 2; indexJ++) {
+                //console.log("Index I: " + indexI);
+                //console.log("Index J: " + indexJ);
+                //console.log('Have DATA')
+
+
+                if (path_hash[indexI][indexJ + 1].data) {
+                    if (path_hash[indexI][indexJ + 1].data['timestamp']) {
+                        placeStayingTime = (((new Date(path_hash[indexI][indexJ + 1].data['timestamp']).getTime() - new Date(path_hash[indexI][indexJ].data['timestamp']).getTime()) / 1000) / 60);
+                        //console.log(placeStayingTime);
+                        if (placeStayingTime > 10) {
+                            console.log('placeStayingTime: ' + placeStayingTime);
+                            console.log("Index I: " + indexI);
+                            console.log("Index J: " + indexJ);
+                            console.log('point on interest');
+                            console.log(path_hash[indexI][indexJ].data.coords);
+                            console.log("Long: " + path_hash[indexI][indexJ].data.coords.longitude);
+                            console.log("Lat : " + path_hash[indexI][indexJ].data.coords.latitude);
+
+                            //get places around point of interest
+                            location = path_hash[indexI][indexJ].data.coords.latitude + "," + path_hash[indexI][indexJ].data.coords.longitude;
+                            var url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + "key=" + key + "&location=" + location + "&radius=" + radius + "&sensor=" + sensor + "&types=" + types + "&keyword=" + keyword;
+                            console.log(url);
+
+                            GPSPoints.push(url);
+
+                        }
+                    }
+                }
+            }
+
+            if (indexI == 13) { //&& indexJ == path[indexI].length - 1
+                //loop done, save places in DB
+                console.log("Places loop done, now cal save places to Postgres");
+
+                // Fetch the locations for all the GPS points
+                const promises = GPSPoints.map(point => fetchUrl(point));
+                // Execute the then section when all the Promises have resolved
+                // which is when all the locations have been retrieved from google API
+                Promise.all(promises).then(all_ocations => {
+                    console.log(all_ocations[0].length); // Contains locations for url1
+                    console.log(all_ocations[1].length);
+
+                    //send results to client
+                    //res.send(all_ocations);
+
+                    //all_ocations is array of arrays, each cell is actually an array of few places
+                    //get each place and connect it to the others to be 1 array with all places
+                    var places_in_one_array = "";
+                    for (var i = 0; i < all_ocations.length; i++) {
+                        for (var j = 0; j < all_ocations[i].length; j++) {
+                            places_in_one_array = places_in_one_array + JSON.stringify(all_ocations[i][j]) + ",";
+
+                            //'UPDATE paths SET path = path || \'' + ',' + location + '\'  WHERE id = ' + trip.id)
+
+                            if (i == all_ocations.length - 1 && j == all_ocations[i].length - 1) {
+                                //save to DB
+                                console.log('done separating places into 1 array');
+                                //console.log(places_in_one_array);
+                                savePlacesToPostgres(places_in_one_array, tripid_val);
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    }
+});
+
+const fetchUrl = (url) => {
+    return new Promise((resolve, reject) => {
+        https.get(url, function (response) {
+            var body = '';
+            response.on('data', function (chunk) {
+                body += chunk;
+            });
+
+            response.on('end', function () {
+                var places = JSON.parse(body); //places + JSON.parse(body);
+                var locations = places.results;
+                resolve(locations) // locations is returned by the Promise
+            });
+
+        }).on('error', function (e) {
+            console.log("Got error: " + e.message);
+            reject(e); // Something went wrong, reject the Promise
+        });
+    });
+}
+
+//help function - save places
+var savePlacesToPostgres = function (places, tripid) {
+    console.log("Saving places into Postgres");
+    console.log('Trip ID: ' + tripid);
+    console.log('Places to save:');
+    console.log(places);
+
+    //save places in Postgres
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("UPDATE trips SET places = ($1 || places) WHERE id = $2", [places, tripid], function (err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+            console.log(result);
+            //output: 1
+        });
+
+    });
+};
 //weather
 var request = require('request');
 app.post('/getWeather', function (req, res) {
@@ -1417,7 +1560,7 @@ app.post('/getWeather', function (req, res) {
     //before loop path, check if the path day have already the 5 points, else get the weather for the 5 points
 
     var hash_weather_points = [];
-    if(path_hash){
+    if (path_hash) {
         console.log('Required weather points: ' + points_number_per_day);
         for (var i = 0; i < path_hash.length; i++) {
             console.log('Day ' + i + ' of ' + path_hash.length);
@@ -1495,7 +1638,7 @@ app.post('/getWeather', function (req, res) {
                 }
             }
         }
-    }else{
+    } else {
         console.log('Empty path sent to server, no weather to check');
     }
 });
@@ -1600,7 +1743,7 @@ app.post('/uploadPhotos', function (req, res) {
                 readAndWriteFile(files[key][0], newPath, userid, tripid, fileName);
             }
         }
-        return res.status(200).send('file uploaded '+'user id: '+ userid + 'trip id: '+ tripid);
+        return res.status(200).send('file uploaded ' + 'user id: ' + userid + 'trip id: ' + tripid);
     });
 
     app.post('/deleteFile', function (req, res) {
@@ -1610,9 +1753,9 @@ app.post('/uploadPhotos', function (req, res) {
         var tripid = req.body.tripid;
         var fileName = req.body.fileName;
 
-        console.log('file :'+ fileName);
-        console.log('user id: '+ userid);
-        console.log('trip id: '+ tripid);
+        console.log('file :' + fileName);
+        console.log('user id: ' + userid);
+        console.log('trip id: ' + tripid);
 
         AWS.config.update({
             accessKeyId: 'AKIAIGEOPTU4KRW6GK6Q',
@@ -1627,12 +1770,12 @@ app.post('/uploadPhotos', function (req, res) {
             Key: '335x200/' + userid + '/' + tripid + '/' + fileName,
         };
 
-        s3.deleteObject(DeleteParams, function(err, data) {
+        s3.deleteObject(DeleteParams, function (err, data) {
             if (err) {
                 console.log(err, err.stack);
                 res.status(500).send(err.stack)
             }  // error
-            else{
+            else {
                 res.status(200).send('file deleted: ', data)
             }
         });
