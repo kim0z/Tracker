@@ -1427,7 +1427,7 @@ app.post('/getGooglePlaces', function (req, res) {
 
     if (path_hash) {
         for ( ; indexI < path_hash.length; indexI++) {
-            
+
             for ( ; indexJ < path_hash[indexI].length - 1; indexJ++) {
 
                 //console.log('path_hash '+path_hash.length);
@@ -1440,7 +1440,7 @@ app.post('/getGooglePlaces', function (req, res) {
                     if (path_hash[indexI][indexJ + 1].data['timestamp']) {
                         placeStayingTime = (((new Date(path_hash[indexI][indexJ + 1].data['timestamp']).getTime() - new Date(path_hash[indexI][indexJ].data['timestamp']).getTime()) / 1000) / 60);
                         //console.log(placeStayingTime);
-                        if (placeStayingTime > 10) {
+                        if (placeStayingTime > 400) {
                             console.log('placeStayingTime: ' + placeStayingTime);
                             console.log("Index I: " + indexI);
                             console.log("Index J: " + indexJ);
@@ -1461,16 +1461,13 @@ app.post('/getGooglePlaces', function (req, res) {
             }
             if (indexI == path_hash.length - 1) { //  && indexJ ==  path_hash[indexI].length - 2 IN THIS WAY I MISS LAST DAY
                 //loop done, save places in DB
-                console.log("Places loop done, now cal save places to Postgres");
+                console.log("Places loop done, now call save places to Postgres");
 
                 // Fetch the locations for all the GPS points
                 const promises = GPSPoints.map(point => fetchUrl(point));
                 // Execute the then section when all the Promises have resolved
                 // which is when all the locations have been retrieved from google API
                 Promise.all(promises).then(all_ocations => {
-                    console.log(all_ocations[0].length); // Contains locations for url1
-                    console.log(all_ocations[1].length);
-
                     //send results to client
                     //res.send(all_ocations);
 
@@ -1489,7 +1486,13 @@ app.post('/getGooglePlaces', function (req, res) {
                                 //console.log(places_in_one_array);
                                 savePlacesToPostgres(places_in_one_array, tripid_val);
 
-                                res.send(200); //when start saving it's time to update client that data saved
+                                //save last index
+                                console.log('Last Index I: ' + indexI);
+                                console.log('Last Index J: ' + indexJ);
+
+                                setLastIndexPath(indexI, indexJ, tripid_val);
+
+                                res.status(200).end()//when start saving it's time to update client that data saved
                             }
                         }
                     }
@@ -1541,6 +1544,100 @@ var savePlacesToPostgres = function (places, tripid) {
             }
             console.log(result);
             //output: 1
+        });
+    });
+};
+
+//get Last index path
+app.post('/getLastIndexPath', function (req, res) {
+    console.log('Get last index path');
+
+    var tripid = req.body.tripid;
+    console.log('Trip id: ' + tripid);
+
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("SELECT path_index FROM trips WHERE id = $1", [tripid], function (err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+            console.log(result);
+            res.status(result).end();
+        });
+    });
+});
+
+var getLastIndexPath = function (tripis_val){
+    console.log('get last index path');
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("SELECT path_index FROM trips WHERE id = $1", [tripis_val], function (err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+            console.log(result);
+            return(result);
+        });
+    });
+};
+
+
+//save Last index path
+app.post('/setLastIndexPath', function (req, res) {
+    console.log('Set last index path');
+
+    var tripid = req.body.tripid;
+    var index = req.body.index;
+
+    console.log('Trip id: ' + tripid);
+    console.log('Index : ' + index);
+
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("Update trips SET path_index = $1 WHERE id = $2", [index, tripid], function (err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+            console.log(result);
+            res.status(result).end();
+        });
+    });
+});
+
+var setLastIndexPath = function (i_val, j_val, tripid_val){
+
+    console.log('saving last index after getting places');
+    console.log('index I: '+i_val);
+    console.log('index J: '+ j_val);
+
+    var index = {i: i_val, j: j_val};
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("Update trips SET path_index = $1 WHERE id = $2", [index, tripid_val], function (err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+            console.log(result);
         });
     });
 };
