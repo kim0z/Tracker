@@ -1399,7 +1399,7 @@ app.post('/getDistance', function (request, response) {
 //Google Places
 var https = require('https');
 app.post('/getGooglePlaces', function (req, res) {
-    console.log('Get Google Places');
+    console.log('************ Get Google Places ****************');
     var key = 'AIzaSyBGUgiAjVugGZ4xVK57PKknf98Dr7YHmD4';
     var path_hash = req.body.path_hash;
     var location = ""; //example : -33.8670522,151.1957362
@@ -1419,9 +1419,12 @@ app.post('/getGooglePlaces', function (req, res) {
     console.log('tripid: ' + tripid_val);
     console.log('indexI ' + indexI);
     console.log('indexJ ' + indexJ);
-    console.log(path_hash);
+    console.log('hash path length' + path_hash.length);
+    //console.log(path_hash);
 
-
+    if(indexI == path_hash.length){ //should be fixed, take into account last cell length to check the J index
+        res.status(200).end();
+    }
     //console.log("Index J: " + indexJ);
     console.log("Hash path length: " + path_hash.length);
 
@@ -1492,7 +1495,7 @@ app.post('/getGooglePlaces', function (req, res) {
 
                                 setLastIndexPath(indexI, indexJ, tripid_val);
 
-                                res.status(200).end()//when start saving it's time to update client that data saved
+                                res.status(200).end();//when start saving it's time to update client that data saved
                             }
                         }
                     }
@@ -1523,6 +1526,29 @@ const fetchUrl = (url) => {
     });
 }
 
+//get Google places from DB
+app.post('/getGooglePlacesFromDB', function (req, res) {
+    console.log('** Get Google places from DB **');
+
+    var tripid = req.body.tripid;
+    console.log('Trip id: ' + tripid);
+
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("SELECT places FROM trips WHERE id = $1", [tripid], function (err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+            console.log(result.rows[0].places);
+            res.json(result.rows[0].places).end();
+        });
+    });
+});
 //help function - save places
 var savePlacesToPostgres = function (places, tripid) {
     console.log("Saving places into Postgres");
@@ -1566,8 +1592,8 @@ app.post('/getLastIndexPath', function (req, res) {
             if (err) {
                 return console.error('error running query', err);
             }
-            console.log(result);
-            res.status(result).end();
+            console.log(result.rows[0].path_index);
+            res.json(result.rows[0].path_index).end();
         });
     });
 });
