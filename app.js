@@ -1561,7 +1561,7 @@ var savePlacesToPostgres = function (places, tripid) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query("UPDATE trips SET places = (places || $1) WHERE id = $2", [places, tripid], function (err, result) {
+        client.query("UPDATE trips SET places = (places || $1) WHERE id = $2::jsonb", [places, tripid], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -1583,6 +1583,7 @@ app.post('/getLastIndexPath', function (req, res) {
 
     pg.connect(conString, function (err, client, done) {
         if (err) {
+            pg.end();
             return console.error('error fetching client from pool', err);
         }
         client.query("SELECT path_index FROM trips WHERE id = $1", [tripid], function (err, result) {
@@ -1591,9 +1592,11 @@ app.post('/getLastIndexPath', function (req, res) {
 
             if (err) {
                 return console.error('error running query', err);
+                pg.end();
             }
             console.log(result.rows[0].path_index);
             res.json(result.rows[0].path_index).end();
+            pg.end();
         });
     });
 });
@@ -1602,6 +1605,7 @@ var getLastIndexPath = function (tripis_val){
     console.log('get last index path');
     pg.connect(conString, function (err, client, done) {
         if (err) {
+            pg.end();
             return console.error('error fetching client from pool', err);
         }
         client.query("SELECT path_index FROM trips WHERE id = $1", [tripis_val], function (err, result) {
@@ -1609,10 +1613,12 @@ var getLastIndexPath = function (tripis_val){
             done();
 
             if (err) {
+                pg.end();
                 return console.error('error running query', err);
             }
             console.log(result);
             return(result);
+            pg.end();
         });
     });
 };
@@ -1630,6 +1636,7 @@ app.post('/setLastIndexPath', function (req, res) {
 
     pg.connect(conString, function (err, client, done) {
         if (err) {
+            pg.end();
             return console.error('error fetching client from pool', err);
         }
         client.query("Update trips SET path_index = $1 WHERE id = $2", [index, tripid], function (err, result) {
@@ -1637,10 +1644,12 @@ app.post('/setLastIndexPath', function (req, res) {
             done();
 
             if (err) {
+                pg.end();
                 return console.error('error running query', err);
             }
             console.log(result);
             res.status(result).end();
+            pg.end();
         });
     });
 });
@@ -1654,6 +1663,7 @@ var setLastIndexPath = function (i_val, j_val, tripid_val){
     var index = {i: i_val, j: j_val};
     pg.connect(conString, function (err, client, done) {
         if (err) {
+            pg.end();
             return console.error('error fetching client from pool', err);
         }
         client.query("Update trips SET path_index = $1 WHERE id = $2", [index, tripid_val], function (err, result) {
@@ -1661,9 +1671,11 @@ var setLastIndexPath = function (i_val, j_val, tripid_val){
             done();
 
             if (err) {
+                pg.end();
                 return console.error('error running query', err);
             }
             console.log(result);
+            pg.end();
         });
     });
 };
