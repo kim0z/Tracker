@@ -462,6 +462,54 @@ var getPathJsonPostgres = function (tripid) {
     });
 }
 
+//Temp function to help in arrange the GPS points
+app.post('/fixPath', function (request, response) {
+   console.log('** Hope the path will be fixed now **');
+
+    //get path from DB
+    // Get a Postgres client from the connection pool
+    pg.connect(conString, function (err, client, done) {
+        // Handle connection errors
+        if (err) {
+            pg.end();
+            console.log(err);
+            return response.status(500).json({success: false, data: err});
+        }
+        // SQL Query > Select Data
+        var query = client.query("SELECT path FROM trips WHERE id = ($1)", '524'); //request.body.id
+
+        // Stream results back one row at a time
+        query.on('row', function (row) {
+            // console.log(row);
+            results.push(row);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function () {
+            pg.end();
+
+            //console.log(results)
+            var trip_path_to_fix = results[0].path;
+
+            //the path till index 26,000 was recorded with 10 sec hits, after that I changed it to 1 min
+            //hit each 1 min means: in 1 hour we have 60 points, 10 hours 600, reasonable number
+            //to fix the 10 sec hit, I need to make it similar to the 1 min, it means instead of having 10 points in 1 min I need 1 point
+            //then from each 10 points delete 9
+
+            console.log('Array length: '+ trip_path_to_fix.length);
+            for(var index = 0 ; index < 5000 ; index ++){
+                trip_path_to_fix.slice(index + 1, index + 10);
+                if(index == 4999){
+                    console.log('done');
+                    console.log('Array length: '+ trip_path_to_fix.length);
+                }
+            }
+        });
+    });
+});
+
+
+
 //Get Path from Postgres - IN USE
 app.post('/getTripPathPostgres', function (request, response) {
     console.log('SERVER:: Posgtres::  Get Trip Path');
@@ -532,8 +580,8 @@ app.post('/getTripPathPostgres', function (request, response) {
                             }
                             if (day < tripDays) {
                                 //Debug
-                                console.log('Path Index:: ' + j + ' of ' + trip_path.length)
-                                console.log('GPS Point date:: ' + trip_path[j].timestamp);
+                                //console.log('Path Index:: ' + j + ' of ' + trip_path.length)
+                                //console.log('GPS Point date:: ' + trip_path[j].timestamp);
 
                                 var d = new Date(parseInt(trip_path[j].timestamp));
                                 trip_path[j].timestamp = d;
@@ -541,11 +589,11 @@ app.post('/getTripPathPostgres', function (request, response) {
                                 if (trip_path[j]['timestamp'] && path_first_date) {
 
                                     //Debug
-                                    console.log('GPS Point date after convert ' + trip_path[j].timestamp);
-                                    console.log('First date in loop:: ' + path_first_date);
+                                    //console.log('GPS Point date after convert ' + trip_path[j].timestamp);
+                                    //console.log('First date in loop:: ' + path_first_date);
 
-                                    console.log('Current GPS pont timestamp: ' + trip_path[j].timestamp.substring(0, 10));
-                                    console.log('First date: ' + path_first_date.substring(0, 10));
+                                    //console.log('Current GPS pont timestamp: ' + trip_path[j].timestamp.substring(0, 10));
+                                    //console.log('First date: ' + path_first_date.substring(0, 10));
 
                                     if (trip_path[j].timestamp.substring(0, 10) == path_first_date.substring(0, 10)) {
                                         // if (checkAccuracy(trip_path[j], gps_accuracy)) { //check accuracy
@@ -575,6 +623,7 @@ app.post('/getTripPathPostgres', function (request, response) {
                         }
                     }
                 response.send({hash: trip_path_hash, length: push_count});
+
             } else {
                 console.log('No Path loaded from Postgres');
                 response.send('No Path loaded from Postgres');
@@ -1145,7 +1194,7 @@ app.post('/publicTrip', function (request, response) {
 
 
 //});
-//save path
+//save path in use
 app.post('/savePathJsonPostgres', function (request, response) {
     console.log('SERVER:: Postgres:: save / update trip with path' + request.body);
     //var path = request.body;
