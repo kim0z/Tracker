@@ -1442,7 +1442,7 @@ app.post('/getDistance', function (request, response) {
             return response.status(500).json({success: false, data: err});
         }
         // SQL Query > Select Data
-        var query = client.query("SELECT path FROM trips WHERE id = ($1)", [request.body.tripId]); //request.body.id
+        var query = client.query("SELECT path_fixed FROM trips WHERE id = ($1)", [request.body.tripId]); //request.body.id
 
         // Stream results back one row at a time
         query.on('row', function (row) {
@@ -1767,7 +1767,7 @@ var request = require('request');
 app.post('/getWeather', function (req, res) {
     console.log('** Weather API started **')
     var key = 'c54b53573f2a9abe64b2694e1234e775'; //weather key
-    console.log(req.body);
+    //console.log(req.body);
 
     var path_hash = req.body.hash_path;
     var points_number_per_day = req.body.points_per_day;
