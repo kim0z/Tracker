@@ -1524,13 +1524,14 @@ app.post('/getGooglePlaces', function (req, res) {
                         placeStayingTime = (((new Date(path_hash[indexI][indexJ + 1].data['timestamp']).getTime() - new Date(path_hash[indexI][indexJ].data['timestamp']).getTime()) / 1000) / 60);
                         //console.log(placeStayingTime);
                         if (placeStayingTime > 400) {
-                            console.log('placeStayingTime: ' + placeStayingTime);
-                            console.log("Index I: " + indexI);
-                            console.log("Index J: " + indexJ);
-                            console.log('point on interest');
-                            console.log(path_hash[indexI][indexJ].data.coords);
-                            console.log("Long: " + path_hash[indexI][indexJ].data.coords.longitude);
-                            console.log("Lat : " + path_hash[indexI][indexJ].data.coords.latitude);
+                            //debug
+                            //console.log('placeStayingTime: ' + placeStayingTime);
+                            //console.log("Index I: " + indexI);
+                            //console.log("Index J: " + indexJ);
+                            //console.log('point on interest');
+                            //console.log(path_hash[indexI][indexJ].data.coords);
+                            //console.log("Long: " + path_hash[indexI][indexJ].data.coords.longitude);
+                            //console.log("Lat : " + path_hash[indexI][indexJ].data.coords.latitude);
 
                             //get places around point of interest
                             location = path_hash[indexI][indexJ].data.coords.latitude + "," + path_hash[indexI][indexJ].data.coords.longitude;
@@ -1556,10 +1557,10 @@ app.post('/getGooglePlaces', function (req, res) {
 
                     //all_ocations is array of arrays, each cell is actually an array of few places
                     //get each place and connect it to the others to be 1 array with all places
-                    var places_in_one_array = "";
+                    var places_in_one_array = [];
                     for (var i = 0; i < all_ocations.length; i++) {
                         for (var j = 0; j < all_ocations[i].length; j++) {
-                            places_in_one_array = places_in_one_array + JSON.stringify(all_ocations[i][j]) + ";";
+                            places_in_one_array.push(all_ocations[i][j]); //JSON.stringify();
 
                             //'UPDATE paths SET path = path || \'' + ',' + location + '\'  WHERE id = ' + trip.id)
 
@@ -1620,11 +1621,12 @@ app.post('/getGooglePlacesFromDB', function (req, res) {
         client.query("SELECT places FROM trips WHERE id = $1", [tripid], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
+            console.log('** Google places was pulled from DB **');
 
             if (err) {
                 return console.error('error running query', err);
             }
-            console.log(result.rows[0].places);
+            //console.log(result.rows[0].places);
             res.json(result.rows[0].places).end();
         });
     });
@@ -1642,7 +1644,7 @@ var savePlacesToPostgres = function (places, tripid) {
             return console.error('error fetching client from pool', err);
         }
         //update configuration_shared.t1 set js = js || '[{"e":"e1","f":"f1"},{"z":"z1"}]'::jsonb
-        client.query("UPDATE trips SET places = (places || $1) WHERE id = $2::jsonb", [places, tripid], function (err, result) {
+        client.query("UPDATE trips SET places = places || $1::jsonb WHERE id = $2", [JSON.stringify(places), tripid], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
 
@@ -1760,7 +1762,7 @@ var setLastIndexPath = function (i_val, j_val, tripid_val){
         });
     });
 };
-//weather
+//weather - In Use
 var request = require('request');
 app.post('/getWeather', function (req, res) {
     console.log('** Weather API started **')
@@ -1822,7 +1824,7 @@ app.post('/getWeather', function (req, res) {
                             //let url = 'http://api.openweathermap.org/data/2.5/weather?q=London&units=imperial&appid=' + key;
                             //let url = 'https://api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + lon + '&cnt=' + cnt + '&appid=' + key;  -- history cnt days
                             //api.openweathermap.org/data/2.5/weather?lat=35&lon=139  --- current
-                            let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + hash_weather_points[weather_hash_index][index].lat + '&lon=' + hash_weather_points[weather_hash_index][index].lng + '&appid=' + key;
+                            let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + hash_weather_points[weather_hash_index][index].lat + '&lon=' + hash_weather_points[weather_hash_index][index].lng + '&units=metric&appid=' + key;
                             request(url, function (err, response, body) {
                                 console.log(body);
                                 if (err) {
@@ -1903,7 +1905,7 @@ app.post('/getMyTrips', function (request, response, next) {
     }
 });
 
-//Postgres get trip by id
+//Postgres get trip by id - In Use (select without path, it's too big - FIX needed)
 app.post('/getTripById', function (request, response) {
 
     if (request.body.trip_id) {
@@ -1931,7 +1933,7 @@ app.post('/getTripById', function (request, response) {
             // After all data is returned, close connection and return results
             query.on('end', function () {
                 done();
-                console.log(results); // looks like : [{....}]
+                //console.log(results); // looks like : [{....}]
                 //tripById = results;
                 tripById = results; //save instance of the trip to be used in other places, like get the date while creating the table
                 return response.json(results);
