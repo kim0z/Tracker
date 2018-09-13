@@ -560,7 +560,7 @@ app.post('/getTripPathPostgres', function (request, response) {
             return response.status(500).json({success: false, data: err});
         }
         // SQL Query > Select Data
-        var query = client.query("SELECT path FROM trips WHERE id = ($1)", [request.body.tripId]); //request.body.id
+        var query = client.query("SELECT path_fixed FROM trips WHERE id = ($1)", [request.body.tripId]); //request.body.id
 
         // Stream results back one row at a time
         query.on('row', function (row) {
@@ -573,7 +573,7 @@ app.post('/getTripPathPostgres', function (request, response) {
             pg.end();
 
             //console.log(results)
-            var trip_path = results[0].path;
+            var trip_path = results[0].path_fixed //.path;
 
             if (trip_path) {
 
@@ -1476,7 +1476,7 @@ app.post('/getDistance', function (request, response) {
     })
 });
 
-//Google Places
+//Google Places - In use
 var https = require('https');
 app.post('/getGooglePlaces', function (req, res) {
     console.log('************ Get Google Places ****************');
@@ -1641,6 +1641,7 @@ var savePlacesToPostgres = function (places, tripid) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
+        //update configuration_shared.t1 set js = js || '[{"e":"e1","f":"f1"},{"z":"z1"}]'::jsonb
         client.query("UPDATE trips SET places = (places || $1) WHERE id = $2::jsonb", [places, tripid], function (err, result) {
             //call `done()` to release the client back to the pool
             done();
