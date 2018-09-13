@@ -521,7 +521,7 @@ app.post('/fixPath', function (request, response) {
                         if (err) {
                             return console.error('error fetching client from pool', err);
                         }
-                        client.query("UPDATE trips SET path_fixed = ($1) WHERE id = 524", [trip_path_to_fix], function (err, result) {
+                        client.query("UPDATE trips SET path_fixed = ($1) WHERE id = 524", [path_fixed], function (err, result) {
                             //call `done()` to release the client back to the pool
                             done();
 
