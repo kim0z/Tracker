@@ -465,7 +465,8 @@ var getPathJsonPostgres = function (tripid) {
 //Temp function to help in arrange the GPS points
 app.post('/fixPath', function (request, response) {
    console.log('** Hope the path will be fixed now **');
-
+    var results = [];
+    var path_fixed = [];
     //get path from DB
     // Get a Postgres client from the connection pool
     pg.connect(conString, function (err, client, done) {
@@ -476,7 +477,7 @@ app.post('/fixPath', function (request, response) {
             return response.status(500).json({success: false, data: err});
         }
         // SQL Query > Select Data
-        var query = client.query("SELECT path FROM trips WHERE id = ($1)", '524'); //request.body.id
+        var query = client.query("SELECT path FROM trips WHERE id = 524");
 
         // Stream results back one row at a time
         query.on('row', function (row) {
@@ -491,17 +492,47 @@ app.post('/fixPath', function (request, response) {
             //console.log(results)
             var trip_path_to_fix = results[0].path;
 
-            //the path till index 26,000 was recorded with 10 sec hits, after that I changed it to 1 min
-            //hit each 1 min means: in 1 hour we have 60 points, 10 hours 600, reasonable number
-            //to fix the 10 sec hit, I need to make it similar to the 1 min, it means instead of having 10 points in 1 min I need 1 point
-            //then from each 10 points delete 9
-
             console.log('Array length: '+ trip_path_to_fix.length);
-            for(var index = 0 ; index < 5000 ; index ++){
-                trip_path_to_fix.slice(index + 1, index + 10);
-                if(index == 4999){
+            for(var index = 1 ; index < trip_path_to_fix.length ; index++){
+                console.log('index: ' + index);
+                var m = index % 20;
+                if(m == 0 && index < 85000){
+                    console.log('Got yea!');
+//                      console.log(trip_path_to_fix[index]);
+                    path_fixed.push(trip_path_to_fix[index]);
+
+                }else{
+                    if( index > 85000){
+                        //index after 85K, start collect all points without jumping 10's
+                        console.log('after 85K');
+                        path_fixed.push(trip_path_to_fix[index]);
+                    }
+                }
+
+                if( index == trip_path_to_fix.length - 1 ){
                     console.log('done');
-                    console.log('Array length: '+ trip_path_to_fix.length);
+                    console.log('Array length: '+ path_fixed.length);
+                    console.log('Original array length: ' + trip_path_to_fix.length);
+
+
+
+                    //update path in new column to save it and not override exists path
+                    pg.connect(conString, function (err, client, done) {
+                        if (err) {
+                            return console.error('error fetching client from pool', err);
+                        }
+                        client.query("UPDATE trips SET path_fixed = ($1) WHERE id = 524", [trip_path_to_fix], function (err, result) {
+                            //call `done()` to release the client back to the pool
+                            done();
+
+                            if (err) {
+                                return console.error('error running query', err);
+                            }
+                            console.log(result);
+                            //output: 1
+                        });
+                    });
+                    break;
                 }
             }
         });
