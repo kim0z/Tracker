@@ -1454,7 +1454,7 @@ app.post('/getDistance', function (request, response) {
         query.on('end', function () {
             pg.end();
             //console.log(results)
-            trip_path = results[0].path;
+            trip_path = results[0].path_fixed;
             if (trip_path) {
                 for (var i = 0; i < trip_path.length; i++) {
                     var point = [];
@@ -1772,6 +1772,19 @@ app.post('/getWeather', function (req, res) {
     var path_hash = req.body.hash_path;
     var points_number_per_day = req.body.points_per_day;
 
+    //new params
+    var tripid_val = req.body.tripid;
+    let indexI = req.body.i; //if path have new GPS data then continue from i index that was saved from last time
+    let indexJ = req.body.j;
+
+    /*
+     if (path_hash) {
+     for ( ; indexI < path_hash.length; indexI++) {
+
+     for ( ; indexJ < path_hash[indexI].length - 1; indexJ++) {
+     */
+
+
     //Loop path and take 5 points from each day
     //for each point get the weather by
     // * cnt =  current date - point date
@@ -1784,32 +1797,33 @@ app.post('/getWeather', function (req, res) {
     var hash_weather_points = [];
     if (path_hash) {
         console.log('Required weather points: ' + points_number_per_day);
-        for (var i = 0; i < path_hash.length; i++) {
+        //for (var i = 0; i < path_hash.length; i++) {
+        for (; indexI < path_hash.length; indexI++) {
             console.log('Day ' + i + ' of ' + path_hash.length);
-            if (path_hash[i].length > 0) {
-                hash_weather_points[i] = [];
+            if (path_hash[indexI].length > 0) {
+                hash_weather_points[indexI] = [];
                 //get 5 points from each day
                 //example: if day include 1000 points, and the required points per day is 5 then 1000 / 5 = 200, take point each 200 points.
-                var points_between = path_hash[i].length / points_number_per_day;
+                var points_between = path_hash[indexI].length / points_number_per_day;
                 points_between = Math.round(points_between);
                 console.log('Points between: ' + points_between);
-                for (var j = 0; j < points_number_per_day; j++) { //0 x 200, 1 x 200, 2 x 200, 3 x 200, 3 x 200, 4 x 200
-                    if (j > path_hash[i].length) {
+                for (; indexJ < points_number_per_day; indexJ++) { //0 x 200, 1 x 200, 2 x 200, 3 x 200, 3 x 200, 4 x 200
+                    if (indexJ > path_hash[indexI].length) {
                         console.log('break loop');
                         break;
                     }
-                    if (j < path_hash[i].length) {
-                        j = Math.round(j);
-                        console.log('Point ' + j * points_between + ' :' + path_hash[i][j * points_between]);
-                        hash_weather_points[i].push(path_hash[i][j * points_between]);
+                    if (indexJ < path_hash[indexI].length) {
+                        indexJ = Math.round(indexJ);
+                        console.log('Point ' + indexJ * points_between + ' :' + path_hash[indexI][indexJ * points_between]);
+                        hash_weather_points[indexI].push(path_hash[indexI][indexJ * points_between]);
                     } else {
                         console.log('Error: Calculating weather points exceeded array day length');
                     }
                 }
             } else {
-                console.log('Path hash day ' + i + ' is empty');
+                console.log('Path hash day ' + indexI + ' is empty');
             }
-            if (i >= path_hash.length - 1) {
+            if (indexI >= path_hash.length - 1) {
                 console.log('Looping weather points results to start get weather for each point');
                 console.log(hash_weather_points);
                 for (let weather_hash_index = 0; weather_hash_index < hash_weather_points.length; weather_hash_index++) {
@@ -1856,7 +1870,6 @@ app.post('/getWeather', function (req, res) {
                     } else {
                         console.log('Day path empty, move to next day');
                     }
-
                 }
             }
         }
