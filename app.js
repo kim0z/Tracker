@@ -1861,7 +1861,14 @@ app.post('/getWeather', function (req, res) {
 
                                         if (weather_hash_index == hash_weather_points.length - 1 && index == hash_weather_points[weather_hash_index].length - 1) {
                                             console.log('Done! all weather set and ready');
-                                            return res.status(200).send(hash_weather_points);
+                                            //return res.status(200).send(hash_weather_points);
+                                            //save weather in PG
+                                            saveWeatherToPostgres(hash_weather_points, tripid_val);
+
+                                            //return weather from DB after the new weather was saved
+                                            setTimeout(function () {
+                                                getWeatherFromDB(tripid_val);
+                                            }, 5000)
                                         }
                                     }
                                 }
@@ -1869,13 +1876,92 @@ app.post('/getWeather', function (req, res) {
                         }
                     } else {
                         console.log('Day path empty, move to next day');
+                        getWeatherFromDB(tripid_val);
                     }
                 }
             }
         }
     } else {
-        console.log('Empty path sent to server, no weather to check');
+        console.log('Empty path sent to server OR already weather saved for the required index, no weather to check');
+        //return weather from DB
+        getWeatherFromDB(tripid_val);
     }
+});
+
+//help function - save places
+var saveWeatherToPostgres = function (weather, tripid) {
+    console.log("Saving weather into Postgres");
+    console.log('Trip ID: ' + tripid);
+    console.log('Places to save:');
+    console.log(weather);
+
+    //save places in Postgres
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("UPDATE trips SET weather = weather || $1::jsonb WHERE id = $2", [JSON.stringify(weather), tripid], function (err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+            console.log(result);
+            //output: 1
+        });
+    });
+};
+
+//get wetaher as a function
+//get weather from DB
+var getWeatherFromDB = function (trip_id_val) {
+    console.log('** Get weather from DB **');
+
+    var tripid = trip_id_val;
+    console.log('Trip id: ' + tripid);
+
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("SELECT weather FROM trips WHERE id = $1", [tripid], function (err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+            console.log('** Weather was pulled from DB **');
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+            //console.log(result.rows[0].places);
+            res.json(result.rows[0].weather).end();
+        });
+    });
+};
+
+//get weather from DB REST
+app.post('/getWeatherFromDB', function (req, res) {
+    console.log('** Get weather from DB **');
+
+    var tripid = req.body.tripid;
+    console.log('Trip id: ' + tripid);
+
+    pg.connect(conString, function (err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("SELECT weather FROM trips WHERE id = $1", [tripid], function (err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+            console.log('** Weather was pulled from DB **');
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+            //console.log(result.rows[0].places);
+            res.json(result.rows[0].weather).end();
+        });
+    });
 });
 
 
