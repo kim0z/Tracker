@@ -1798,6 +1798,7 @@ app.post('/getWeather', function (req, res) {
     //before loop path, check if the path day have already the 5 points, else get the weather for the 5 points
 
     var hash_weather_points = [];
+    var hash_weather_points_index = 0;
     if (path_hash) {
         console.log('Required weather points per day: ' + points_number_per_day);
 
@@ -1809,7 +1810,7 @@ app.post('/getWeather', function (req, res) {
             for (; indexI < path_hash.length; indexI++) {
                 console.log('Day ' + indexI + ' of ' + path_hash.length);
                 if (path_hash[indexI].length > 0) {
-                    hash_weather_points[indexI] = [];
+                    hash_weather_points[hash_weather_points_index] = [];
                     //get 5 points from each day
                     //example: if day include 1000 points, and the required points per day is 5 then 1000 / 5 = 200, take point each 200 points.
                     var points_between = path_hash[indexI].length / points_number_per_day;
@@ -1823,15 +1824,16 @@ app.post('/getWeather', function (req, res) {
                         if (indexJ < path_hash[indexI].length) {
                             indexJ = Math.round(indexJ);
                             console.log('Point ' + indexJ * points_between + ' :' + path_hash[indexI][indexJ * points_between]);
-                            hash_weather_points[indexI].push(path_hash[indexI][indexJ * points_between]);
+                            hash_weather_points[hash_weather_points_index].push(path_hash[indexI][indexJ * points_between]);
                         } else {
                             console.log('Error: Calculating weather points exceeded array day length');
                         }
+                        hash_weather_points_index++;
                     }
                 } else {
                     console.log('Path hash day ' + indexI + ' is empty');
                 }
-                if (indexI >= path_hash.length - 1) {
+                //if (indexI >= path_hash.length - 1) {
                     console.log('Looping weather points results to start get weather for each point');
                     console.log(hash_weather_points);
                     for (let weather_hash_index = 0; weather_hash_index < hash_weather_points.length; weather_hash_index++) {
@@ -1857,7 +1859,7 @@ app.post('/getWeather', function (req, res) {
                                             console.log('weather API: null, error: Error, please try again');
                                         } else {
                                             let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
-                                            console.log('Weather result: ' + weatherText);
+                                            console.log('** Weather result: ' + weatherText);
                                             //push to the same hash points by adding the weather results
                                             let gps_point = hash_weather_points[weather_hash_index][index];
                                             hash_weather_points[weather_hash_index][index] = {
@@ -1865,8 +1867,10 @@ app.post('/getWeather', function (req, res) {
                                                 weather_text: weatherText,
                                                 weather: body
                                             };
-                                            console.log('weather pushed in cell: [' + weather_hash_index + '][' + index + ']');
+                                            console.log('** weather pushed in cell: [' + weather_hash_index + '][' + index + ']');
 
+                                            console.log('** Weather hash index:' + weather_hash_index);
+                                            console.log('** Hash wetaher points: ' + hash_weather_points.length );
                                             if (weather_hash_index == hash_weather_points.length - 1 && index == hash_weather_points[weather_hash_index].length - 1) {
                                                 console.log('Done! all weather set and ready');
                                                 //return res.status(200).send(hash_weather_points);
@@ -1887,7 +1891,7 @@ app.post('/getWeather', function (req, res) {
                             //res.json(getWeatherFromDB(tripid_val)).end();
                         }
                     }
-                }
+                //}
             }
         }
     } else {
