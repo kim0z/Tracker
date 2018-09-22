@@ -464,7 +464,7 @@ var getPathJsonPostgres = function (tripid) {
 
 //Temp function to help in arrange the GPS points
 app.post('/fixPath', function (request, response) {
-   console.log('** Hope the path will be fixed now **');
+    console.log('** Hope the path will be fixed now **');
     var results = [];
     var path_fixed = [];
     //get path from DB
@@ -492,28 +492,27 @@ app.post('/fixPath', function (request, response) {
             //console.log(results)
             var trip_path_to_fix = results[0].path;
 
-            console.log('Array length: '+ trip_path_to_fix.length);
-            for(var index = 1 ; index < trip_path_to_fix.length ; index++){
+            console.log('Array length: ' + trip_path_to_fix.length);
+            for (var index = 1; index < trip_path_to_fix.length; index++) {
                 console.log('index: ' + index);
                 var m = index % 20;
-                if(m == 0 && index < 85000){
+                if (m == 0 && index < 85000) {
                     console.log('Got yea!');
 //                      console.log(trip_path_to_fix[index]);
                     path_fixed.push(trip_path_to_fix[index]);
 
-                }else{
-                    if( index > 85000){
+                } else {
+                    if (index > 85000) {
                         //index after 85K, start collect all points without jumping 10's
                         console.log('after 85K');
                         path_fixed.push(trip_path_to_fix[index]);
                     }
                 }
 
-                if( index == trip_path_to_fix.length - 1 ){
+                if (index == trip_path_to_fix.length - 1) {
                     console.log('done');
-                    console.log('Array length: '+ path_fixed.length);
+                    console.log('Array length: ' + path_fixed.length);
                     console.log('Original array length: ' + trip_path_to_fix.length);
-
 
 
                     //update path in new column to save it and not override exists path
@@ -538,7 +537,6 @@ app.post('/fixPath', function (request, response) {
         });
     });
 });
-
 
 
 //Get Path from Postgres - IN USE
@@ -1502,16 +1500,16 @@ app.post('/getGooglePlaces', function (req, res) {
     console.log('hash path length' + path_hash.length);
     //console.log(path_hash);
 
-    if(indexI == path_hash.length){ //should be fixed, take into account last cell length to check the J index
+    if (indexI == path_hash.length) { //should be fixed, take into account last cell length to check the J index
         res.status(200).end();
     }
     //console.log("Index J: " + indexJ);
     console.log("Hash path length: " + path_hash.length);
 
     if (path_hash) {
-        for ( ; indexI < path_hash.length; indexI++) {
+        for (; indexI < path_hash.length; indexI++) {
 
-            for ( ; indexJ < path_hash[indexI].length - 1; indexJ++) {
+            for (; indexJ < path_hash[indexI].length - 1; indexJ++) {
 
                 //console.log('path_hash '+path_hash.length);
                 //console.log('path_hash inside'+path_hash[indexI].length);
@@ -1684,7 +1682,7 @@ app.post('/getLastIndexPath', function (req, res) {
     });
 });
 
-var getLastIndexPath = function (tripis_val){
+var getLastIndexPath = function (tripis_val) {
     console.log('get last index path');
     pg.connect(conString, function (err, client, done) {
         if (err) {
@@ -1700,7 +1698,7 @@ var getLastIndexPath = function (tripis_val){
                 return console.error('error running query', err);
             }
             console.log(result);
-            return(result);
+            return (result);
             pg.end();
         });
     });
@@ -1737,11 +1735,11 @@ app.post('/setLastIndexPath', function (req, res) {
     });
 });
 
-var setLastIndexPath = function (i_val, j_val, tripid_val){
+var setLastIndexPath = function (i_val, j_val, tripid_val) {
 
     console.log('saving last index after getting places');
-    console.log('index I: '+i_val);
-    console.log('index J: '+ j_val);
+    console.log('index I: ' + i_val);
+    console.log('index J: ' + j_val);
 
     var index = {i: i_val, j: j_val};
     pg.connect(conString, function (err, client, done) {
@@ -1765,7 +1763,7 @@ var setLastIndexPath = function (i_val, j_val, tripid_val){
 //weather - In Use
 var request = require('request');
 app.post('/getWeather', function (req, res) {
-    console.log('** Weather API started **')
+    console.log('******* Weather API started *********')
     var key = 'c54b53573f2a9abe64b2694e1234e775'; //weather key
     //console.log(req.body);
 
@@ -1776,6 +1774,11 @@ app.post('/getWeather', function (req, res) {
     var tripid_val = req.body.tripid;
     let indexI = req.body.i; //if path have new GPS data then continue from i index that was saved from last time
     let indexJ = req.body.j;
+
+    console.log('Weather index');
+    console.log('Index i: ' + indexI);
+    console.log('Index j: ' + indexJ);
+
 
     /*
      if (path_hash) {
@@ -1796,87 +1799,93 @@ app.post('/getWeather', function (req, res) {
 
     var hash_weather_points = [];
     if (path_hash) {
-        console.log('Required weather points: ' + points_number_per_day);
-        //for (var i = 0; i < path_hash.length; i++) {
-        for (; indexI < path_hash.length; indexI++) {
-            console.log('Day ' + i + ' of ' + path_hash.length);
-            if (path_hash[indexI].length > 0) {
-                hash_weather_points[indexI] = [];
-                //get 5 points from each day
-                //example: if day include 1000 points, and the required points per day is 5 then 1000 / 5 = 200, take point each 200 points.
-                var points_between = path_hash[indexI].length / points_number_per_day;
-                points_between = Math.round(points_between);
-                console.log('Points between: ' + points_between);
-                for (; indexJ < points_number_per_day; indexJ++) { //0 x 200, 1 x 200, 2 x 200, 3 x 200, 3 x 200, 4 x 200
-                    if (indexJ > path_hash[indexI].length) {
-                        console.log('break loop');
-                        break;
+        console.log('Required weather points per day: ' + points_number_per_day);
+
+        if (indexI == path_hash.length) { //if index is updated then no need to loop path, jet get data from DB
+            console.log('** weather, indexI is equal to path_hash length, don not loop path, get weather from DB **');
+            res.json(getWeatherFromDB(tripid_val)).end();
+        } else {
+            console.log('** index not updated loop path to get weather data **');
+            for (; indexI < path_hash.length; indexI++) {
+                console.log('Day ' + indexI + ' of ' + path_hash.length);
+                if (path_hash[indexI].length > 0) {
+                    hash_weather_points[indexI] = [];
+                    //get 5 points from each day
+                    //example: if day include 1000 points, and the required points per day is 5 then 1000 / 5 = 200, take point each 200 points.
+                    var points_between = path_hash[indexI].length / points_number_per_day;
+                    points_between = Math.round(points_between);
+                    console.log('Points between: ' + points_between);
+                    for (; indexJ < points_number_per_day; indexJ++) { //0 x 200, 1 x 200, 2 x 200, 3 x 200, 3 x 200, 4 x 200
+                        if (indexJ > path_hash[indexI].length) {
+                            console.log('break loop');
+                            break;
+                        }
+                        if (indexJ < path_hash[indexI].length) {
+                            indexJ = Math.round(indexJ);
+                            console.log('Point ' + indexJ * points_between + ' :' + path_hash[indexI][indexJ * points_between]);
+                            hash_weather_points[indexI].push(path_hash[indexI][indexJ * points_between]);
+                        } else {
+                            console.log('Error: Calculating weather points exceeded array day length');
+                        }
                     }
-                    if (indexJ < path_hash[indexI].length) {
-                        indexJ = Math.round(indexJ);
-                        console.log('Point ' + indexJ * points_between + ' :' + path_hash[indexI][indexJ * points_between]);
-                        hash_weather_points[indexI].push(path_hash[indexI][indexJ * points_between]);
-                    } else {
-                        console.log('Error: Calculating weather points exceeded array day length');
-                    }
+                } else {
+                    console.log('Path hash day ' + indexI + ' is empty');
                 }
-            } else {
-                console.log('Path hash day ' + indexI + ' is empty');
-            }
-            if (indexI >= path_hash.length - 1) {
-                console.log('Looping weather points results to start get weather for each point');
-                console.log(hash_weather_points);
-                for (let weather_hash_index = 0; weather_hash_index < hash_weather_points.length; weather_hash_index++) {
-                    if (hash_weather_points[weather_hash_index]) {
-                        for (let index = 0; index < hash_weather_points[weather_hash_index].length; index++) {
-                            console.log(hash_weather_points[weather_hash_index][index]);
-                            //Get weather
-                            //api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}
-                            //cnt number of days returned (from 1 to 16)
-                            //let city = 'london';//req.body.city;
-                            //var cnt = 2;
-                            //let url = 'http://api.openweathermap.org/data/2.5/weather?q=London&units=imperial&appid=' + key;
-                            //let url = 'https://api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + lon + '&cnt=' + cnt + '&appid=' + key;  -- history cnt days
-                            //api.openweathermap.org/data/2.5/weather?lat=35&lon=139  --- current
-                            let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + hash_weather_points[weather_hash_index][index].lat + '&lon=' + hash_weather_points[weather_hash_index][index].lng + '&units=metric&appid=' + key;
-                            request(url, function (err, response, body) {
-                                console.log(body);
-                                if (err) {
-                                    console.log('weather API error: please try again');
-                                } else {
-                                    let weather = JSON.parse(body)
-                                    if (weather.main == undefined) {
-                                        console.log('weather API: null, error: Error, please try again');
+                if (indexI >= path_hash.length - 1) {
+                    console.log('Looping weather points results to start get weather for each point');
+                    console.log(hash_weather_points);
+                    for (let weather_hash_index = 0; weather_hash_index < hash_weather_points.length; weather_hash_index++) {
+                        if (hash_weather_points[weather_hash_index]) {
+                            for (let index = 0; index < hash_weather_points[weather_hash_index].length; index++) {
+                                console.log(hash_weather_points[weather_hash_index][index]);
+                                //Get weather
+                                //api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}
+                                //cnt number of days returned (from 1 to 16)
+                                //let city = 'london';//req.body.city;
+                                //var cnt = 2;
+                                //let url = 'http://api.openweathermap.org/data/2.5/weather?q=London&units=imperial&appid=' + key;
+                                //let url = 'https://api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + lon + '&cnt=' + cnt + '&appid=' + key;  -- history cnt days
+                                //api.openweathermap.org/data/2.5/weather?lat=35&lon=139  --- current
+                                let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + hash_weather_points[weather_hash_index][index].lat + '&lon=' + hash_weather_points[weather_hash_index][index].lng + '&units=metric&appid=' + key;
+                                request(url, function (err, response, body) {
+                                    console.log(body);
+                                    if (err) {
+                                        console.log('weather API error: please try again');
                                     } else {
-                                        let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
-                                        console.log('Weather result: ' + weatherText);
-                                        //push to the same hash points by adding the weather results
-                                        let gps_point = hash_weather_points[weather_hash_index][index];
-                                        hash_weather_points[weather_hash_index][index] = {
-                                            point: gps_point,
-                                            weather_text: weatherText,
-                                            weather: body
-                                        };
-                                        console.log('weather pushed in cell: [' + weather_hash_index + '][' + index + ']');
+                                        let weather = JSON.parse(body)
+                                        if (weather.main == undefined) {
+                                            console.log('weather API: null, error: Error, please try again');
+                                        } else {
+                                            let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
+                                            console.log('Weather result: ' + weatherText);
+                                            //push to the same hash points by adding the weather results
+                                            let gps_point = hash_weather_points[weather_hash_index][index];
+                                            hash_weather_points[weather_hash_index][index] = {
+                                                point: gps_point,
+                                                weather_text: weatherText,
+                                                weather: body
+                                            };
+                                            console.log('weather pushed in cell: [' + weather_hash_index + '][' + index + ']');
 
-                                        if (weather_hash_index == hash_weather_points.length - 1 && index == hash_weather_points[weather_hash_index].length - 1) {
-                                            console.log('Done! all weather set and ready');
-                                            //return res.status(200).send(hash_weather_points);
-                                            //save weather in PG
-                                            saveWeatherToPostgres(hash_weather_points, tripid_val);
+                                            if (weather_hash_index == hash_weather_points.length - 1 && index == hash_weather_points[weather_hash_index].length - 1) {
+                                                console.log('Done! all weather set and ready');
+                                                //return res.status(200).send(hash_weather_points);
+                                                //save weather in PG
+                                                saveWeatherToPostgres(hash_weather_points, tripid_val);
 
-                                            //return weather from DB after the new weather was saved
-                                            setTimeout(function () {
-                                                getWeatherFromDB(tripid_val);
-                                            }, 5000)
+                                                //return weather from DB after the new weather was saved
+                                                setTimeout(function () {
+                                                    res.json(getWeatherFromDB(tripid_val)).end();
+                                                }, 5000)
+                                            }
                                         }
                                     }
-                                }
-                            });
+                                });
+                            }
+                        } else {
+                            console.log('Day path empty, move to next day');
+                            //res.json(getWeatherFromDB(tripid_val)).end();
                         }
-                    } else {
-                        console.log('Day path empty, move to next day');
-                        getWeatherFromDB(tripid_val);
                     }
                 }
             }
@@ -1884,7 +1893,7 @@ app.post('/getWeather', function (req, res) {
     } else {
         console.log('Empty path sent to server OR already weather saved for the required index, no weather to check');
         //return weather from DB
-        getWeatherFromDB(tripid_val);
+        res.json(getWeatherFromDB(tripid_val)).end();
     }
 });
 
@@ -1934,7 +1943,7 @@ var getWeatherFromDB = function (trip_id_val) {
                 return console.error('error running query', err);
             }
             //console.log(result.rows[0].places);
-            res.json(result.rows[0].weather).end();
+            return result.rows[0].weather;
         });
     });
 };
