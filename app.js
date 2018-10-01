@@ -495,14 +495,16 @@ app.post('/fixPath', function (request, response) {
             console.log('Array length: ' + trip_path_to_fix.length);
             for (var index = 1; index < trip_path_to_fix.length; index++) {
                 console.log('index: ' + index);
-                var m = index % 20;
+                //var m = index % 20;
+                var m = index % 100;
                 if (m == 0 && index < 85000) {
                     console.log('Got yea!');
 //                      console.log(trip_path_to_fix[index]);
                     path_fixed.push(trip_path_to_fix[index]);
 
                 } else {
-                    if (index > 85000) {
+                    var mm = index % 30;
+                    if (mm == 0 && index > 85000) {
                         //index after 85K, start collect all points without jumping 10's
                         console.log('after 85K');
                         path_fixed.push(trip_path_to_fix[index]);
@@ -1799,8 +1801,9 @@ app.post('/getWeather', function (req, res) {
 
     var hash_weather_points = [];
     var hash_weather_points_index = 0;
+
     if (path_hash) {
-        console.log('Required weather points per day: ' + points_number_per_day);
+        console.log('get weather points per day: ' + points_number_per_day);
 
         if (indexI == path_hash.length) { //if index is updated then no need to loop path, jet get data from DB
             console.log('** weather, indexI is equal to path_hash length, don not loop path, get weather from DB **');
@@ -1828,8 +1831,9 @@ app.post('/getWeather', function (req, res) {
                         } else {
                             console.log('Error: Calculating weather points exceeded array day length');
                         }
-
                     }
+
+                    console.log(hash_weather_points);
 
 
 
