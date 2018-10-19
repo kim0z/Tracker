@@ -23,6 +23,9 @@ server.listen(8080);
 //extract Exif metadata from images
 var ExifImage = require('exif').ExifImage;
 
+
+var distance = require('gps-distance');
+
 //var mongoose = require('mongoose');                   // mongoose for mongodb             // set the port
 //var database = require('./config/database');          // load the database config
 var Firebase = require("firebase"); //Firebase cloud Database No Sql
@@ -540,6 +543,84 @@ app.post('/fixPath', function (request, response) {
     });
 });
 
+
+//Temp function 2 to help in arrange the GPS points - redundancy
+app.post('/fixPathRedundancy', function (request, response) {
+    console.log('** Lets do it good now ..  **');
+    var results = [];
+    var path_fixed = [];
+    //get path from DB
+    // Get a Postgres client from the connection pool
+    pg.connect(conString, function (err, client, done) {
+        // Handle connection errors
+        if (err) {
+            pg.end();
+            console.log(err);
+            return response.status(500).json({success: false, data: err});
+        }
+        // SQL Query > Select Data
+        var query = client.query("SELECT path FROM trips WHERE id = 524");
+
+        // Stream results back one row at a time
+        query.on('row', function (row) {
+            // console.log(row);
+            results.push(row);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function () {
+            pg.end();
+
+            //console.log(results)
+            var trip_path_to_fix = results[0].path;
+
+            console.log('Array length before fix: ' + trip_path_to_fix.length);
+
+
+            var index_i = 0;
+            var index_j = 1;
+            path_fixed[0] = results[0].path[0];
+
+            while(index_j < trip_path_to_fix.length && index_j < trip_path_to_fix.length){
+
+                var distanceAtoB = distance(trip_path_to_fix[index_i]['coords'].latitude, trip_path_to_fix[index_i]['coords'].longitude, trip_path_to_fix[index_j]['coords'].latitude, trip_path_to_fix[index_j]['coords'].longitude);
+                if(distanceAtoB < 10){ //check distance between point A to point B, if less than 5 meters then move index J 1 step
+                    index_j++;
+                }else{ // if distance larger than 5 meters then move index i to be index j, and move j one step
+                    console.log('Match');
+                    console.log(trip_path_to_fix[index_j]);
+                    path_fixed.push(trip_path_to_fix[index_j]); //save the point (end point)
+                    index_i = index_j;
+                    index_j++;
+                }
+
+                if(index_j == trip_path_to_fix.length || index_j == trip_path_to_fix.length - 1 || index_j == trip_path_to_fix.length - 2){ //save to postgres
+                    console.log('J index is pointing to the end of the array or 1 or 2 cells less, STOP');
+
+                    console.log('New path length : ', path_fixed.length);
+                    //update path in new column to save it and not override exists path
+                    pg.connect(conString, function (err, client, done) {
+                        if (err) {
+                            return console.error('error fetching client from pool', err);
+                        }
+                        client.query("UPDATE trips SET path_fixed = ($1) WHERE id = 524", [path_fixed], function (err, result) {
+                            //call `done()` to release the client back to the pool
+                            done();
+
+                            if (err) {
+                                return console.error('error running query', err);
+                            }
+                            console.log(result);
+                            //output: 1
+                        });
+                    });
+
+                    break;
+                }
+            }
+        });
+    });
+});
 
 //Get Path from Postgres - IN USE
 app.post('/getTripPathPostgres', function (request, response) {
@@ -1424,7 +1505,6 @@ app.post('/updateTripPhotosProvider', function (request, response) {
  */
 
 //GPS distance
-var distance = require('gps-distance');
 app.post('/getDistance', function (request, response) {
     //get PATH FROM DB
     console.log('calculate path distance')
