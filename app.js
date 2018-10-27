@@ -581,12 +581,12 @@ app.post('/fixPathRedundancy', function (request, response) {
             var index_j = 1;
             path_fixed[0] = results[0].path[0];
 
-            while(index_j < trip_path_to_fix.length && index_j < trip_path_to_fix.length){
+            while (index_j < trip_path_to_fix.length && index_j < trip_path_to_fix.length) {
 
                 var distanceAtoB = distance(trip_path_to_fix[index_i]['coords'].latitude, trip_path_to_fix[index_i]['coords'].longitude, trip_path_to_fix[index_j]['coords'].latitude, trip_path_to_fix[index_j]['coords'].longitude);
-                if(distanceAtoB < 10){ //check distance between point A to point B, if less than 5 meters then move index J 1 step
+                if (distanceAtoB < 10) { //check distance between point A to point B, if less than 5 meters then move index J 1 step
                     index_j++;
-                }else{ // if distance larger than 5 meters then move index i to be index j, and move j one step
+                } else { // if distance larger than 5 meters then move index i to be index j, and move j one step
                     console.log('Match');
                     console.log(trip_path_to_fix[index_j]);
                     path_fixed.push(trip_path_to_fix[index_j]); //save the point (end point)
@@ -594,7 +594,7 @@ app.post('/fixPathRedundancy', function (request, response) {
                     index_j++;
                 }
 
-                if(index_j == trip_path_to_fix.length || index_j == trip_path_to_fix.length - 1 || index_j == trip_path_to_fix.length - 2){ //save to postgres
+                if (index_j == trip_path_to_fix.length || index_j == trip_path_to_fix.length - 1 || index_j == trip_path_to_fix.length - 2) { //save to postgres
                     console.log('J index is pointing to the end of the array or 1 or 2 cells less, STOP');
 
                     console.log('New path length : ', path_fixed.length);
@@ -1918,7 +1918,6 @@ app.post('/getWeather', function (req, res) {
                     console.log(hash_weather_points);
 
 
-
                     hash_weather_points_index++; //increase index for the next array in weather points hash
 
                 }
@@ -1927,7 +1926,7 @@ app.post('/getWeather', function (req, res) {
             //check if loop done -- ****** hre should take into account the J also ***************
             console.log('DEBUG:: indexI', indexI);
             console.log('DEBUG:: path hash length', path_hash.length);
-            if(indexI == path_hash.length || indexI == path_hash.length - 1){ //loop done
+            if (indexI == path_hash.length || indexI == path_hash.length - 1) { //loop done
                 console.log('Done getting GPS point for weather, Now loop hash weather to get weather for each point!!');
                 //after the loop is done, all points was gathered from path, now need to loop points and get weather for each point
                 //Async problem
@@ -1948,47 +1947,86 @@ app.post('/getWeather', function (req, res) {
                             //api.openweathermap.org/data/2.5/weather?lat=35&lon=139  --- current
                             let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + hash_weather_points[weather_hash_index][index].lat + '&lon=' + hash_weather_points[weather_hash_index][index].lng + '&units=metric&appid=' + key;
 
-                            setTimeout(function () {
-                                request(url, function (err, response, body) {
-                                    console.log(body);
-                                    if (err) {
-                                        console.log('weather API error: please try again');
+                            $http
+                                .get({ url: url, params: {} })
+                                .success(function(body, status, headers, config) {
+
+                                    let weather = JSON.parse(body)
+                                    if (weather.main == undefined) {
+                                        console.log('weather API: null, error: Error, please try again');
                                     } else {
-                                        let weather = JSON.parse(body)
-                                        if (weather.main == undefined) {
-                                            console.log('weather API: null, error: Error, please try again');
-                                        } else {
-                                            let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
-                                            console.log('** Weather result: ' + weatherText);
-                                            //push to the same hash points by adding the weather results
-                                            let gps_point = hash_weather_points[weather_hash_index][index];
-                                            hash_weather_points[weather_hash_index][index] = {
-                                                point: gps_point,
-                                                weather_text: weatherText,
-                                                weather: body
-                                            };
-                                            console.log('** weather pushed in cell: [' + weather_hash_index + '][' + index + ']');
+                                        let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
+                                        console.log('** Weather result: ' + weatherText);
+                                        //push to the same hash points by adding the weather results
+                                        let gps_point = hash_weather_points[weather_hash_index][index];
+                                        hash_weather_points[weather_hash_index][index] = {
+                                            point: gps_point,
+                                            weather_text: weatherText,
+                                            weather: body
+                                        };
+                                        console.log('** weather pushed in cell: [' + weather_hash_index + '][' + index + ']');
 
-                                            console.log('** Weather hash index:' + weather_hash_index);
-                                            console.log('** Hash weather points: ' + hash_weather_points.length );
-                                            if (weather_hash_index == hash_weather_points.length - 1 && index == hash_weather_points[weather_hash_index].length - 1) {
-                                                console.log('Done! all weather set and ready');
-                                                //return res.status(200).send(hash_weather_points);
-                                                //save weather in PG
-                                                saveWeatherToPostgres(hash_weather_points, tripid_val);
+                                        console.log('** Weather hash index:' + weather_hash_index);
+                                        console.log('** Hash weather points: ' + hash_weather_points.length);
+                                        if (weather_hash_index == hash_weather_points.length - 1 && index == hash_weather_points[weather_hash_index].length - 1) {
+                                            console.log('Done! all weather set and ready');
+                                            //return res.status(200).send(hash_weather_points);
+                                            //save weather in PG
+                                            saveWeatherToPostgres(hash_weather_points, tripid_val);
 
-                                                //return weather from DB after the new weather was saved
-                                                //setTimeout(function () {
-                                                console.log('After finish saving data in DB, now pull it and send to client!!')
-                                                res.json(getWeatherFromDB(tripid_val)).end();
-                                                //}, 5000);
+                                            //return weather from DB after the new weather was saved
+                                            //setTimeout(function () {
+                                            console.log('After finish saving data in DB, now pull it and send to client!!')
+                                            res.json(getWeatherFromDB(tripid_val)).end();
+                                            //}, 5000);
 
-                                                setLastIndexPath(indexI, indexJ, tripid_val);
-                                            }
+                                            setLastIndexPath(indexI, indexJ, tripid_val);
                                         }
                                     }
+
                                 });
-                            }, 1000);
+
+                            /*
+                            request(url, function (err, response, body) {
+                                console.log(body);
+                                if (err) {
+                                    console.log('weather API error: please try again');
+                                } else {
+                                    let weather = JSON.parse(body)
+                                    if (weather.main == undefined) {
+                                        console.log('weather API: null, error: Error, please try again');
+                                    } else {
+                                        let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
+                                        console.log('** Weather result: ' + weatherText);
+                                        //push to the same hash points by adding the weather results
+                                        let gps_point = hash_weather_points[weather_hash_index][index];
+                                        hash_weather_points[weather_hash_index][index] = {
+                                            point: gps_point,
+                                            weather_text: weatherText,
+                                            weather: body
+                                        };
+                                        console.log('** weather pushed in cell: [' + weather_hash_index + '][' + index + ']');
+
+                                        console.log('** Weather hash index:' + weather_hash_index);
+                                        console.log('** Hash weather points: ' + hash_weather_points.length);
+                                        if (weather_hash_index == hash_weather_points.length - 1 && index == hash_weather_points[weather_hash_index].length - 1) {
+                                            console.log('Done! all weather set and ready');
+                                            //return res.status(200).send(hash_weather_points);
+                                            //save weather in PG
+                                            saveWeatherToPostgres(hash_weather_points, tripid_val);
+
+                                            //return weather from DB after the new weather was saved
+                                            //setTimeout(function () {
+                                            console.log('After finish saving data in DB, now pull it and send to client!!')
+                                            res.json(getWeatherFromDB(tripid_val)).end();
+                                            //}, 5000);
+
+                                            setLastIndexPath(indexI, indexJ, tripid_val);
+                                        }
+                                    }
+                                }
+                            });
+                            */
 
                         }
                     } else {
@@ -2001,7 +2039,7 @@ app.post('/getWeather', function (req, res) {
             }
 
 
-                //}
+            //}
             //}
         }
     } else {
