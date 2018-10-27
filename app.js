@@ -1988,43 +1988,11 @@ app.post('/getWeather', function (req, res) {
                                             //save weather in PG
                                             saveWeatherToPostgres(hash_weather_points, tripid_val);
 
-                                            //return weather from DB after the new weather was saved
-                                            setTimeout(function () {
+                                            //return 200 to client to allow client to get weather from DB by another API
+
                                             console.log('After finish saving data in DB, now pull it and send to client!!')
-                                            //res.json(getWeatherFromDB(tripid_val)).end();
-                                                //var w = getWeatherFromDB(tripid_val);
-                                                //res.json(w).end();
-
-
-                                                //****** instead of calling function "\getWeatherFromDB(tripid_val);"
-                                                console.log('** Get weather from DB **');
-
-                                                var tripid = tripid_val;
-                                                console.log('Trip id: ' + tripid);
-
-                                                pg.connect(conString, function (err, client, done) {
-                                                    if (err) {
-                                                        return console.error('error fetching client from pool', err);
-                                                    }
-                                                    client.query("SELECT weather FROM trips WHERE id = $1", [tripid], function (err, result) {
-                                                        //call `done()` to release the client back to the pool
-                                                        done();
-                                                        console.log('** Weather was pulled from DB **');
-                                                        console.log('DEBUG:');
-                                                        console.log(result.rows[0]);
-
-                                                        if (err) {
-                                                            return console.error('error running query', err);
-                                                        }
-                                                        //console.log(result.rows[0].places);
-                                                        //return result.rows[0].weather;
-                                                        res.json(result.rows[0].weather).end();
-                                                    });
-                                                });
-
-                                            }, 10000);
-
-                                            setLastIndexPath(indexI, indexJ, tripid_val);
+                                                res.status(200).end();//when start saving it's time to update client that data saved
+                                                setLastIndexPath(indexI, indexJ, tripid_val);
                                         }
                                     }
 
