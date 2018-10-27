@@ -15,6 +15,7 @@ var fs = require('fs');
 var port = process.env.PORT || 9090;
 var server = http.createServer(app);
 var AWS = require('aws-sdk');
+const axios = require('axios');
 
 var io = require('socket.io').listen(server);
 
@@ -1951,8 +1952,60 @@ app.post('/getWeather', function (req, res) {
                             //api.openweathermap.org/data/2.5/weather?lat=35&lon=139  --- current
                             let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + hash_weather_points[weather_hash_index][index].lat + '&lon=' + hash_weather_points[weather_hash_index][index].lng + '&units=metric&appid=' + key;
 
-                            //request(url, function (err, response, body) {
-                            http.get(url, function(body) {
+
+                            axios.get(url)
+                                .then(response => {
+                                    console.log(response.data);
+                                    let weather = JSON.parse(body)
+                                    if (weather.main == undefined) {
+                                        console.log('weather API: null, error: Error, please try again');
+                                    } else {
+                                        let weatherText = `It's ${weather.main.temp} degrees in ${weather.name}!`;
+                                        console.log('** Weather result: ' + weatherText);
+                                        //push to the same hash points by adding the weather results
+                                        let gps_point = hash_weather_points[weather_hash_index][index];
+                                        hash_weather_points[weather_hash_index][index] = {
+                                            point: gps_point,
+                                            weather_text: weatherText,
+                                            weather: body
+                                        };
+
+                                        weather_api_result_counter++;
+
+                                        console.log('** weather pushed in cell: [' + weather_hash_index + '][' + index + ']');
+
+                                        console.log('** Weather hash index:' + weather_hash_index);
+                                        console.log('** Hash weather points: ' + hash_weather_points.length);
+
+                                        console.log('** Points to get weather for: ' + weather_number_of_points);
+                                        console.log('** Points API results :' + weather_api_result_counter);
+
+                                        //if (weather_hash_index == hash_weather_points.length - 1 && index == hash_weather_points[weather_hash_index].length - 1) {
+                                        if(weather_api_result_counter == weather_number_of_points){
+                                            console.log('Done! all weather set and ready');
+                                            //return res.status(200).send(hash_weather_points);
+                                            //save weather in PG
+                                            saveWeatherToPostgres(hash_weather_points, tripid_val);
+
+                                            //return weather from DB after the new weather was saved
+                                            //setTimeout(function () {
+                                            console.log('After finish saving data in DB, now pull it and send to client!!')
+                                            res.json(getWeatherFromDB(tripid_val)).end();
+                                            //}, 5000);
+
+                                            setLastIndexPath(indexI, indexJ, tripid_val);
+                                        }
+                                    }
+
+
+                                    
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                });
+
+                            /*
+                            request(url, function (err, response, body) {
                                 console.log(body);
                                 if (err) {
                                     console.log('weather API error: please try again');
@@ -1979,10 +2032,10 @@ app.post('/getWeather', function (req, res) {
                                         console.log('** Hash weather points: ' + hash_weather_points.length);
 
                                         console.log('** Points to get weather for: ' + weather_number_of_points);
-                                        console.log('** Results fom API :' + weather_api_result_counter);
+                                        console.log('** Points API results :' + weather_api_result_counter);
 
                                         //if (weather_hash_index == hash_weather_points.length - 1 && index == hash_weather_points[weather_hash_index].length - 1) {
-                                        if(weather_api_result_counter == weather_number_of_points)
+                                        if(weather_api_result_counter == weather_number_of_points){
                                             console.log('Done! all weather set and ready');
                                             //return res.status(200).send(hash_weather_points);
                                             //save weather in PG
@@ -1999,7 +2052,7 @@ app.post('/getWeather', function (req, res) {
                                     }
                                 }
                             });
-
+*/
                         }
                     } else {
                         console.log('Day path empty, move to next day');
