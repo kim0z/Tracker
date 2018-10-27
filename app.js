@@ -1654,7 +1654,7 @@ app.post('/getGooglePlaces', function (req, res) {
                                 console.log('Last Index I: ' + indexI);
                                 console.log('Last Index J: ' + indexJ);
 
-                                setLastIndexPath(indexI, indexJ, tripid_val);
+                                //setLastIndexPath(indexI, indexJ, tripid_val);
 
                                 res.status(200).end();//when start saving it's time to update client that data saved
                             }
@@ -1885,7 +1885,7 @@ app.post('/getWeather', function (req, res) {
     if (path_hash) {
         console.log('get weather points per day: ' + points_number_per_day);
 
-        if (indexI == path_hash.length) { //if index is updated then no need to loop path, jet get data from DB
+        if (indexI == path_hash.length) { //if index is updated then no need to loop path, just get data from DB
             console.log('** weather, indexI is equal to path_hash length, don not loop path, get weather from DB **');
             res.json(getWeatherFromDB(tripid_val)).end();
         } else {
@@ -1898,7 +1898,7 @@ app.post('/getWeather', function (req, res) {
                     //example: if day include 1000 points, and the required points per day is 5 then 1000 / 5 = 200, take point each 200 points.
                     var points_between = path_hash[indexI].length / points_number_per_day;
                     points_between = Math.round(points_between);
-                    console.log('Points between: ' + points_between);
+                    console.log('Take points each (per day): ' + points_between);
                     for (; indexJ < points_number_per_day; indexJ++) { //0 x 200, 1 x 200, 2 x 200, 3 x 200, 3 x 200, 4 x 200
                         if (indexJ > path_hash[indexI].length) {
                             console.log('break loop');
@@ -1907,12 +1907,14 @@ app.post('/getWeather', function (req, res) {
                         if (indexJ < path_hash[indexI].length) {
                             indexJ = Math.round(indexJ);
                             console.log('Point ' + indexJ * points_between + ' :' + path_hash[indexI][indexJ * points_between]);
+                            console.log('push weather GPS point to hash weather')
                             hash_weather_points[hash_weather_points_index].push(path_hash[indexI][indexJ * points_between]);
                         } else {
                             console.log('Error: Calculating weather points exceeded array day length');
                         }
                     }
 
+                    console.log('DEBUG: Print Hash Weather to console:');
                     console.log(hash_weather_points);
 
 
@@ -1920,7 +1922,10 @@ app.post('/getWeather', function (req, res) {
                     hash_weather_points_index++; //increase index for the next array in weather points hash
 
                     //check if loop done -- ****** hre should take into account the J also ***************
+                    console.log('DEBUG:: indexI', indexI);
+                    console.log('DEBUG:: path hash length', path_hash.length);
                     if(indexI == path_hash.length){ //loop done
+                        console.log('Done getting GPS point for weather, Now loop hash weather to get weather for each point!!');
                         //after the loop is done, all points was gathered from path, now need to loop points and get weather for each point
                         //Async problem
                         //if (indexI >= path_hash.length - 1) {
@@ -1970,7 +1975,9 @@ app.post('/getWeather', function (req, res) {
                                                     //return weather from DB after the new weather was saved
                                                     setTimeout(function () {
                                                         res.json(getWeatherFromDB(tripid_val)).end();
-                                                    }, 5000)
+                                                    }, 5000);
+
+                                                    setLastIndexPath(indexI, indexJ, tripid_val);
                                                 }
                                             }
                                         }
