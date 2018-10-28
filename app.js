@@ -5,6 +5,8 @@
 //
 // #############################################################################
 
+const rook = require('rookout/auto_start');
+
 var http = require('http');
 var database = require('./config/database');
 var multiparty = require('multiparty'); //for upload photos
@@ -1957,7 +1959,8 @@ app.post('/getWeather', function (req, res) {
                                 .then(response => {
                                     var body = response.data;
                                     console.log(body);
-                                    let weather = JSON.parse(body)
+                                    //let weather = JSON.parse(body)
+                                    let weather = body;
                                     if (weather.main == undefined) {
                                         console.log('weather API: null, error: Error, please try again');
                                     } else {
@@ -1992,7 +1995,7 @@ app.post('/getWeather', function (req, res) {
 
                                             console.log('After finish saving data in DB, now pull it and send to client!!')
                                                 res.status(200).end();//when start saving it's time to update client that data saved
-                                                setLastIndexPath(indexI, indexJ, tripid_val);
+                                                //setLastIndexPath(indexI, indexJ, tripid_val);
                                         }
                                     }
 
